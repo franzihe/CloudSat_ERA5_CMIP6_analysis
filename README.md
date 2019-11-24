@@ -14,7 +14,7 @@
 
 
 
-** Data is usually distributed and available online through portals (ESGF, EBAS, AEROCOM, etc.): Standardized procedures (common variables names, units, metadata conventions) and quality control before publishing data**.
+**Data is usually distributed and available online through portals (ESGF, EBAS, AEROCOM, etc.): Standardized procedures (common variables names, units, metadata conventions) and quality control before publishing data**.
 
 
 ### Individual work and blue skies research:
