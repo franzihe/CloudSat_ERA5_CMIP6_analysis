@@ -5,9 +5,11 @@ title: "Personas and Pathways"
 
 # Personas and Pathways
 
+The personas and pathways described below have been presented to students, researchers and climate scientists to get feedback and inputs for designing real use cases.
+
 > ## Odin
 >
-> Odin is an established scientist at the Norwegian Meteorological Institute. He is in his fifties and endeavors to get people thinking about sustainable lifestyle. He follows the flight shaming environmental movement, owns an electric car and live in a passive house. He has been involved in the successive CMIPs and has practical experience with handling climate data. He loves teaching and working with master students and young researchers and has no issues with sharing as long as he can see a benefit in the process.
+> Odin is an established scientist at the Norwegian Meteorological Institute. He is in his fifties and endeavors to get people thinking about sustainable lifestyle. He follows the flight shaming environmental movement, owns an electric car and lives in a passive house. He has been involved in the successive [CMIPs](https://www.wcrp-climate.org/wgcm-cmip) and has practical experience with handling climate data. He loves teaching and working with master students and young researchers and has no issues with sharing as long as he can see a benefit in the process.
 > > ## Odin pathway
 > > 
 > > ### Discovery 
@@ -24,7 +26,7 @@ title: "Personas and Pathways"
 > > 
 > > ### Sustained Participation 
 > > 
-> > Odin uses the NIRD-toolkit based Jupyterhub on a regular basis. He identifies several weaknesses such as difficulties to trace data ownership and license (especially for observations) and correctly cite the source of the data, lack of data catalogue. He also would like to more computing resources to process more and faster data. He understands that he needs some training and documentation to realize the full potential of GPUs and distributed data processing.
+> > Odin uses the NIRD-toolkit based Jupyterhub on a regular basis. He identifies several weaknesses such as difficulties to trace data ownership and license (especially for observations) and correctly cite the source of the data, lack of data catalogue. He also would like to get more computing resources to process more and faster data. He understands that he needs some training and documentation to realize the full potential of GPUs and distributed data processing.
 > > 
 > > ### Networked Participation 
 > > 
