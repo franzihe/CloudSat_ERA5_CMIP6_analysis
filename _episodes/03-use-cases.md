@@ -25,8 +25,9 @@ title: "EOSC Nordic Climate Use cases"
 > > 
 > > In concrete terms, we will aim at working on:
 > > 
-> > - single-point/region simulations (FATES, LPJ-GUESS) at a number of specified locations in particular close to monitored sites;
+> > - single-point/region simulations (FATES, LPJ-GUESS) at a number of specified locations in particular close to monitored sites;the number of sites and location should be flexible enough so that new sites can be easily added.
 > > - allowing researchers to access and share data collected either during field campaigns or on a regular basis at selected measurement stations; 
+> > - allowing researchers to control data access: researchers need to be able to choose who they want to share with and what they want to share; however, metadata should always be available to everyone.
 > > - offering the necessary tools to analyze and visualize the resulting data and in particular comparison between observations and model outputs.
 > {: .solution}
 > > 
@@ -34,7 +35,7 @@ title: "EOSC Nordic Climate Use cases"
 > > 
 > > - Integration of FATES (Functionally Assembled Terrestrial Ecosystem Simulator) as a new tool in Galaxy;
 > > - Integration of LPJ-GUESS Ecosystem Model as a new tool in Galaxy;
-> > - Integration in Galaxy of tools for analyzing and visualizing the model outputs;
+> > - Integration in Galaxy of tools for analyzing and visualizing the model outputs; ideally, we would develop the visualization tool using [voila dashboards](https://voila.readthedocs.io/en/stable/) (or [R shiny](https://shiny.rstudio.com/)).
 > > - Publication of in-situ measurements (with comprehensive meta-data, citation, access control, etc.).
 > > 
 > > **Reference**: [PeCAN project](http://pecanproject.github.io/)
