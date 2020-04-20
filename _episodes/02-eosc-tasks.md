@@ -42,8 +42,8 @@ Then we give an overview of the status at the start of the project (state of the
 > Preliminary list of tasks to enable T5.2.1:
 > 
 > - The plan is to install one single Galaxy instance for all the Nordics. Pulsar will be used to submit jobs on various platforms (HPCs and cloud computing). The objective is to use a similar setting as the one used by Galaxy Europe to ease maintenance and facilitate deployment of new tools by the Climate community,
-> - The [list of Galaxy tools available/needed](../work/galaxy/#galaxy-climate-tools) is provided and maintained by the Climate community. T5.2.1 will install Galaxy tools that are made available in the [Galaxy Toolshed](https://toolshed.g2.bx.psu.edu/) or available as interactive environment in the [Galaxy Europe github repository](https://github.com/NordicESMhub/galaxy/tree/release_19.09_europe/tools/interactive). 
-> - The [list of available/needed training material](../work/work/galaxy/#galaxy-training-material) is also provided and maintained by the Climate community (NICEST2). T5.2.1 will install Galaxy tools and datasets (Galaxy data libraries) necessary for users to use these training material on the Nordic Galaxy instance.
+> - The [list of Galaxy tools available/needed](../work/galaxy#galaxy-climate-tools) is provided and maintained by the Climate community. T5.2.1 will install Galaxy tools that are made available in the [Galaxy Toolshed](https://toolshed.g2.bx.psu.edu/) or available as interactive environment in the [Galaxy Europe github repository](https://github.com/NordicESMhub/galaxy/tree/release_19.09_europe/tools/interactive). 
+> - The [list of available/needed training material](../work/work/galaxy#galaxy-training-material) is also provided and maintained by the Climate community (NICEST2). T5.2.1 will install Galaxy tools and datasets (Galaxy data libraries) necessary for users to use these training material on the Nordic Galaxy instance.
 > 
 {: .solution}
 
@@ -65,7 +65,7 @@ Then we give an overview of the status at the start of the project (state of the
 {: .solution}
 
 > ## Galaxy climate workbench framework for EOSC-Nordic
-> More information on Galaxy climate workbench can be found [here](../work/galaxy/).
+> More information on Galaxy climate workbench can be found [here](../work/galaxy).
 > - [Galaxy tools for Climate Analysis](../work/galaxy/#galaxy-climate-tools)
 > - [Galaxy Training material for Climate Analysis](../work/galaxy/#galaxy-training-material).
 > This page is regularly updated to reflect status and progress.
