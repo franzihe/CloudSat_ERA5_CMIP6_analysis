@@ -66,8 +66,8 @@ Then we give an overview of the status at the start of the project (state of the
 
 > ## Galaxy climate workbench framework for EOSC-Nordic
 > More information on Galaxy climate workbench can be found [here](../work/galaxy).
-> - [Galaxy tools for Climate Analysis](../work/galaxy/#galaxy-climate-tools)
-> - [Galaxy Training material for Climate Analysis](../work/galaxy/#galaxy-training-material).
+> - [Galaxy tools for Climate Analysis](../work/galaxy#galaxy-climate-tools)
+> - [Galaxy Training material for Climate Analysis](../work/galaxy#galaxy-training-material).
 > This page is regularly updated to reflect status and progress.
 >
 {: .challenge}
