@@ -14,8 +14,6 @@ permalink: /
 - ERA5, UERRA (re-analysis)
 - EBAS, AEROCOM
 
-
-
 **Data is usually distributed and available online through portals (ESGF, EBAS, AEROCOM, etc.): Standardized procedures (common variables names, units, metadata conventions) and quality control before publishing data**.
 
 
@@ -25,4 +23,7 @@ permalink: /
 
 
 **Data is by design/purpose unorganized, unconstrained, unstandardized, unchecked, and for the vast majority usually unusable outside the project/lab/researcher.**
+
+
+An exhanustiv list of climate data relevant for the Climate Science Demonstrator is given in [EOSC-Nordic Task 5.3](02-eosc-tasks/).
 
