@@ -135,3 +135,36 @@ title: "EOSC Nordic Climate Use cases"
 > - T5.3.2: Machine actionable DMPs (M1-36)
 {: .callout}
 
+> ## Use case 4: A community Virtual Laboratory for the development of machine-learning-based parameterizations and sub-models for clouds and land-surface processes in Earth System Models.
+> 
+> **Goal**: Improve existing parameterizations and prepare Earth System Models for future architectures by using machine learning.
+> 
+> **Target audience**: Climate experts and data scientists in the field.
+> 
+> **Lead**:  University of Oslo, Norway
+> 
+> **Partners**: 
+> - University of Oslo, Norway
+> - University of Helsinki
+> 
+> > ## What? 
+> > 
+> > Provide a platform for facilitating the development of:
+> > - new parameterizations for Earth System models using machine learning;
+> > - sub-models for clouds and land-surface processes in ESM using machine learning;
+> > 
+> > The framework should also facilitate the introduction of these new parameterizations in existing ESMs.
+> {: .solution}
+> > 
+> > ## How?
+> > 
+> > - Tools + corresponding training material.
+> > - *What would be the best tools?*
+> > 
+> {: .solution}
+>
+> ### EOSC-Nordic tasks
+> 
+> Needs to be covered by the following EOSC-Nordic tasks:
+> - T5.2.2: Code Repositories, Containerization and "virtual laboratories" (M1-36)
+{: .callout}
