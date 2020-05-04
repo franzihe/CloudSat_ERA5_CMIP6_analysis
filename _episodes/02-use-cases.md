@@ -9,11 +9,10 @@ title: "EOSC Nordic Climate Use cases"
 >
 > **Target audience**: Experts of ecosystems, biologists and environmental scientists with no background in climate modeling
 > 
-> **Lead**: Hui Tang, University of Oslo, Norway
+> **Use case owner**: Hui Tang, University of Oslo, Norway
 >
 > **Partners**:
 > - Lund University (Sweden)
-> - University of Helsinki (Finland)
 > - University of Oslo (Norway)
 > - Natural History Museum (Norway)
 >
@@ -29,14 +28,14 @@ title: "EOSC Nordic Climate Use cases"
 > > - single-point/region simulations (FATES and/or LPJ-GUESS) at a number of specified locations in particular close to monitored sites;the number of sites and location should be flexible enough so that new sites can be easily added.
 > > - allowing researchers to access and share data collected either during field campaigns or on a regular basis at selected measurement stations; 
 > > - allowing researchers to control data access: researchers need to be able to choose who they want to share with and what they want to share; however, metadata should always be available to everyone.
-> > - offering the necessary tools (including machine learning tools) to analyze and visualize the resulting data and in particular comparison between observations and model outputs.
+> > - offering the necessary tools to analyze and visualize the resulting data and in particular comparison between observations and model outputs.
 > {: .solution}
 > > 
 > > ## How?
 > > 
 > > - Integration of FATES (Functionally Assembled Terrestrial Ecosystem Simulator) and/or LPJ-GUESS Ecosystem Model as new tools in Galaxy;
 > > - Integration in Galaxy of tools for analyzing and visualizing the model outputs; ideally, we would develop the visualization tool using Galaxy Climate JupyterLab and we would "turn" jupyter notebooks into Galaxy tools.
-> > - Develop target online tutorials to advertise Galaxy FATES and Galaxy Machine Learning tools.
+> > - Develop target online tutorials to advertise Galaxy FATES tools.
 > > - Publication of in-situ measurements (with comprehensive meta-data, citation, access control, etc.).
 > > 
 > > **Reference**: [PeCAN project](http://pecanproject.github.io/)
@@ -55,10 +54,11 @@ title: "EOSC Nordic Climate Use cases"
 > ## Use case 2: FAIR Climate data for the Nordics
 > 
 > **Goal**: Provide FAIR climate data to all the communities interested in climate mitigation and climate change impact assessment.
+> This use case aims at serving [NeIC NICEST-2](https://nordicesmhub.github.io/nicest2/).
 > 
 > **Target audience**: Scientists, local authorities, policy makers and general public.
 > 
-> **Lead**: Hamish Struthers, National Supercomputing Centre, Sweden
+> **Use case owner**: Hamish Struthers, National Supercomputing Centre, Sweden
 > 
 > **Partners**:
 > - DMI, Denmark
@@ -93,10 +93,11 @@ title: "EOSC Nordic Climate Use cases"
 > ## Use case 3: A community Virtual Laboratory for developing Climate diagnostics for the Nordics
 > 
 > **Goal**: Share and develop Earth System Model EValuation diagnostics and analysis along with the related data.
+> This use case aims at serving [NeIC NICEST-2](https://nordicesmhub.github.io/nicest2/).
 > 
 > **Target audience**: Climate experts and data scientists in the field.
 > 
-> **Lead**: Risto Makkonen, University of Helsinki, Finland
+> **Use case owner**: Øyvind Seland, Norwegian Meteorological Institute, Norway
 > 
 > **Partners**: 
 > - MetNo, Norway
@@ -143,11 +144,12 @@ title: "EOSC Nordic Climate Use cases"
 > 
 > **Target audience**: Climate experts and data scientists in the field.
 > 
-> **Lead**:  University of Oslo, Norway
+> **Use case owner**: Risto Makkonen, University of Helsinki, Finland
 > 
 > **Partners**: 
 > - University of Oslo, Norway
-> - University of Helsinki
+> - University of Helsinki, Finland
+> - University of Iceland, Iceland
 > 
 > > ## What? 
 > > 
@@ -160,8 +162,9 @@ title: "EOSC Nordic Climate Use cases"
 > > 
 > > ## How?
 > > 
-> > - Tools + corresponding training material.
-> > - *What would be the best tools?*
+> > - Interactive Climate JupyterLab tool in Galaxy with CESM, CTSM environment for developing, testing and running Earth System Modelling experiments.
+> > - Publication of ESM workflows for creating and publishing Research Objects.
+> > - Development of online tutorial to advertise Interactive Climate JupyterLab for running Earth System Models.
 > > 
 > {: .solution}
 >
