@@ -13,6 +13,7 @@ title: "EOSC Nordic Climate Use cases"
 >
 > **Partners**:
 > - Lund University (Sweden)
+> - University of Helsinki (Finland)
 > - University of Oslo (Norway)
 > - Natural History Museum (Norway)
 >
@@ -25,17 +26,17 @@ title: "EOSC Nordic Climate Use cases"
 > > 
 > > In concrete terms, we will aim at working on:
 > > 
-> > - single-point/region simulations (FATES, LPJ-GUESS) at a number of specified locations in particular close to monitored sites;the number of sites and location should be flexible enough so that new sites can be easily added.
+> > - single-point/region simulations (FATES and/or LPJ-GUESS) at a number of specified locations in particular close to monitored sites;the number of sites and location should be flexible enough so that new sites can be easily added.
 > > - allowing researchers to access and share data collected either during field campaigns or on a regular basis at selected measurement stations; 
 > > - allowing researchers to control data access: researchers need to be able to choose who they want to share with and what they want to share; however, metadata should always be available to everyone.
-> > - offering the necessary tools to analyze and visualize the resulting data and in particular comparison between observations and model outputs.
+> > - offering the necessary tools (including machine learning tools) to analyze and visualize the resulting data and in particular comparison between observations and model outputs.
 > {: .solution}
 > > 
 > > ## How?
 > > 
-> > - Integration of FATES (Functionally Assembled Terrestrial Ecosystem Simulator) as a new tool in Galaxy;
-> > - Integration of LPJ-GUESS Ecosystem Model as a new tool in Galaxy;
-> > - Integration in Galaxy of tools for analyzing and visualizing the model outputs; ideally, we would develop the visualization tool using [voila dashboards](https://voila.readthedocs.io/en/stable/) (or [R shiny](https://shiny.rstudio.com/)).
+> > - Integration of FATES (Functionally Assembled Terrestrial Ecosystem Simulator) and/or LPJ-GUESS Ecosystem Model as new tools in Galaxy;
+> > - Integration in Galaxy of tools for analyzing and visualizing the model outputs; ideally, we would develop the visualization tool using Galaxy Climate JupyterLab and we would "turn" jupyter notebooks into Galaxy tools.
+> > - Develop target online tutorials to advertise Galaxy FATES and Galaxy Machine Learning tools.
 > > - Publication of in-situ measurements (with comprehensive meta-data, citation, access control, etc.).
 > > 
 > > **Reference**: [PeCAN project](http://pecanproject.github.io/)
@@ -77,7 +78,7 @@ title: "EOSC Nordic Climate Use cases"
 > > - Integration of other climate data in Galaxy (could also include model outputs from research work not directly related to CMIP, and any other relevant observations);
 > > - Deployment of simple tools for visualizing climate data over the Nordics from Galaxy;
 > > - Deployment of statistical tools (global mean, regional mean, time series, climate indices) for characterizing climate change in the nordic countries;
-> > - Deployment of Parallel Machine Learning and Deep Learning tools in Galaxy (for example to identify local trends, develop classifications, extrapolate mitigation impacts, have an insight into downscaling, etc.).
+> > - Deployment of Machine Learning and Deep Learning tools in Galaxy (for example to identify local trends, develop classifications, extrapolate mitigation impacts, have an insight into downscaling, etc.).
 > > 
 > {: .solution}
 > ### EOSC-Nordic tasks
@@ -123,6 +124,7 @@ title: "EOSC Nordic Climate Use cases"
 > > - Access to HPC, including GPUs to be able to handle, analyze and visualize large amount of climate data;
 > > - Access to CMIP data, re-analysis, model outputs produced by researchers (see use case 2);
 > > - Access to observations (see use case 2).
+> > - Develop target online training material to advertise the tools.
 > > 
 > {: .solution}
 >

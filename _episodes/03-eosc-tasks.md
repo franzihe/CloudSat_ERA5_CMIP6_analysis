@@ -30,10 +30,8 @@ Then we give an overview of the status at the start of the project (state of the
 >
 > Here we list what is relevant for the Climate science demonstrator only.
 > 
-> - [B2share Nordic](https://neic.no/affiliate-B2share/)
 > - [Galaxy pulsar](https://pulsar-network.readthedocs.io/en/latest/) for wide job execution system distributed across several European datacenters, allowing to scale Galaxy instances computing power over heterogeneous resources.
 > - [Galaxy workflows](https://galaxyproject.org/learn/advanced-workflow/) are text files that can be easily exchanged. Galaxy workflows can be searched per Galaxy instances. For instance on Galaxy Europe, shared workflows are [published](https://climate.usegalaxy.eu/workflows/list_published).
-> - [Galaxy data libraries](https://galaxyproject.org/data-libraries/). Per instance (same as for Galaxy workflows) but possible to "replicate" between Galaxy instances.
 > - [Galaxy shared histories](https://galaxyproject.org/learn/share/). Galaxy allows users to share their "histories" (data, processing, etc.) via a link. Users can set permissions to restrict access to a group of users if necessary (or a single user).
 {: .solution}
 
@@ -134,16 +132,30 @@ Then we give an overview of the status at the start of the project (state of the
 
 > ## What is known/available at the start of the project
 >
+> - [B2share Nordic](https://neic.no/affiliate-B2share/)
+> - [B2safe](https://www.eudat.eu/b2safe)
+> - [CernVM File System (CernVM-FS)](https://cernvm.cern.ch/portal/filesystem)
+> - [ownCloud](https://owncloud.org/)
+> - [Galaxy data libraries](https://galaxyproject.org/data-libraries/). Per instance (same as for Galaxy workflows) but possible to "replicate" between Galaxy instances through CVMFS.
+> - [Earth Systm Grid Federation (ESGF)](https://esgf.llnl.gov/)
+>
 {: .solution}
 
 > ## Status: January 2020
 >
+> CVFMS is used to replicate Galaxy reference data on any Galaxy instance. Look at Galaxy [Reference Data with CVMFS](https://training.galaxyproject.org/training-material/topics/admin/tutorials/cvmfs/tutorial.html) tutorial for more information on the usage of CVMFS in Galaxy for deploying/replicating reference data. This approach is probably suitable for small climate datasets (for instance teaching datasets, in-situ observations) but is not appropriate for the bulk amount of climate data. We suggest to investigate other remote access solutions.
+>
 > Preliminary list of tasks to enable T5.3.1:
+> - Prepare test dataset in [zarr](https://zarr.readthedocs.io/en/stable/) for parallel access through python.
+> - Create data catalog using [intake](https://intake.readthedocs.io/en/latest/catalog.html). The goal will be to automatically create/update data catalog as new data is harvested (link to T5.3.2).
+> - Check [esm-intake](https://intake-esm.readthedocs.io/en/latest/) that is specific to [CMIP](https://www.wcrp-climate.org/wgcm-cmip) and [CESM Large Ensemble Community Project](http://www.cesm.ucar.edu/projects/community-projects/LENS/) 
+> - Install [ownCloud](https://owncloud.org/) on [NIRD research data project area](http://www.cesm.ucar.edu/projects/community-projects/LENS/) to test access and processing of climate data from Galaxy (using intake catalog and zarr data format).
 >
 {: .solution}
 
 > ## Status: April 2020
 >
+> - Preliminary tests using ownCloud have been successful. However, no performance analysis has been performed yet. So far we only tested the functionalities. Larger datasets will be harvested for further testing.
 {: .solution}
 
 
