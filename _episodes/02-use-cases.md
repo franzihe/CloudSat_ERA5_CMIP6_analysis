@@ -144,7 +144,7 @@ title: "EOSC Nordic Climate Use cases"
 > 
 > **Target audience**: Climate experts and data scientists in the field.
 > 
-> **Use case owner**: Risto Makkonen, University of Helsinki, Finland
+> **Use case owner**: Risto Makkonen, Finnish Meteorological Institute, Finland
 > 
 > **Partners**: 
 > - University of Oslo, Norway
