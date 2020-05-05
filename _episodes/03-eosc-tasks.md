@@ -62,6 +62,20 @@ Then we give an overview of the status at the start of the project (state of the
 > 
 {: .solution}
 
+> ## Status: May 2020
+> 
+> ### Galaxy Training material
+> 
+> New training materials published:
+> - [Visualize Climate data with Panoply netCDF viewer](https://training.galaxyproject.org/training-material/topics/climate/tutorials/panoply/tutorial.html).
+> 
+> - [Getting your hands on Climate](https://training.galaxyproject.org/training-material/topics/climate/tutorials/climate-101/tutorial.html).
+> 
+> New training material planned:
+> - Analyzing CMIP6 data with Galaxy Climate JupyterLab: development has started [here](https://github.com/NordicESMhub/galaxy-training-material/tree/cmip6) with corresponding [PR](https://github.com/galaxyproject/training-material/pull/1883) (in progress).
+> 
+{: .solution}
+
 > ## Galaxy climate workbench framework for EOSC-Nordic
 > More information on Galaxy climate workbench can be found [here](../work/galaxy).
 > - [Galaxy tools for Climate Analysis](../work/galaxy#galaxy-climate-tools)
@@ -81,7 +95,6 @@ Then we give an overview of the status at the start of the project (state of the
 > and containerization. The subtask will focus on building a natural language processing laboratory, but the overall
 > goal will be to create a generic recipe for building virtual laboratories.
 {: .callout}
-
 
 > ## What is known/available at the start of the project
 > 
@@ -166,19 +179,30 @@ Then we give an overview of the status at the start of the project (state of the
 # EOSC Nordic Task 5.3.2
 
 > ## T5.3.2: Machine actionable DMPs (M1-36) Lead: SIGMA2 – Participants: GFF, SNIC, UGOT/SND
-> Link DMP with storage & computing reservation.
+> Link DMP with storage & computing resource allocations.
 {: .callout}
 
 > ## What is known/available at the start of the project
->
+> - Storage and computing resource allocation are usually based on scientific merit. Project managers submit storage and/or compute applications that are usually evaluated and granted by a resource allocation committee.
+> - Data Management Plans are usually requested but not necessarily mandatory. In addition, DMPs are usually very little assessed and monitored during the lifetime of a project.
 {: .solution}
 
 > ## Status: January 2020
 >
 > Preliminary list of tasks to enable T5.3.2:
 >
+> - This task has not started yet.
+>
 {: .solution}
 
 > ## Status: April 2020
+>
+> - Brainstorming activity to narrow down what we can do during EOSC-Nordic: the goal will be to "link" DMPs (for instance [Easy DMP](https://www.sigma2.no/data-planning)) with resource allocation.
+{: .solution}
+
+> ## Status: May 2020
+>
+> - A first draft for EOSC-Nordic Climate Science roadmap has been released:
+>   <img src="/eosc-nordic-climate-demonstrator/img/ResearchLifeCycle.png" width="600"/> 
 >
 {: .solution}
