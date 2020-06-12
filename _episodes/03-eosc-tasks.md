@@ -171,6 +171,14 @@ Then we give an overview of the status at the start of the project (state of the
 > - Preliminary tests using ownCloud have been successful. However, no performance analysis has been performed yet. So far we only tested the functionalities. Larger datasets will be harvested for further testing.
 {: .solution}
 
+> ## Status: June 2020
+>
+> - A larger dataset has been uploaded to ownCloud (by Adil) and we have started new tests. This [new dataset](https://zenodo.org/record/3734146#.XuNiQjozY2w) will be used for developing a new training material (on Galaxy) for learning to use and analyze [Community Earth System Model](http://www.cesm.ucar.edu/).
+> - [intake catalog for accessing dataset](https://raw.githubusercontent.com/NordicESMhub/eosc-nordic-climate-demonstrator/master/work/owncloud/F2000climo_f19_g17_control.yaml): it is a `yaml` file where we specify how and where to access the dataset. Ideally, catalogs will be archived (NIRD archive, zenodo or other) with metadata from the dataset (to be searchable and findable).
+> - [simple python jupyter notebook](https://github.com/NordicESMhub/eosc-nordic-climate-demonstrator/blob/master/work/owncloud/F2000climo_f19_g17_control.ipynb) to illustrate the usage of the dataset. 
+- [Training material (under development)](https://github.com/NordicESMhub/galaxy-training-material/blob/cesm/topics/climate/tutorials/cesm/tutorial.md). Information on how to render the page locally can be found [here](https://training.galaxyproject.org/training-material/topics/contributing/tutorials/running-jekyll/tutorial.html).
+>
+{: .solution}
 
 > ## Climate data relevant for EOSC-Nordic
 > The list of data relevant for the Climate community can be found [here](../work/data).
