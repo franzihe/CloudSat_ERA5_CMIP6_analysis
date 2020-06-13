@@ -7,4 +7,4 @@ sources:
     args: # passed to the open() method
       urlpath: 'https://oyCNYAX4LTmCZxn:@ns9999k.owncloud.sigma2.no/public.php/webdav/F2000climo_f19_g17_control'
       consolidated: True
-      decode_cf: False
+      decode_cf: True
