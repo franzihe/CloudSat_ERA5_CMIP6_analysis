@@ -177,6 +177,7 @@ Then we give an overview of the status at the start of the project (state of the
 > - [intake catalog for accessing dataset](https://raw.githubusercontent.com/NordicESMhub/eosc-nordic-climate-demonstrator/master/work/owncloud/F2000climo_f19_g17_control.yaml): it is a `yaml` file where we specify how and where to access the dataset. Ideally, catalogs will be archived (NIRD archive, zenodo or other) with metadata from the dataset (to be searchable and findable).
 > - [simple python jupyter notebook](https://github.com/NordicESMhub/eosc-nordic-climate-demonstrator/blob/master/work/owncloud/F2000climo_f19_g17_control.ipynb) to illustrate the usage of the dataset. 
 > - [Example to compute monthly average](https://github.com/NordicESMhub/eosc-nordic-climate-demonstrator/blob/master/work/owncloud/F2000climo_monthly_avg.ipynb). 
+> - [Example to create zarray from netCDF file](https://github.com/NordicESMhub/eosc-nordic-climate-demonstrator/blob/master/work/owncloud/create_zarr.ipynb). 
 - [Training material (under development)](https://github.com/NordicESMhub/galaxy-training-material/blob/cesm/topics/climate/tutorials/cesm/tutorial.md). Information on how to render the page locally can be found [here](https://training.galaxyproject.org/training-material/topics/contributing/tutorials/running-jekyll/tutorial.html).
 >
 {: .solution}
