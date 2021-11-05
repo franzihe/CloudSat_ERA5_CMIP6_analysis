@@ -17,6 +17,5 @@ from glob import glob
 import pandas as pd
 import numpy as np
 from cmcrameri import cm
-import cmip6_preprocessing.preprocessing as preprocessing
 
 import functions as fct
