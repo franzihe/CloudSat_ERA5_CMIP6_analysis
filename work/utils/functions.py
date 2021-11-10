@@ -34,19 +34,4 @@ def regrid_data(ds_in, ds_out):
     return ds_in_regrid
 
 
-def to_DatetimeNoLeap(da):
-    """Takes a DataArray. Change the 
-    calendar to DatetimeNoLeap.
-    https://climate-cms.org/2019/11/12/Calendars-and-monthly-data.html"""
-    val = da.copy()
-    time1 = da.time.copy()
-    for itime in range(val.sizes["time"]):
-        bb = val.time.values[itime].timetuple()
-        time1.values[itime] = cftime.DatetimeNoLeap(bb[0], bb[1], 15, 12)
 
-    # We rename the time dimension and coordinate to time360 to make it clear it isn't
-    # the original time coordinate.
-    val = val.rename({"time": "time"})
-    time1 = time1.rename({"time": "time"})
-    val = val.assign_coords({"time": time1})
-    return val
