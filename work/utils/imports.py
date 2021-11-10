@@ -18,4 +18,5 @@ import pandas as pd
 import numpy as np
 from cmcrameri import cm
 
+
 import functions as fct
