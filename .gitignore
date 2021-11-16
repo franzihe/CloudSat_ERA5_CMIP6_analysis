@@ -45,3 +45,6 @@
 ### Python
 # Ignore *.pyc files
 *.pyc
+
+### xesmf regridder files
+bilinear_*.nc
