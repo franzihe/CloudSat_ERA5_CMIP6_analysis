@@ -1,9 +1,20 @@
 from imports import xr, xe, cftime, plt, ccrs, cm, cy, np
 
 
+def rename_coords_lon_lat(ds):
+    for k in ds.indexes.keys():
+        if k == "longitude":
+            ds = ds.rename({"longitude": "lon"})
+        if k == "latitude":
+            ds = ds.rename({"latitude": "lat"})
+
+    return ds
+
+
 def regrid_data(ds_in, ds_out):
     # Regridder data
     regridder = xe.Regridder(ds_in, ds_out, "bilinear")
+    regridder.clean_weight_file()
 
     # Apply regridder to data
     # the entire dataset can be processed at once
