@@ -12,6 +12,8 @@ def rename_coords_lon_lat(ds):
 
 
 def regrid_data(ds_in, ds_out):
+    ds_in = rename_coords_lon_lat(ds_in)
+
     # Regridder data
     regridder = xe.Regridder(ds_in, ds_out, "bilinear")
     regridder.clean_weight_file()
