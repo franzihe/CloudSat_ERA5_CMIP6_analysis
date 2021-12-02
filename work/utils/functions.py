@@ -45,6 +45,43 @@ def regrid_data(ds_in, ds_out):
     return ds_in_regrid
 
 
+def plt_spatial_seasonal_mean(
+    variable, vmin=None, vmax=None, levels=None, add_colorbar=None, title=None
+):
+    fig, axsm = plt.subplots(
+        2, 2, figsize=[10, 7], subplot_kw={"projection": ccrs.PlateCarree()}
+    )
+    fig.suptitle(title, fontsize=16, fontweight="bold")
+    axs = axsm.flatten()
+    for ax, i in zip(axs, variable.season):
+        im = variable.sel(season=i,).plot.contourf(
+            ax=ax,
+            transform=ccrs.PlateCarree(),
+            cmap=cm.devon_r,
+            robust=True,
+            vmin=vmin,
+            vmax=vmax,
+            levels=levels,
+            extend="max",
+            add_colorbar=add_colorbar,
+        )
+
+        ax.coastlines()
+        gl = ax.gridlines()
+        ax.add_feature(cy.feature.BORDERS)
+        gl.top_labels = False
+        ax.set_title("season: {}".format(i.values))
+
+    plt.tight_layout()
+    fig.subplots_adjust(top=0.88)
+
+    return (
+        fig,
+        axs,
+        im,
+    )
+
+
 def plt_diff_seasonal(
     true_var, estimated_var, cbar_label, vmin=None, vmax=None, levels=None, title=None
 ):
