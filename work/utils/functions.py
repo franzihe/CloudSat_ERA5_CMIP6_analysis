@@ -117,7 +117,7 @@ def plt_diff_seasonal(
 
     # colorbar
     fig.subplots_adjust(right=0.8)
-    cbar_ax = fig.add_axes([1, 0.15, 0.05, 0.7])
+    cbar_ax = fig.add_axes([1, 0.15, 0.025, 0.7])
     cb = fig.colorbar(im, cax=cbar_ax, orientation="vertical", fraction=0.046, pad=0.04)
     # set cbar label
     cb.set_label(label=cbar_label, weight="bold")
@@ -148,8 +148,8 @@ def plt_zonal_seasonal(variable_model, title=None, label=None):
         ax.set_title("season: {}".format(i.values))
 
     axs[1].legend(
-        loc="center left",
-        bbox_to_anchor=(1, -0.5),
+        loc="upper left",
+        bbox_to_anchor=(1.0, 1),
         title=label,
         fontsize="small",
         fancybox=True,
@@ -158,24 +158,30 @@ def plt_zonal_seasonal(variable_model, title=None, label=None):
     return axs
 
 
-def plt_bar_global_mean(var_model, var_obs, label=None):
-    fig, ax = plt.subplots(1, 1, figsize=[10, 7], sharex=True, sharey=True,)
-
-    fig.suptitle("Global mean (1985 - 2014)", fontsize=16, fontweight="bold")
-    ax.grid()
-
+def plt_bar_area_mean(ax, var_model, var_obs,loc, bar_width=None, hatch=None, alpha=None, label=None, ylabel=None):
+    
+    
     for k, c, pos in zip(
         var_model.model.values,
         cm.romaO(range(0, 256, int(256 / len(var_model.model.values)))),
         range(len(var_model.model.values)),
     ):
-        ax.bar(pos, var_model.sel(model=k).values, color=c, width=0.5)
-
-    ax.bar(len(var_model.model.values), var_obs.values, color="k", width=0.5)
+        ax.bar(pos+loc*bar_width, var_model.sel(model=k).values, color=c, width=bar_width, edgecolor='black', hatch=hatch, alpha = alpha)
+        
+    ax.bar(len(var_model.model.values)+loc*bar_width, var_obs.values, color="k", width=bar_width, edgecolor='white', hatch=hatch, alpha = alpha, label=label)
+        
     ax.set_xticks(range(len(np.append((var_model.model.values), "ERA5").tolist())))
     ax.set_xticklabels(
         np.append((var_model.model.values), "ERA5").tolist(), fontsize=12, rotation=90
     )
-    ax.set_ylabel(label, fontweight="bold")
+    ax.set_ylabel(ylabel, fontweight="bold")
+    
+    ax.legend(
+        loc="upper left",
+        bbox_to_anchor=(1, 1),
+        title='MEAN',
+        fontsize="small",
+        fancybox=True,
+    )
 
     plt.tight_layout()
