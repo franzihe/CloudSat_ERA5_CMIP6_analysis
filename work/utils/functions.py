@@ -1,4 +1,4 @@
-from imports import xr, xe, cftime, plt, ccrs, cm, cy, np
+from imports import xr, xe, cftime, plt, ccrs, cm, cy, np, linregress
 
 
 def rename_coords_lon_lat(ds):
@@ -158,30 +158,72 @@ def plt_zonal_seasonal(variable_model, title=None, label=None):
     return axs
 
 
-def plt_bar_area_mean(ax, var_model, var_obs,loc, bar_width=None, hatch=None, alpha=None, label=None, ylabel=None):
-    
-    
+def plt_bar_area_mean(
+    ax,
+    var_model,
+    var_obs,
+    loc,
+    bar_width=None,
+    hatch=None,
+    alpha=None,
+    label=None,
+    ylabel=None,
+):
+
     for k, c, pos in zip(
         var_model.model.values,
         cm.romaO(range(0, 256, int(256 / len(var_model.model.values)))),
         range(len(var_model.model.values)),
     ):
-        ax.bar(pos+loc*bar_width, var_model.sel(model=k).values, color=c, width=bar_width, edgecolor='black', hatch=hatch, alpha = alpha)
-        
-    ax.bar(len(var_model.model.values)+loc*bar_width, var_obs.values, color="k", width=bar_width, edgecolor='white', hatch=hatch, alpha = alpha, label=label)
-        
+        ax.bar(
+            pos + loc * bar_width,
+            var_model.sel(model=k).values,
+            color=c,
+            width=bar_width,
+            edgecolor="black",
+            hatch=hatch,
+            alpha=alpha,
+        )
+
+    ax.bar(
+        len(var_model.model.values) + loc * bar_width,
+        var_obs.values,
+        color="k",
+        width=bar_width,
+        edgecolor="white",
+        hatch=hatch,
+        alpha=alpha,
+        label=label,
+    )
+
     ax.set_xticks(range(len(np.append((var_model.model.values), "ERA5").tolist())))
     ax.set_xticklabels(
         np.append((var_model.model.values), "ERA5").tolist(), fontsize=12, rotation=90
     )
     ax.set_ylabel(ylabel, fontweight="bold")
-    
+
     ax.legend(
         loc="upper left",
         bbox_to_anchor=(1, 1),
-        title='MEAN',
+        title="MEAN",
         fontsize="small",
         fancybox=True,
     )
 
     plt.tight_layout()
+
+
+def calc_regression(ds, ds_result, lat, step, season):
+
+    x = ds["iwp_{}_{}".format(lat, lat + step)].sel(season=season).values.flatten()
+    y = ds["sf_{}_{}".format(lat, lat + step)].sel(season=season).values.flatten()
+
+    mask = ~np.isnan(y) & ~np.isnan(x)
+
+    _res = linregress(x[mask], y[mask])
+
+    ds_result["slope_{}_{}".format(lat, lat + step,)] = _res.slope
+    ds_result["intercept_{}_{}".format(lat, lat + step,)] = _res.intercept
+    ds_result["rvalue_{}_{}".format(lat, lat + step)] = _res.rvalue
+
+    return ds_result
