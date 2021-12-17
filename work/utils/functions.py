@@ -1,4 +1,4 @@
-from imports import xr, xe, cftime, plt, ccrs, cm, cy, np
+from imports import xr, xe, cftime, plt, ccrs, cm, cy, np, linregress
 
 
 def rename_coords_lon_lat(ds):
@@ -158,30 +158,147 @@ def plt_zonal_seasonal(variable_model, title=None, label=None):
     return axs
 
 
-def plt_bar_area_mean(ax, var_model, var_obs,loc, bar_width=None, hatch=None, alpha=None, label=None, ylabel=None):
-    
-    
+def plt_bar_area_mean(
+    ax,
+    var_model,
+    var_obs,
+    loc,
+    bar_width=None,
+    hatch=None,
+    alpha=None,
+    label=None,
+    ylabel=None,
+):
+
     for k, c, pos in zip(
         var_model.model.values,
         cm.romaO(range(0, 256, int(256 / len(var_model.model.values)))),
         range(len(var_model.model.values)),
     ):
-        ax.bar(pos+loc*bar_width, var_model.sel(model=k).values, color=c, width=bar_width, edgecolor='black', hatch=hatch, alpha = alpha)
-        
-    ax.bar(len(var_model.model.values)+loc*bar_width, var_obs.values, color="k", width=bar_width, edgecolor='white', hatch=hatch, alpha = alpha, label=label)
-        
+        ax.bar(
+            pos + loc * bar_width,
+            var_model.sel(model=k).values,
+            color=c,
+            width=bar_width,
+            edgecolor="black",
+            hatch=hatch,
+            alpha=alpha,
+        )
+
+    ax.bar(
+        len(var_model.model.values) + loc * bar_width,
+        var_obs.values,
+        color="k",
+        width=bar_width,
+        edgecolor="white",
+        hatch=hatch,
+        alpha=alpha,
+        label=label,
+    )
+
     ax.set_xticks(range(len(np.append((var_model.model.values), "ERA5").tolist())))
     ax.set_xticklabels(
         np.append((var_model.model.values), "ERA5").tolist(), fontsize=12, rotation=90
     )
     ax.set_ylabel(ylabel, fontweight="bold")
-    
+
     ax.legend(
         loc="upper left",
         bbox_to_anchor=(1, 1),
-        title='MEAN',
+        title="MEAN",
         fontsize="small",
         fancybox=True,
     )
 
     plt.tight_layout()
+
+
+def calc_regression(ds, ds_result, lat, step, season, model=None):
+
+    x = ds["iwp_{}_{}".format(lat, lat + step)].sel(season=season).values.flatten()
+    y = ds["sf_{}_{}".format(lat, lat + step)].sel(season=season).values.flatten()
+
+    mask = ~np.isnan(y) & ~np.isnan(x)
+
+    if x[mask].size == 0 or y[mask].size == 0:
+        # print(
+        #     "Sorry, nothing exists for {} in {}. ({}, {})".format(
+        #         model, season, lat, lat + step
+        #     )
+        # )
+        ds_result["slope_{}_{}".format(lat, lat + step,)] = np.nan
+        ds_result["intercept_{}_{}".format(lat, lat + step,)] = np.nan
+        ds_result["rvalue_{}_{}".format(lat, lat + step)] = np.nan
+    else:
+        _res = linregress(x[mask], y[mask])
+
+        ds_result["slope_{}_{}".format(lat, lat + step,)] = _res.slope
+        ds_result["intercept_{}_{}".format(lat, lat + step,)] = _res.intercept
+        ds_result["rvalue_{}_{}".format(lat, lat + step)] = _res.rvalue
+
+    return ds_result
+
+
+def plt_scatter_iwp_sf_seasonal(
+    ds, linreg, iteration, step, title=None, xlim=None, ylim=None
+):
+
+    fig, axsm = plt.subplots(2, 2, figsize=[10, 7], sharex=True, sharey=True,)
+    fig.suptitle(title, fontsize=16, fontweight="bold")
+
+    axs = axsm.flatten()
+    for ax, i in zip(axs, ds.season):
+        ax.grid()
+        for _lat, c in zip(iteration, cm.romaO(range(0, 256, int(256 / 4)))):
+            # plot scatter
+            ax.scatter(
+                ds["iwp_{}_{}".format(_lat, _lat + step)].sel(season=i),
+                ds["sf_{}_{}".format(_lat, _lat + step)].sel(season=i),
+                label="{}, {}".format(_lat, _lat + step),
+                color=c,
+                alpha=0.5,
+            )
+
+            # plot regression line
+            y = (
+                np.linspace(0, 350)
+                * linreg["slope_{}_{}".format(_lat, _lat + step)].sel(season=i).values
+                + linreg["intercept_{}_{}".format(_lat, _lat + step)]
+                .sel(season=i)
+                .values
+            )
+
+            ax.plot(np.linspace(0, 100), y, color=c, linewidth="2")
+
+        ax.set_ylabel("Snowfall (mm$\,$day$^{-1}$)", fontweight="bold")
+        ax.set_xlabel("Ice Water Path (g$\,$m$^{-2}$)", fontweight="bold")
+        ax.set_title(
+            "season: {}; lat: ({}, {})".format(
+                i.values, iteration[0], iteration[-1] + step
+            )
+        )
+        ax.set_xlim(xlim)
+        ax.set_ylim(ylim)
+
+    axs[1].legend(
+        loc="upper left", bbox_to_anchor=(1, 1), fontsize="small", fancybox=True,
+    )
+
+    plt.tight_layout()
+
+
+def return_ds_regression(ds, iteration, step):
+    ds_result = dict()
+    for season in ds.season.values:
+        ds_res = xr.Dataset()
+        for _lat in iteration:
+
+            ds_res = calc_regression(ds, ds_res, _lat, step, season)
+
+        ds_result[season] = ds_res
+
+    ds_linear_reg = xr.concat(
+        objs=list(ds_result.values()), dim=list(ds_result.keys()), coords="all"
+    ).rename({"concat_dim": "season"})
+
+    return ds_linear_reg

@@ -17,6 +17,7 @@ from glob import glob
 import pandas as pd
 import numpy as np
 from cmcrameri import cm
+from scipy.stats import linregress
 
 
 import functions as fct
