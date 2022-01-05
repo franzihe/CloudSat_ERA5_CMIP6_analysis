@@ -2,6 +2,7 @@ from imports import xr, xe, cftime, plt, ccrs, cm, cy, np, linregress
 
 import warnings
 
+
 def rename_coords_lon_lat(ds):
     for k in ds.indexes.keys():
         if k == "longitude":
@@ -303,6 +304,42 @@ def return_ds_regression(ds, iteration, step):
     ).rename({"concat_dim": "season"})
 
     return ds_linear_reg
+
+
+def return_pd_dataFrame_corr_coeff(ds, season, iteration, step):
+
+    rvalue = []
+    slope = []
+    intercept = []
+    index_season = []
+    index_lat = []
+
+    for lat in iteration:
+        index_season.append("{}".format(season))
+        index_lat.append("[{},{}]".format(lat, lat + step))
+        rvalue.append(
+            ds["rvalue_{}_{}".format(lat, lat + step)].sel(season=season).values.item()
+        )
+        slope.append(
+            ds["slope_{}_{}".format(lat, lat + step)].sel(season=season).values.item()
+        )
+        intercept.append(
+            ds["intercept_{}_{}".format(lat, lat + step)]
+            .sel(season=season)
+            .values.item()
+        )
+
+    da = pd.concat(
+        [
+            pd.Series(index_season),
+            pd.Series(rvalue),
+            pd.Series(slope),
+            pd.Series(intercept),
+        ],
+        axis=1,
+    )
+    da.columns = ["season", "R**2", "a", "b"]
+    return (da.T, pd.Series(index_lat))
 
 
 # log_interpolate_1d_V2 is taken from the Metpy package https://github.com/Unidata/MetPy/blob/3dc05c8ae40a784956327907955fc09a3e46e0e1/src/metpy/interpolate/one_dimension.py#L53
