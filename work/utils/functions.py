@@ -1,4 +1,4 @@
-from imports import xr, xe, cftime, plt, ccrs, cm, cy, np, linregress
+from imports import xr, xe, cftime, plt, ccrs, cm, cy, np, linregress, pd
 
 import warnings
 
@@ -17,8 +17,8 @@ def regrid_data(ds_in, ds_out):
     ds_in = rename_coords_lon_lat(ds_in)
 
     # Regridder data
-    regridder = xe.Regridder(ds_in, ds_out, "bilinear")
-    regridder.clean_weight_file()
+    regridder = xe.Regridder(ds_in, ds_out,  "conservative")  #"bilinear")  #
+    # regridder.clean_weight_file()
 
     # Apply regridder to data
     # the entire dataset can be processed at once
@@ -270,7 +270,7 @@ def plt_scatter_iwp_sf_seasonal(
                 .values
             )
 
-            ax.plot(np.linspace(0, 100), y, color=c, linewidth="2")
+            ax.plot(np.linspace(0, 350), y, color=c, linewidth="2")
 
         ax.set_ylabel("Snowfall (mm$\,$day$^{-1}$)", fontweight="bold")
         ax.set_xlabel("Ice Water Path (g$\,$m$^{-2}$)", fontweight="bold")
