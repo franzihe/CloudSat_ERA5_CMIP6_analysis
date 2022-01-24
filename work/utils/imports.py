@@ -18,7 +18,8 @@ import pandas as pd
 import numpy as np
 from cmcrameri import cm
 from scipy.stats import linregress
-
+import dask.array as da
+import geocat.comp as gc
 
 
 import functions as fct
