@@ -17,7 +17,7 @@ def regrid_data(ds_in, ds_out):
     ds_in = rename_coords_lon_lat(ds_in)
 
     # Regridder data
-    regridder = xe.Regridder(ds_in, ds_out,  "conservative")  #"bilinear")  #
+    regridder = xe.Regridder(ds_in, ds_out, "conservative")  # "bilinear")  #
     # regridder.clean_weight_file()
 
     # Apply regridder to data
@@ -47,9 +47,7 @@ def regrid_data(ds_in, ds_out):
     return ds_in_regrid
 
 
-def plt_spatial_seasonal_mean(
-    variable, vmin=None, vmax=None, levels=None, add_colorbar=None, title=None
-):
+def plt_spatial_seasonal_mean(variable, variable_id, add_colorbar=None, title=None):
     fig, axsm = plt.subplots(
         2, 2, figsize=[10, 7], subplot_kw={"projection": ccrs.PlateCarree()}
     )
@@ -61,9 +59,9 @@ def plt_spatial_seasonal_mean(
             transform=ccrs.PlateCarree(),
             cmap=cm.devon_r,
             robust=True,
-            vmin=vmin,
-            vmax=vmax,
-            levels=levels,
+            vmin=plt_dict[variable_id][plt_dict["header"].index("vmin")],
+            vmax=plt_dict[variable_id][plt_dict["header"].index("vmax")],
+            levels=plt_dict[variable_id][plt_dict["header"].index("levels")],
             extend="max",
             add_colorbar=add_colorbar,
         )
@@ -82,6 +80,25 @@ def plt_spatial_seasonal_mean(
         axs,
         im,
     )
+
+
+plt_dict = {
+    "header": ["label", "vmin", "vmax", "levels", "vmin_std", "vmax_std"],
+    "sf": ["Snowfall (mm$\,$day$^{-1}$)", 0, 2.5, 25, 0, 0.6],
+    "tp": ["Total precipitation (mm$\,$day$^{-1}$)", 0, 9, 90, 0, 2.4],
+    "tciw": ["Ice Water Path (g$\,$m$^{-2}$)", 0, 100, 25, 0, 20],
+    "tclw": ["Liquid Water Path (g$\,$m$^{-2}$)", 0, 100, 25, 0, 20],
+    "2t": ["2-m temperature (K)", 246, 300, 40, 0, 6],
+}
+
+to_era_variable = {'tas'    : '2t', 
+                   'cli'    : 'clic',
+                   'clw'    : 'clwc',
+                   'prsn'   : 'sf', 
+                   'ta'     : 't',
+                   'clivi'  : 'tciw',
+                   'lwp'    : 'tclw',
+                   'pr'     : 'tp'}
 
 
 def plt_diff_seasonal(
@@ -131,7 +148,13 @@ def plt_diff_seasonal(
 
 
 def plt_zonal_seasonal(variable_model, title=None, label=None):
-    fig, axsm = plt.subplots(2, 2, figsize=[10, 7], sharex=True, sharey=True,)
+    fig, axsm = plt.subplots(
+        2,
+        2,
+        figsize=[10, 7],
+        sharex=True,
+        sharey=True,
+    )
 
     fig.suptitle(title, fontsize=16, fontweight="bold")
 
@@ -142,7 +165,9 @@ def plt_zonal_seasonal(variable_model, title=None, label=None):
             cm.romaO(range(0, 256, int(256 / len(variable_model.model.values)))),
         ):
             variable_model.sel(season=i, model=k).plot(
-                ax=ax, label=k, color=c,
+                ax=ax,
+                label=k,
+                color=c,
             )
 
         ax.set_ylabel(label, fontweight="bold")
@@ -228,14 +253,34 @@ def calc_regression(ds, ds_result, lat, step, season, model=None):
         #         model, season, lat, lat + step
         #     )
         # )
-        ds_result["slope_{}_{}".format(lat, lat + step,)] = np.nan
-        ds_result["intercept_{}_{}".format(lat, lat + step,)] = np.nan
+        ds_result[
+            "slope_{}_{}".format(
+                lat,
+                lat + step,
+            )
+        ] = np.nan
+        ds_result[
+            "intercept_{}_{}".format(
+                lat,
+                lat + step,
+            )
+        ] = np.nan
         ds_result["rvalue_{}_{}".format(lat, lat + step)] = np.nan
     else:
         _res = linregress(x[mask], y[mask])
 
-        ds_result["slope_{}_{}".format(lat, lat + step,)] = _res.slope
-        ds_result["intercept_{}_{}".format(lat, lat + step,)] = _res.intercept
+        ds_result[
+            "slope_{}_{}".format(
+                lat,
+                lat + step,
+            )
+        ] = _res.slope
+        ds_result[
+            "intercept_{}_{}".format(
+                lat,
+                lat + step,
+            )
+        ] = _res.intercept
         ds_result["rvalue_{}_{}".format(lat, lat + step)] = _res.rvalue
 
     return ds_result
@@ -245,7 +290,13 @@ def plt_scatter_iwp_sf_seasonal(
     ds, linreg, iteration, step, title=None, xlim=None, ylim=None
 ):
 
-    fig, axsm = plt.subplots(2, 2, figsize=[10, 7], sharex=True, sharey=True,)
+    fig, axsm = plt.subplots(
+        2,
+        2,
+        figsize=[10, 7],
+        sharex=True,
+        sharey=True,
+    )
     fig.suptitle(title, fontsize=16, fontweight="bold")
 
     axs = axsm.flatten()
@@ -283,7 +334,10 @@ def plt_scatter_iwp_sf_seasonal(
         ax.set_ylim(ylim)
 
     axs[1].legend(
-        loc="upper left", bbox_to_anchor=(1, 1), fontsize="small", fancybox=True,
+        loc="upper left",
+        bbox_to_anchor=(1, 1),
+        fontsize="small",
+        fancybox=True,
     )
 
     plt.tight_layout()
