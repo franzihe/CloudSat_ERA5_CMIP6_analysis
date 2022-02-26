@@ -145,6 +145,9 @@ height_agl = 44330 * (1 - (ds_cs['Pressure_grid']/1013.25) ** (1/5.255))
 ds_cs['Pressure_grid'] = ds_cs['Pressure_grid'].assign_coords(height_agl=("nbin", height_agl.values))
 ds_cs['height_agl'].attrs = ({'units':ds_cs['height'].attrs['units'], 'longname': 'height above ground'}) 
 
+# Round grid values
+ds_cs['Pressure_grid'] = ds_cs['Pressure_grid'].round(decimals=0)
+
 # %%
 # Example plot of the new pressure grid retrieved with the exponetial fit and the pressure provided by the ECMWF-AUX file
 ds_cs['Pressure_grid'].plot(x = 'height_agl')
