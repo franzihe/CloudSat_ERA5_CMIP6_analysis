@@ -1,4 +1,18 @@
-from imports import xr, xe, cftime, plt, ccrs, cm, cy, np, linregress, pd
+from imports import (
+    xr,
+    xe,
+    cftime,
+    plt,
+    ccrs,
+    cm,
+    cy,
+    np,
+    linregress,
+    pd,
+    da,
+    datetime,
+    timedelta,
+)
 
 import warnings
 
@@ -91,14 +105,16 @@ plt_dict = {
     "2t": ["2-m temperature (K)", 246, 300, 40, 0, 6],
 }
 
-to_era_variable = {'tas'    : '2t', 
-                   'cli'    : 'clic',
-                   'clw'    : 'clwc',
-                   'prsn'   : 'sf', 
-                   'ta'     : 't',
-                   'clivi'  : 'tciw',
-                   'lwp'    : 'tclw',
-                   'pr'     : 'tp'}
+to_era_variable = {
+    "tas": "2t",
+    "cli": "clic",
+    "clw": "clwc",
+    "prsn": "sf",
+    "ta": "t",
+    "clivi": "tciw",
+    "lwp": "tclw",
+    "pr": "tp",
+}
 
 
 def plt_diff_seasonal(
@@ -565,3 +581,144 @@ def broadcast_indices(x, minv, ndim, axis):
             dim_inds = np.arange(x.shape[dim])
             ret.append(dim_inds[tuple(broadcast_slice)])
     return tuple(ret)
+
+
+def get_profile_times(h5file):
+    time_offset_seconds = get_geoloc_var(h5file, "Profile_time")
+    UTC_start_time_seconds = get_geoloc_var(h5file, "UTC_start")[0]
+    start_time_string = h5file["Swath Attributes"]["start_time"][0][0].decode("UTF-8")
+    YYYYmmdd = start_time_string[0:8]
+    base_time = datetime.strptime(YYYYmmdd, "%Y%m%d")
+    UTC_start_offset = timedelta(seconds=UTC_start_time_seconds)
+    profile_times = np.array(
+        [
+            base_time + UTC_start_offset + timedelta(seconds=x)
+            for x in time_offset_seconds
+        ]
+    )
+
+    da = xr.DataArray(
+        data=profile_times,
+        dims=["nray"],
+        coords=dict(
+            nray=range(len(profile_times)),
+        ),
+        attrs=dict(
+            description="time",
+        ),
+    )
+    return da
+
+
+def get_geoloc_var(
+    h5file,
+    varname,
+):
+    var_value = h5file["Geolocation Fields"][varname][:]
+    var_value = var_value.astype(float)
+    factor = h5file["Swath Attributes"][varname + ".factor"][0][0]
+    offset = h5file["Swath Attributes"][varname + ".offset"][0][0]
+    var_value = (var_value - offset) / factor
+
+    if varname == "DEM_elevation":
+        var_value[var_value < 0.0] = 0.0
+    if (
+        varname == "Height"
+        or varname == "DEM_elevation"
+        or varname == "Vertical_binsize"
+    ):
+        # mask missing values
+        var_value[
+            var_value == h5file["Swath Attributes"][varname + ".missing"][0][0]
+        ] = np.nan
+
+    if (
+        varname == "Latitude"
+        or varname == "Longitude"
+        or varname == "Height"
+        or varname == "DEM_elevation"
+        or varname == "Vertical_binsize"
+    ):
+        if var_value.ndim == 1:
+            da = xr.DataArray(
+                data=var_value,
+                dims=["nray"],
+                coords=dict(
+                    nray=range(len(var_value)),
+                ),
+                attrs=dict(
+                    longname=h5file["Swath Attributes"][varname + ".long_name"][0][
+                        0
+                    ].decode("UTF-8"),
+                    units=h5file["Swath Attributes"][varname + ".units"][0][0].decode(
+                        "UTF-8"
+                    ),
+                ),
+            )
+        if var_value.ndim == 2:
+            da = xr.DataArray(
+                data=var_value,
+                dims=["nray", "nbin"],
+                coords=dict(
+                    nray=range(var_value.shape[0]), nbin=range(var_value.shape[1])
+                ),
+                attrs=dict(
+                    longname=h5file["Swath Attributes"][varname + ".long_name"][0][
+                        0
+                    ].decode("UTF-8"),
+                    units=h5file["Swath Attributes"][varname + ".units"][0][0].decode(
+                        "UTF-8"
+                    ),
+                ),
+            )
+        return da
+
+    else:
+        return var_value
+
+
+def get_data_var(h5file, varname):
+    var_value = h5file["Data Fields"][varname][:]
+    var_value = var_value.astype(float)
+    factor = h5file["Swath Attributes"][varname + ".factor"][0][0]
+    offset = h5file["Swath Attributes"][varname + ".offset"][0][0]
+    var_value = (var_value - offset) / factor
+
+    var_value[
+        var_value == h5file["Swath Attributes"][varname + ".missing"][0][0]
+    ] = np.nan
+
+    if var_value.ndim == 1:
+        da = xr.DataArray(
+            data=var_value,
+            dims=["nray"],
+            coords=dict(
+                nray=range(len(var_value)),
+            ),
+            attrs=dict(
+                longname=h5file["Swath Attributes"][varname + ".long_name"][0][
+                    0
+                ].decode("UTF-8"),
+                units=h5file["Swath Attributes"][varname + ".units"][0][0].decode(
+                    "UTF-8"
+                ),
+            ),
+        )
+    if var_value.ndim == 2:
+        da = xr.DataArray(
+            data=var_value,
+            dims=["nray", "nbin"],
+            coords=dict(nray=range(var_value.shape[0]), nbin=range(var_value.shape[1])),
+            attrs=dict(
+                longname=h5file["Swath Attributes"][varname + ".long_name"][0][
+                    0
+                ].decode("UTF-8"),
+                units=h5file["Swath Attributes"][varname + ".units"][0][0].decode(
+                    "UTF-8"
+                ),
+            ),
+        )
+    return da
+
+def exponential_fit(x, a, b, c):
+    return (a*np.exp(b*x) + c)
