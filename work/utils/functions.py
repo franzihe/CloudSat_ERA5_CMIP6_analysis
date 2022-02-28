@@ -20,8 +20,16 @@ import warnings
 def rename_coords_lon_lat(ds):
     for k in ds.indexes.keys():
         if k == "longitude":
+            ds["longitude"].attrs = {
+                "standard_name": "longitude",
+                "units": "degrees_east",
+            }
             ds = ds.rename({"longitude": "lon"})
         if k == "latitude":
+            ds["latitude"].attrs = {
+                "standard_name": "latitude",
+                "units": "degrees_north",
+            }
             ds = ds.rename({"latitude": "lat"})
 
     return ds
@@ -29,6 +37,7 @@ def rename_coords_lon_lat(ds):
 
 def regrid_data(ds_in, ds_out):
     ds_in = rename_coords_lon_lat(ds_in)
+    ds_out = rename_coords_lon_lat(ds_out)
 
     # Regridder data
     regridder = xe.Regridder(ds_in, ds_out, "conservative")  # "bilinear")  #
@@ -60,37 +69,39 @@ def regrid_data(ds_in, ds_out):
                 continue
     return ds_in_regrid
 
+
 def find_IWC_LWC_level(ds, var1, var2, value, ds_out):
     # 1.1. IWC + LWC = 100%
     iwc_lwc = ds[var1] + ds[var2]
-    # 1.2. IWC/(IWC + LWC)  = fraction_iwc 
-    iwc_fraction = ds[var1]/iwc_lwc
+    # 1.2. IWC/(IWC + LWC)  = fraction_iwc
+    iwc_fraction = ds[var1] / iwc_lwc
     # 2. level where fraction_iwc == 0.5 and fraction_lwc == 0.5 or given value
     # use the closest layer as it might not be exactly 0.5
     filter = find_nearest(iwc_fraction, value)
 
-
     # 3. get values where level given value
-    iwc_val = int(value*100)
-    lwc_val = int(100-iwc_val)
-    
-    ds_out['pressure_{}_{}'.format(iwc_val, lwc_val)] = ds['pressure'].where(filter)
+    iwc_val = int(value * 100)
+    lwc_val = int(100 - iwc_val)
+
+    ds_out["pressure"] = ds["pressure"].where(filter)
 
     for var_id in list(ds.keys()):
-        if (var_id == 'pressure_{}_{}'.format(iwc_val, lwc_val)) or (var_id == 'pressure'):
+        if (var_id == "pressure_{}_{}".format(iwc_val, lwc_val)) or (
+            var_id == "pressure"
+        ):
             continue
         else:
-            ds_out[var_id + '_{}_{}'.format(iwc_val, lwc_val)] = ds[var_id].where(filter)
+            ds_out[var_id] = ds[var_id].where(filter)
             if len(ds[var_id].dims) < 4:
-                filter_pres = ds_out['pressure_{}_{}'.format(iwc_val, lwc_val)] == ds_out['pressure_{}_{}'.format(iwc_val, lwc_val)].max('level')
-                ds_out[var_id + '_{}_{}'.format(iwc_val, lwc_val)] = (ds_out[var_id + '_{}_{}'.format(iwc_val, lwc_val)].where(filter_pres)).idxmax(dim='level')
+                filter_pres = ds_out["pressure"] == ds_out["pressure"].max("level")
+                ds_out[var_id] = (ds_out[var_id].where(filter_pres)).idxmax(dim="level")
 
-    return(ds_out)
+    return ds_out
 
 
 def find_nearest(array, value):
-    filter1 = (array == abs(array - value).min())
-    return(filter1)
+    filter1 = array == abs(array - value).min()
+    return filter1
 
 
 def plt_spatial_seasonal_mean(variable, variable_id, add_colorbar=None, title=None):
@@ -752,5 +763,6 @@ def get_data_var(h5file, varname):
         )
     return da
 
+
 def exponential_fit(x, a, b, c):
-    return (a*np.exp(b*x) + c)
+    return a * np.exp(b * x) + c
