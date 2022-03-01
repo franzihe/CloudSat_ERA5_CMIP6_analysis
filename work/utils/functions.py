@@ -70,32 +70,26 @@ def regrid_data(ds_in, ds_out):
     return ds_in_regrid
 
 
-def find_IWC_LWC_level(ds, var1, var2, value, ds_out):
+def find_IWC_LWC_level(ds, var1, var2, value, coordinate):
     # 1.1. IWC + LWC = 100%
     iwc_lwc = ds[var1] + ds[var2]
     # 1.2. IWC/(IWC + LWC)  = fraction_iwc
     iwc_fraction = ds[var1] / iwc_lwc
     # 2. level where fraction_iwc == 0.5 and fraction_lwc == 0.5 or given value
     # use the closest layer as it might not be exactly 0.5
-    filter = find_nearest(iwc_fraction, value)
+    filter_mc = find_nearest(iwc_fraction, value)
 
     # 3. get values where level given value
     iwc_val = int(value * 100)
     lwc_val = int(100 - iwc_val)
 
-    ds_out["pressure"] = ds["pressure"].where(filter)
+    p_5050 = ds["pressure"].where(filter_mc)  # e.g. P@50/50
+    filter_pres = p_5050 == p_5050.max(dim=coordinate)
 
+    ds_out = xr.Dataset()
     for var_id in list(ds.keys()):
-        if (var_id == "pressure_{}_{}".format(iwc_val, lwc_val)) or (
-            var_id == "pressure"
-        ):
-            continue
-        else:
-            ds_out[var_id] = ds[var_id].where(filter)
-            if len(ds[var_id].dims) < 4:
-                filter_pres = ds_out["pressure"] == ds_out["pressure"].max("level")
-                ds_out[var_id] = (ds_out[var_id].where(filter_pres)).idxmax(dim="level")
-
+        var = ds[var_id].where(filter_pres)
+        ds_out[var_id] = var.sum(dim=coordinate, skipna=True)
     return ds_out
 
 
