@@ -98,6 +98,20 @@ def find_nearest(array, value):
     return filter1
 
 
+def seasonal_mean_std(
+    ds,
+    var,
+):
+    ds[var + "_season_mean"] = (
+        ds[var].groupby("time.season").mean("time", keep_attrs=True)
+    )
+    ds[var + "_season_std"] = (
+        ds[var].groupby("time.season").std("time", keep_attrs=True)
+    )
+
+    return ds
+
+
 def plt_spatial_seasonal_mean(variable, variable_id, add_colorbar=None, title=None):
     fig, axsm = plt.subplots(
         2, 2, figsize=[10, 7], subplot_kw={"projection": ccrs.PlateCarree()}
