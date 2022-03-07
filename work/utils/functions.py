@@ -77,24 +77,25 @@ def find_IWC_LWC_level(ds, var1, var2, value, coordinate):
     iwc_fraction = ds[var1] / iwc_lwc
     # 2. level where fraction_iwc == 0.5 and fraction_lwc == 0.5 or given value
     # use the closest layer as it might not be exactly 0.5
-    filter_mc = find_nearest(iwc_fraction, value)
+    filter_mc = find_nearest(iwc_fraction, value, coordinate)
 
     # 3. get values where level given value
-    iwc_val = int(value * 100)
-    lwc_val = int(100 - iwc_val)
 
-    p_5050 = ds["pressure"].where(filter_mc)  # e.g. P@50/50
-    filter_pres = p_5050 == p_5050.max(dim=coordinate)
+    # p_5050 = ds["pressure"].where(filter_mc)  # e.g. P@50/50
+    # filter_pres = p_5050 == p_5050.max(dim=coordinate)
 
     ds_out = xr.Dataset()
     for var_id in list(ds.keys()):
-        var = ds[var_id].where(filter_pres)
-        ds_out[var_id] = var.sum(dim=coordinate, skipna=True)
+        var = ds[var_id].where(filter_mc)
+        ds_out[var_id] = var
+        # ds_out[var_id] = var.sum(dim=coordinate, skipna=True)
     return ds_out
 
 
-def find_nearest(array, value):
-    filter1 = array == abs(array - value).min()
+def find_nearest(array, value, coordinate):
+    filter1 = array[coordinate] == abs(array - value).idxmin(
+        dim=coordinate, skipna=True
+    )
     return filter1
 
 
