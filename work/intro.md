@@ -1,16 +1,4 @@
-# Welcome to your Jupyter Book
+# Welcome to Global Snow project website
 
-This is a small sample book to give you a feel for how book content is
-structured.
+You will find here all my work.
 
-:::{note}
-Here is a note!
-:::
-
-And here is a code block:
-
-```
-e = mc^2
-```
-
-Check out the content pages bundled with this sample book to see more.

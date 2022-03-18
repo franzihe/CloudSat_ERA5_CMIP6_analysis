@@ -1,8 +1,10 @@
-# Table of content
-# Learn more at https://jupyterbook.org/customize/toc.html
-#
-- file: intro
-- file: content
+format: jb-article
+root: intro
+sections:
+- file: ERA5/ERA5_1985-2014
+- file: CMIP6_ERA5_CloudSat/plt_seasonal_mean
+- file: cmip/CMIP6_hr_1985-2014
+- file: cloudsat
   sections:
-    - file: markdown
-    - file: notebooks
+  - file: CloudSat/get_pressure_grid
+  - file: CloudSat/read_2C_snow
