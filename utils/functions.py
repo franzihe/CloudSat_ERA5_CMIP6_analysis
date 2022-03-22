@@ -150,11 +150,12 @@ def plt_spatial_seasonal_mean(variable, variable_id, add_colorbar=None, title=No
 
 plt_dict = {
     "header": ["label", "vmin", "vmax", "levels", "vmin_std", "vmax_std"],
-    "sf": ["Snowfall (mm$\,$day$^{-1}$)", 0, 2.5, 25, 0, 0.6],
-    "tp": ["Total precipitation (mm$\,$day$^{-1}$)", 0, 9, 90, 0, 2.4],
-    "tciw": ["Ice Water Path (g$\,$m$^{-2}$)", 0, 100, 25, 0, 20],
-    "tclw": ["Liquid Water Path (g$\,$m$^{-2}$)", 0, 100, 25, 0, 20],
-    "2t": ["2-m temperature (K)", 246, 300, 40, 0, 6],
+    "sf": ["Snowfall (mm$\,$day$^{-1}$)", 0, 2.5, 26, 0, 0.6],
+    "tp": ["Total precipitation (mm$\,$day$^{-1}$)", 0, 9, 91, 0, 2.4],
+    "tciw": ["Ice Water Path (g$\,$m$^{-2}$)", 0, 100, 26, 0, 20],
+    "tclw": ["Liquid Water Path (g$\,$m$^{-2}$)", 0, 100, 26, 0, 20],
+    "2t": ["2-m temperature (K)", 246, 300, 41, 0, 6],
+    "msr": ["Mean snowfall rate (mm$\,$day$^{-1}$)", 0, 2.4, 25, 0, 1],
 }
 
 to_era_variable = {
