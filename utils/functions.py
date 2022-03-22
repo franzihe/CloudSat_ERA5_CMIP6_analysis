@@ -113,7 +113,9 @@ def seasonal_mean_std(
     return ds
 
 
-def plt_spatial_seasonal_mean(variable, variable_id, add_colorbar=None, title=None):
+def plt_spatial_seasonal_mean(
+    variable, variable_id, add_colorbar=None, title=None, global_mean=None
+):
     fig, axsm = plt.subplots(
         2, 2, figsize=[10, 7], subplot_kw={"projection": ccrs.PlateCarree()}
     )
@@ -136,7 +138,14 @@ def plt_spatial_seasonal_mean(variable, variable_id, add_colorbar=None, title=No
         gl = ax.gridlines()
         ax.add_feature(cy.feature.BORDERS)
         gl.top_labels = False
-        ax.set_title("season: {}".format(i.values))
+        if global_mean == None:
+            ax.set_title("season: {}".format(i.values))
+        else:
+            ax.set_title(
+                "season: {}; global mean: {}".format(
+                    i.values, global_mean.sel(season=i).round(decimals=2).values
+                )
+            )
 
     plt.tight_layout()
     fig.subplots_adjust(top=0.88)
@@ -156,6 +165,10 @@ plt_dict = {
     "tclw": ["Liquid Water Path (g$\,$m$^{-2}$)", 0, 100, 26, 0, 20],
     "2t": ["2-m temperature (K)", 246, 300, 41, 0, 6],
     "msr": ["Mean snowfall rate (mm$\,$day$^{-1}$)", 0, 2.4, 25, 0, 1],
+    "clic": ["Specific cloud ice water content (g kg$^{-1}$)", 0, 0.01, 11, 0, 1],
+    "clwc": ["Specific cloud liquid water content (g kg$^{-1}$)", 0, 0.01, 11, 0, 1],
+    "cswc": ["Specific snow water content (g kg$^{-1}$)", 0.05, 0.08, 11, 0, 1],
+    "pressure": ["Pressure", 1, 1000, 38, 0, 50],
 }
 
 to_era_variable = {
