@@ -70,6 +70,24 @@ def regrid_data(ds_in, ds_out):
     return ds_in_regrid
 
 
+def dataset_IWC_LWC_level(ds, iwc_stat, var1, var2, data_name):
+    dset_dict = dict()
+    dset_dict[data_name] = ds
+    for i in iwc_stat.items():
+        dset_dict["{}_{}".format(data_name, i[0])] = fct.find_IWC_LWC_level(
+            ds, var1=var1, var2=var2, value=i[1], coordinate="level"
+        )
+
+    ## Connect all statistics into one Dataset with new coordinate 'statistic'
+    _ds = list(dset_dict.values())
+    _coord = list(dset_dict.keys())
+    ds_new = xr.concat(objs=_ds, dim=_coord, coords="all").rename(
+        {"concat_dim": "statistic"}
+    )
+
+    return ds_new
+
+
 def find_IWC_LWC_level(ds, var1, var2, value, coordinate):
     # 1.1. IWC + LWC = 100%
     iwc_lwc = ds[var1] + ds[var2]
