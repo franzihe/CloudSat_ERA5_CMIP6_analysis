@@ -103,8 +103,12 @@ def seasonal_mean_std(
     ds,
     var,
 ):
-    ds[var] = ds[var].groupby("time.season").mean("time", keep_attrs=True, skipna=True)
-    ds[var] = ds[var].groupby("time.season").std("time", keep_attrs=True, skipna=True)
+    ds[var + "_season_mean"] = (
+        ds[var].groupby("time.season").mean("time", keep_attrs=True, skipna=True)
+    )
+    ds[var + "_season_std"] = (
+        ds[var].groupby("time.season").std("time", keep_attrs=True, skipna=True)
+    )
 
     return ds
 
