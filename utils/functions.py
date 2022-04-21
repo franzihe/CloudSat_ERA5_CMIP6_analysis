@@ -74,7 +74,7 @@ def dataset_IWC_LWC_level(ds, iwc_stat, var1, var2, data_name):
     dset_dict = dict()
     dset_dict[data_name] = ds
     for i in iwc_stat.items():
-        dset_dict["{}_{}".format(data_name, i[0])] = fct.find_IWC_LWC_level(
+        dset_dict["{}_{}".format(data_name, i[0])] = find_IWC_LWC_level(
             ds, var1=var1, var2=var2, value=i[1], coordinate="level"
         )
 
@@ -186,7 +186,7 @@ plt_dict = {
     "clic": ["Specific cloud ice water content (g kg$^{-1}$)", 0, 0.01, 11, 0, 1],
     "clwc": ["Specific cloud liquid water content (g kg$^{-1}$)", 0, 0.01, 11, 0, 1],
     "cswc": ["Specific snow water content (g kg$^{-1}$)", 0.05, 0.08, 11, 0, 1],
-    "pressure": ["Pressure", 300, 1000, 26, 0, 50],
+    "pressure": ["Pressure", 400, 1000, 26, 0, 50],
 }
 
 to_era_variable = {
