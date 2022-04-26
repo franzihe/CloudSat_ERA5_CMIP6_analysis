@@ -1,0 +1,1765 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example with high-resolution CMIP6 models (~100 km) using Pangeo catalog &#8212; globalsnow</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Cloudsat" href="../cloudsat.html" />
+    <link rel="prev" title="Analysis of CMIP6, ERA5, and CloudSat" href="../CMIP6_ERA5_CloudSat/plt_seasonal_mean.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">globalsnow</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Welcome to Global Snow project website
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../ERA5/ERA5_1985-2014.html">
+   Example with ERA5 high-resolution (~0.25deg) monthly means
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../CMIP6_ERA5_CloudSat/plt_seasonal_mean.html">
+   Analysis of CMIP6, ERA5, and CloudSat
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Example with high-resolution CMIP6 models (~100 km) using Pangeo catalog
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../cloudsat.html">
+   Cloudsat
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../CloudSat/get_pressure_grid.html">
+     Example to get CloudSat mean pressure level profile
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/cmip/CMIP6_hr_1985-2014.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/franzihe/CloudSat_ERA5_CMIP6_analysis"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/franzihe/CloudSat_ERA5_CMIP6_analysis/issues/new?title=Issue%20on%20page%20%2Fcmip/CMIP6_hr_1985-2014.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/franzihe/CloudSat_ERA5_CMIP6_analysis/main?urlpath=tree/work/cmip/CMIP6_hr_1985-2014.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Example with high-resolution CMIP6 models (~100 km) using Pangeo catalog
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#table-of-contents">
+   Table of Contents
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction-a-id-introduction-a">
+   1. Introduction
+   <a id="introduction">
+   </a>
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#data-wrangling-a-id-data-wrangling-a">
+   2. Data Wrangling
+   <a id="data_wrangling">
+   </a>
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#import-python-packages">
+     Import python packages
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#open-cmip6-online-catalog">
+     Open CMIP6 online catalog
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#search-corresponding-data">
+     Search corresponding data
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-dictionary-from-the-list-of-datasets-we-found">
+     Create dictionary from the list of datasets we found
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#calendar">
+     Calendar
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#show-attributes-and-individual-identifier">
+     Show attributes and individual identifier
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#assign-attributes-to-the-variables">
+     Assign attributes to the variables
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#interpolate-from-cmip6-hybrid-sigma-pressure-levels-to-era5-isobaric-pressure-levels">
+     Interpolate from CMIP6 hybrid sigma-pressure levels to ERA5 isobaric pressure levels
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#regrid-cmip6-data-to-noresm2-mm-grid-a-id-regrid-hz-a">
+     Regrid CMIP6 data to NorESM2-MM grid
+     <a id="regrid_hz">
+     </a>
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#connect-all-models-into-one-dataset-with-new-coordinate-model">
+     Connect all models into one Dataset with new coordinate ‘model’
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#find-mixed-phase-clouds">
+     Find mixed-phase clouds
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-dictionary-from-the-list-of-datasets-we-want-to-use-for-the-iwc-lwc-statistics">
+     Create dictionary from the list of datasets we want to use for the IWC/LWC statistics
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exploratory-data-analysis-a-id-exploratory-a">
+   3. Exploratory Data Analysis
+   <a id="exploratory">
+   </a>
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-seasonal-mean-of-all-regridded-models">
+     Create seasonal mean of all regridded models
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-model-mean-spread-of-seasonal-mean-of-all-regridded-models">
+     Create model mean/spread of seasonal mean of all regridded models
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references-a-id-references-a">
+   References
+   <a id="references">
+   </a>
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Example with high-resolution CMIP6 models (~100 km) using Pangeo catalog</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Example with high-resolution CMIP6 models (~100 km) using Pangeo catalog
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#table-of-contents">
+   Table of Contents
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction-a-id-introduction-a">
+   1. Introduction
+   <a id="introduction">
+   </a>
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#data-wrangling-a-id-data-wrangling-a">
+   2. Data Wrangling
+   <a id="data_wrangling">
+   </a>
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#import-python-packages">
+     Import python packages
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#open-cmip6-online-catalog">
+     Open CMIP6 online catalog
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#search-corresponding-data">
+     Search corresponding data
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-dictionary-from-the-list-of-datasets-we-found">
+     Create dictionary from the list of datasets we found
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#calendar">
+     Calendar
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#show-attributes-and-individual-identifier">
+     Show attributes and individual identifier
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#assign-attributes-to-the-variables">
+     Assign attributes to the variables
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#interpolate-from-cmip6-hybrid-sigma-pressure-levels-to-era5-isobaric-pressure-levels">
+     Interpolate from CMIP6 hybrid sigma-pressure levels to ERA5 isobaric pressure levels
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#regrid-cmip6-data-to-noresm2-mm-grid-a-id-regrid-hz-a">
+     Regrid CMIP6 data to NorESM2-MM grid
+     <a id="regrid_hz">
+     </a>
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#connect-all-models-into-one-dataset-with-new-coordinate-model">
+     Connect all models into one Dataset with new coordinate ‘model’
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#find-mixed-phase-clouds">
+     Find mixed-phase clouds
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-dictionary-from-the-list-of-datasets-we-want-to-use-for-the-iwc-lwc-statistics">
+     Create dictionary from the list of datasets we want to use for the IWC/LWC statistics
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exploratory-data-analysis-a-id-exploratory-a">
+   3. Exploratory Data Analysis
+   <a id="exploratory">
+   </a>
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-seasonal-mean-of-all-regridded-models">
+     Create seasonal mean of all regridded models
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-model-mean-spread-of-seasonal-mean-of-all-regridded-models">
+     Create model mean/spread of seasonal mean of all regridded models
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references-a-id-references-a">
+   References
+   <a id="references">
+   </a>
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <div class="tex2jax_ignore mathjax_ignore section" id="example-with-high-resolution-cmip6-models-100-km-using-pangeo-catalog">
+<h1>Example with high-resolution CMIP6 models (~100 km) using Pangeo catalog<a class="headerlink" href="#example-with-high-resolution-cmip6-models-100-km-using-pangeo-catalog" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="table-of-contents">
+<h1>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h1>
+<ul>
+<li><a href="#introduction">1. Introduction</a></li>
+<li><a href="#data_wrangling">2. Data Wrangling</a></li>
+<li><a href="#exploratory">3. Exploratory Data Analysis</a></li>
+<li><a href="#conclusion">4. Conclusion</a></li>
+<li><a href="#references">5. References</a></li>
+</ul>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="introduction-a-id-introduction-a">
+<h1>1. Introduction <a id='introduction'></a><a class="headerlink" href="#introduction-a-id-introduction-a" title="Permalink to this headline">¶</a></h1>
+<p>Cloud feedbacks are a major contributor to the spread of climate sensitivity in global climate models (GCMs) <a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1029/2019GL085782">Zelinka et al. (2020)</a>. Among the most poorly understood cloud feedbacks is the one associated with the cloud phase, which is expected to be modified with climate change <a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1038/s41561-020-00649-1">Bjordal et al. (2020)</a>. Cloud phase bias, in addition, has significant implications for the simulation of radiative properties and glacier and ice sheet mass balances in climate models.</p>
+<p>In this context, this work aims to expand our knowledge on how the representation of the cloud phase affects snow formation in GCMs. Better understanding this aspect is necessary to develop climate models further and improve future climate predictions.</p>
+<ul class="simple">
+<li><p>Retrieve CMIP6 data through <a class="reference external" href="https://pangeo-data.github.io/pangeo-cmip6-cloud/">Pangeo</a></p></li>
+<li><p>Hybrid sigma-pressure coordinates to isobaric pressure levels of the European Centre for Medium-Range Weather Forecast Re-Analysis 5 (ERA5) with <a class="reference external" href="https://geocat-comp.readthedocs.io/en/latest/index.html">GeoCAT-comb</a></p></li>
+<li><p>Regridd the CMIP6 variables to the exact horizontal resolution with <a class="reference external" href="https://xesmf.readthedocs.io/en/latest/"><code class="docutils literal notranslate"><span class="pre">xesmf</span></code></a></p></li>
+<li><p>Calculate an ensemble mean of all used models</p></li>
+<li><p>Calculate and plot the seasonal mean of the ensemble mean</p></li>
+</ul>
+<p><strong>Questions</strong></p>
+<ul class="simple">
+<li><p>How is the cloud phase and snowfall varying between 1985 and 2014?</p></li>
+</ul>
+<blockquote>
+<div><p><strong><em>NOTE:</em></strong> We answer questions related to the comparison of CMIP models to ERA5 in another <a class="reference internal" href="../CMIP6_ERA5_CloudSat/plt_seasonal_mean.html"><span class="doc std std-doc">Jupyter Notebook</span></a>.</p>
+</div></blockquote>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="data-wrangling-a-id-data-wrangling-a">
+<h1>2. Data Wrangling <a id='data_wrangling'></a><a class="headerlink" href="#data-wrangling-a-id-data-wrangling-a" title="Permalink to this headline">¶</a></h1>
+<p>This study will compare surface snowfall, ice, and liquid water content from the Coupled Model Intercomparison Project Phase 6 (<a class="reference external" href="https://esgf-node.llnl.gov/projects/cmip6/">CMIP6</a>) climate models (accessed through <a class="reference external" href="https://pangeo.io/">Pangeo</a>) to the European Centre for Medium-Range Weather Forecast Re-Analysis 5 (<a class="reference external" href="https://www.ecmwf.int/en/forecasts/datasets/reanalysis-datasets/era5">ERA5</a>) data from <strong>1985 to 2014</strong>. We conduct statistical analysis at the annual and seasonal timescales to determine the biases in cloud phase and precipitation (liquid and solid) in the CMIP6 models and their potential connection between them.</p>
+<ul class="simple">
+<li><p>Time period: 1985 to 2014</p></li>
+<li><p>horizonal resolution: ~100km</p></li>
+<li><p>time resolution: monthly atmospheric data (Amon, AERmon)</p></li>
+<li><p>Variables:</p></li>
+</ul>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>shortname</p></th>
+<th class="text-align:center head"><p>Long name</p></th>
+<th class="text-align:right head"><p>Units</p></th>
+<th class="text-align:right head"><p>levels</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>prsn</p></td>
+<td class="text-align:center"><p>Snowfall Flux</p></td>
+<td class="text-align:right"><p>[kg m-2 s-1]</p></td>
+<td class="text-align:right"><p>surface</p></td>
+</tr>
+<tr class="row-odd"><td><p>clw</p></td>
+<td class="text-align:center"><p>Mass Fraction of Cloud Liquid Water</p></td>
+<td class="text-align:right"><p>[kg kg-1]</p></td>
+<td class="text-align:right"><p>ml</p></td>
+</tr>
+<tr class="row-even"><td><p>cli</p></td>
+<td class="text-align:center"><p>Mass Fraction of Cloud Ice</p></td>
+<td class="text-align:right"><p>[kg kg-1]</p></td>
+<td class="text-align:right"><p>ml</p></td>
+</tr>
+<tr class="row-odd"><td><p>tas</p></td>
+<td class="text-align:center"><p>Near-Surface Air Temperature</p></td>
+<td class="text-align:right"><p>[K]</p></td>
+<td class="text-align:right"><p>surface</p></td>
+</tr>
+<tr class="row-even"><td><p>ta</p></td>
+<td class="text-align:center"><p>Air Temperature</p></td>
+<td class="text-align:right"><p>[K]</p></td>
+<td class="text-align:right"><p>ml</p></td>
+</tr>
+<tr class="row-odd"><td><p>clivi</p></td>
+<td class="text-align:center"><p>Ice Water Path</p></td>
+<td class="text-align:right"><p>[kg m-2]</p></td>
+<td class="text-align:right"><p></p></td>
+</tr>
+<tr class="row-even"><td><p>lwp</p></td>
+<td class="text-align:center"><p>Liquid Water Path</p></td>
+<td class="text-align:right"><p>[kg m-2]</p></td>
+<td class="text-align:right"><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>pr</p></td>
+<td class="text-align:center"><p>Precipitation</p></td>
+<td class="text-align:right"><p>[kg m-2 s-1]</p></td>
+<td class="text-align:right"><p>surface</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>CMIP6 models:</p></li>
+</ul>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Institution</p></th>
+<th class="text-align:center head"><p>Model name</p></th>
+<th class="text-align:right head"><p>Reference</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.rcec.sinica.edu.tw/index_en.php">AS-RCEC</a></p></td>
+<td class="text-align:center"><p>TaiESM1</p></td>
+<td class="text-align:right"><p><a class="reference external" href="https://doi.org/10.5194/gmd-13-3887-2020">Lee et al. (2020)</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://bcc.ncc-cma.net/">BCC</a></p></td>
+<td class="text-align:center"><p>BCC-CSM2-M</p></td>
+<td class="text-align:right"><p><a class="reference external" href="https://doi.org/10.5194/gmd-12-1573-2019">Wu et al. (2019)</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.cma.gov.cn/en2014/">CAMS</a></p></td>
+<td class="text-align:center"><p>CAMS-CSM1-0</p></td>
+<td class="text-align:right"><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://english.iap.cas.cn/">CAS</a></p></td>
+<td class="text-align:center"><p>FGOALS-f3-L</p></td>
+<td class="text-align:right"><p><a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1080/16742834.2020.1778419">Bian et al. (2020)</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.cmcc.it/">CMCC</a></p></td>
+<td class="text-align:center"><p>CMCC-CM2-SR5</p></td>
+<td class="text-align:right"><p><a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1029/2018MS001369">Cherchi et al. (2019)</a></p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td class="text-align:center"><p>CMCC-CM2-HR4</p></td>
+<td class="text-align:right"><p><a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1029/2018MS001369">Cherchi et al. (2019)</a></p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td class="text-align:center"><p>CMCC-ESM2</p></td>
+<td class="text-align:right"><p><a class="reference external" href="https://www.cmcc.it/models/cmcc-esm-earth-system-model">CMCC website</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.ec-earth.org/">EC-Earth-Consortium</a></p></td>
+<td class="text-align:center"><p>EC-Earth3-AerChem</p></td>
+<td class="text-align:right"><p><a class="reference external" href="https://doi.org/10.5194/gmd-14-5637-2021">van Noije et al. (2021)</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://e3sm.org/">E3SM-Project</a></p></td>
+<td class="text-align:center"><p>E3SM-1-1</p></td>
+<td class="text-align:right"><p><a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1029/2018MS001603">Golaz et al. (2019)</a>; <a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1029/2019MS001766">Burrows et al. (2020)</a> Text S8</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td class="text-align:center"><p>E3SM-1-1-ECA</p></td>
+<td class="text-align:right"><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://mpimet.mpg.de/en/homepage">MPI-M</a></p></td>
+<td class="text-align:center"><p>MPI-ESM1-2-HR</p></td>
+<td class="text-align:right"><p><a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1029/2017MS001217">Müller et al. (2018)</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.mri-jma.go.jp/index_en.html">MRI</a></p></td>
+<td class="text-align:center"><p>MRI-ESM2-0</p></td>
+<td class="text-align:right"><p><a class="reference external" href="https://doi.org/10.2151/jmsj.2019-051">Yukimoto et al. (2019)</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://folk.uib.no/ngfhd/EarthClim/index.htm">NCC</a></p></td>
+<td class="text-align:center"><p>NorESM2-MM</p></td>
+<td class="text-align:right"><p><a class="reference external" href="https://doi.org/10.5194/gmd-13-6165-2020">Seland et al. (2020)</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.gfdl.noaa.gov/">NOAA-GFDL</a></p></td>
+<td class="text-align:center"><p>GFDL-CM4</p></td>
+<td class="text-align:right"><p><a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1029/2019MS001829">Held et al. (2019)</a></p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td class="text-align:center"><p>GFDL-ESM4</p></td>
+<td class="text-align:right"><p><a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1029/2019MS002015">Dunne et al. (2020)</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://en.snu.ac.kr/index.html">SNU</a></p></td>
+<td class="text-align:center"><p>SAM0-UNICON</p></td>
+<td class="text-align:right"><p><a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1175/JCLI-D-18-0796.1">Park et al. (2019)</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.tsinghua.edu.cn/en/">THU</a></p></td>
+<td class="text-align:center"><p>CIESM</p></td>
+<td class="text-align:right"><p><a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1029/2019MS002036">Lin et al. (2020)</a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="import-python-packages">
+<h2>Import python packages<a class="headerlink" href="#import-python-packages" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Python</span></code> environment requirements: file <span class="xref myst">globalsnow.yml</span></p></li>
+<li><p>load <code class="docutils literal notranslate"><span class="pre">python</span></code> packages from <span class="xref myst">imports.py</span></p></li>
+<li><p>load <code class="docutils literal notranslate"><span class="pre">functions</span></code> from <span class="xref myst">functions.py</span></p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># supress warnings</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span> <span class="c1"># don&#39;t output warnings</span>
+
+<span class="c1"># import packages</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;/uio/kant/geo-metos-u1/franzihe/Documents/Python/globalsnow/eosc-nordic-climate-demonstrator/work/utils&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">imports</span> <span class="kn">import</span> <span class="p">(</span><span class="n">xr</span><span class="p">,</span> <span class="n">intake</span><span class="p">,</span> <span class="n">cftime</span><span class="p">,</span> <span class="n">xe</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">np</span><span class="p">,</span> <span class="n">cm</span><span class="p">,</span> <span class="n">pd</span><span class="p">,</span> <span class="n">fct</span><span class="p">,</span><span class="n">ccrs</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">plt</span><span class="p">,</span> <span class="n">da</span><span class="p">,</span> <span class="n">gc</span><span class="p">)</span>
+
+<span class="n">xr</span><span class="o">.</span><span class="n">set_options</span><span class="p">(</span><span class="n">display_style</span><span class="o">=</span><span class="s2">&quot;html&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># reload imports</span>
+<span class="o">%</span><span class="k">load_ext</span> autoreload
+<span class="o">%</span><span class="k">autoreload</span> 2
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="open-cmip6-online-catalog">
+<h2>Open CMIP6 online catalog<a class="headerlink" href="#open-cmip6-online-catalog" title="Permalink to this headline">¶</a></h2>
+<p>… by using <code class="docutils literal notranslate"><span class="pre">intake</span></code> from <a class="reference external" href="https://gallery.pangeo.io/repos/pangeo-data/pangeo-tutorial-gallery/intake.html">pangeo.io</a>, specifically <code class="docutils literal notranslate"><span class="pre">intake-esm</span></code>.</p>
+<p>An example on <a class="reference external" href="https://pangeo-data.github.io/pangeo-cmip6-cloud/accessing_data.html#loading-an-esm-collection">Loading an ESM collection</a> and <a class="reference external" href="https://pangeo-data.github.io/pangeo-cmip6-cloud/accessing_data.html#searching-for-datasets">searching for datasets</a> can also be found on the <a class="reference external" href="https://pangeo-data.github.io/pangeo-cmip6-cloud/accessing_data.html">Pangeo / ESGF Cloud Data Working Group documentation</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cat_url</span> <span class="o">=</span> <span class="s2">&quot;https://storage.googleapis.com/cmip6/pangeo-cmip6.json&quot;</span>
+<span class="n">col</span> <span class="o">=</span> <span class="n">intake</span><span class="o">.</span><span class="n">open_esm_datastore</span><span class="p">(</span><span class="n">cat_url</span><span class="p">)</span>
+<span class="n">col</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><p><strong>pangeo-cmip6 catalog with 7696 dataset(s) from 515388 asset(s)</strong>:</p> <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>unique</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>activity_id</th>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>institution_id</th>
+      <td>36</td>
+    </tr>
+    <tr>
+      <th>source_id</th>
+      <td>88</td>
+    </tr>
+    <tr>
+      <th>experiment_id</th>
+      <td>170</td>
+    </tr>
+    <tr>
+      <th>member_id</th>
+      <td>657</td>
+    </tr>
+    <tr>
+      <th>table_id</th>
+      <td>37</td>
+    </tr>
+    <tr>
+      <th>variable_id</th>
+      <td>700</td>
+    </tr>
+    <tr>
+      <th>grid_label</th>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>zstore</th>
+      <td>515388</td>
+    </tr>
+    <tr>
+      <th>dcpp_init_year</th>
+      <td>60</td>
+    </tr>
+    <tr>
+      <th>version</th>
+      <td>737</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</div>
+<div class="section" id="search-corresponding-data">
+<h2>Search corresponding data<a class="headerlink" href="#search-corresponding-data" title="Permalink to this headline">¶</a></h2>
+<p>Get the data required for the analysis. Define variables, models, experiment, and time resolution as defined in <a href="#data_wrangling">2. Data Wrangling</a>
+.</p>
+<ul class="simple">
+<li><p>use member_id = ‘r1i1p1f1’.</p></li>
+<li><p>using intake-esm’s <code class="docutils literal notranslate"><span class="pre">search()</span></code> function:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">col.search(variable_id,</span> <span class="pre">source_id,</span> <span class="pre">experiment_id,</span> <span class="pre">table_id,</span> <span class="pre">member_id,</span> <span class="pre">institution_id,</span> <span class="pre">grid_label)</span></code></p></li>
+</ul>
+</li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Variables</span>
+<span class="n">variable_id</span><span class="o">=</span><span class="p">[</span>
+            <span class="s1">&#39;cli&#39;</span><span class="p">,</span>
+            <span class="c1"># &#39;clivi&#39;,</span>
+            <span class="s1">&#39;clw&#39;</span><span class="p">,</span>
+            <span class="c1"># &#39;lwp&#39;,</span>
+            <span class="s1">&#39;pr&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;prsn&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;ta&#39;</span><span class="p">,</span> 
+            <span class="c1"># &#39;tas&#39;</span>
+             <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Models</span>
+<span class="n">list_models</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;NorESM2-MM&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;TaiESM1&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;EC-Earth3-AerChem&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;GFDL-ESM4&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;SAM0-UNICON&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;CAMS-CSM1-0&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;CMCC-CM2-HR4&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;MPI-ESM1-2-HR&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;BCC-CSM2-MR&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;E3SM-1-1&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;CMCC-CM2-SR5&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;CMCC-ESM2&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;FGOALS-f3-L&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;E3SM-1-1-ECA&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;CIESM&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;GFDL-CM4&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;MRI-ESM2-0&#39;</span><span class="p">]</span>  
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## experiment</span>
+<span class="n">experiment_id</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;historical&#39;</span><span class="p">]</span>
+
+<span class="c1">## time resolution</span>
+<span class="n">t_res</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Amon&#39;</span><span class="p">,</span> <span class="s1">&#39;AERmon&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## search for variables, models, ...</span>
+<span class="n">cat</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">variable_id</span><span class="o">=</span><span class="n">variable_id</span><span class="p">,</span> <span class="n">source_id</span><span class="o">=</span><span class="n">list_models</span><span class="p">,</span> <span class="n">experiment_id</span><span class="o">=</span><span class="n">experiment_id</span><span class="p">,</span> <span class="n">table_id</span> <span class="o">=</span> <span class="n">t_res</span><span class="p">,</span> <span class="n">member_id</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;r1i1p1f1&#39;</span><span class="p">])</span>
+<span class="c1"># cat.df</span>
+<span class="c1">## show the CMIP6 models found in pandas Dataframe </span>
+<span class="n">cat</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&#39;GFDL-CM4&#39;, &#39;BCC-CSM2-MR&#39;, &#39;MRI-ESM2-0&#39;, &#39;SAM0-UNICON&#39;,
+       &#39;CAMS-CSM1-0&#39;, &#39;MPI-ESM1-2-HR&#39;, &#39;GFDL-ESM4&#39;, &#39;FGOALS-f3-L&#39;,
+       &#39;NorESM2-MM&#39;, &#39;E3SM-1-1&#39;, &#39;E3SM-1-1-ECA&#39;, &#39;CIESM&#39;, &#39;CMCC-CM2-SR5&#39;,
+       &#39;TaiESM1&#39;, &#39;EC-Earth3-AerChem&#39;, &#39;CMCC-CM2-HR4&#39;, &#39;CMCC-ESM2&#39;],
+      dtype=object)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><p><strong>pangeo-cmip6 catalog with 17 dataset(s) from 81 asset(s)</strong>:</p> <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>unique</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>activity_id</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>institution_id</th>
+      <td>13</td>
+    </tr>
+    <tr>
+      <th>source_id</th>
+      <td>17</td>
+    </tr>
+    <tr>
+      <th>experiment_id</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>member_id</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>table_id</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>variable_id</th>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>grid_label</th>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>zstore</th>
+      <td>81</td>
+    </tr>
+    <tr>
+      <th>dcpp_init_year</th>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>version</th>
+      <td>19</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</div>
+<div class="section" id="create-dictionary-from-the-list-of-datasets-we-found">
+<h2>Create dictionary from the list of datasets we found<a class="headerlink" href="#create-dictionary-from-the-list-of-datasets-we-found" title="Permalink to this headline">¶</a></h2>
+<p>Load the found datasets into xarray dataset containers using intake-esm’s <code class="docutils literal notranslate"><span class="pre">to_dataset_dict()</span></code> function, which yields a Python dictionary.</p>
+<blockquote>
+<div><p><strong><em>NOTE:</em></strong> This step may take several minutes so be patient!</p>
+</div></blockquote>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dset_dict</span> <span class="o">=</span> <span class="n">cat</span><span class="o">.</span><span class="n">to_dataset_dict</span><span class="p">(</span><span class="n">zarr_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;use_cftime&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">,})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--&gt; The keys in the returned dictionary of datasets are constructed as follows:
+	&#39;activity_id.institution_id.source_id.experiment_id.table_id.grid_label&#39;
+</pre></div>
+</div>
+<div class="output text_html">
+<div>
+    <style>
+        /* Turns off some styling */
+        progress {
+            /* gets rid of default border in Firefox and Opera. */
+            border: none;
+            /* Needs to be in here for Safari polyfill so background images work as expected. */
+            background-size: auto;
+        }
+        .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+            background: #F44336;
+        }
+    </style>
+  <progress value='17' class='' max='17' style='width:300px; height:20px; vertical-align: middle;'></progress>
+  100.00% [17/17 01:18<00:00]
+</div>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># list all merged datasets and show coordinates</span>
+<span class="k">for</span> <span class="n">keys</span><span class="p">,</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">dset_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">dims</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CMIP.NOAA-GFDL.GFDL-ESM4.historical.Amon.gr1: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.THU.CIESM.historical.Amon.gr: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.CMCC.CMCC-ESM2.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.MPI-M.MPI-ESM1-2-HR.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.NCC.NorESM2-MM.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.AS-RCEC.TaiESM1.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.CAMS.CAMS-CSM1-0.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.NOAA-GFDL.GFDL-CM4.historical.Amon.gr1: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.CMCC.CMCC-CM2-HR4.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.SNU.SAM0-UNICON.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.CMCC.CMCC-CM2-SR5.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.BCC.BCC-CSM2-MR.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.CAS.FGOALS-f3-L.historical.Amon.gr: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.MRI.MRI-ESM2-0.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.E3SM-Project.E3SM-1-1.historical.Amon.gr: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.E3SM-Project.E3SM-1-1-ECA.historical.Amon.gr: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.EC-Earth-Consortium.EC-Earth3-AerChem.historical.Amon.gr: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="calendar">
+<h2>Calendar<a class="headerlink" href="#calendar" title="Permalink to this headline">¶</a></h2>
+<p>Not all models in CMIP6 use the same calendar. Hence we double check the time axis. Later, when we regrid to the same horizontal resolution (<a href="#regrid_hz">Regrid CMIP6 data</a>) we will assign the same calendars for each model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># metadata of the historical run:</span>
+<span class="n">_d2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s2">&quot;calendar&quot;</span><span class="p">,</span>
+                 <span class="s2">&quot;branch_time_in_parent&quot;</span><span class="p">,</span> <span class="c1">#&quot;parent_activity_id&quot;, &quot;parent_experiment_id&quot;,	&quot;parent_mip_era&quot;,</span>
+                 <span class="s2">&quot;parent_source_id&quot;</span><span class="p">,</span><span class="c1">#&quot;parent_sub_experiment_id&quot;, </span>
+                 <span class="s2">&quot;parent_time_units&quot;</span><span class="p">,</span><span class="c1"># &quot;parent_variant_label&quot;</span>
+                  <span class="p">])</span>
+<span class="n">_d2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">_d2</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="s1">&#39;index&#39;</span><span class="p">})</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">dset_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="n">_data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">_names</span> <span class="o">=</span><span class="p">[]</span>
+    <span class="n">_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dset_dict</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">to_index</span><span class="p">()</span><span class="o">.</span><span class="n">calendar</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dset_dict</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        
+        <span class="k">if</span> <span class="s1">&#39;parent_time_units&#39;</span> <span class="ow">in</span> <span class="n">k</span> <span class="ow">or</span> <span class="s1">&#39;branch_time_in_parent&#39;</span> <span class="ow">in</span> <span class="n">k</span> <span class="ow">or</span> <span class="s1">&#39;parent_source_id&#39;</span> <span class="ow">in</span> <span class="n">k</span><span class="p">:</span>
+            <span class="n">_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            <span class="n">_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+    <span class="n">_d2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">_d2</span><span class="p">,</span>   <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">_data</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">_d2</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">_d2</span> <span class="o">=</span> <span class="n">_d2</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">)</span>
+<span class="n">_d2</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">_d2</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;parent_source_id&#39;</span><span class="p">]</span>
+<span class="n">_d2</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;parent_source_id&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>index</th>
+      <th>calendar</th>
+      <th>branch_time_in_parent</th>
+      <th>parent_time_units</th>
+    </tr>
+    <tr>
+      <th>parent_source_id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>days since 0001-1-1</th>
+      <td>noleap</td>
+      <td>36500.0</td>
+      <td>GFDL-ESM4</td>
+    </tr>
+    <tr>
+      <th>days since 0001-01-01</th>
+      <td>noleap</td>
+      <td>182500.0</td>
+      <td>CIESM</td>
+    </tr>
+    <tr>
+      <th>days since 1850-01-01</th>
+      <td>noleap</td>
+      <td>0.0</td>
+      <td>CMCC-ESM2</td>
+    </tr>
+    <tr>
+      <th>days since 1850-1-1 00:00:00</th>
+      <td>proleptic_gregorian</td>
+      <td>0.0</td>
+      <td>MPI-ESM1-2-HR</td>
+    </tr>
+    <tr>
+      <th>days since 0001-01-01</th>
+      <td>noleap</td>
+      <td>438000.0</td>
+      <td>NorESM2-MM</td>
+    </tr>
+    <tr>
+      <th>days since 1850-01-01</th>
+      <td>noleap</td>
+      <td>171550.0</td>
+      <td>TaiESM1</td>
+    </tr>
+    <tr>
+      <th>days since 1850-01-01</th>
+      <td>noleap</td>
+      <td>3025.0</td>
+      <td>CAMS-CSM1-0</td>
+    </tr>
+    <tr>
+      <th>days since 0001-1-1</th>
+      <td>noleap</td>
+      <td>36500.0</td>
+      <td>GFDL-CM4</td>
+    </tr>
+    <tr>
+      <th>days since 1850-01-01</th>
+      <td>noleap</td>
+      <td>0.0</td>
+      <td>CMCC-CM2-HR4</td>
+    </tr>
+    <tr>
+      <th>days since 0001-01-01</th>
+      <td>noleap</td>
+      <td>99645.0</td>
+      <td>SAM0-UNICON</td>
+    </tr>
+    <tr>
+      <th>days since 1850-01-01</th>
+      <td>noleap</td>
+      <td>0.0</td>
+      <td>CMCC-CM2-SR5</td>
+    </tr>
+    <tr>
+      <th>days since 1850-01-01</th>
+      <td>noleap</td>
+      <td>2289.0</td>
+      <td>BCC-CSM2-MR</td>
+    </tr>
+    <tr>
+      <th>days since 0001-01-01</th>
+      <td>noleap</td>
+      <td>12345.0</td>
+      <td>FGOALS-f3-L</td>
+    </tr>
+    <tr>
+      <th>days since 1850-01-01</th>
+      <td>proleptic_gregorian</td>
+      <td>0.0</td>
+      <td>MRI-ESM2-0</td>
+    </tr>
+    <tr>
+      <th>days since 0001-01-01</th>
+      <td>noleap</td>
+      <td>0.0</td>
+      <td>E3SM-1-1</td>
+    </tr>
+    <tr>
+      <th>days since 0001-01-01</th>
+      <td>noleap</td>
+      <td>0.0</td>
+      <td>E3SM-1-1-ECA</td>
+    </tr>
+    <tr>
+      <th>days since 1850-01-01</th>
+      <td>proleptic_gregorian</td>
+      <td>0.0</td>
+      <td>EC-Earth3-AerChem</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</div>
+<div class="section" id="show-attributes-and-individual-identifier">
+<h2>Show attributes and individual identifier<a class="headerlink" href="#show-attributes-and-individual-identifier" title="Permalink to this headline">¶</a></h2>
+<p>NorESM2-MM is going to be the reference model for the horizontal grid. The <code class="docutils literal notranslate"><span class="pre">xarray</span></code> datasets inside <code class="docutils literal notranslate"><span class="pre">dset_dict</span></code> can be extracted as any value in a Python dictionary.</p>
+<p>The dictonary key for NorESM2-MM is: <strong><a class="reference external" href="http://CMIP.NCC.NorESM2-MM.historical.Amon.gn">CMIP.NCC.NorESM2-MM.historical.Amon.gn</a></strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">variable_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;lwp&#39;</span><span class="p">:</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">dset_dict</span><span class="p">[</span><span class="s1">&#39;CMIP.NCC.NorESM2-MM.historical.AERmon.gn&#39;</span><span class="p">]</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">dset_dict</span><span class="p">[</span><span class="s1">&#39;CMIP.NCC.NorESM2-MM.historical.Amon.gn&#39;</span><span class="p">]</span>
+    
+
+<span class="c1">## attributes of the xarray dataset </span>
+<span class="n">ds</span><span class="p">[</span><span class="n">variable_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">attrs</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;tracking_id&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>({&#39;cell_measures&#39;: &#39;area: areacella&#39;,
+  &#39;cell_methods&#39;: &#39;area: time: mean&#39;,
+  &#39;comment&#39;: &#39;Includes both large-scale and convective cloud. This is calculated as the mass of cloud ice in the grid cell divided by the mass of air (including the water in all phases) in the grid cell. It includes precipitating hydrometeors ONLY if the precipitating hydrometeors affect the calculation of radiative transfer in model.&#39;,
+  &#39;history&#39;: &quot;2019-11-25T21:51:40Z altered by CMOR: Converted units from &#39;1&#39; to &#39;kg kg-1&#39;. 2019-11-25T21:51:41Z altered by CMOR: Converted type from &#39;d&#39; to &#39;f&#39;. 2019-11-25T21:51:41Z altered by CMOR: Inverted axis: lev.&quot;,
+  &#39;long_name&#39;: &#39;Mass Fraction of Cloud Ice&#39;,
+  &#39;original_name&#39;: &#39;CLDICE&#39;,
+  &#39;original_units&#39;: &#39;1&#39;,
+  &#39;standard_name&#39;: &#39;mass_fraction_of_cloud_ice_in_air&#39;,
+  &#39;units&#39;: &#39;kg kg-1&#39;},
+ &#39;hdl:21.14100/bdfd7dd4-b7a4-4c0e-b79c-28a1dfcf57dd\nhdl:21.14100/ee267138-b752-4170-b1b5-216449dd1268\nhdl:21.14100/313c20af-b8bd-437f-ba76-e341512e01cb\nhdl:21.14100/a6d7cb7a-0775-4ed4-8ec1-ba3e504ff8bc\nhdl:21.14100/cf13a474-dd65-4ac9-85d8-a4e91453c2a5\nhdl:21.14100/d1e77260-e1b3-4f69-8a55-7b7b08268f92\nhdl:21.14100/7d2f9ff6-5dba-486b-b26c-83449441be37\nhdl:21.14100/4bd7e622-d889-4148-8fd2-c51503df6210\nhdl:21.14100/ec908d5b-4bfd-456f-ab91-d7ca825b71e6\nhdl:21.14100/39275014-6e35-4859-b2d1-cbfd2fefeaab\nhdl:21.14100/02eb7701-6c97-4349-acf6-85a6e5b2e4b3\nhdl:21.14100/24665b73-7508-4647-93c0-be93d452554b\nhdl:21.14100/74b3476f-b4db-4006-9577-dac4c0fc4ba0\nhdl:21.14100/c3fab37d-21d7-470c-9f4d-f480bdffc64d\nhdl:21.14100/6946c90a-b26b-4d75-969a-e7659c2877b8\nhdl:21.14100/20dc7a63-02bc-4d1e-a2ac-9f23b707a2ec\nhdl:21.14100/3d7be3a4-c1e2-4657-9d09-68349f58159d\nhdl:21.14100/1c8e58a1-c250-4120-9fb6-159885cd5a96\nhdl:21.14100/c1340042-4644-4d38-9270-d000d8d14b19\nhdl:21.14100/c7f9967e-a7a9-44ae-bbb5-4b5a02c5a7b3\nhdl:21.14100/34449e11-fad2-4fea-82c8-19e194f8d7f5\nhdl:21.14100/fd79dd4c-b2aa-4290-83a2-07dce463a1c0\nhdl:21.14100/b548a684-f49f-4dac-b1a9-acc24a8ff750\nhdl:21.14100/66f04c76-793d-4a11-bed4-040d3b0b7de5\nhdl:21.14100/8e53004f-a51b-4fcb-b4db-cafd3cb33de3\nhdl:21.14100/c0b36dc0-7408-462a-a3da-849bda149260\nhdl:21.14100/5410d0a1-9def-42b7-91a0-d959a6650d4a\nhdl:21.14100/23e3e9fd-2131-4952-b5eb-36f058178ab2\nhdl:21.14100/e2948317-3a1d-4627-822c-03ed8097c2ed\nhdl:21.14100/be8f947a-bf1e-4a2f-9320-e33d65ef2b6c\nhdl:21.14100/8c2c2821-597e-45f9-8990-ba520145b33c\nhdl:21.14100/1c1b0353-cd70-47e6-8c17-676783f1a93b\nhdl:21.14100/214acf85-5eb2-4924-b063-adc28c657692\nhdl:21.14100/11406d14-0f70-44f6-ae0d-6c246f1305e3\nhdl:21.14100/240f3d7a-faa9-4e7a-aeab-7a842635dcc3\nhdl:21.14100/554fb9db-fdc0-425c-ac68-146cba77f8cb\nhdl:21.14100/7235eb45-2da1-4bb8-bd16-467256066116\nhdl:21.14100/f2188a57-eff0-4ab9-8263-a6654349ee18\nhdl:21.14100/3fdefb99-9db8-44c1-9a51-885f6db62cfa\nhdl:21.14100/f50ff646-df59-4eac-8080-e5da16e5d778\nhdl:21.14100/2fde10fe-1e37-4a93-ac9c-a34b8de5a606\nhdl:21.14100/25d85a61-ac30-49cd-985b-66d121e4d388\nhdl:21.14100/a83c191a-d59b-4079-87f3-8caa874fce06\nhdl:21.14100/23263a30-65b9-4887-b46c-253af00861e6\nhdl:21.14100/cbea6d5b-68dd-4db8-9500-8e2d1bcf11be\nhdl:21.14100/457e8153-b9e8-4e0a-a339-4b0f37c2992d\nhdl:21.14100/28e89d10-aa46-4629-9f96-07eb18d42bcc\nhdl:21.14100/4fe3cdb8-8434-497d-88b3-9eff0eab6264\nhdl:21.14100/4b34d44c-c673-419e-b5bb-cd01c5f382d6\nhdl:21.14100/20b0215a-3e8e-474b-9513-a80f45805ad2\nhdl:21.14100/e484b416-c59c-4ac2-bd9a-9ba2a3047d6a\nhdl:21.14100/befe4a85-4c28-4df7-9efe-0232a75ad2bc\nhdl:21.14100/9be130fb-934e-429b-84f1-77bee253059b\nhdl:21.14100/45a7fb91-c21b-42aa-8b7b-ca4fccee3d82\nhdl:21.14100/550cfa82-7d5f-484d-bcd8-375b6bf9cd28\nhdl:21.14100/809d1eee-9b32-4314-9c47-570edddcde9d\nhdl:21.14100/b5a65d62-f8fc-4b13-8a36-8a6a0fc8f64c\nhdl:21.14100/f1ba6e0d-af4f-419d-a762-d4ca5b3e0fd8\nhdl:21.14100/2492e2d8-23ed-4ddf-9a89-2e48df0d5933\nhdl:21.14100/1bda4adf-11a3-4b39-9a30-808ac443c79e\nhdl:21.14100/f2889793-851e-4ccd-b303-4d03e27ba56b\nhdl:21.14100/49e57aae-a8c0-426d-abd9-ffe68548a7b4\nhdl:21.14100/d2082e93-5bbe-4737-801f-c5d289f2c656\nhdl:21.14100/058f0e3d-126b-402c-8c57-26d915d617c6\nhdl:21.14100/d6659ea1-7c7d-49cb-b399-08d5541b6423\nhdl:21.14100/eda3b060-ad9f-4ea8-834c-850d811cd41d\nhdl:21.14100/d5c82405-0ebc-42bb-82ac-2202181bbd35\nhdl:21.14100/a408357d-ef9b-40a8-9b59-89c3a5d4958e\nhdl:21.14100/164a18b5-95a5-498f-89ad-f3cfa8dbb9ae&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="assign-attributes-to-the-variables">
+<h2>Assign attributes to the variables<a class="headerlink" href="#assign-attributes-to-the-variables" title="Permalink to this headline">¶</a></h2>
+<p>We will assign the attributes to the variables as in ERA5 to make CMIP6 and ERA5 variables comperable.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://clipc-services.ceda.ac.uk/dreq/u/dd916e3e2eca18cda5d9f81749d0c91c.html"><code class="docutils literal notranslate"><span class="pre">cli</span></code></a> and <a class="reference external" href="http://clipc-services.ceda.ac.uk/dreq/u/86b2b3318a73839edfafa9d46864aadc.html"><code class="docutils literal notranslate"><span class="pre">clw</span></code></a> in <strong>kg kg-1</strong> <span class="math notranslate nohighlight">\(\rightarrow\)</span> Multiply by <strong>1000</strong> to get <strong>g kg-1</strong></p></li>
+<li><p><a class="reference external" href="http://clipc-services.ceda.ac.uk/dreq/u/73c496f5669cc122cf1cddfe4df2a27a.html"><code class="docutils literal notranslate"><span class="pre">clivi</span></code></a> and <a class="reference external" href="http://clipc-services.ceda.ac.uk/dreq/u/e6b31a1928879fcd3c92fe7b592f070e.html"><code class="docutils literal notranslate"><span class="pre">lwp</span></code></a> in <strong>kg m-2</strong> <span class="math notranslate nohighlight">\(\rightarrow\)</span> Multiply by <strong>1000</strong> to get <strong>g m-2</strong></p></li>
+<li><p><a class="reference external" href="http://clipc-services.ceda.ac.uk/dreq/u/62f26742cf240c1b5169a5cd511196b6.html"><code class="docutils literal notranslate"><span class="pre">pr</span></code></a> and <a class="reference external" href="http://clipc-services.ceda.ac.uk/dreq/u/051919eddec810e292c883205c944ceb.html"><code class="docutils literal notranslate"><span class="pre">prsn</span></code></a> in <strong>kg m-2 s-1</strong> <span class="math notranslate nohighlight">\(\rightarrow\)</span> Multiply by <strong>86400</strong> to get <strong>mm day-1</strong></p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="n">variable_id</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">keys</span> <span class="ow">in</span> <span class="n">dset_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">var_id</span> <span class="o">==</span> <span class="s1">&#39;cli&#39;</span> <span class="ow">or</span> <span class="n">var_id</span> <span class="o">==</span> <span class="s1">&#39;clw&#39;</span> <span class="ow">or</span> <span class="n">var_id</span>  <span class="o">==</span> <span class="s1">&#39;clivi&#39;</span> <span class="ow">or</span> <span class="n">var_id</span> <span class="o">==</span> <span class="s1">&#39;lwp&#39;</span><span class="p">:</span>
+            <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span><span class="o">*</span><span class="mi">1000</span>
+            <span class="k">if</span> <span class="n">var_id</span> <span class="o">==</span> <span class="s1">&#39;cli&#39;</span><span class="p">:</span>
+                <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;g kg-1&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Mass Fraction of Cloud Ice&#39;</span><span class="p">,</span> <span class="s1">&#39;standard_name&#39;</span><span class="p">:</span> <span class="s1">&#39;mass_fraction_of_cloud_ice_in_air&#39;</span><span class="p">,</span> <span class="s1">&#39;comment&#39;</span><span class="p">:</span> <span class="s1">&#39;Includes both large-scale and convective cloud. This is calculated as the mass of cloud ice in the grid cell divided by the mass of air (including the water in all phases) in the grid cell. It includes precipitating hydrometeors ONLY if the precipitating hydrometeors affect the calculation of radiative transfer in model.&#39;</span><span class="p">,</span> <span class="s1">&#39;cell_methods&#39;</span><span class="p">:</span> <span class="s1">&#39;area: time: mean (interval: 5 minutes)&#39;</span><span class="p">,</span> <span class="s1">&#39;cell_measures&#39;</span><span class="p">:</span> <span class="s1">&#39;area: areacella&#39;</span><span class="p">,}</span>
+            <span class="k">if</span> <span class="n">var_id</span> <span class="o">==</span> <span class="s1">&#39;clw&#39;</span><span class="p">:</span>
+                <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;g kg-1&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Mass Fraction of Cloud Liquid Water&#39;</span><span class="p">,</span> <span class="s1">&#39;standard_name&#39;</span><span class="p">:</span> <span class="s1">&#39;mass_fraction_of_cloud_liquid_water_in_air&#39;</span><span class="p">,</span> <span class="s1">&#39;comment&#39;</span><span class="p">:</span> <span class="s1">&#39;Includes both large-scale and convective cloud. Calculate as the mass of cloud liquid water in the grid cell divided by the mass of air (including the water in all phases) in the grid cells. Precipitating hydrometeors are included ONLY if the precipitating hydrometeors affect the calculation of radiative transfer in model.&#39;</span><span class="p">,</span> <span class="s1">&#39;cell_methods&#39;</span><span class="p">:</span> <span class="s1">&#39;area: time: mean&#39;</span><span class="p">,</span> <span class="s1">&#39;cell_measures&#39;</span><span class="p">:</span> <span class="s1">&#39;area: areacella&#39;</span><span class="p">}</span>
+            <span class="k">if</span> <span class="n">var_id</span> <span class="o">==</span> <span class="s1">&#39;clivi&#39;</span><span class="p">:</span>
+                <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;g m-2&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Ice Water Path&#39;</span><span class="p">,</span> <span class="s1">&#39;comment&#39;</span><span class="p">:</span> <span class="s1">&#39;mass of ice water in the column divided by the area of the column (not just the area of the cloudy portion of the column). Includes precipitating frozen hydrometeors ONLY if the precipitating hydrometeor affects the calculation of radiative transfer in model.&#39;</span><span class="p">,</span> <span class="s1">&#39;cell_methods&#39;</span><span class="p">:</span> <span class="s1">&#39;area: time: mean&#39;</span><span class="p">,</span> <span class="s1">&#39;cell_measures&#39;</span><span class="p">:</span> <span class="s1">&#39;area: areacella&#39;</span><span class="p">}</span> 
+            <span class="k">if</span> <span class="n">var_id</span> <span class="o">==</span> <span class="s1">&#39;lwp&#39;</span><span class="p">:</span>
+                <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;g m-2&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Liquid Water Path&#39;</span><span class="p">,</span> <span class="s1">&#39;comment&#39;</span><span class="p">:</span> <span class="s1">&#39;The total mass of liquid water in cloud per unit area.&#39;</span><span class="p">,</span> <span class="s1">&#39;cell_methods&#39;</span><span class="p">:</span> <span class="s1">&#39;area: time: mean&#39;</span><span class="p">,</span> <span class="s1">&#39;cell_measures&#39;</span><span class="p">:</span> <span class="s1">&#39;area: areacella&#39;</span><span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">var_id</span> <span class="o">==</span> <span class="s1">&#39;pr&#39;</span> <span class="ow">or</span> <span class="n">var_id</span> <span class="o">==</span> <span class="s1">&#39;prsn&#39;</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span> 
+                <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span><span class="o">*</span><span class="mi">86400</span>
+                <span class="k">if</span> <span class="n">var_id</span> <span class="o">==</span> <span class="s1">&#39;pr&#39;</span><span class="p">:</span>
+                    <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;mm day-1&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Precipitation&#39;</span><span class="p">,</span> <span class="s1">&#39;comment&#39;</span><span class="p">:</span> <span class="s1">&#39;includes both liquid and solid phases&#39;</span><span class="p">,</span><span class="s1">&#39;cell_methods&#39;</span><span class="p">:</span> <span class="s1">&#39;area: time: mean&#39;</span><span class="p">,</span> <span class="s1">&#39;cell_measures&#39;</span><span class="p">:</span> <span class="s1">&#39;area: areacella&#39;</span><span class="p">}</span>
+                <span class="k">if</span> <span class="n">var_id</span> <span class="o">==</span> <span class="s1">&#39;prsn&#39;</span><span class="p">:</span>
+                    <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;mm day-1&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Snowfall&#39;</span><span class="p">,</span> <span class="s1">&#39;comment&#39;</span><span class="p">:</span> <span class="s1">&#39;At surface; includes precipitation of all forms of water in the solid phase&#39;</span><span class="p">,</span> <span class="s1">&#39;cell_methods&#39;</span><span class="p">:</span> <span class="s1">&#39;area: time: mean&#39;</span><span class="p">,</span> <span class="s1">&#39;cell_measures&#39;</span><span class="p">:</span> <span class="s1">&#39;area: areacella&#39;</span><span class="p">}</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">continue</span>
+        
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="interpolate-from-cmip6-hybrid-sigma-pressure-levels-to-era5-isobaric-pressure-levels">
+<h2>Interpolate from CMIP6 hybrid sigma-pressure levels to ERA5 isobaric pressure levels<a class="headerlink" href="#interpolate-from-cmip6-hybrid-sigma-pressure-levels-to-era5-isobaric-pressure-levels" title="Permalink to this headline">¶</a></h2>
+<p>The vertical variables in the CMIP6 models are in hybrid sigma-pressure levels. Hence the vertical variable in the xarray datasets in <code class="docutils literal notranslate"><span class="pre">dset_dict</span></code> will be calculated by using the <a class="reference external" href="https://geocat-comp.readthedocs.io/en/latest/index.html">GeoCAT-comb</a> function to <a class="reference external" href="https://geocat-comp.readthedocs.io/en/latest/user_api/generated/geocat.comp.interpolation.interp_hybrid_to_pressure.html#geocat.comp.interpolation.interp_hybrid_to_pressure">interpolate data from hybrid-sigma levels to isobaric levels</a>.</p>
+<p>The GeoCAT-comb function takes the following input:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code>:   Multidimensional data array, which holds hybrid-sigma levels and has a lev_dim coordinate.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ps</span></code>:     A multi-dimensional array of surface pressures (Pa), same time/space shape as data. Not all variables include the surface pressure, hence we will search the <code class="docutils literal notranslate"><span class="pre">Pangeo.io</span></code> catalog to find the surface pressure associated with the model.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hyam</span></code>:     One-dimensional arrays containing the hybrid A coefficients. Must have the same dimension size as the lev_dim dimension of data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hybm</span></code>:     One-dimensional arrays containing the hybrid B coefficients. Must have the same dimension size as the lev_dim dimension of data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">p0</span></code>:       Scalar numeric value equal to surface reference pressure (Pa). Defaults to 100000 Pa.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">new_levels</span></code>: A one-dimensional array of output pressure levels (Pa). We will use the ERA5 37 pressure levels.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ P(i,j,k) = hyam(k) p0 + hybm(k) ps(i,j)\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># load the levels from the ERA5 file and transfer to Pa</span>
+<span class="n">era_level</span> <span class="o">=</span> <span class="p">(</span><span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="s1">&#39;/scratch/franzihe/input/ERA5/monthly_means/0.25deg/clwc_Amon_ERA5_198501_198912.nc&#39;</span><span class="p">)[</span><span class="s1">&#39;level&#39;</span><span class="p">])</span><span class="o">*</span><span class="mi">100</span>
+
+<span class="k">if</span> <span class="p">((</span><span class="s1">&#39;clw&#39;</span> <span class="ow">or</span> <span class="s1">&#39;cli&#39;</span> <span class="ow">or</span> <span class="s1">&#39;ta&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">variable_id</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="c1"># if var_id == &#39;clw&#39; or var_id == &#39;cli&#39;:</span>
+    <span class="k">for</span> <span class="n">keys</span> <span class="ow">in</span> <span class="n">dset_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="c1"># rename cmip pressure level for atmospheric temperature</span>
+        <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span> <span class="o">=</span> <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s1">&#39;plev&#39;</span><span class="p">:</span><span class="s1">&#39;clev&#39;</span><span class="p">})</span>
+        <span class="c1"># interpolate from hybrid to pressure levels for clw and cli</span>
+        <span class="k">for</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="p">[</span><span class="n">variable_id</span><span class="p">[</span><span class="n">variable_id</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;clw&#39;</span><span class="p">)],</span> <span class="n">variable_id</span><span class="p">[</span><span class="n">variable_id</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;cli&#39;</span><span class="p">)]]:</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;ps&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>     <span class="c1"># valid for models which don&#39;t provide ps in the clw or cli dataset</span>
+                <span class="n">model</span> <span class="o">=</span> <span class="n">keys</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">ds_ps</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">source_id</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">table_id</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Amon&#39;</span><span class="p">,</span> <span class="p">],</span> <span class="n">experiment_id</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;historical&#39;</span><span class="p">],</span> <span class="n">variable_id</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ps&#39;</span><span class="p">,</span><span class="s1">&#39;p0&#39;</span><span class="p">,</span> <span class="p">],</span> <span class="n">member_id</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;r1i1p1f1&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">to_dataset_dict</span><span class="p">(</span><span class="n">zarr_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;use_cftime&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">,},</span> <span class="p">)</span>
+                <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ds_ps</span><span class="p">[</span><span class="n">keys</span><span class="p">],</span> <span class="p">)</span>
+                <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="s1">&#39;ps&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="s1">&#39;ps&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">member_id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+                
+                
+            <span class="c1"># Rename datasets with different naming convention for constant A</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;a&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span> <span class="o">=</span> <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s1">&#39;ap&#39;</span><span class="p">:</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;ap_bnds&#39;</span><span class="p">:</span> <span class="s1">&#39;a_bnds&#39;</span><span class="p">})</span>
+                    
+                    
+            <span class="c1"># Convert the model level to isobaric levels</span>
+            <span class="c1">#### a, b, ps, p0</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;a&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="o">==</span> <span class="kc">True</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="o">==</span> <span class="kc">True</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;p0&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="o">==</span> <span class="kc">True</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;ps&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_interp&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">)]</span> <span class="o">=</span> <span class="n">gc</span><span class="o">.</span><span class="n">interpolation</span><span class="o">.</span><span class="n">interp_hybrid_to_pressure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">member_id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">),</span> 
+                                                                                                                <span class="n">ps</span><span class="o">=</span><span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="s1">&#39;ps&#39;</span><span class="p">],</span><span class="n">hyam</span><span class="o">=</span><span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="s1">&#39;a&#39;</span><span class="p">],</span>
+                                                                                                                <span class="n">hybm</span><span class="o">=</span><span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="s1">&#39;b&#39;</span><span class="p">],</span>
+                                                                                                                <span class="n">p0</span><span class="o">=</span><span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="s1">&#39;p0&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> 
+                                                                                                                <span class="n">new_levels</span><span class="o">=</span><span class="p">(</span><span class="n">era_level</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="p">)</span>
+                <span class="c1"># # remove the variables needed for the calculation of the isobaric levels. If this step is not performed, </span>
+                <span class="c1"># # the horizontal regridding will not be possible.</span>
+                <span class="c1"># dset_dict[keys] = dset_dict[keys].drop((&#39;a&#39;, &#39;p0&#39;, &#39;b&#39;, &#39;ps&#39;, &#39;a_bnds&#39;, &#39;b_bnds&#39;, var_id))</span>
+                <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span> <span class="o">=</span> <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">drop</span><span class="p">((</span><span class="n">var_id</span><span class="p">))</span>
+                <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span> <span class="o">=</span> <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_interp&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">):</span><span class="n">var_id</span><span class="p">})</span>
+
+            <span class="c1">#### a, b, ps</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="s1">&#39;a&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="o">==</span> <span class="kc">True</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="o">==</span> <span class="kc">True</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;ps&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="o">==</span> <span class="kc">True</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;p0&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_interp&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">)]</span> <span class="o">=</span> <span class="n">gc</span><span class="o">.</span><span class="n">interpolation</span><span class="o">.</span><span class="n">interp_hybrid_to_pressure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">member_id</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> 
+                                                                                                                <span class="n">ps</span><span class="o">=</span><span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="s1">&#39;ps&#39;</span><span class="p">],</span>
+                                                                                                                <span class="n">hyam</span><span class="o">=</span><span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="s1">&#39;a&#39;</span><span class="p">],</span> 
+                                                                                                                <span class="n">hybm</span><span class="o">=</span><span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="s1">&#39;b&#39;</span><span class="p">],</span>
+                                                                                                                <span class="n">p0</span><span class="o">=</span><span class="mf">100000.0</span><span class="p">,</span>
+                                                                                                                <span class="n">new_levels</span><span class="o">=</span><span class="p">(</span><span class="n">era_level</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="p">)</span>
+                <span class="c1"># dset_dict[keys] = dset_dict[keys].drop((&#39;a&#39;, &#39;b&#39;, &#39;ps&#39;, &#39;a_bnds&#39;, &#39;b_bnds&#39;, var_id))</span>
+                <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span> <span class="o">=</span> <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">drop</span><span class="p">((</span><span class="n">var_id</span><span class="p">))</span>
+                <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span> <span class="o">=</span> <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_interp&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">):</span><span class="n">var_id</span><span class="p">})</span>
+        
+        <span class="c1"># remove the variables needed for the calculation of the isobaric levels. If this step is not performed, </span>
+        <span class="c1"># the horizontal regridding will not be possible.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;p0&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span> <span class="o">=</span> <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">drop</span><span class="p">((</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;p0&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;ps&#39;</span><span class="p">,</span> <span class="s1">&#39;a_bnds&#39;</span><span class="p">,</span> <span class="s1">&#39;b_bnds&#39;</span><span class="p">,))</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="s1">&#39;p0&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span> <span class="o">=</span> <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">drop</span><span class="p">((</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;ps&#39;</span><span class="p">,</span> <span class="s1">&#39;a_bnds&#39;</span><span class="p">,</span> <span class="s1">&#39;b_bnds&#39;</span><span class="p">,))</span>
+ 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--&gt; The keys in the returned dictionary of datasets are constructed as follows:
+	&#39;activity_id.institution_id.source_id.experiment_id.table_id.grid_label&#39;
+</pre></div>
+</div>
+<div class="output text_html">
+<div>
+    <style>
+        /* Turns off some styling */
+        progress {
+            /* gets rid of default border in Firefox and Opera. */
+            border: none;
+            /* Needs to be in here for Safari polyfill so background images work as expected. */
+            background-size: auto;
+        }
+        .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+            background: #F44336;
+        }
+    </style>
+  <progress value='1' class='' max='1' style='width:300px; height:20px; vertical-align: middle;'></progress>
+  100.00% [1/1 00:00<00:00]
+</div>
+</div></div>
+</div>
+</div>
+<div class="section" id="regrid-cmip6-data-to-noresm2-mm-grid-a-id-regrid-hz-a">
+<h2>Regrid CMIP6 data to NorESM2-MM grid <a id='regrid_hz'></a><a class="headerlink" href="#regrid-cmip6-data-to-noresm2-mm-grid-a-id-regrid-hz-a" title="Permalink to this headline">¶</a></h2>
+<p>We want to conduct statistical analysis at the annual and seasonal timescales to determine the biases in cloud phase and precipitation (liquid and solid) in the CMIP6 models. At the moment we have all historical data from the CMIP6 models. For this, we will have to extract the 30-year period between 1985 and 2014.</p>
+<p><span class="math notranslate nohighlight">\(\rightarrow\)</span> Define a start and end year.</p>
+<p>The CMIP6 high resolution models have approximately a nominal resolution of 100km. But not all have identical grid spacing. Hence we will make use of the python package <code class="docutils literal notranslate"><span class="pre">xesmf</span></code> and the documentation on <a class="reference external" href="https://xesmf.readthedocs.io/en/latest/notebooks/Compare_algorithms.html#Decreasing-resolution">decreasing resolution</a>, <a class="reference external" href="https://xesmf.readthedocs.io/en/latest/notebooks/Masking.html?highlight=conservative#Limitations-and-warnings">Limitations and warnings</a>.</p>
+<p>NorESM2-MM will be the reference grid since we want to compare the models to the ERA5 data. The ERA5 data has a nominal resolution of 0.25deg and has been regridded to the same horizontal resolution as the NorESM2-MM in <a class="reference internal" href="../ERA5/ERA5_1985-2014.html"><span class="doc std std-doc">the ERA5 Jupyter Notebook</span></a>.</p>
+<p><span class="math notranslate nohighlight">\(\rightarrow\)</span> Define NorESM2-MM as the reference grid <code class="docutils literal notranslate"><span class="pre">ds_out</span></code>.</p>
+<p>Create a new Python dictionary (<code class="docutils literal notranslate"><span class="pre">ds_gridded_dict</span></code>) with the regridded CMIP6 <code class="docutils literal notranslate"><span class="pre">xarray</span></code> datasets between 1985 an 2014. Save each regridded model to a <code class="docutils literal notranslate"><span class="pre">netcdf</span></code>, locally.</p>
+<blockquote>
+<div><p><strong><em>NOTE:</em></strong> This step may take several minutes!</p>
+</div></blockquote>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">starty</span> <span class="o">=</span> <span class="mi">1985</span><span class="p">;</span> <span class="n">endy</span> <span class="o">=</span> <span class="mi">2014</span>
+<span class="n">year_range</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">starty</span><span class="p">,</span> <span class="n">endy</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create dictionary for reggridded data</span>
+<span class="n">ds_gridded_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+<span class="c1"># Read in the output grid from NorESM</span>
+<span class="k">if</span> <span class="n">variable_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;lwp&#39;</span><span class="p">:</span>
+    <span class="n">ds_out</span> <span class="o">=</span> <span class="n">dset_dict</span><span class="p">[</span><span class="s1">&#39;CMIP.NCC.NorESM2-MM.historical.AERmon.gn&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">member_id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">ds_out</span> <span class="o">=</span> <span class="n">dset_dict</span><span class="p">[</span><span class="s1">&#39;CMIP.NCC.NorESM2-MM.historical.Amon.gn&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">member_id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">ds_out</span> <span class="o">=</span> <span class="n">ds_out</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span> <span class="o">=</span> <span class="n">ds_out</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">year_range</span><span class="p">))</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+
+
+<span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">keys</span> <span class="ow">in</span> <span class="n">dset_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="c1"># select only models which have atmospheric monthly values</span>
+    <span class="n">amon</span> <span class="o">=</span> <span class="n">keys</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">amon</span> <span class="o">==</span> <span class="s1">&#39;Amon&#39;</span> <span class="ow">or</span> <span class="n">amon</span> <span class="o">==</span> <span class="s1">&#39;AERmon&#39;</span><span class="p">:</span> 
+        <span class="c1"># select model name </span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">keys</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+        
+        <span class="c1"># select where data should be saved</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">variable_id</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_Amon_1deg_</span><span class="si">{}</span><span class="s1">01_</span><span class="si">{}</span><span class="s1">12.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">variable_id</span><span class="p">,</span> <span class="n">starty</span><span class="p">,</span> <span class="n">endy</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">([</span><span class="n">variable_id</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_Amon_1deg_</span><span class="si">{}</span><span class="s1">01_</span><span class="si">{}</span><span class="s1">12.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">variable_id</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">starty</span><span class="p">,</span> <span class="n">endy</span><span class="p">)</span>
+        <span class="c1"># filename = &#39;{}_Amon_1deg_{}01_{}12.nc&#39;.format(variable_id[0], starty, endy)</span>
+        <span class="n">savepath</span> <span class="o">=</span> <span class="s1">&#39;/scratch/franzihe/output/CMIP6_hist/1deg/</span><span class="si">{}</span><span class="s1">/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">nc_out</span> <span class="o">=</span> <span class="n">savepath</span> <span class="o">+</span> <span class="n">filename</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="n">nc_out</span><span class="p">)</span>
+        
+        <span class="c1"># Input data from CMIP6 model to be regridded</span>
+        <span class="n">ds_in</span> <span class="o">=</span> <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">member_id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">ds_in</span> <span class="o">=</span> <span class="n">ds_in</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span> <span class="o">=</span> <span class="n">ds_in</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">year_range</span><span class="p">))</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+            
+        <span class="c1"># common time grid</span>
+        <span class="n">ds_in</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_out</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
+            
+
+        <span class="c1"># Regrid data</span>
+        <span class="n">ds_in_regrid</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">regrid_data</span><span class="p">(</span><span class="n">ds_in</span><span class="p">,</span> <span class="n">ds_out</span><span class="p">)</span>
+
+
+        <span class="c1"># Shift the longitude from 0--&gt;360 to -180--&gt;180 and sort by longitude and time</span>
+        <span class="n">ds_in_regrid</span> <span class="o">=</span> <span class="n">ds_in_regrid</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">lon</span><span class="o">=</span><span class="p">(((</span><span class="n">ds_in_regrid</span><span class="o">.</span><span class="n">lon</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span><span class="p">)</span> <span class="o">-</span> <span class="mi">180</span><span class="p">))</span><span class="o">.</span><span class="n">sortby</span><span class="p">(</span><span class="s1">&#39;lon&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sortby</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+        <span class="n">ds_in_regrid</span> <span class="o">=</span> <span class="n">ds_in_regrid</span><span class="o">.</span><span class="n">reset_coords</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;time_bnds&#39;</span><span class="p">,</span> <span class="p">],</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+            
+        <span class="c1"># create dataset with all models</span>
+        <span class="n">ds_gridded_dict</span><span class="p">[</span><span class="n">model</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_in_regrid</span>
+
+        <span class="c1"># if nc_out in files:</span>
+        <span class="c1">#     print(&#39;{} is downloaded&#39;.format(nc_out))</span>
+        <span class="c1">#     counter += 1</span>
+        <span class="c1">#     print(&#39;Have regridded in total: {:} files&#39;.format(str(counter)))</span>
+        <span class="c1"># else:    </span>
+            <span class="c1"># Save to netcdf file</span>
+        <span class="n">ds_in_regrid</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">nc_out</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;file written: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nc_out</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="connect-all-models-into-one-dataset-with-new-coordinate-model">
+<h2>Connect all models into one Dataset with new coordinate ‘model’<a class="headerlink" href="#connect-all-models-into-one-dataset-with-new-coordinate-model" title="Permalink to this headline">¶</a></h2>
+<p>We will create a <code class="docutils literal notranslate"><span class="pre">xarray.Dataset</span></code> with all CMIP6 models, after the interpolation to the same horizonal (and vertical) resolution. This step will make the next steps easier, as we will not need the the full dictonary key and can just use the model name.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># not needed if regridding works</span>
+<span class="n">ds_gridded_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">list_models</span><span class="p">:</span>
+    <span class="n">ds_gridded_dict</span><span class="p">[</span><span class="n">model</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="s1">&#39;/scratch/franzihe/output/CMIP6_hist/1deg/</span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">_Amon_1deg_198501_201412.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">variable_id</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># expand the model with nan array where missing variables</span>
+<span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">ds_gridded_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variable_id</span><span class="p">:</span>
+        <span class="c1"># print(var, model)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">var</span> <span class="ow">in</span> <span class="n">ds_gridded_dict</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;pr&#39;</span> <span class="ow">or</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;prsn&#39;</span><span class="p">:</span>
+                <span class="n">ds_gridded_dict</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">da</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">ds_gridded_dict</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> 
+                                                                                 <span class="n">ds_gridded_dict</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s1">&#39;lat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> 
+                                                                                 <span class="n">ds_gridded_dict</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> 
+                                                            <span class="n">fill_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> 
+                                                            <span class="n">chunks</span><span class="o">=</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="mi">721</span><span class="p">,</span> <span class="mi">1440</span><span class="o">/</span><span class="mi">2</span><span class="p">)),</span> <span class="n">dims</span> <span class="o">=</span> <span class="p">[</span><span class="n">ds_gridded_dict</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ds_gridded_dict</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">lat</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ds_gridded_dict</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">lon</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">coords</span><span class="o">=</span><span class="p">[</span><span class="n">ds_gridded_dict</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">ds_gridded_dict</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">lat</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">ds_gridded_dict</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">lon</span><span class="o">.</span><span class="n">values</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CAMS-CSM1-0 prsn
+CMCC-ESM2 prsn
+CIESM pr
+CIESM prsn
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_ds</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ds_gridded_dict</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="n">_coord</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ds_gridded_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="n">ds_cmip</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">objs</span><span class="o">=</span><span class="n">_ds</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">_coord</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s1">&#39;concat_dim&#39;</span><span class="p">:</span><span class="s1">&#39;model&#39;</span><span class="p">})</span>
+<span class="n">ds_cmip</span> <span class="o">=</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;bnds&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="find-mixed-phase-clouds">
+<h2>Find mixed-phase clouds<a class="headerlink" href="#find-mixed-phase-clouds" title="Permalink to this headline">¶</a></h2>
+<p>Calculate the IWC/LWC statistics given by the values. Setting the value to 0.5 will find the level in the atmosphere where IWC and LWC are 50/50. Setting it to a value of 0.7 will find the level where IWC is 70% while LWC is 30%.</p>
+<ol class="simple">
+<li><p>find the fraction of IWC to LWC
+$<span class="math notranslate nohighlight">\(fraction = \frac{IWC}{IWC + LWC}\)</span>$</p></li>
+<li><p>find the nearest value to given IWC-fraction</p></li>
+<li><p>find atmospheric pressure levels where IWC/LWC fraction occurs</p></li>
+<li><p>find the index of the first atmospheric pressure level</p></li>
+<li><p>use the index to select variables</p></li>
+</ol>
+</div>
+<div class="section" id="create-dictionary-from-the-list-of-datasets-we-want-to-use-for-the-iwc-lwc-statistics">
+<h2>Create dictionary from the list of datasets we want to use for the IWC/LWC statistics<a class="headerlink" href="#create-dictionary-from-the-list-of-datasets-we-want-to-use-for-the-iwc-lwc-statistics" title="Permalink to this headline">¶</a></h2>
+<p>Calculate the IWC/LWC statistics given by the values. Setting the value to 0.5 will find the level in the atmosphere where IWC and LWC are 50/50. Setting it to a value of 0.7 will find the level where IWC is 70% while LWC is 30%.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_ds</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dset_dict2</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="n">_coord</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dset_dict2</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="n">ds_cmip_1deg</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">objs</span><span class="o">=</span><span class="n">_ds</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">_coord</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s1">&#39;concat_dim&#39;</span><span class="p">:</span><span class="s1">&#39;stat&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="exploratory-data-analysis-a-id-exploratory-a">
+<h1>3. Exploratory Data Analysis <a id='exploratory'></a><a class="headerlink" href="#exploratory-data-analysis-a-id-exploratory-a" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="create-seasonal-mean-of-all-regridded-models">
+<h2>Create seasonal mean of all regridded models<a class="headerlink" href="#create-seasonal-mean-of-all-regridded-models" title="Permalink to this headline">¶</a></h2>
+<p>…and plot seasonal mean of each individual model</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">ds_cmip</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+    <span class="n">ds_cmip</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">seasonal_mean_std</span><span class="p">(</span><span class="n">ds_cmip</span><span class="p">,</span> <span class="n">var_id</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># extract the variable name similar to ERA5 for plotting</span>
+<span class="n">var</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">to_era_variable</span><span class="p">[</span><span class="n">variable_id</span><span class="p">[</span><span class="n">variable_id</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;prsn&#39;</span><span class="p">)]]</span>
+
+<span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+    <span class="n">fct</span><span class="o">.</span><span class="n">plt_spatial_seasonal_mean</span><span class="p">(</span><span class="n">ds_cmip</span><span class="p">[</span><span class="n">variable_id</span><span class="p">[</span><span class="n">variable_id</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;prsn&#39;</span><span class="p">)]</span><span class="o">+</span><span class="s1">&#39;_season_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">),</span> <span class="n">var</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> MEAN (</span><span class="si">{}</span><span class="s1"> - </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">starty</span><span class="p">,</span> <span class="n">endy</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/CMIP6_hr_1985-2014_37_0.png" src="../_images/CMIP6_hr_1985-2014_37_0.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_37_1.png" src="../_images/CMIP6_hr_1985-2014_37_1.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_37_2.png" src="../_images/CMIP6_hr_1985-2014_37_2.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_37_3.png" src="../_images/CMIP6_hr_1985-2014_37_3.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_37_4.png" src="../_images/CMIP6_hr_1985-2014_37_4.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_37_5.png" src="../_images/CMIP6_hr_1985-2014_37_5.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_37_6.png" src="../_images/CMIP6_hr_1985-2014_37_6.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_37_7.png" src="../_images/CMIP6_hr_1985-2014_37_7.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_37_8.png" src="../_images/CMIP6_hr_1985-2014_37_8.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_37_9.png" src="../_images/CMIP6_hr_1985-2014_37_9.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_37_10.png" src="../_images/CMIP6_hr_1985-2014_37_10.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_37_11.png" src="../_images/CMIP6_hr_1985-2014_37_11.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_37_12.png" src="../_images/CMIP6_hr_1985-2014_37_12.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_37_13.png" src="../_images/CMIP6_hr_1985-2014_37_13.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_37_14.png" src="../_images/CMIP6_hr_1985-2014_37_14.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_37_15.png" src="../_images/CMIP6_hr_1985-2014_37_15.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_37_16.png" src="../_images/CMIP6_hr_1985-2014_37_16.png" />
+</div>
+</div>
+</div>
+<div class="section" id="create-model-mean-spread-of-seasonal-mean-of-all-regridded-models">
+<h2>Create model mean/spread of seasonal mean of all regridded models<a class="headerlink" href="#create-model-mean-spread-of-seasonal-mean-of-all-regridded-models" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds_cmip</span><span class="p">[</span><span class="n">variable_id</span><span class="p">[</span><span class="n">variable_id</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;prsn&#39;</span><span class="p">)]</span><span class="o">+</span><span class="s1">&#39;_season_model_mean&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_cmip</span><span class="p">[</span><span class="n">variable_id</span><span class="p">[</span><span class="n">variable_id</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;prsn&#39;</span><span class="p">)]</span><span class="o">+</span><span class="s1">&#39;_season_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">skipna</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">ds_cmip</span><span class="p">[</span><span class="n">variable_id</span><span class="p">[</span><span class="n">variable_id</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;prsn&#39;</span><span class="p">)]</span><span class="o">+</span><span class="s1">&#39;_season_model_std&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">ds_cmip</span><span class="p">[</span><span class="n">variable_id</span><span class="p">[</span><span class="n">variable_id</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;prsn&#39;</span><span class="p">)]</span><span class="o">+</span><span class="s1">&#39;_season_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">skipna</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span><span class="p">,</span> <span class="n">im</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">plt_spatial_seasonal_mean</span><span class="p">(</span><span class="n">ds_cmip</span><span class="p">[</span><span class="n">variable_id</span><span class="p">[</span><span class="n">variable_id</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;prsn&#39;</span><span class="p">)]</span><span class="o">+</span><span class="s1">&#39;_season_model_mean&#39;</span><span class="p">],</span> <span class="n">var</span><span class="p">,</span> <span class="n">add_colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;CMIP6 - high resolution (1985 - 2014)&#39;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">right</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="n">cbar_ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">])</span>
+<span class="n">cb</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cbar_ax</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.046</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
+<span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;MEAN - </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fct</span><span class="o">.</span><span class="n">plt_dict</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">fct</span><span class="o">.</span><span class="n">plt_dict</span><span class="p">[</span><span class="s1">&#39;header&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">)]),</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+
+<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> 
+         <span class="n">transform</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="n">bbox</span> <span class="o">=</span><span class="p">{</span><span class="s1">&#39;facecolor&#39;</span><span class="p">:</span><span class="s1">&#39;green&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;alpha&#39;</span><span class="p">:</span><span class="mf">0.6</span><span class="p">,</span>
+                <span class="s1">&#39;pad&#39;</span><span class="p">:</span><span class="mi">5</span><span class="p">})</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ds_cmip</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">5</span><span class="p">:</span><span class="mi">10</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> 
+            <span class="n">transform</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="n">bbox</span> <span class="o">=</span><span class="p">{</span><span class="s1">&#39;facecolor&#39;</span><span class="p">:</span><span class="s1">&#39;green&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;alpha&#39;</span><span class="p">:</span><span class="mf">0.6</span><span class="p">,</span>
+                    <span class="s1">&#39;pad&#39;</span><span class="p">:</span><span class="mi">5</span><span class="p">})</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ds_cmip</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mf">0.38</span><span class="p">,</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">10</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> 
+            <span class="n">transform</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="n">bbox</span> <span class="o">=</span><span class="p">{</span><span class="s1">&#39;facecolor&#39;</span><span class="p">:</span><span class="s1">&#39;green&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;alpha&#39;</span><span class="p">:</span><span class="mf">0.6</span><span class="p">,</span>
+                    <span class="s1">&#39;pad&#39;</span><span class="p">:</span><span class="mi">5</span><span class="p">})</span>
+    
+
+<span class="c1"># save figure to png</span>
+<span class="n">figdir</span> <span class="o">=</span> <span class="s1">&#39;/uio/kant/geo-metos-u1/franzihe/Documents/Figures/CMIP6/&#39;</span>
+<span class="n">figname</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_season_mean_1deg_</span><span class="si">{}</span><span class="s1">_</span><span class="si">{}</span><span class="s1">.png&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">variable_id</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">starty</span><span class="p">,</span> <span class="n">endy</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">figdir</span> <span class="o">+</span> <span class="n">figname</span><span class="p">,</span> <span class="nb">format</span> <span class="o">=</span> <span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">transparent</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/CMIP6_hr_1985-2014_40_0.png" src="../_images/CMIP6_hr_1985-2014_40_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span><span class="p">,</span> <span class="n">im</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">plt_spatial_seasonal_mean</span><span class="p">(</span><span class="n">ds_cmip</span><span class="p">[</span><span class="n">variable_id</span><span class="p">[</span><span class="n">variable_id</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;prsn&#39;</span><span class="p">)]</span><span class="o">+</span><span class="s1">&#39;_season_model_mean&#39;</span><span class="p">],</span> <span class="n">var</span><span class="p">,</span> <span class="n">add_colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;CMIP6 - high resolution (1985 - 2014)&#39;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">right</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="n">cbar_ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">])</span>
+<span class="n">cb</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cbar_ax</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.046</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
+<span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;MEAN - </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fct</span><span class="o">.</span><span class="n">plt_dict</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">fct</span><span class="o">.</span><span class="n">plt_dict</span><span class="p">[</span><span class="s1">&#39;header&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">)]),</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+
+
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span> <span class="n">ds_cmip</span><span class="p">[</span><span class="n">variable_id</span><span class="p">[</span><span class="n">variable_id</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;prsn&#39;</span><span class="p">)]</span><span class="o">+</span><span class="s1">&#39;_season_model_std&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">season</span><span class="p">):</span>
+    <span class="n">sm</span> <span class="o">=</span> <span class="n">ds_cmip</span><span class="p">[</span><span class="n">variable_id</span><span class="p">[</span><span class="n">variable_id</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;prsn&#39;</span><span class="p">)]</span><span class="o">+</span><span class="s1">&#39;_season_model_std&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">season</span><span class="o">=</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> 
+                                                                      <span class="n">robust</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                                                      <span class="n">vmin</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">plt_dict</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">fct</span><span class="o">.</span><span class="n">plt_dict</span><span class="p">[</span><span class="s1">&#39;header&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;vmin_std&#39;</span><span class="p">)],</span> 
+                                                                      <span class="n">vmax</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">plt_dict</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">fct</span><span class="o">.</span><span class="n">plt_dict</span><span class="p">[</span><span class="s1">&#39;header&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;vmax_std&#39;</span><span class="p">)],</span>
+                                                                       <span class="n">levels</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+                                                                      <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">lajolla</span><span class="p">,</span>
+                                                                      <span class="n">add_colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    
+<span class="n">cbar_ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">1.10</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">])</span>
+<span class="n">sb</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">sm</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cbar_ax</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.046</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
+<span class="n">sb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;STD - </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fct</span><span class="o">.</span><span class="n">plt_dict</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">fct</span><span class="o">.</span><span class="n">plt_dict</span><span class="p">[</span><span class="s1">&#39;header&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">)]),</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+
+<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> 
+         <span class="n">transform</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="n">bbox</span> <span class="o">=</span><span class="p">{</span><span class="s1">&#39;facecolor&#39;</span><span class="p">:</span><span class="s1">&#39;green&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;alpha&#39;</span><span class="p">:</span><span class="mf">0.6</span><span class="p">,</span>
+                <span class="s1">&#39;pad&#39;</span><span class="p">:</span><span class="mi">5</span><span class="p">})</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ds_cmip</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">5</span><span class="p">:</span><span class="mi">10</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> 
+            <span class="n">transform</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="n">bbox</span> <span class="o">=</span><span class="p">{</span><span class="s1">&#39;facecolor&#39;</span><span class="p">:</span><span class="s1">&#39;green&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;alpha&#39;</span><span class="p">:</span><span class="mf">0.6</span><span class="p">,</span>
+                    <span class="s1">&#39;pad&#39;</span><span class="p">:</span><span class="mi">5</span><span class="p">})</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ds_cmip</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mf">0.38</span><span class="p">,</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">10</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> 
+            <span class="n">transform</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="n">bbox</span> <span class="o">=</span><span class="p">{</span><span class="s1">&#39;facecolor&#39;</span><span class="p">:</span><span class="s1">&#39;green&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;alpha&#39;</span><span class="p">:</span><span class="mf">0.6</span><span class="p">,</span>
+                    <span class="s1">&#39;pad&#39;</span><span class="p">:</span><span class="mi">5</span><span class="p">})</span>
+<span class="c1"># save figure to png</span>
+<span class="n">figdir</span> <span class="o">=</span> <span class="s1">&#39;/uio/kant/geo-metos-u1/franzihe/Documents/Figures/CMIP6/&#39;</span>
+<span class="n">figname</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_season_mean_std_1deg_</span><span class="si">{}</span><span class="s1">_</span><span class="si">{}</span><span class="s1">.png&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">variable_id</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">starty</span><span class="p">,</span> <span class="n">endy</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">figdir</span> <span class="o">+</span> <span class="n">figname</span><span class="p">,</span> <span class="nb">format</span> <span class="o">=</span> <span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">transparent</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/CMIP6_hr_1985-2014_41_0.png" src="../_images/CMIP6_hr_1985-2014_41_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># save to netcdf</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_1deg_</span><span class="si">{}</span><span class="s1">01_</span><span class="si">{}</span><span class="s1">12.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">variable_id</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">starty</span><span class="p">,</span> <span class="n">endy</span><span class="p">)</span>
+<span class="n">savepath</span> <span class="o">=</span> <span class="s1">&#39;/scratch/franzihe/output/CMIP6_hist/1deg/&#39;</span>
+<span class="n">nc_out</span> <span class="o">=</span> <span class="n">savepath</span> <span class="o">+</span> <span class="n">filename</span>
+<span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="n">nc_out</span><span class="p">)</span>
+
+<span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span> 
+<span class="c1"># Save to netcdf file</span>
+<span class="k">if</span> <span class="n">nc_out</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+<span class="c1">#     print(&#39;{} is downloaded&#39;.format(nc_out))</span>
+<span class="c1">#     counter += 1</span>
+<span class="c1">#     print(&#39;Have saved in total: {:} files&#39;.format(str(counter)))</span>
+<span class="c1"># else:</span>
+    <span class="n">ds_cmip</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">nc_out</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;file written: .</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nc_out</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="references-a-id-references-a">
+<h1>References <a id='references'></a><a class="headerlink" href="#references-a-id-references-a" title="Permalink to this headline">¶</a></h1>
+<p>[1] Zelinka, M. D., Myers, T. A., McCoy, D. T., Po-Chedley, S., Caldwell, P. M., Ceppi, P., et al. (2020). Causes of higher climate sensitivity in CMIP6 models. Geophysical Research Letters, 47, e2019GL085782. <a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1029/2019GL085782">https://doi-org.ezproxy.uio.no/10.1029/2019GL085782</a></p>
+<p>[2] Bjordal, J., Storelvmo, T., Alterskjær, K. et al. Equilibrium climate sensitivity above 5 °C plausible due to state-dependent cloud feedback. Nat. Geosci. 13, 718–721 (2020). <a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1038/s41561-020-00649-1">https://doi-org.ezproxy.uio.no/10.1038/s41561-020-00649-1</a></p>
+<p>[3] Wu, T., Lu, Y., Fang, Y., Xin, X., Li, L., Li, W., Jie, W., Zhang, J., Liu, Y., Zhang, L., Zhang, F., Zhang, Y., Wu, F., Li, J., Chu, M., Wang, Z., Shi, X., Liu, X., Wei, M., Huang, A., Zhang, Y., and Liu, X.: The Beijing Climate Center Climate System Model (BCC-CSM): the main progress from CMIP5 to CMIP6 , Geosci. Model Dev., 12, 1573–1600, <a class="reference external" href="https://doi.org/10.5194/gmd-12-1573-2019">https://doi.org/10.5194/gmd-12-1573-2019</a>, 2019.</p>
+<p>[4] Lee, W.-L., Wang, Y.-C., Shiu, C.-J., Tsai, I., Tu, C.-Y., Lan, Y.-Y., Chen, J.-P., Pan, H.-L., and Hsu, H.-H.: Taiwan Earth System Model Version 1: description and evaluation of mean state, Geosci. Model Dev., 13, 3887–3904, <a class="reference external" href="https://doi.org/10.5194/gmd-13-3887-2020">https://doi.org/10.5194/gmd-13-3887-2020</a>, 2020.</p>
+<p>[5] Bian HE, Yongqiang YU, Qing BAO, Pengfei LIN, Hailong LIU, Jinxiao LI, Lei WANG, Yimin LIU, Guoxiong WU, Kangjun CHEN, Yuyang GUO, Shuwen ZHAO, Xiaoqi ZHANG, Mirong SONG &amp; Jinbo XIE (2020) CAS FGOALS-f3-L model dataset descriptions for CMIP6 DECK experiments, Atmospheric and Oceanic Science Letters, 13:6, 582-588, DOI: 10.1080/16742834.2020.1778419</p>
+<p>[6] Cherchi, A., Fogli, P. G., Lovato, T., Peano, D., Iovino, D., Gualdi, S., et al. (2019). Global mean climate and main patterns of variability in the CMCC-CM2 coupled model. Journal of Advances in Modeling Earth Systems, 11, 185– 209. <a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1029/2018MS001369">https://doi-org.ezproxy.uio.no/10.1029/2018MS001369</a></p>
+<p>[7] van Noije, T., Bergman, T., Le Sager, P., O’Donnell, D., Makkonen, R., Gonçalves-Ageitos, M., Döscher, R., Fladrich, U., von Hardenberg, J., Keskinen, J.-P., Korhonen, H., Laakso, A., Myriokefalitakis, S., Ollinaho, P., Pérez García-Pando, C., Reerink, T., Schrödner, R., Wyser, K., and Yang, S.: EC-Earth3-AerChem: a global climate model with interactive aerosols and atmospheric chemistry participating in CMIP6 , Geosci. Model Dev., 14, 5637–5668, <a class="reference external" href="https://doi.org/10.5194/gmd-14-5637-2021">https://doi.org/10.5194/gmd-14-5637-2021</a>, 2021.</p>
+<p>[8] Golaz, J.-C., Caldwell, P. M., Van Roekel, L. P., Petersen, M. R., Tang, Q., Wolfe, J. D., et al. (2019). The DOE E3SM coupled model version 1: Overview and evaluation at standard resolution. Journal of Advances in Modeling Earth Systems, 11, 2089– 2129. <a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1029/2018MS001603">https://doi-org.ezproxy.uio.no/10.1029/2018MS001603</a></p>
+<p>[9] Burrows, S. M., Maltrud, M., Yang, X., Zhu, Q., Jeffery, N., Shi, X., et al. (2020). The DOE E3SM v1.1 biogeochemistry configuration: Description and simulated ecosystem-climate responses to historical changes in forcing. Journal of Advances in Modeling Earth Systems, 12, e2019MS001766. <a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1029/2019MS001766">https://doi-org.ezproxy.uio.no/10.1029/2019MS001766</a></p>
+<p>[10] Müller, W. A., Jungclaus, J. H., Mauritsen, T., Baehr, J., Bittner, M., Budich, R., et al. (2018). A higher-resolution version of the Max Planck Institute Earth System Model (MPI-ESM1.2-HR). Journal of Advances in Modeling Earth Systems, 10, 1383– 1413. <a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1029/2017MS001217">https://doi-org.ezproxy.uio.no/10.1029/2017MS001217</a></p>
+<p>[11] Yukimoto, S., H. Kawai, T. Koshiro, N. Oshima, K. Yoshida, S. Urakawa, H. Tsujino, M. Deushi, T. Tanaka, M. Hosaka, S. Yabu, H. Yoshimura, E. Shindo, R. Mizuta, A. Obata, Y. Adachi, and M. Ishii, 2019: The Meteorological Research Institute Earth System Model version 2.0, MRI-ESM2.0: Description and basic evaluation of the physical component. J. Meteor. Soc. Japan, 97, 931–965, doi:10.2151/jmsj.2019-051.</p>
+<p>[12] Seland, Ø., Bentsen, M., Olivié, D., Toniazzo, T., Gjermundsen, A., Graff, L. S., Debernard, J. B., Gupta, A. K., He, Y.-C., Kirkevåg, A., Schwinger, J., Tjiputra, J., Aas, K. S., Bethke, I., Fan, Y., Griesfeller, J., Grini, A., Guo, C., Ilicak, M., Karset, I. H. H., Landgren, O., Liakka, J., Moseid, K. O., Nummelin, A., Spensberger, C., Tang, H., Zhang, Z., Heinze, C., Iversen, T., and Schulz, M.: Overview of the Norwegian Earth System Model (NorESM2) and key climate response of CMIP6 DECK, historical, and scenario simulations, Geosci. Model Dev., 13, 6165–6200, <a class="reference external" href="https://doi.org/10.5194/gmd-13-6165-2020">https://doi.org/10.5194/gmd-13-6165-2020</a>, 2020.</p>
+<p>[13] Held, I. M., Guo, H., Adcroft, A., Dunne, J. P., Horowitz, L. W., Krasting, J., et al. (2019). Structure and performance of GFDL’s CM4.0 climate model. Journal of Advances in Modeling Earth Systems, 11, 3691– 3727. <a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1029/2019MS001829">https://doi-org.ezproxy.uio.no/10.1029/2019MS001829</a></p>
+<p>[14] Dunne, J. P., Horowitz, L. W., Adcroft, A. J., Ginoux, P., Held, I. M., John, J. G., et al. (2020). The GFDL Earth System Model Version 4.1 (GFDL-ESM 4.1): Overall coupled model description and simulation characteristics. Journal of Advances in Modeling Earth Systems, 12, e2019MS002015. <a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1029/2019MS002015">https://doi-org.ezproxy.uio.no/10.1029/2019MS002015</a></p>
+<p>[15] Park, S., Shin, J., Kim, S., Oh, E., &amp; Kim, Y. (2019). Global Climate Simulated by the Seoul National University Atmosphere Model Version 0 with a Unified Convection Scheme (SAM0-UNICON), Journal of Climate, 32(10), 2917-2949. Retrieved Jan 12, 2022, from <a class="reference external" href="https://journals-ametsoc-org.ezproxy.uio.no/view/journals/clim/32/10/jcli-d-18-0796.1.xml">https://journals-ametsoc-org.ezproxy.uio.no/view/journals/clim/32/10/jcli-d-18-0796.1.xml</a></p>
+<p>[16] Lin, Y., Huang, X., Liang, Y., Qin, Y., Xu, S., &amp; Huang, W., et al. (2020). Community Integrated Earth System Model (CIESM): Description and evaluation. Journal of Advances in Modeling Earth Systems, 12, e2019MS002036. <a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1029/2019MS002036">https://doi-org.ezproxy.uio.no/10.1029/2019MS002036</a></p>
+<img src="https://drive.google.com/uc?id=1zb0LHvipx8JOXLLrCxzYToJM7eNK4eaw"  height="100" />
+<img src="https://reliance.rohub.org/static/media/Reliance-logo.433dc2e9.png"  height="100" />
+<img src="https://www.uio.no/vrtx/decorating/resources/dist/src2/images/footer/uio-logo-en.svg"  height="100" />
+<img src="https://erc.europa.eu/sites/default/files/logo_0.png"  height="100" />
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./cmip"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="../CMIP6_ERA5_CloudSat/plt_seasonal_mean.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Analysis of CMIP6, ERA5, and CloudSat</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../cloudsat.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Cloudsat</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Franziska Hellmuth<br/>
+    
+        &copy; Copyright 2022.<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>
