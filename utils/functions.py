@@ -70,6 +70,24 @@ def regrid_data(ds_in, ds_out):
     return ds_in_regrid
 
 
+def dataset_IWC_LWC_level(ds, iwc_stat, var1, var2, data_name):
+    dset_dict = dict()
+    dset_dict[data_name] = ds
+    for i in iwc_stat.items():
+        dset_dict["{}_{}".format(data_name, i[0])] = find_IWC_LWC_level(
+            ds, var1=var1, var2=var2, value=i[1], coordinate="level"
+        )
+
+    ## Connect all statistics into one Dataset with new coordinate 'statistic'
+    _ds = list(dset_dict.values())
+    _coord = list(dset_dict.keys())
+    ds_new = xr.concat(objs=_ds, dim=_coord, coords="all").rename(
+        {"concat_dim": "statistic"}
+    )
+
+    return ds_new
+
+
 def find_IWC_LWC_level(ds, var1, var2, value, coordinate):
     # 1.1. IWC + LWC = 100%
     iwc_lwc = ds[var1] + ds[var2]
@@ -103,17 +121,19 @@ def seasonal_mean_std(
     ds,
     var,
 ):
-    ds[var + "_season_mean"] = (
-        ds[var].groupby("time.season").mean("time", keep_attrs=True)
+    ds[var + "_mean"] = (
+        ds[var].groupby("time.season").mean("time", keep_attrs=True, skipna=True)
     )
-    ds[var + "_season_std"] = (
-        ds[var].groupby("time.season").std("time", keep_attrs=True)
+    ds[var + "_std"] = (
+        ds[var].groupby("time.season").std("time", keep_attrs=True, skipna=True)
     )
 
     return ds
 
 
-def plt_spatial_seasonal_mean(variable, variable_id, add_colorbar=None, title=None):
+def plt_spatial_seasonal_mean(
+    variable, variable_id, add_colorbar=None, title=None, global_mean=None
+):
     fig, axsm = plt.subplots(
         2, 2, figsize=[10, 7], subplot_kw={"projection": ccrs.PlateCarree()}
     )
@@ -136,7 +156,14 @@ def plt_spatial_seasonal_mean(variable, variable_id, add_colorbar=None, title=No
         gl = ax.gridlines()
         ax.add_feature(cy.feature.BORDERS)
         gl.top_labels = False
-        ax.set_title("season: {}".format(i.values))
+        if global_mean == None:
+            ax.set_title("season: {}".format(i.values))
+        else:
+            ax.set_title(
+                "season: {}; global mean: {}".format(
+                    i.values, global_mean.sel(season=i).round(decimals=2).values
+                )
+            )
 
     plt.tight_layout()
     fig.subplots_adjust(top=0.88)
@@ -150,11 +177,16 @@ def plt_spatial_seasonal_mean(variable, variable_id, add_colorbar=None, title=No
 
 plt_dict = {
     "header": ["label", "vmin", "vmax", "levels", "vmin_std", "vmax_std"],
-    "sf": ["Snowfall (mm$\,$day$^{-1}$)", 0, 2.5, 25, 0, 0.6],
-    "tp": ["Total precipitation (mm$\,$day$^{-1}$)", 0, 9, 90, 0, 2.4],
-    "tciw": ["Ice Water Path (g$\,$m$^{-2}$)", 0, 100, 25, 0, 20],
-    "tclw": ["Liquid Water Path (g$\,$m$^{-2}$)", 0, 100, 25, 0, 20],
-    "2t": ["2-m temperature (K)", 246, 300, 40, 0, 6],
+    "sf": ["Snowfall (mm$\,$day$^{-1}$)", 0, 2.5, 26, 0, 0.6],
+    "tp": ["Total precipitation (mm$\,$day$^{-1}$)", 0, 9, 91, 0, 2.4],
+    "tciw": ["Ice Water Path (g$\,$m$^{-2}$)", 0, 100, 26, 0, 20],
+    "tclw": ["Liquid Water Path (g$\,$m$^{-2}$)", 0, 100, 26, 0, 20],
+    "2t": ["2-m temperature (K)", 246, 300, 41, 0, 6],
+    "msr": ["Mean snowfall rate (mm$\,$day$^{-1}$)", 0, 2.4, 25, 0, 1],
+    "clic": ["Specific cloud ice water content (g kg$^{-1}$)", 0, 0.01, 11, 0, 1],
+    "clwc": ["Specific cloud liquid water content (g kg$^{-1}$)", 0, 0.01, 11, 0, 1],
+    "cswc": ["Specific snow water content (g kg$^{-1}$)", 0.05, 0.08, 11, 0, 1],
+    "pressure": ["Pressure", 400, 1000, 26, 0, 50],
 }
 
 to_era_variable = {
