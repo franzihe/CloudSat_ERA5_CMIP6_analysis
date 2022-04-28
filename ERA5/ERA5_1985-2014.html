@@ -630,7 +630,7 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7f8596a47580&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7f2214bbffa0&gt;
 </pre></div>
 </div>
 </div>
@@ -640,12 +640,6 @@ const thebe_selector_output = ".output, .cell_output"
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># reload imports</span>
 <span class="o">%</span><span class="k">load_ext</span> autoreload
 <span class="o">%</span><span class="k">autoreload</span> 2
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The autoreload extension is already loaded. To reload it, use:
-  %reload_ext autoreload
 </pre></div>
 </div>
 </div>
@@ -1032,7 +1026,7 @@ $<span class="math notranslate nohighlight">\(fraction = \frac{IWC}{IWC + LWC}\)
         <span class="n">add_colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fg</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">flat</span><span class="p">,</span> <span class="n">variable</span><span class="o">.</span><span class="n">season</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;season: </span><span class="si">{}</span><span class="s1">, global mean: </span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">global_mean</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">season</span><span class="o">=</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;season: </span><span class="si">{}</span><span class="s1">, global mean: </span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">global_mean</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">season</span><span class="o">=</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
     <span class="c1"># lets add a coastline to each axis</span>
     <span class="c1"># great reason to use FacetGrid.map</span>
     <span class="n">fg</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">coastlines</span><span class="p">())</span>
@@ -1041,7 +1035,7 @@ $<span class="math notranslate nohighlight">\(fraction = \frac{IWC}{IWC + LWC}\)
 
     <span class="n">fg</span><span class="o">.</span><span class="n">add_colorbar</span><span class="p">(</span><span class="n">fraction</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
 
-    <span class="n">fg</span><span class="o">.</span><span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;MEAN - </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fct</span><span class="o">.</span><span class="n">plt_dict</span><span class="p">[</span><span class="n">var_id</span><span class="p">][</span><span class="n">fct</span><span class="o">.</span><span class="n">plt_dict</span><span class="p">[</span><span class="s1">&#39;header&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">)],</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">))</span>
+    <span class="n">fg</span><span class="o">.</span><span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fct</span><span class="o">.</span><span class="n">plt_dict</span><span class="p">[</span><span class="n">var_id</span><span class="p">][</span><span class="n">fct</span><span class="o">.</span><span class="n">plt_dict</span><span class="p">[</span><span class="s1">&#39;header&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">)],</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">))</span>
     
 </pre></div>
 </div>
@@ -1052,10 +1046,11 @@ $<span class="math notranslate nohighlight">\(fraction = \frac{IWC}{IWC + LWC}\)
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">season_mean_1deg</span><span class="o">.</span><span class="n">statistic</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="n">ds_era</span><span class="o">.</span><span class="n">data_vars</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">stat</span> <span class="o">==</span> <span class="s1">&#39;ERA5&#39;</span> <span class="ow">and</span> <span class="n">var_id</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;occurence&#39;</span><span class="p">)</span><span class="o">==-</span><span class="mi">1</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span><span class="p">))</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
-            <span class="n">variable</span> <span class="o">=</span> <span class="n">season_mean_1deg</span><span class="p">[</span><span class="n">var_id</span><span class="o">+</span><span class="s1">&#39;_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">statistic</span><span class="o">=</span><span class="n">stat</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            
-            <span class="n">global_mean</span> <span class="o">=</span> <span class="n">ds_era_1deg</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">statistic</span><span class="o">=</span><span class="n">stat</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">),</span><span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;time.season&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> <span class="n">var_id</span><span class="p">)</span>
+            <span class="n">variable</span> <span class="o">=</span> <span class="n">season_mean_1deg</span><span class="p">[</span><span class="n">var_id</span><span class="o">+</span><span class="s1">&#39;_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">statistic</span><span class="o">=</span><span class="n">stat</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span><span class="c1">#.sum(&#39;level&#39;, skipna=True, keep_attrs=True)</span>
+            
+            <span class="n">global_mean</span> <span class="o">=</span> <span class="n">ds_era_1deg</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">statistic</span><span class="o">=</span><span class="n">stat</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">),</span><span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;time.season&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
 
 
             <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> MEAN (</span><span class="si">{}</span><span class="s1"> - </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> <span class="n">starty</span><span class="p">,</span> <span class="n">endy</span><span class="p">)</span>
@@ -1063,10 +1058,11 @@ $<span class="math notranslate nohighlight">\(fraction = \frac{IWC}{IWC + LWC}\)
             
 
         <span class="k">elif</span> <span class="n">stat</span><span class="o">!=</span> <span class="s1">&#39;ERA5&#39;</span> <span class="ow">and</span> <span class="n">var_id</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;occurence&#39;</span><span class="p">)</span><span class="o">==-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> <span class="n">var_id</span><span class="p">)</span>
             <span class="n">variable</span> <span class="o">=</span> <span class="n">season_mean_1deg</span><span class="p">[</span><span class="n">var_id</span><span class="o">+</span><span class="s1">&#39;_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">statistic</span><span class="o">=</span><span class="n">stat</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             
             <span class="n">global_mean</span> <span class="o">=</span> <span class="n">ds_era_1deg</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">statistic</span><span class="o">=</span><span class="n">stat</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">),</span><span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;time.season&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> <span class="n">var_id</span><span class="p">)</span>
+            
 
 
             <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> MEAN (</span><span class="si">{}</span><span class="s1"> - </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> <span class="n">starty</span><span class="p">,</span> <span class="n">endy</span><span class="p">)</span>
@@ -1088,23 +1084,35 @@ ERA5_50 cswc
 ERA5_50 msr
 ERA5_50 sf
 ERA5_50 t
+ERA5_50 tciw
+ERA5_50 tclw
+ERA5_50 tp
+ERA5_50 pressure
+ERA5_70 2t
+ERA5_70 clic
+ERA5_70 clwc
+ERA5_70 cswc
+ERA5_70 msr
+ERA5_70 sf
+ERA5_70 t
+ERA5_70 tciw
+ERA5_70 tclw
+ERA5_70 tp
+ERA5_70 pressure
+ERA5_30 2t
+ERA5_30 clic
+ERA5_30 clwc
+ERA5_30 cswc
+ERA5_30 msr
+ERA5_30 sf
+ERA5_30 t
+ERA5_30 tciw
+ERA5_30 tclw
+ERA5_30 tp
+ERA5_30 pressure
 </pre></div>
 </div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">KeyError</span><span class="g g-Whitespace">                                  </span>Traceback (most recent call last)
-<span class="o">/</span><span class="n">uio</span><span class="o">/</span><span class="n">kant</span><span class="o">/</span><span class="n">geo</span><span class="o">-</span><span class="n">metos</span><span class="o">-</span><span class="n">u1</span><span class="o">/</span><span class="n">franzihe</span><span class="o">/</span><span class="n">Documents</span><span class="o">/</span><span class="n">Python</span><span class="o">/</span><span class="n">globalsnow</span><span class="o">/</span><span class="n">CloudSat_ERA5_CMIP6_analysis</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">ERA5</span><span class="o">/</span><span class="n">ERA5_1985</span><span class="o">-</span><span class="mf">2014.</span><span class="n">ipynb</span> <span class="n">Cell</span> <span class="mi">28</span><span class="s1">&#39; in &lt;module&gt;</span>
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell://ssh-remote%2Bmimi.uio.no/uio/kant/geo-metos-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/work/ERA5/ERA5_1985-2014.ipynb#ch0000031vscode-remote?line=17&#39;</span><span class="o">&gt;</span><span class="mi">18</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> <span class="n">var_id</span><span class="p">)</span>
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell://ssh-remote%2Bmimi.uio.no/uio/kant/geo-metos-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/work/ERA5/ERA5_1985-2014.ipynb#ch0000031vscode-remote?line=20&#39;</span><span class="o">&gt;</span><span class="mi">21</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> MEAN (</span><span class="si">{}</span><span class="s1"> - </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> <span class="n">starty</span><span class="p">,</span> <span class="n">endy</span><span class="p">)</span>
-<span class="o">---&gt;</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell://ssh-remote%2Bmimi.uio.no/uio/kant/geo-metos-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/work/ERA5/ERA5_1985-2014.ipynb#ch0000031vscode-remote?line=21&#39;</span><span class="o">&gt;</span><span class="mi">22</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">plt_spatial_seasonal_mean</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">global_mean</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">var_id</span><span class="p">)</span>
-
-<span class="nn">/uio/kant/geo-metos-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/work/ERA5/ERA5_1985-2014.ipynb Cell 27&#39;</span> in <span class="ni">plt_spatial_seasonal_mean</span><span class="nt">(variable, global_mean, title, var_id)</span>
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell://ssh-remote%2Bmimi.uio.no/uio/kant/geo-metos-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/work/ERA5/ERA5_1985-2014.ipynb#ch0000030vscode-remote?line=21&#39;</span><span class="o">&gt;</span><span class="mi">22</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">fg</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell://ssh-remote%2Bmimi.uio.no/uio/kant/geo-metos-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/work/ERA5/ERA5_1985-2014.ipynb#ch0000030vscode-remote?line=24&#39;</span><span class="o">&gt;</span><span class="mi">25</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">fg</span><span class="o">.</span><span class="n">add_colorbar</span><span class="p">(</span><span class="n">fraction</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
-<span class="o">---&gt;</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell://ssh-remote%2Bmimi.uio.no/uio/kant/geo-metos-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/work/ERA5/ERA5_1985-2014.ipynb#ch0000030vscode-remote?line=26&#39;</span><span class="o">&gt;</span><span class="mi">27</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">fg</span><span class="o">.</span><span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;MEAN - </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fct</span><span class="o">.</span><span class="n">plt_dict</span><span class="p">[</span><span class="n">var_id</span><span class="p">][</span><span class="n">fct</span><span class="o">.</span><span class="n">plt_dict</span><span class="p">[</span><span class="s1">&#39;header&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">)],</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">))</span>
-
-<span class="ne">KeyError</span>: &#39;t&#39;
-</pre></div>
-</div>
+<img alt="../_images/ERA5_1985-2014_27_1.png" src="../_images/ERA5_1985-2014_27_1.png" />
 <img alt="../_images/ERA5_1985-2014_27_2.png" src="../_images/ERA5_1985-2014_27_2.png" />
 <img alt="../_images/ERA5_1985-2014_27_3.png" src="../_images/ERA5_1985-2014_27_3.png" />
 <img alt="../_images/ERA5_1985-2014_27_4.png" src="../_images/ERA5_1985-2014_27_4.png" />
@@ -1118,6 +1126,31 @@ ERA5_50 t
 <img alt="../_images/ERA5_1985-2014_27_12.png" src="../_images/ERA5_1985-2014_27_12.png" />
 <img alt="../_images/ERA5_1985-2014_27_13.png" src="../_images/ERA5_1985-2014_27_13.png" />
 <img alt="../_images/ERA5_1985-2014_27_14.png" src="../_images/ERA5_1985-2014_27_14.png" />
+<img alt="../_images/ERA5_1985-2014_27_15.png" src="../_images/ERA5_1985-2014_27_15.png" />
+<img alt="../_images/ERA5_1985-2014_27_16.png" src="../_images/ERA5_1985-2014_27_16.png" />
+<img alt="../_images/ERA5_1985-2014_27_17.png" src="../_images/ERA5_1985-2014_27_17.png" />
+<img alt="../_images/ERA5_1985-2014_27_18.png" src="../_images/ERA5_1985-2014_27_18.png" />
+<img alt="../_images/ERA5_1985-2014_27_19.png" src="../_images/ERA5_1985-2014_27_19.png" />
+<img alt="../_images/ERA5_1985-2014_27_20.png" src="../_images/ERA5_1985-2014_27_20.png" />
+<img alt="../_images/ERA5_1985-2014_27_21.png" src="../_images/ERA5_1985-2014_27_21.png" />
+<img alt="../_images/ERA5_1985-2014_27_22.png" src="../_images/ERA5_1985-2014_27_22.png" />
+<img alt="../_images/ERA5_1985-2014_27_23.png" src="../_images/ERA5_1985-2014_27_23.png" />
+<img alt="../_images/ERA5_1985-2014_27_24.png" src="../_images/ERA5_1985-2014_27_24.png" />
+<img alt="../_images/ERA5_1985-2014_27_25.png" src="../_images/ERA5_1985-2014_27_25.png" />
+<img alt="../_images/ERA5_1985-2014_27_26.png" src="../_images/ERA5_1985-2014_27_26.png" />
+<img alt="../_images/ERA5_1985-2014_27_27.png" src="../_images/ERA5_1985-2014_27_27.png" />
+<img alt="../_images/ERA5_1985-2014_27_28.png" src="../_images/ERA5_1985-2014_27_28.png" />
+<img alt="../_images/ERA5_1985-2014_27_29.png" src="../_images/ERA5_1985-2014_27_29.png" />
+<img alt="../_images/ERA5_1985-2014_27_30.png" src="../_images/ERA5_1985-2014_27_30.png" />
+<img alt="../_images/ERA5_1985-2014_27_31.png" src="../_images/ERA5_1985-2014_27_31.png" />
+<img alt="../_images/ERA5_1985-2014_27_32.png" src="../_images/ERA5_1985-2014_27_32.png" />
+<img alt="../_images/ERA5_1985-2014_27_33.png" src="../_images/ERA5_1985-2014_27_33.png" />
+<img alt="../_images/ERA5_1985-2014_27_34.png" src="../_images/ERA5_1985-2014_27_34.png" />
+<img alt="../_images/ERA5_1985-2014_27_35.png" src="../_images/ERA5_1985-2014_27_35.png" />
+<img alt="../_images/ERA5_1985-2014_27_36.png" src="../_images/ERA5_1985-2014_27_36.png" />
+<img alt="../_images/ERA5_1985-2014_27_37.png" src="../_images/ERA5_1985-2014_27_37.png" />
+<img alt="../_images/ERA5_1985-2014_27_38.png" src="../_images/ERA5_1985-2014_27_38.png" />
+<img alt="../_images/ERA5_1985-2014_27_39.png" src="../_images/ERA5_1985-2014_27_39.png" />
 </div>
 </div>
 </div>
