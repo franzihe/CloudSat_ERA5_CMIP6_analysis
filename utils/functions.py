@@ -131,59 +131,48 @@ def seasonal_mean_std(
     return ds
 
 
-def plt_spatial_seasonal_mean(
-    variable, variable_id, add_colorbar=None, title=None, global_mean=None
-):
-    fig, axsm = plt.subplots(
-        2, 2, figsize=[10, 7], subplot_kw={"projection": ccrs.PlateCarree()}
+def plt_spatial_seasonal_mean(variable, global_mean, title, var_id, extend):
+
+    fg = variable.plot(
+        col="season",
+        col_wrap=2,
+        transform=ccrs.PlateCarree(),  # remember to provide this!
+        subplot_kws={
+            "projection": ccrs.PlateCarree()
+        },
+        cbar_kwargs={"orientation": "vertical", "shrink": 0.8, "aspect": 40},
+        cmap=cm.devon_r, 
+        figsize=[10, 7],
+        robust=True,
+        extend=extend,
+        add_colorbar=False,
+        vmin=plt_dict[var_id][plt_dict['header'].index('vmin')],
+        vmax=plt_dict[var_id][plt_dict['header'].index('vmax')],
+        levels=plt_dict[var_id][plt_dict['header'].index('levels')],
     )
-    fig.suptitle(title, fontsize=16, fontweight="bold")
-    axs = axsm.flatten()
-    for ax, i in zip(axs, variable.season):
-        im = variable.sel(season=i,).plot.contourf(
-            ax=ax,
-            transform=ccrs.PlateCarree(),
-            cmap=cm.devon_r,
-            robust=True,
-            vmin=plt_dict[variable_id][plt_dict["header"].index("vmin")],
-            vmax=plt_dict[variable_id][plt_dict["header"].index("vmax")],
-            levels=plt_dict[variable_id][plt_dict["header"].index("levels")],
-            extend="max",
-            add_colorbar=add_colorbar,
-        )
+    for ax, i in zip(fg.axes.flat, variable.season.values):
+        ax.set_title('season: {}, global mean: {:.3f}'.format(i, global_mean.sel(season=i).values))
+    # lets add a coastline to each axis
+    # great reason to use FacetGrid.map
+    fg.map(lambda: plt.gca().coastlines())
+    fg.fig.suptitle(title, fontsize=16, fontweight="bold")
 
-        ax.coastlines()
-        gl = ax.gridlines()
-        ax.add_feature(cy.feature.BORDERS)
-        gl.top_labels = False
-        if global_mean == None:
-            ax.set_title("season: {}".format(i.values))
-        else:
-            ax.set_title(
-                "season: {}; global mean: {}".format(
-                    i.values, global_mean.sel(season=i).round(decimals=2).values
-                )
-            )
 
-    plt.tight_layout()
-    fig.subplots_adjust(top=0.88)
+    fg.add_colorbar(fraction=0.05, pad=0.04)
 
-    return (
-        fig,
-        axs,
-        im,
-    )
+    fg.cbar.set_label(label='{}'.format(plt_dict[var_id][plt_dict['header'].index('label')], weight='bold'))
+    
 
 
 plt_dict = {
     "header": ["label", "vmin", "vmax", "levels", "vmin_std", "vmax_std"],
     "sf": ["Snowfall (mm$\,$day$^{-1}$)", 0, 2.5, 26, 0, 0.6],
-    "tp": ["Total precipitation (mm$\,$day$^{-1}$)", 0, 9, 91, 0, 2.4],
-    "tciw": ["Ice Water Path (g$\,$m$^{-2}$)", 0, 100, 26, 0, 20],
-    "tclw": ["Liquid Water Path (g$\,$m$^{-2}$)", 0, 100, 26, 0, 20],
-    "2t": ["2-m temperature (K)", 250, 300, 50, 0, 6],
+    "tp": ["Total precipitation (mm$\,$day$^{-1}$)", 0, 10, 25, 0, 2.4],
+    "tciw": ["Ice Water Path (g$\,$m$^{-2}$)", 0, 100, 25, 0, 20],
+    "tclw": ["Liquid Water Path (g$\,$m$^{-2}$)", 0, 100, 25, 0, 20],
+    "2t": ["2-m temperature (K)", 235, 310, 25, 0, 6],
     "t": ["Air temperature (K)", 230, 300, 70, 0, 6 ],
-    "msr": ["Mean snowfall rate (mm$\,$day$^{-1}$)", 0, 2.4, 25, 0, 1],
+    "msr": ["Mean snowfall rate (mm$\,$day$^{-1}$)", 0, 2.5, 26, 0, 1],
     "clic": ["Specific cloud ice water content (g kg$^{-1}$)", 0, 0.01, 11, 0, 1],
     "clwc": ["Specific cloud liquid water content (g kg$^{-1}$)", 0, 0.01, 11, 0, 1],
     "cswc": ["Specific snow water content (g kg$^{-1}$)", 0.05, 0.08, 11, 0, 1],
