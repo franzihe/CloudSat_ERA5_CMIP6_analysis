@@ -262,6 +262,11 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
   <ul class="visible nav section-nav flex-column">
    <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#organize-my-data">
+     Organize my data
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
     <a class="reference internal nav-link" href="#import-python-packages">
      Import python packages
     </a>
@@ -395,6 +400,11 @@ const thebe_selector_output = ".output, .cell_output"
    </a>
   </a>
   <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#organize-my-data">
+     Organize my data
+    </a>
+   </li>
    <li class="toc-h2 nav-item toc-entry">
     <a class="reference internal nav-link" href="#import-python-packages">
      Import python packages
@@ -667,10 +677,61 @@ const thebe_selector_output = ".output, .cell_output"
 </tr>
 </tbody>
 </table>
+<div class="section" id="organize-my-data">
+<h2>Organize my data<a class="headerlink" href="#organize-my-data" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Define a prefix for my project (you may need to adjust it for your own usage on your infrastructure).</p>
+<ul>
+<li><p>input folder where all the data used as input to my Jupyter Notebook is stored (and eventually shared)</p></li>
+<li><p>output folder where all the results to keep are stored</p></li>
+<li><p>tool folder where all the tools</p></li>
+</ul>
+</li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="n">hostname</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">()</span>
+
+<span class="n">abs_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">hostname</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">absolute</span><span class="p">())</span>
+<span class="n">WORKDIR</span> <span class="o">=</span> <span class="n">abs_path</span><span class="p">[:</span><span class="o">-</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">abs_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">abs_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+
+
+<span class="k">if</span> <span class="s2">&quot;mimi&quot;</span> <span class="ow">in</span> <span class="n">hostname</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">hostname</span><span class="p">)</span>
+    <span class="n">DATA_DIR</span> <span class="o">=</span> <span class="s2">&quot;/scratch/franzihe/&quot;</span>
+    <span class="n">FIG_DIR</span> <span class="o">=</span> <span class="s2">&quot;/uio/kant/geo-metos-u1/franzihe/Documents/Figures/CMIP6/&quot;</span>
+<span class="k">elif</span> <span class="s2">&quot;glefsekaldt&quot;</span> <span class="ow">in</span> <span class="n">hostname</span><span class="p">:</span> 
+    <span class="n">DATA_DIR</span> <span class="o">=</span> <span class="s2">&quot;/home/franzihe/Data/&quot;</span>
+    <span class="n">FIG_DIR</span> <span class="o">=</span> <span class="s2">&quot;/home/franzihe/Documents/Figures/CMIP6/&quot;</span>
+
+<span class="n">INPUT_DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">)</span>
+<span class="n">OUTPUT_DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">)</span>
+<span class="n">UTILS_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">WORKDIR</span><span class="p">,</span> <span class="s1">&#39;utils&#39;</span><span class="p">)</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">UTILS_DIR</span><span class="p">)</span>
+<span class="c1"># make figure directory</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">FIG_DIR</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mimi.uio.no
+</pre></div>
+</div>
+</div>
+</div>
+</div>
 <div class="section" id="import-python-packages">
 <h2>Import python packages<a class="headerlink" href="#import-python-packages" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">Python</span></code> environment requirements: file <span class="xref myst">globalsnow.yml</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Python</span></code> environment requirements: file <span class="xref myst">requirements_globalsnow.txt</span></p></li>
 <li><p>load <code class="docutils literal notranslate"><span class="pre">python</span></code> packages from <span class="xref myst">imports.py</span></p></li>
 <li><p>load <code class="docutils literal notranslate"><span class="pre">functions</span></code> from <span class="xref myst">functions.py</span></p></li>
 </ul>
@@ -681,14 +742,20 @@ const thebe_selector_output = ".output, .cell_output"
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span> <span class="c1"># don&#39;t output warnings</span>
 
 <span class="c1"># import packages</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;/uio/kant/geo-metos-u1/franzihe/Documents/Python/globalsnow/eosc-nordic-climate-demonstrator/work/utils&#39;</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">imports</span> <span class="kn">import</span> <span class="p">(</span><span class="n">xr</span><span class="p">,</span> <span class="n">intake</span><span class="p">,</span> <span class="n">cftime</span><span class="p">,</span> <span class="n">xe</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">np</span><span class="p">,</span> <span class="n">cm</span><span class="p">,</span> <span class="n">pd</span><span class="p">,</span> <span class="n">fct</span><span class="p">,</span><span class="n">ccrs</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">plt</span><span class="p">,</span> <span class="n">da</span><span class="p">,</span> <span class="n">gc</span><span class="p">)</span>
-
 <span class="n">xr</span><span class="o">.</span><span class="n">set_options</span><span class="p">(</span><span class="n">display_style</span><span class="o">=</span><span class="s2">&quot;html&quot;</span><span class="p">)</span>
-
-
-<span class="c1"># reload imports</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7f8a85fb07f0&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># reload imports</span>
 <span class="o">%</span><span class="k">load_ext</span> autoreload
 <span class="o">%</span><span class="k">autoreload</span> 2
 </pre></div>
@@ -709,7 +776,7 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><p><strong>pangeo-cmip6 catalog with 7696 dataset(s) from 515388 asset(s)</strong>:</p> <div>
+<div class="output text_html"><p><strong>pangeo-cmip6 catalog with 7686 dataset(s) from 514961 asset(s)</strong>:</p> <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
@@ -765,7 +832,7 @@ const thebe_selector_output = ".output, .cell_output"
     </tr>
     <tr>
       <th>zstore</th>
-      <td>515388</td>
+      <td>514961</td>
     </tr>
     <tr>
       <th>dcpp_init_year</th>
@@ -797,13 +864,13 @@ const thebe_selector_output = ".output, .cell_output"
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Variables</span>
 <span class="n">variable_id</span><span class="o">=</span><span class="p">[</span>
             <span class="s1">&#39;cli&#39;</span><span class="p">,</span>
-            <span class="c1"># &#39;clivi&#39;,</span>
+            <span class="s1">&#39;clivi&#39;</span><span class="p">,</span>
             <span class="s1">&#39;clw&#39;</span><span class="p">,</span>
-            <span class="c1"># &#39;lwp&#39;,</span>
+            <span class="s1">&#39;lwp&#39;</span><span class="p">,</span>
             <span class="s1">&#39;pr&#39;</span><span class="p">,</span>
             <span class="s1">&#39;prsn&#39;</span><span class="p">,</span>
             <span class="s1">&#39;ta&#39;</span><span class="p">,</span> 
-            <span class="c1"># &#39;tas&#39;</span>
+            <span class="s1">&#39;tas&#39;</span>
              <span class="p">]</span>
 </pre></div>
 </div>
@@ -865,83 +932,6 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><p><strong>pangeo-cmip6 catalog with 17 dataset(s) from 81 asset(s)</strong>:</p> <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>unique</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>activity_id</th>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>institution_id</th>
-      <td>13</td>
-    </tr>
-    <tr>
-      <th>source_id</th>
-      <td>17</td>
-    </tr>
-    <tr>
-      <th>experiment_id</th>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>member_id</th>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>table_id</th>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>variable_id</th>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>grid_label</th>
-      <td>3</td>
-    </tr>
-    <tr>
-      <th>zstore</th>
-      <td>81</td>
-    </tr>
-    <tr>
-      <th>dcpp_init_year</th>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>version</th>
-      <td>19</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
-</div>
 </div>
 <div class="section" id="create-dictionary-from-the-list-of-datasets-we-found">
 <h2>Create dictionary from the list of datasets we found<a class="headerlink" href="#create-dictionary-from-the-list-of-datasets-we-found" title="Permalink to this headline">¶</a></h2>
@@ -974,8 +964,8 @@ const thebe_selector_output = ".output, .cell_output"
             background: #F44336;
         }
     </style>
-  <progress value='17' class='' max='17' style='width:300px; height:20px; vertical-align: middle;'></progress>
-  100.00% [17/17 01:18<00:00]
+  <progress value='21' class='' max='21' style='width:300px; height:20px; vertical-align: middle;'></progress>
+  100.00% [21/21 01:18<00:00]
 </div>
 </div></div>
 </div>
@@ -988,21 +978,25 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CMIP.NOAA-GFDL.GFDL-ESM4.historical.Amon.gr1: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
-CMIP.THU.CIESM.historical.Amon.gr: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
-CMIP.CMCC.CMCC-ESM2.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
-CMIP.MPI-M.MPI-ESM1-2-HR.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
-CMIP.NCC.NorESM2-MM.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
-CMIP.AS-RCEC.TaiESM1.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CMIP.EC-Earth-Consortium.EC-Earth3-AerChem.historical.AERmon.gr: [&#39;lat&#39;, &#39;bnds&#39;, &#39;lon&#39;, &#39;member_id&#39;, &#39;time&#39;]
+CMIP.AS-RCEC.TaiESM1.historical.AERmon.gn: [&#39;lat&#39;, &#39;bnds&#39;, &#39;lon&#39;, &#39;member_id&#39;, &#39;time&#39;]
+CMIP.NCC.NorESM2-MM.historical.AERmon.gn: [&#39;lat&#39;, &#39;bnds&#39;, &#39;lon&#39;, &#39;member_id&#39;, &#39;time&#39;]
+CMIP.NOAA-GFDL.GFDL-ESM4.historical.AERmon.gr1: [&#39;bnds&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;member_id&#39;, &#39;time&#39;]
+CMIP.NOAA-GFDL.GFDL-ESM4.historical.Amon.gr1: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
 CMIP.CAMS.CAMS-CSM1-0.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
-CMIP.NOAA-GFDL.GFDL-CM4.historical.Amon.gr1: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.NCC.NorESM2-MM.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.CMCC.CMCC-ESM2.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.THU.CIESM.historical.Amon.gr: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.CMCC.CMCC-CM2-SR5.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
 CMIP.CMCC.CMCC-CM2-HR4.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
 CMIP.SNU.SAM0-UNICON.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
-CMIP.CMCC.CMCC-CM2-SR5.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
-CMIP.BCC.BCC-CSM2-MR.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
-CMIP.CAS.FGOALS-f3-L.historical.Amon.gr: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
-CMIP.MRI.MRI-ESM2-0.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.NOAA-GFDL.GFDL-CM4.historical.Amon.gr1: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.AS-RCEC.TaiESM1.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
 CMIP.E3SM-Project.E3SM-1-1.historical.Amon.gr: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.MPI-M.MPI-ESM1-2-HR.historical.Amon.gn: [&#39;time&#39;, &#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.CAS.FGOALS-f3-L.historical.Amon.gr: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.BCC.BCC-CSM2-MR.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
+CMIP.MRI.MRI-ESM2-0.historical.Amon.gn: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
 CMIP.E3SM-Project.E3SM-1-1-ECA.historical.Amon.gr: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
 CMIP.EC-Earth-Consortium.EC-Earth3-AerChem.historical.Amon.gr: [&#39;lev&#39;, &#39;bnds&#39;, &#39;member_id&#39;, &#39;time&#39;, &#39;lat&#39;, &#39;lon&#39;, &#39;plev&#39;]
 </pre></div>
@@ -1072,106 +1066,130 @@ CMIP.EC-Earth-Consortium.EC-Earth3-AerChem.historical.Amon.gr: [&#39;lev&#39;, &
   </thead>
   <tbody>
     <tr>
-      <th>days since 0001-1-1</th>
-      <td>noleap</td>
-      <td>36500.0</td>
-      <td>GFDL-ESM4</td>
-    </tr>
-    <tr>
-      <th>days since 0001-01-01</th>
-      <td>noleap</td>
-      <td>182500.0</td>
-      <td>CIESM</td>
-    </tr>
-    <tr>
-      <th>days since 1850-01-01</th>
-      <td>noleap</td>
-      <td>0.0</td>
-      <td>CMCC-ESM2</td>
-    </tr>
-    <tr>
-      <th>days since 1850-1-1 00:00:00</th>
+      <th>EC-Earth3-AerChem</th>
       <td>proleptic_gregorian</td>
       <td>0.0</td>
-      <td>MPI-ESM1-2-HR</td>
+      <td>days since 1850-01-01</td>
     </tr>
     <tr>
-      <th>days since 0001-01-01</th>
-      <td>noleap</td>
-      <td>438000.0</td>
-      <td>NorESM2-MM</td>
-    </tr>
-    <tr>
-      <th>days since 1850-01-01</th>
+      <th>TaiESM1</th>
       <td>noleap</td>
       <td>171550.0</td>
-      <td>TaiESM1</td>
+      <td>days since 1850-01-01</td>
     </tr>
     <tr>
-      <th>days since 1850-01-01</th>
+      <th>NorESM2-MM</th>
       <td>noleap</td>
-      <td>3025.0</td>
-      <td>CAMS-CSM1-0</td>
+      <td>438000.0</td>
+      <td>days since 0001-01-01</td>
     </tr>
     <tr>
-      <th>days since 0001-1-1</th>
+      <th>GFDL-ESM4</th>
       <td>noleap</td>
       <td>36500.0</td>
-      <td>GFDL-CM4</td>
+      <td>days since 0001-1-1</td>
     </tr>
     <tr>
-      <th>days since 1850-01-01</th>
+      <th>36500.0</th>
       <td>noleap</td>
-      <td>0.0</td>
-      <td>CMCC-CM2-HR4</td>
+      <td>GFDL-ESM4</td>
+      <td>days since 0001-1-1</td>
     </tr>
     <tr>
-      <th>days since 0001-01-01</th>
+      <th>3025.0</th>
       <td>noleap</td>
-      <td>99645.0</td>
-      <td>SAM0-UNICON</td>
+      <td>CAMS-CSM1-0</td>
+      <td>days since 1850-01-01</td>
     </tr>
     <tr>
-      <th>days since 1850-01-01</th>
+      <th>438000.0</th>
       <td>noleap</td>
-      <td>0.0</td>
+      <td>NorESM2-MM</td>
+      <td>days since 0001-01-01</td>
+    </tr>
+    <tr>
+      <th>0.0</th>
+      <td>noleap</td>
+      <td>CMCC-ESM2</td>
+      <td>days since 1850-01-01</td>
+    </tr>
+    <tr>
+      <th>182500.0</th>
+      <td>noleap</td>
+      <td>CIESM</td>
+      <td>days since 0001-01-01</td>
+    </tr>
+    <tr>
+      <th>0.0</th>
+      <td>noleap</td>
       <td>CMCC-CM2-SR5</td>
+      <td>days since 1850-01-01</td>
     </tr>
     <tr>
-      <th>days since 1850-01-01</th>
+      <th>0.0</th>
       <td>noleap</td>
-      <td>2289.0</td>
-      <td>BCC-CSM2-MR</td>
+      <td>CMCC-CM2-HR4</td>
+      <td>days since 1850-01-01</td>
     </tr>
     <tr>
-      <th>days since 0001-01-01</th>
+      <th>99645.0</th>
       <td>noleap</td>
-      <td>12345.0</td>
-      <td>FGOALS-f3-L</td>
+      <td>SAM0-UNICON</td>
+      <td>days since 0001-01-01</td>
     </tr>
     <tr>
-      <th>days since 1850-01-01</th>
-      <td>proleptic_gregorian</td>
-      <td>0.0</td>
-      <td>MRI-ESM2-0</td>
-    </tr>
-    <tr>
-      <th>days since 0001-01-01</th>
+      <th>36500.0</th>
       <td>noleap</td>
-      <td>0.0</td>
+      <td>GFDL-CM4</td>
+      <td>days since 0001-1-1</td>
+    </tr>
+    <tr>
+      <th>171550.0</th>
+      <td>noleap</td>
+      <td>TaiESM1</td>
+      <td>days since 1850-01-01</td>
+    </tr>
+    <tr>
+      <th>0.0</th>
+      <td>noleap</td>
       <td>E3SM-1-1</td>
+      <td>days since 0001-01-01</td>
     </tr>
     <tr>
-      <th>days since 0001-01-01</th>
-      <td>noleap</td>
-      <td>0.0</td>
-      <td>E3SM-1-1-ECA</td>
-    </tr>
-    <tr>
-      <th>days since 1850-01-01</th>
+      <th>0.0</th>
       <td>proleptic_gregorian</td>
-      <td>0.0</td>
+      <td>MPI-ESM1-2-HR</td>
+      <td>days since 1850-1-1 00:00:00</td>
+    </tr>
+    <tr>
+      <th>12345.0</th>
+      <td>noleap</td>
+      <td>FGOALS-f3-L</td>
+      <td>days since 0001-01-01</td>
+    </tr>
+    <tr>
+      <th>2289.0</th>
+      <td>noleap</td>
+      <td>BCC-CSM2-MR</td>
+      <td>days since 1850-01-01</td>
+    </tr>
+    <tr>
+      <th>0.0</th>
+      <td>proleptic_gregorian</td>
+      <td>MRI-ESM2-0</td>
+      <td>days since 1850-01-01</td>
+    </tr>
+    <tr>
+      <th>0.0</th>
+      <td>noleap</td>
+      <td>E3SM-1-1-ECA</td>
+      <td>days since 0001-01-01</td>
+    </tr>
+    <tr>
+      <th>0.0</th>
+      <td>proleptic_gregorian</td>
       <td>EC-Earth3-AerChem</td>
+      <td>days since 1850-01-01</td>
     </tr>
   </tbody>
 </table>
@@ -1205,7 +1223,7 @@ CMIP.EC-Earth-Consortium.EC-Earth3-AerChem.historical.Amon.gr: [&#39;lev&#39;, &
   &#39;original_units&#39;: &#39;1&#39;,
   &#39;standard_name&#39;: &#39;mass_fraction_of_cloud_ice_in_air&#39;,
   &#39;units&#39;: &#39;kg kg-1&#39;},
- &#39;hdl:21.14100/bdfd7dd4-b7a4-4c0e-b79c-28a1dfcf57dd\nhdl:21.14100/ee267138-b752-4170-b1b5-216449dd1268\nhdl:21.14100/313c20af-b8bd-437f-ba76-e341512e01cb\nhdl:21.14100/a6d7cb7a-0775-4ed4-8ec1-ba3e504ff8bc\nhdl:21.14100/cf13a474-dd65-4ac9-85d8-a4e91453c2a5\nhdl:21.14100/d1e77260-e1b3-4f69-8a55-7b7b08268f92\nhdl:21.14100/7d2f9ff6-5dba-486b-b26c-83449441be37\nhdl:21.14100/4bd7e622-d889-4148-8fd2-c51503df6210\nhdl:21.14100/ec908d5b-4bfd-456f-ab91-d7ca825b71e6\nhdl:21.14100/39275014-6e35-4859-b2d1-cbfd2fefeaab\nhdl:21.14100/02eb7701-6c97-4349-acf6-85a6e5b2e4b3\nhdl:21.14100/24665b73-7508-4647-93c0-be93d452554b\nhdl:21.14100/74b3476f-b4db-4006-9577-dac4c0fc4ba0\nhdl:21.14100/c3fab37d-21d7-470c-9f4d-f480bdffc64d\nhdl:21.14100/6946c90a-b26b-4d75-969a-e7659c2877b8\nhdl:21.14100/20dc7a63-02bc-4d1e-a2ac-9f23b707a2ec\nhdl:21.14100/3d7be3a4-c1e2-4657-9d09-68349f58159d\nhdl:21.14100/1c8e58a1-c250-4120-9fb6-159885cd5a96\nhdl:21.14100/c1340042-4644-4d38-9270-d000d8d14b19\nhdl:21.14100/c7f9967e-a7a9-44ae-bbb5-4b5a02c5a7b3\nhdl:21.14100/34449e11-fad2-4fea-82c8-19e194f8d7f5\nhdl:21.14100/fd79dd4c-b2aa-4290-83a2-07dce463a1c0\nhdl:21.14100/b548a684-f49f-4dac-b1a9-acc24a8ff750\nhdl:21.14100/66f04c76-793d-4a11-bed4-040d3b0b7de5\nhdl:21.14100/8e53004f-a51b-4fcb-b4db-cafd3cb33de3\nhdl:21.14100/c0b36dc0-7408-462a-a3da-849bda149260\nhdl:21.14100/5410d0a1-9def-42b7-91a0-d959a6650d4a\nhdl:21.14100/23e3e9fd-2131-4952-b5eb-36f058178ab2\nhdl:21.14100/e2948317-3a1d-4627-822c-03ed8097c2ed\nhdl:21.14100/be8f947a-bf1e-4a2f-9320-e33d65ef2b6c\nhdl:21.14100/8c2c2821-597e-45f9-8990-ba520145b33c\nhdl:21.14100/1c1b0353-cd70-47e6-8c17-676783f1a93b\nhdl:21.14100/214acf85-5eb2-4924-b063-adc28c657692\nhdl:21.14100/11406d14-0f70-44f6-ae0d-6c246f1305e3\nhdl:21.14100/240f3d7a-faa9-4e7a-aeab-7a842635dcc3\nhdl:21.14100/554fb9db-fdc0-425c-ac68-146cba77f8cb\nhdl:21.14100/7235eb45-2da1-4bb8-bd16-467256066116\nhdl:21.14100/f2188a57-eff0-4ab9-8263-a6654349ee18\nhdl:21.14100/3fdefb99-9db8-44c1-9a51-885f6db62cfa\nhdl:21.14100/f50ff646-df59-4eac-8080-e5da16e5d778\nhdl:21.14100/2fde10fe-1e37-4a93-ac9c-a34b8de5a606\nhdl:21.14100/25d85a61-ac30-49cd-985b-66d121e4d388\nhdl:21.14100/a83c191a-d59b-4079-87f3-8caa874fce06\nhdl:21.14100/23263a30-65b9-4887-b46c-253af00861e6\nhdl:21.14100/cbea6d5b-68dd-4db8-9500-8e2d1bcf11be\nhdl:21.14100/457e8153-b9e8-4e0a-a339-4b0f37c2992d\nhdl:21.14100/28e89d10-aa46-4629-9f96-07eb18d42bcc\nhdl:21.14100/4fe3cdb8-8434-497d-88b3-9eff0eab6264\nhdl:21.14100/4b34d44c-c673-419e-b5bb-cd01c5f382d6\nhdl:21.14100/20b0215a-3e8e-474b-9513-a80f45805ad2\nhdl:21.14100/e484b416-c59c-4ac2-bd9a-9ba2a3047d6a\nhdl:21.14100/befe4a85-4c28-4df7-9efe-0232a75ad2bc\nhdl:21.14100/9be130fb-934e-429b-84f1-77bee253059b\nhdl:21.14100/45a7fb91-c21b-42aa-8b7b-ca4fccee3d82\nhdl:21.14100/550cfa82-7d5f-484d-bcd8-375b6bf9cd28\nhdl:21.14100/809d1eee-9b32-4314-9c47-570edddcde9d\nhdl:21.14100/b5a65d62-f8fc-4b13-8a36-8a6a0fc8f64c\nhdl:21.14100/f1ba6e0d-af4f-419d-a762-d4ca5b3e0fd8\nhdl:21.14100/2492e2d8-23ed-4ddf-9a89-2e48df0d5933\nhdl:21.14100/1bda4adf-11a3-4b39-9a30-808ac443c79e\nhdl:21.14100/f2889793-851e-4ccd-b303-4d03e27ba56b\nhdl:21.14100/49e57aae-a8c0-426d-abd9-ffe68548a7b4\nhdl:21.14100/d2082e93-5bbe-4737-801f-c5d289f2c656\nhdl:21.14100/058f0e3d-126b-402c-8c57-26d915d617c6\nhdl:21.14100/d6659ea1-7c7d-49cb-b399-08d5541b6423\nhdl:21.14100/eda3b060-ad9f-4ea8-834c-850d811cd41d\nhdl:21.14100/d5c82405-0ebc-42bb-82ac-2202181bbd35\nhdl:21.14100/a408357d-ef9b-40a8-9b59-89c3a5d4958e\nhdl:21.14100/164a18b5-95a5-498f-89ad-f3cfa8dbb9ae&#39;)
+ &#39;hdl:21.14100/bdfd7dd4-b7a4-4c0e-b79c-28a1dfcf57dd\nhdl:21.14100/ee267138-b752-4170-b1b5-216449dd1268\nhdl:21.14100/313c20af-b8bd-437f-ba76-e341512e01cb\nhdl:21.14100/a6d7cb7a-0775-4ed4-8ec1-ba3e504ff8bc\nhdl:21.14100/cf13a474-dd65-4ac9-85d8-a4e91453c2a5\nhdl:21.14100/d1e77260-e1b3-4f69-8a55-7b7b08268f92\nhdl:21.14100/7d2f9ff6-5dba-486b-b26c-83449441be37\nhdl:21.14100/4bd7e622-d889-4148-8fd2-c51503df6210\nhdl:21.14100/ec908d5b-4bfd-456f-ab91-d7ca825b71e6\nhdl:21.14100/39275014-6e35-4859-b2d1-cbfd2fefeaab\nhdl:21.14100/02eb7701-6c97-4349-acf6-85a6e5b2e4b3\nhdl:21.14100/24665b73-7508-4647-93c0-be93d452554b\nhdl:21.14100/74b3476f-b4db-4006-9577-dac4c0fc4ba0\nhdl:21.14100/c3fab37d-21d7-470c-9f4d-f480bdffc64d\nhdl:21.14100/6946c90a-b26b-4d75-969a-e7659c2877b8\nhdl:21.14100/20dc7a63-02bc-4d1e-a2ac-9f23b707a2ec\nhdl:21.14100/3d7be3a4-c1e2-4657-9d09-68349f58159d\nhdl:21.14100/4576a6a4-21eb-401f-ab73-5d1f13c89f42\nhdl:21.14100/a0e47031-94d9-48a4-9a35-e008ec3bef1d\nhdl:21.14100/32e0ed01-ea5d-4b0b-a20e-f91e387ca569\nhdl:21.14100/18ea3cba-6cc9-49a9-b187-1d0be93c8ef5\nhdl:21.14100/bd923348-9aa1-4ad0-9efc-37288b19a933\nhdl:21.14100/95758127-f854-4fb0-b926-3ec4c4d95340\nhdl:21.14100/bf47f517-d03a-4e70-9504-563c825f1782\nhdl:21.14100/1686b8a1-4074-46d5-80ac-1c8a645b1fb4\nhdl:21.14100/f76f66be-aeae-49f0-8c98-2851d67a3de4\nhdl:21.14100/95a4d1c4-ad2d-425b-85f0-22d1ccc4f943\nhdl:21.14100/2c293851-7402-451a-80af-e21cd0eba6c2\nhdl:21.14100/69b4bae2-7e14-4386-b4ae-55f5c8fbcceb\nhdl:21.14100/793f3341-d4f6-465b-b391-cb4db029d09e\nhdl:21.14100/18f93468-a290-4ede-9585-29c4ff55efaa\nhdl:21.14100/128d940b-c6d9-4304-9b3b-40c2a7021d0d\nhdl:21.14100/7ef0b75e-5f11-4da9-a61b-d9b5eb08073f\nhdl:21.14100/7adb44a6-fa3b-4893-9560-c3377f29ee5f\nhdl:21.14100/1c8e58a1-c250-4120-9fb6-159885cd5a96\nhdl:21.14100/c1340042-4644-4d38-9270-d000d8d14b19\nhdl:21.14100/c7f9967e-a7a9-44ae-bbb5-4b5a02c5a7b3\nhdl:21.14100/34449e11-fad2-4fea-82c8-19e194f8d7f5\nhdl:21.14100/fd79dd4c-b2aa-4290-83a2-07dce463a1c0\nhdl:21.14100/b548a684-f49f-4dac-b1a9-acc24a8ff750\nhdl:21.14100/66f04c76-793d-4a11-bed4-040d3b0b7de5\nhdl:21.14100/8e53004f-a51b-4fcb-b4db-cafd3cb33de3\nhdl:21.14100/c0b36dc0-7408-462a-a3da-849bda149260\nhdl:21.14100/5410d0a1-9def-42b7-91a0-d959a6650d4a\nhdl:21.14100/23e3e9fd-2131-4952-b5eb-36f058178ab2\nhdl:21.14100/e2948317-3a1d-4627-822c-03ed8097c2ed\nhdl:21.14100/be8f947a-bf1e-4a2f-9320-e33d65ef2b6c\nhdl:21.14100/8c2c2821-597e-45f9-8990-ba520145b33c\nhdl:21.14100/1c1b0353-cd70-47e6-8c17-676783f1a93b\nhdl:21.14100/214acf85-5eb2-4924-b063-adc28c657692\nhdl:21.14100/11406d14-0f70-44f6-ae0d-6c246f1305e3\nhdl:21.14100/240f3d7a-faa9-4e7a-aeab-7a842635dcc3\nhdl:21.14100/554fb9db-fdc0-425c-ac68-146cba77f8cb\nhdl:21.14100/7235eb45-2da1-4bb8-bd16-467256066116\nhdl:21.14100/f2188a57-eff0-4ab9-8263-a6654349ee18\nhdl:21.14100/3fdefb99-9db8-44c1-9a51-885f6db62cfa\nhdl:21.14100/f50ff646-df59-4eac-8080-e5da16e5d778\nhdl:21.14100/2fde10fe-1e37-4a93-ac9c-a34b8de5a606\nhdl:21.14100/25d85a61-ac30-49cd-985b-66d121e4d388\nhdl:21.14100/a83c191a-d59b-4079-87f3-8caa874fce06\nhdl:21.14100/23263a30-65b9-4887-b46c-253af00861e6\nhdl:21.14100/cbea6d5b-68dd-4db8-9500-8e2d1bcf11be\nhdl:21.14100/457e8153-b9e8-4e0a-a339-4b0f37c2992d\nhdl:21.14100/28e89d10-aa46-4629-9f96-07eb18d42bcc\nhdl:21.14100/4fe3cdb8-8434-497d-88b3-9eff0eab6264\nhdl:21.14100/4b34d44c-c673-419e-b5bb-cd01c5f382d6\nhdl:21.14100/20b0215a-3e8e-474b-9513-a80f45805ad2\nhdl:21.14100/e484b416-c59c-4ac2-bd9a-9ba2a3047d6a\nhdl:21.14100/befe4a85-4c28-4df7-9efe-0232a75ad2bc\nhdl:21.14100/9be130fb-934e-429b-84f1-77bee253059b\nhdl:21.14100/45a7fb91-c21b-42aa-8b7b-ca4fccee3d82\nhdl:21.14100/550cfa82-7d5f-484d-bcd8-375b6bf9cd28\nhdl:21.14100/809d1eee-9b32-4314-9c47-570edddcde9d\nhdl:21.14100/b5a65d62-f8fc-4b13-8a36-8a6a0fc8f64c\nhdl:21.14100/f1ba6e0d-af4f-419d-a762-d4ca5b3e0fd8\nhdl:21.14100/2492e2d8-23ed-4ddf-9a89-2e48df0d5933\nhdl:21.14100/1bda4adf-11a3-4b39-9a30-808ac443c79e\nhdl:21.14100/f2889793-851e-4ccd-b303-4d03e27ba56b\nhdl:21.14100/49e57aae-a8c0-426d-abd9-ffe68548a7b4\nhdl:21.14100/d2082e93-5bbe-4737-801f-c5d289f2c656\nhdl:21.14100/058f0e3d-126b-402c-8c57-26d915d617c6\nhdl:21.14100/d6659ea1-7c7d-49cb-b399-08d5541b6423\nhdl:21.14100/eda3b060-ad9f-4ea8-834c-850d811cd41d\nhdl:21.14100/d5c82405-0ebc-42bb-82ac-2202181bbd35\nhdl:21.14100/a408357d-ef9b-40a8-9b59-89c3a5d4958e\nhdl:21.14100/164a18b5-95a5-498f-89ad-f3cfa8dbb9ae\nhdl:21.14100/b726dcce-04e7-41ef-8f32-a36cffa516bd\nhdl:21.14100/69786839-c0a1-45de-935b-13a04e382fd7\nhdl:21.14100/9e97d612-10a7-458a-980e-fe4d4cac4bdb\nhdl:21.14100/0d51a98d-e849-48ae-82b4-9b2fb8f8c223\nhdl:21.14100/0966ef7c-613e-4fcc-81f5-c7e0811a8f34\nhdl:21.14100/f4ac8ec2-30a2-4cb4-a7f6-c501e812baf6\nhdl:21.14100/0daf9460-21f8-48a5-930d-cc1f74812994\nhdl:21.14100/bda027e9-7c49-44f5-bb08-52e8b14e612d\nhdl:21.14100/6e3ad453-fcaf-4e39-873b-e19fa777337a\nhdl:21.14100/c803cdd9-03f8-468a-add6-f1dbb3e0821d\nhdl:21.14100/20dfef18-620f-45c7-9d4b-1a6b2e4cb865\nhdl:21.14100/a176839c-d91a-4523-b272-61a65a73fb78\nhdl:21.14100/808c535a-b500-4424-a9bb-5f967c257748\nhdl:21.14100/a04a6234-f33c-4039-b6f7-509966fe357b\nhdl:21.14100/45c7759d-86c5-442f-a211-089103fa5868\nhdl:21.14100/217c9a68-8d35-42e7-a7ed-69035697043f\nhdl:21.14100/c9b183a4-5812-4b4e-af0a-497a68180979&#39;)
 </pre></div>
 </div>
 </div>
@@ -1244,6 +1262,53 @@ CMIP.EC-Earth-Consortium.EC-Earth3-AerChem.historical.Amon.gr: [&#39;lev&#39;, &
             <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                 <span class="k">continue</span>
         
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">KeyError</span><span class="g g-Whitespace">                                  </span>Traceback (most recent call last)
+<span class="nn">File ~/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py:1393,</span> in <span class="ni">Dataset._construct_dataarray</span><span class="nt">(self, name)</span>
+   <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;file:///uio/kant/geo-metos-u1/franzihe/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py?line=1391&#39;</span><span class="o">&gt;</span><span class="mi">1392</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="k">try</span><span class="p">:</span>
+<span class="o">-&gt;</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;file:///uio/kant/geo-metos-u1/franzihe/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py?line=1392&#39;</span><span class="o">&gt;</span><span class="mi">1393</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="n">variable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+   <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;file:///uio/kant/geo-metos-u1/franzihe/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py?line=1393&#39;</span><span class="o">&gt;</span><span class="mi">1394</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+
+<span class="ne">KeyError</span>: &#39;cli&#39;
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">KeyError</span><span class="g g-Whitespace">                                  </span>Traceback (most recent call last)
+<span class="o">/</span><span class="n">uio</span><span class="o">/</span><span class="n">kant</span><span class="o">/</span><span class="n">geo</span><span class="o">-</span><span class="n">metos</span><span class="o">-</span><span class="n">u1</span><span class="o">/</span><span class="n">franzihe</span><span class="o">/</span><span class="n">Documents</span><span class="o">/</span><span class="n">Python</span><span class="o">/</span><span class="n">globalsnow</span><span class="o">/</span><span class="n">CloudSat_ERA5_CMIP6_analysis</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">cmip</span><span class="o">/</span><span class="n">CMIP6_hr_1985</span><span class="o">-</span><span class="mf">2014.</span><span class="n">ipynb</span> <span class="n">Cell</span> <span class="mi">25</span><span class="s1">&#39; in &lt;module&gt;</span>
+      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell://ssh-remote%2Bmimi.uio.no/uio/kant/geo-metos-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/work/cmip/CMIP6_hr_1985-2014.ipynb#ch0000021vscode-remote?line=1&#39;</span><span class="o">&gt;</span><span class="mi">2</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="k">for</span> <span class="n">keys</span> <span class="ow">in</span> <span class="n">dset_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell://ssh-remote%2Bmimi.uio.no/uio/kant/geo-metos-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/work/cmip/CMIP6_hr_1985-2014.ipynb#ch0000021vscode-remote?line=2&#39;</span><span class="o">&gt;</span><span class="mi">3</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="k">if</span> <span class="n">var_id</span> <span class="o">==</span> <span class="s1">&#39;cli&#39;</span> <span class="ow">or</span> <span class="n">var_id</span> <span class="o">==</span> <span class="s1">&#39;clw&#39;</span> <span class="ow">or</span> <span class="n">var_id</span>  <span class="o">==</span> <span class="s1">&#39;clivi&#39;</span> <span class="ow">or</span> <span class="n">var_id</span> <span class="o">==</span> <span class="s1">&#39;lwp&#39;</span><span class="p">:</span>
+<span class="o">----&gt;</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell://ssh-remote%2Bmimi.uio.no/uio/kant/geo-metos-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/work/cmip/CMIP6_hr_1985-2014.ipynb#ch0000021vscode-remote?line=3&#39;</span><span class="o">&gt;</span><span class="mi">4</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>         <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span><span class="o">*</span><span class="mi">1000</span>
+      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell://ssh-remote%2Bmimi.uio.no/uio/kant/geo-metos-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/work/cmip/CMIP6_hr_1985-2014.ipynb#ch0000021vscode-remote?line=4&#39;</span><span class="o">&gt;</span><span class="mi">5</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>         <span class="k">if</span> <span class="n">var_id</span> <span class="o">==</span> <span class="s1">&#39;cli&#39;</span><span class="p">:</span>
+      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell://ssh-remote%2Bmimi.uio.no/uio/kant/geo-metos-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/work/cmip/CMIP6_hr_1985-2014.ipynb#ch0000021vscode-remote?line=5&#39;</span><span class="o">&gt;</span><span class="mi">6</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>             <span class="n">dset_dict</span><span class="p">[</span><span class="n">keys</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;g kg-1&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Mass Fraction of Cloud Ice&#39;</span><span class="p">,</span> <span class="s1">&#39;standard_name&#39;</span><span class="p">:</span> <span class="s1">&#39;mass_fraction_of_cloud_ice_in_air&#39;</span><span class="p">,</span> <span class="s1">&#39;comment&#39;</span><span class="p">:</span> <span class="s1">&#39;Includes both large-scale and convective cloud. This is calculated as the mass of cloud ice in the grid cell divided by the mass of air (including the water in all phases) in the grid cell. It includes precipitating hydrometeors ONLY if the precipitating hydrometeors affect the calculation of radiative transfer in model.&#39;</span><span class="p">,</span> <span class="s1">&#39;cell_methods&#39;</span><span class="p">:</span> <span class="s1">&#39;area: time: mean (interval: 5 minutes)&#39;</span><span class="p">,</span> <span class="s1">&#39;cell_measures&#39;</span><span class="p">:</span> <span class="s1">&#39;area: areacella&#39;</span><span class="p">,}</span>
+
+<span class="nn">File ~/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py:1497,</span> in <span class="ni">Dataset.__getitem__</span><span class="nt">(self, key)</span>
+   <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;file:///uio/kant/geo-metos-u1/franzihe/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py?line=1493&#39;</span><span class="o">&gt;</span><span class="mi">1494</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="o">**</span><span class="n">cast</span><span class="p">(</span><span class="n">Mapping</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span>
+   <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;file:///uio/kant/geo-metos-u1/franzihe/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py?line=1495&#39;</span><span class="o">&gt;</span><span class="mi">1496</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="k">if</span> <span class="n">hashable</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+<span class="o">-&gt;</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;file:///uio/kant/geo-metos-u1/franzihe/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py?line=1496&#39;</span><span class="o">&gt;</span><span class="mi">1497</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_construct_dataarray</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+   <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;file:///uio/kant/geo-metos-u1/franzihe/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py?line=1497&#39;</span><span class="o">&gt;</span><span class="mi">1498</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="k">else</span><span class="p">:</span>
+   <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;file:///uio/kant/geo-metos-u1/franzihe/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py?line=1498&#39;</span><span class="o">&gt;</span><span class="mi">1499</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_copy_listed</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+<span class="nn">File ~/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py:1395,</span> in <span class="ni">Dataset._construct_dataarray</span><span class="nt">(self, name)</span>
+   <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;file:///uio/kant/geo-metos-u1/franzihe/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py?line=1392&#39;</span><span class="o">&gt;</span><span class="mi">1393</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="n">variable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+   <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;file:///uio/kant/geo-metos-u1/franzihe/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py?line=1393&#39;</span><span class="o">&gt;</span><span class="mi">1394</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+<span class="o">-&gt;</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;file:///uio/kant/geo-metos-u1/franzihe/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py?line=1394&#39;</span><span class="o">&gt;</span><span class="mi">1395</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="n">_</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">variable</span> <span class="o">=</span> <span class="n">_get_virtual_variable</span><span class="p">(</span>
+   <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;file:///uio/kant/geo-metos-u1/franzihe/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py?line=1395&#39;</span><span class="o">&gt;</span><span class="mi">1396</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_level_coords</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span>
+   <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;file:///uio/kant/geo-metos-u1/franzihe/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py?line=1396&#39;</span><span class="o">&gt;</span><span class="mi">1397</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="p">)</span>
+   <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;file:///uio/kant/geo-metos-u1/franzihe/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py?line=1398&#39;</span><span class="o">&gt;</span><span class="mi">1399</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">needed_dims</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">variable</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+   <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;file:///uio/kant/geo-metos-u1/franzihe/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py?line=1400&#39;</span><span class="o">&gt;</span><span class="mi">1401</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">coords</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="n">Variable</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="nn">File ~/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py:168,</span> in <span class="ni">_get_virtual_variable</span><span class="nt">(variables, key, level_vars, dim_sizes)</span>
+    <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;file:///uio/kant/geo-metos-u1/franzihe/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py?line=165&#39;</span><span class="o">&gt;</span><span class="mi">166</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="n">ref_var</span> <span class="o">=</span> <span class="n">dim_var</span><span class="o">.</span><span class="n">to_index_variable</span><span class="p">()</span><span class="o">.</span><span class="n">get_level_variable</span><span class="p">(</span><span class="n">ref_name</span><span class="p">)</span>
+    <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;file:///uio/kant/geo-metos-u1/franzihe/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py?line=166&#39;</span><span class="o">&gt;</span><span class="mi">167</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="k">else</span><span class="p">:</span>
+<span class="o">--&gt;</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;file:///uio/kant/geo-metos-u1/franzihe/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py?line=167&#39;</span><span class="o">&gt;</span><span class="mi">168</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="n">ref_var</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="n">ref_name</span><span class="p">]</span>
+    <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;file:///uio/kant/geo-metos-u1/franzihe/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py?line=169&#39;</span><span class="o">&gt;</span><span class="mi">170</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="k">if</span> <span class="n">var_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;file:///uio/kant/geo-metos-u1/franzihe/miniconda3/envs/geocat/lib/python3.9/site-packages/xarray/core/dataset.py?line=170&#39;</span><span class="o">&gt;</span><span class="mi">171</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="n">virtual_var</span> <span class="o">=</span> <span class="n">ref_var</span>
+
+<span class="ne">KeyError</span>: &#39;cli&#39;
 </pre></div>
 </div>
 </div>
@@ -1370,6 +1435,13 @@ CMIP.EC-Earth-Consortium.EC-Earth3-AerChem.historical.Amon.gr: [&#39;lev&#39;, &
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variable_id</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create dictionary for reggridded data</span>
 <span class="n">ds_gridded_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
@@ -1482,6 +1554,13 @@ CIESM prsn
 </div>
 </div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="s1">&#39;/scratch/franzihe/output/CMIP6_hist/1deg/all_var_Amon_1deg_198501_201412.nc&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 <div class="section" id="find-mixed-phase-clouds">
 <h2>Find mixed-phase clouds<a class="headerlink" href="#find-mixed-phase-clouds" title="Permalink to this headline">¶</a></h2>
@@ -1533,23 +1612,23 @@ $<span class="math notranslate nohighlight">\(fraction = \frac{IWC}{IWC + LWC}\)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/CMIP6_hr_1985-2014_37_0.png" src="../_images/CMIP6_hr_1985-2014_37_0.png" />
-<img alt="../_images/CMIP6_hr_1985-2014_37_1.png" src="../_images/CMIP6_hr_1985-2014_37_1.png" />
-<img alt="../_images/CMIP6_hr_1985-2014_37_2.png" src="../_images/CMIP6_hr_1985-2014_37_2.png" />
-<img alt="../_images/CMIP6_hr_1985-2014_37_3.png" src="../_images/CMIP6_hr_1985-2014_37_3.png" />
-<img alt="../_images/CMIP6_hr_1985-2014_37_4.png" src="../_images/CMIP6_hr_1985-2014_37_4.png" />
-<img alt="../_images/CMIP6_hr_1985-2014_37_5.png" src="../_images/CMIP6_hr_1985-2014_37_5.png" />
-<img alt="../_images/CMIP6_hr_1985-2014_37_6.png" src="../_images/CMIP6_hr_1985-2014_37_6.png" />
-<img alt="../_images/CMIP6_hr_1985-2014_37_7.png" src="../_images/CMIP6_hr_1985-2014_37_7.png" />
-<img alt="../_images/CMIP6_hr_1985-2014_37_8.png" src="../_images/CMIP6_hr_1985-2014_37_8.png" />
-<img alt="../_images/CMIP6_hr_1985-2014_37_9.png" src="../_images/CMIP6_hr_1985-2014_37_9.png" />
-<img alt="../_images/CMIP6_hr_1985-2014_37_10.png" src="../_images/CMIP6_hr_1985-2014_37_10.png" />
-<img alt="../_images/CMIP6_hr_1985-2014_37_11.png" src="../_images/CMIP6_hr_1985-2014_37_11.png" />
-<img alt="../_images/CMIP6_hr_1985-2014_37_12.png" src="../_images/CMIP6_hr_1985-2014_37_12.png" />
-<img alt="../_images/CMIP6_hr_1985-2014_37_13.png" src="../_images/CMIP6_hr_1985-2014_37_13.png" />
-<img alt="../_images/CMIP6_hr_1985-2014_37_14.png" src="../_images/CMIP6_hr_1985-2014_37_14.png" />
-<img alt="../_images/CMIP6_hr_1985-2014_37_15.png" src="../_images/CMIP6_hr_1985-2014_37_15.png" />
-<img alt="../_images/CMIP6_hr_1985-2014_37_16.png" src="../_images/CMIP6_hr_1985-2014_37_16.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_41_0.png" src="../_images/CMIP6_hr_1985-2014_41_0.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_41_1.png" src="../_images/CMIP6_hr_1985-2014_41_1.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_41_2.png" src="../_images/CMIP6_hr_1985-2014_41_2.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_41_3.png" src="../_images/CMIP6_hr_1985-2014_41_3.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_41_4.png" src="../_images/CMIP6_hr_1985-2014_41_4.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_41_5.png" src="../_images/CMIP6_hr_1985-2014_41_5.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_41_6.png" src="../_images/CMIP6_hr_1985-2014_41_6.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_41_7.png" src="../_images/CMIP6_hr_1985-2014_41_7.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_41_8.png" src="../_images/CMIP6_hr_1985-2014_41_8.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_41_9.png" src="../_images/CMIP6_hr_1985-2014_41_9.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_41_10.png" src="../_images/CMIP6_hr_1985-2014_41_10.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_41_11.png" src="../_images/CMIP6_hr_1985-2014_41_11.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_41_12.png" src="../_images/CMIP6_hr_1985-2014_41_12.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_41_13.png" src="../_images/CMIP6_hr_1985-2014_41_13.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_41_14.png" src="../_images/CMIP6_hr_1985-2014_41_14.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_41_15.png" src="../_images/CMIP6_hr_1985-2014_41_15.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_41_16.png" src="../_images/CMIP6_hr_1985-2014_41_16.png" />
 </div>
 </div>
 </div>
@@ -1599,7 +1678,7 @@ $<span class="math notranslate nohighlight">\(fraction = \frac{IWC}{IWC + LWC}\)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/CMIP6_hr_1985-2014_40_0.png" src="../_images/CMIP6_hr_1985-2014_40_0.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_44_0.png" src="../_images/CMIP6_hr_1985-2014_44_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1652,7 +1731,7 @@ $<span class="math notranslate nohighlight">\(fraction = \frac{IWC}{IWC + LWC}\)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/CMIP6_hr_1985-2014_41_0.png" src="../_images/CMIP6_hr_1985-2014_41_0.png" />
+<img alt="../_images/CMIP6_hr_1985-2014_45_0.png" src="../_images/CMIP6_hr_1985-2014_45_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
