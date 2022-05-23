@@ -3243,7 +3243,15 @@ hdl:21.14100/a423afb2-f51a-4489-9f48-738415a2039e</dd><dt><span>external_variabl
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variable_id</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds_out</span> <span class="o">=</span> <span class="n">dset_dict</span><span class="p">[</span><span class="s1">&#39;CMIP.NCC.NorESM2-MM.historical.Amon.gn&#39;</span><span class="p">]</span>
+<span class="n">ds_in</span>  <span class="o">=</span> <span class="n">dset_dict</span><span class="p">[</span><span class="n">model</span><span class="p">]</span>
+
+<span class="c1"># Regridder data</span>
+<span class="n">regridder</span> <span class="o">=</span> <span class="n">xe</span><span class="o">.</span><span class="n">Regridder</span><span class="p">(</span><span class="n">ds_in</span><span class="p">,</span> <span class="n">ds_out</span><span class="p">,</span> <span class="s2">&quot;conservative&quot;</span><span class="p">)</span>
+
+<span class="c1"># Apply regridder to data</span>
+ <span class="c1"># the entire dataset can be processed at once</span>
+<span class="n">ds_in_regrid</span> <span class="o">=</span> <span class="n">regridder</span><span class="p">(</span><span class="n">ds_in</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
