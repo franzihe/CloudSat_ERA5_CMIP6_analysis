@@ -92,10 +92,10 @@ def find_IWC_LWC_level(ds, var1, var2, value, coordinate):
     # 1.1. IWC + LWC = 100%
     iwc_lwc = ds[var1] + ds[var2]
     # 1.2. IWC/(IWC + LWC)  = fraction_iwc
-    iwc_fraction = ds[var1] / iwc_lwc
+    fraction = ds[var1] / iwc_lwc
     # 2. level where fraction_iwc == 0.5 and fraction_lwc == 0.5 or given value
     # use the closest layer as it might not be exactly 0.5
-    filter_mc = find_nearest(iwc_fraction, value, coordinate)
+    filter_mc = find_nearest(fraction, value, coordinate)
 
     # 3. get values where level given value
 
