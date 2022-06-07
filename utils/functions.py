@@ -171,7 +171,7 @@ plt_dict = {
     "tciw": ["Ice Water Path (g$\,$m$^{-2}$)", 0, 100, 25, 0, 20],
     "tclw": ["Liquid Water Path (g$\,$m$^{-2}$)", 0, 100, 25, 0, 20],
     "2t": ["2-m temperature (K)", 235, 310, 25, 0, 6],
-    "t": ["Air temperature (K)", 230, 300, 70, 0, 6 ],
+    "t": ["Air temperature (K)", 230, 260, 30, 0, 6 ],
     "msr": ["Mean snowfall rate (mm$\,$day$^{-1}$)", 0, 2.5, 26, 0, 1],
     "clic": ["Specific cloud ice water content (g kg$^{-1}$)", 0, 0.01, 11, 0, 1],
     "clwc": ["Specific cloud liquid water content (g kg$^{-1}$)", 0, 0.01, 11, 0, 1],
