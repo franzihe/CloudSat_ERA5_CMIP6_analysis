@@ -4,11 +4,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Example with high-resolution CMIP6 models (~100 km) using Pangeo catalog &#8212; globalsnow</title>
     
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -18,20 +20,16 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    
-      
-
-    
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -39,12 +37,13 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script src="../_static/design-tabs.js"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
@@ -64,7 +63,21 @@ const thebe_selector_output = ".output, .cell_output"
     <!-- Google Analytics -->
     
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
     
     <div class="container-fluid" id="banner"></div>
 
@@ -73,9 +86,10 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="container-xl">
       <div class="row">
           
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
-    
-        <div class="navbar-brand-box">
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../index.html">
       
         <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
@@ -93,14 +107,15 @@ const thebe_selector_output = ".output, .cell_output"
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
-        <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../intro.html">
-   Welcome to Global Snow project website
-  </a>
- </li>
-</ul>
-<ul class="current nav bd-sidenav">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Welcome to Global Snow project website
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../ERA5/ERA5_1985-2014.html">
    Example with ERA5 high-resolution (~0.25deg) monthly means
@@ -136,107 +151,209 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-<div class="navbar_extra_footer">
-  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-</div>
-
-</div>
-
-
-          
-
-
-          
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
             
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
-            
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
-        
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/cmip/CMIP6_hr_1985-2014.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.ipynb</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
-    </div>
-</div>
-
-            <!-- Source interaction buttons -->
-
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
-    <div class="dropdown-buttons sourcebuttons">
-        <a class="repository-button"
-            href="https://github.com/franzihe/CloudSat_ERA5_CMIP6_analysis"><button type="button" class="btn btn-secondary topbarbtn"
-                data-toggle="tooltip" data-placement="left" title="Source repository"><i
-                    class="fab fa-github"></i>repository</button></a>
-        <a class="issues-button"
-            href="https://github.com/franzihe/CloudSat_ERA5_CMIP6_analysis/issues/new?title=Issue%20on%20page%20%2Fcmip/CMIP6_hr_1985-2014.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        
-    </div>
-</div>
-
-            <!-- Full screen (wrap in <a> to have style consistency -->
-
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
-
-            <!-- Launch buttons -->
-
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/franzihe/CloudSat_ERA5_CMIP6_analysis/main?urlpath=tree/work/cmip/CMIP6_hr_1985-2014.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
-        </div>
-
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
-            
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
             </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/franzihe/CloudSat_ERA5_CMIP6_analysis/main?urlpath=tree/work/cmip/CMIP6_hr_1985-2014.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/franzihe/CloudSat_ERA5_CMIP6_analysis"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/franzihe/CloudSat_ERA5_CMIP6_analysis/issues/new?title=Issue%20on%20page%20%2Fcmip/CMIP6_hr_1985-2014.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/cmip/CMIP6_hr_1985-2014.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#">
    Example with high-resolution CMIP6 models (~100 km) using Pangeo catalog
@@ -358,12 +475,11 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
 </ul>
 
-            </nav>
-        </div>
-    </div>
+    </nav>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
                 <h1>Example with high-resolution CMIP6 models (~100 km) using Pangeo catalog</h1>
@@ -501,14 +617,15 @@ const thebe_selector_output = ".output, .cell_output"
                     </div>
                 </div>
             </div>
-            
+            <main id="main-content" role="main">
+                
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="example-with-high-resolution-cmip6-models-100-km-using-pangeo-catalog">
-<h1>Example with high-resolution CMIP6 models (~100 km) using Pangeo catalog<a class="headerlink" href="#example-with-high-resolution-cmip6-models-100-km-using-pangeo-catalog" title="Permalink to this headline">¶</a></h1>
-</div>
-<div class="tex2jax_ignore mathjax_ignore section" id="table-of-contents">
-<h1>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="example-with-high-resolution-cmip6-models-100-km-using-pangeo-catalog">
+<h1>Example with high-resolution CMIP6 models (~100 km) using Pangeo catalog<a class="headerlink" href="#example-with-high-resolution-cmip6-models-100-km-using-pangeo-catalog" title="Permalink to this headline">#</a></h1>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="table-of-contents">
+<h1>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">#</a></h1>
 <ul>
 <li><a href="#introduction">1. Introduction</a></li>
 <li><a href="#data_wrangling">2. Data Wrangling</a></li>
@@ -516,9 +633,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li><a href="#conclusion">4. Conclusion</a></li>
 <li><a href="#references">5. References</a></li>
 </ul>
-</div>
-<div class="tex2jax_ignore mathjax_ignore section" id="introduction-a-id-introduction-a">
-<h1>1. Introduction <a id='introduction'></a><a class="headerlink" href="#introduction-a-id-introduction-a" title="Permalink to this headline">¶</a></h1>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="introduction-a-id-introduction-a">
+<h1>1. Introduction <a id='introduction'></a><a class="headerlink" href="#introduction-a-id-introduction-a" title="Permalink to this headline">#</a></h1>
 <p>Cloud feedbacks are a major contributor to the spread of climate sensitivity in global climate models (GCMs) <a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1029/2019GL085782">Zelinka et al. (2020)</a>. Among the most poorly understood cloud feedbacks is the one associated with the cloud phase, which is expected to be modified with climate change <a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1038/s41561-020-00649-1">Bjordal et al. (2020)</a>. Cloud phase bias, in addition, has significant implications for the simulation of radiative properties and glacier and ice sheet mass balances in climate models.</p>
 <p>In this context, this work aims to expand our knowledge on how the representation of the cloud phase affects snow formation in GCMs. Better understanding this aspect is necessary to develop climate models further and improve future climate predictions.</p>
 <ul class="simple">
@@ -535,9 +652,9 @@ const thebe_selector_output = ".output, .cell_output"
 <blockquote>
 <div><p><strong><em>NOTE:</em></strong> We answer questions related to the comparison of CMIP models to ERA5 in another <a class="reference internal" href="../CMIP6_ERA5_CloudSat/plt_seasonal_mean.html"><span class="doc std std-doc">Jupyter Notebook</span></a>.</p>
 </div></blockquote>
-</div>
-<div class="tex2jax_ignore mathjax_ignore section" id="data-wrangling-a-id-data-wrangling-a">
-<h1>2. Data Wrangling <a id='data_wrangling'></a><a class="headerlink" href="#data-wrangling-a-id-data-wrangling-a" title="Permalink to this headline">¶</a></h1>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="data-wrangling-a-id-data-wrangling-a">
+<h1>2. Data Wrangling <a id='data_wrangling'></a><a class="headerlink" href="#data-wrangling-a-id-data-wrangling-a" title="Permalink to this headline">#</a></h1>
 <p>This study will compare surface snowfall, ice, and liquid water content from the Coupled Model Intercomparison Project Phase 6 (<a class="reference external" href="https://esgf-node.llnl.gov/projects/cmip6/">CMIP6</a>) climate models (accessed through <a class="reference external" href="https://pangeo.io/">Pangeo</a>) to the European Centre for Medium-Range Weather Forecast Re-Analysis 5 (<a class="reference external" href="https://www.ecmwf.int/en/forecasts/datasets/reanalysis-datasets/era5">ERA5</a>) data from <strong>1985 to 2014</strong>. We conduct statistical analysis at the annual and seasonal timescales to determine the biases in cloud phase and precipitation (liquid and solid) in the CMIP6 models and their potential connection between them.</p>
 <ul class="simple">
 <li><p>Time period: 1985 to 2014</p></li>
@@ -677,8 +794,8 @@ const thebe_selector_output = ".output, .cell_output"
 </tr>
 </tbody>
 </table>
-<div class="section" id="organize-my-data">
-<h2>Organize my data<a class="headerlink" href="#organize-my-data" title="Permalink to this headline">¶</a></h2>
+<section id="organize-my-data">
+<h2>Organize my data<a class="headerlink" href="#organize-my-data" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
 <li><p>Define a prefix for my project (you may need to adjust it for your own usage on your infrastructure).</p>
 <ul>
@@ -727,9 +844,9 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="import-python-packages">
-<h2>Import python packages<a class="headerlink" href="#import-python-packages" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="import-python-packages">
+<h2>Import python packages<a class="headerlink" href="#import-python-packages" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">Python</span></code> environment requirements: file <span class="xref myst">requirements_globalsnow.txt</span></p></li>
 <li><p>load <code class="docutils literal notranslate"><span class="pre">python</span></code> packages from <span class="xref myst">imports.py</span></p></li>
@@ -762,9 +879,9 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="open-cmip6-online-catalog">
-<h2>Open CMIP6 online catalog<a class="headerlink" href="#open-cmip6-online-catalog" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="open-cmip6-online-catalog">
+<h2>Open CMIP6 online catalog<a class="headerlink" href="#open-cmip6-online-catalog" title="Permalink to this headline">#</a></h2>
 <p>… by using <code class="docutils literal notranslate"><span class="pre">intake</span></code> from <a class="reference external" href="https://gallery.pangeo.io/repos/pangeo-data/pangeo-tutorial-gallery/intake.html">pangeo.io</a>, specifically <code class="docutils literal notranslate"><span class="pre">intake-esm</span></code>.</p>
 <p>An example on <a class="reference external" href="https://pangeo-data.github.io/pangeo-cmip6-cloud/accessing_data.html#loading-an-esm-collection">Loading an ESM collection</a> and <a class="reference external" href="https://pangeo-data.github.io/pangeo-cmip6-cloud/accessing_data.html#searching-for-datasets">searching for datasets</a> can also be found on the <a class="reference external" href="https://pangeo-data.github.io/pangeo-cmip6-cloud/accessing_data.html">Pangeo / ESGF Cloud Data Working Group documentation</a>.</p>
 <div class="cell docutils container">
@@ -846,9 +963,9 @@ const thebe_selector_output = ".output, .cell_output"
 </table>
 </div></div></div>
 </div>
-</div>
-<div class="section" id="search-corresponding-data">
-<h2>Search corresponding data<a class="headerlink" href="#search-corresponding-data" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="search-corresponding-data">
+<h2>Search corresponding data<a class="headerlink" href="#search-corresponding-data" title="Permalink to this headline">#</a></h2>
 <p>Get the data required for the analysis. Define variables, models, experiment, and time resolution as defined in <a href="#data_wrangling">2. Data Wrangling</a>
 .</p>
 <ul class="simple">
@@ -932,9 +1049,9 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="create-dictionary-from-the-list-of-datasets-we-found">
-<h2>Create dictionary from the list of datasets we found<a class="headerlink" href="#create-dictionary-from-the-list-of-datasets-we-found" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="create-dictionary-from-the-list-of-datasets-we-found">
+<h2>Create dictionary from the list of datasets we found<a class="headerlink" href="#create-dictionary-from-the-list-of-datasets-we-found" title="Permalink to this headline">#</a></h2>
 <p>Load the found datasets into xarray dataset containers using intake-esm’s <code class="docutils literal notranslate"><span class="pre">to_dataset_dict()</span></code> function, which yields a Python dictionary.</p>
 <blockquote>
 <div><p><strong><em>NOTE:</em></strong> This step may take several minutes so be patient!</p>
@@ -1003,9 +1120,9 @@ CMIP.EC-Earth-Consortium.EC-Earth3-AerChem.historical.Amon.gr: [&#39;lev&#39;, &
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="calendar">
-<h2>Calendar<a class="headerlink" href="#calendar" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="calendar">
+<h2>Calendar<a class="headerlink" href="#calendar" title="Permalink to this headline">#</a></h2>
 <p>Not all models in CMIP6 use the same calendar. Hence we double check the time axis. Later, when we regrid to the same horizontal resolution (<a href="#regrid_hz">Regrid CMIP6 data</a>) we will assign the same calendars for each model.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1195,9 +1312,9 @@ CMIP.EC-Earth-Consortium.EC-Earth3-AerChem.historical.Amon.gr: [&#39;lev&#39;, &
 </table>
 </div></div></div>
 </div>
-</div>
-<div class="section" id="show-attributes-and-individual-identifier">
-<h2>Show attributes and individual identifier<a class="headerlink" href="#show-attributes-and-individual-identifier" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="show-attributes-and-individual-identifier">
+<h2>Show attributes and individual identifier<a class="headerlink" href="#show-attributes-and-individual-identifier" title="Permalink to this headline">#</a></h2>
 <p>NorESM2-MM is going to be the reference model for the horizontal grid. The <code class="docutils literal notranslate"><span class="pre">xarray</span></code> datasets inside <code class="docutils literal notranslate"><span class="pre">dset_dict</span></code> can be extracted as any value in a Python dictionary.</p>
 <p>The dictonary key for NorESM2-MM is: <strong><a class="reference external" href="http://CMIP.NCC.NorESM2-MM.historical.Amon.gn">CMIP.NCC.NorESM2-MM.historical.Amon.gn</a></strong></p>
 <div class="cell docutils container">
@@ -1228,9 +1345,9 @@ CMIP.EC-Earth-Consortium.EC-Earth3-AerChem.historical.Amon.gr: [&#39;lev&#39;, &
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="assign-attributes-to-the-variables">
-<h2>Assign attributes to the variables<a class="headerlink" href="#assign-attributes-to-the-variables" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="assign-attributes-to-the-variables">
+<h2>Assign attributes to the variables<a class="headerlink" href="#assign-attributes-to-the-variables" title="Permalink to this headline">#</a></h2>
 <p>We will assign the attributes to the variables as in ERA5 to make CMIP6 and ERA5 variables comperable.</p>
 <ul class="simple">
 <li><p><a class="reference external" href="http://clipc-services.ceda.ac.uk/dreq/u/dd916e3e2eca18cda5d9f81749d0c91c.html"><code class="docutils literal notranslate"><span class="pre">cli</span></code></a> and <a class="reference external" href="http://clipc-services.ceda.ac.uk/dreq/u/86b2b3318a73839edfafa9d46864aadc.html"><code class="docutils literal notranslate"><span class="pre">clw</span></code></a> in <strong>kg kg-1</strong> <span class="math notranslate nohighlight">\(\rightarrow\)</span> Multiply by <strong>1000</strong> to get <strong>g kg-1</strong></p></li>
@@ -1266,9 +1383,9 @@ CMIP.EC-Earth-Consortium.EC-Earth3-AerChem.historical.Amon.gr: [&#39;lev&#39;, &
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="interpolate-from-cmip6-hybrid-sigma-pressure-levels-to-era5-isobaric-pressure-levels">
-<h2>Interpolate from CMIP6 hybrid sigma-pressure levels to ERA5 isobaric pressure levels<a class="headerlink" href="#interpolate-from-cmip6-hybrid-sigma-pressure-levels-to-era5-isobaric-pressure-levels" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="interpolate-from-cmip6-hybrid-sigma-pressure-levels-to-era5-isobaric-pressure-levels">
+<h2>Interpolate from CMIP6 hybrid sigma-pressure levels to ERA5 isobaric pressure levels<a class="headerlink" href="#interpolate-from-cmip6-hybrid-sigma-pressure-levels-to-era5-isobaric-pressure-levels" title="Permalink to this headline">#</a></h2>
 <p>The vertical variables in the CMIP6 models are in hybrid sigma-pressure levels. Hence the vertical variable in the xarray datasets in <code class="docutils literal notranslate"><span class="pre">dset_dict</span></code> will be calculated by using the <a class="reference external" href="https://geocat-comp.readthedocs.io/en/latest/index.html">GeoCAT-comb</a> function to <a class="reference external" href="https://geocat-comp.readthedocs.io/en/latest/user_api/generated/geocat.comp.interpolation.interp_hybrid_to_pressure.html#geocat.comp.interpolation.interp_hybrid_to_pressure">interpolate data from hybrid-sigma levels to isobaric levels</a>.</p>
 <p>The GeoCAT-comb function takes the following input:</p>
 <ul class="simple">
@@ -3214,9 +3331,9 @@ File was processed by fremetar (GFDL analog of CMOR). TripleID: [exper_id_NIX4LX
 </div>
 </div></div>
 </div>
-</div>
-<div class="section" id="regrid-cmip6-data-to-noresm2-mm-grid-a-id-regrid-hz-a">
-<h2>Regrid CMIP6 data to NorESM2-MM grid <a id='regrid_hz'></a><a class="headerlink" href="#regrid-cmip6-data-to-noresm2-mm-grid-a-id-regrid-hz-a" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="regrid-cmip6-data-to-noresm2-mm-grid-a-id-regrid-hz-a">
+<h2>Regrid CMIP6 data to NorESM2-MM grid <a id='regrid_hz'></a><a class="headerlink" href="#regrid-cmip6-data-to-noresm2-mm-grid-a-id-regrid-hz-a" title="Permalink to this headline">#</a></h2>
 <p>We want to conduct statistical analysis at the annual and seasonal timescales to determine the biases in cloud phase and precipitation (liquid and solid) in the CMIP6 models. At the moment we have all historical data from the CMIP6 models. For this, we will have to extract the 30-year period between 1985 and 2014.</p>
 <p><span class="math notranslate nohighlight">\(\rightarrow\)</span> Define a start and end year.</p>
 <p>The CMIP6 high resolution models have approximately a nominal resolution of 100km. But not all have identical grid spacing. Hence we will make use of the python package <code class="docutils literal notranslate"><span class="pre">xesmf</span></code> and the documentation on <a class="reference external" href="https://xesmf.readthedocs.io/en/latest/notebooks/Compare_algorithms.html#Decreasing-resolution">decreasing resolution</a>, <a class="reference external" href="https://xesmf.readthedocs.io/en/latest/notebooks/Masking.html?highlight=conservative#Limitations-and-warnings">Limitations and warnings</a>.</p>
@@ -3315,9 +3432,9 @@ File was processed by fremetar (GFDL analog of CMOR). TripleID: [exper_id_NIX4LX
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="connect-all-models-into-one-dataset-with-new-coordinate-model">
-<h2>Connect all models into one Dataset with new coordinate ‘model’<a class="headerlink" href="#connect-all-models-into-one-dataset-with-new-coordinate-model" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="connect-all-models-into-one-dataset-with-new-coordinate-model">
+<h2>Connect all models into one Dataset with new coordinate ‘model’<a class="headerlink" href="#connect-all-models-into-one-dataset-with-new-coordinate-model" title="Permalink to this headline">#</a></h2>
 <p>We will create a <code class="docutils literal notranslate"><span class="pre">xarray.Dataset</span></code> with all CMIP6 models, after the interpolation to the same horizonal (and vertical) resolution. This step will make the next steps easier, as we will not need the the full dictonary key and can just use the model name.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -3372,9 +3489,9 @@ CIESM prsn
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="find-mixed-phase-clouds">
-<h2>Find mixed-phase clouds<a class="headerlink" href="#find-mixed-phase-clouds" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="find-mixed-phase-clouds">
+<h2>Find mixed-phase clouds<a class="headerlink" href="#find-mixed-phase-clouds" title="Permalink to this headline">#</a></h2>
 <p>Calculate the IWC/LWC statistics given by the values. Setting the value to 0.5 will find the level in the atmosphere where IWC and LWC are 50/50. Setting it to a value of 0.7 will find the level where IWC is 70% while LWC is 30%.</p>
 <ol class="simple">
 <li><p>find the fraction of IWC to LWC
@@ -3384,9 +3501,9 @@ $<span class="math notranslate nohighlight">\(fraction = \frac{IWC}{IWC + LWC}\)
 <li><p>find the index of the first atmospheric pressure level</p></li>
 <li><p>use the index to select variables</p></li>
 </ol>
-</div>
-<div class="section" id="create-dictionary-from-the-list-of-datasets-we-want-to-use-for-the-iwc-lwc-statistics">
-<h2>Create dictionary from the list of datasets we want to use for the IWC/LWC statistics<a class="headerlink" href="#create-dictionary-from-the-list-of-datasets-we-want-to-use-for-the-iwc-lwc-statistics" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="create-dictionary-from-the-list-of-datasets-we-want-to-use-for-the-iwc-lwc-statistics">
+<h2>Create dictionary from the list of datasets we want to use for the IWC/LWC statistics<a class="headerlink" href="#create-dictionary-from-the-list-of-datasets-we-want-to-use-for-the-iwc-lwc-statistics" title="Permalink to this headline">#</a></h2>
 <p>Calculate the IWC/LWC statistics given by the values. Setting the value to 0.5 will find the level in the atmosphere where IWC and LWC are 50/50. Setting it to a value of 0.7 will find the level where IWC is 70% while LWC is 30%.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -3397,12 +3514,12 @@ $<span class="math notranslate nohighlight">\(fraction = \frac{IWC}{IWC + LWC}\)
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="tex2jax_ignore mathjax_ignore section" id="exploratory-data-analysis-a-id-exploratory-a">
-<h1>3. Exploratory Data Analysis <a id='exploratory'></a><a class="headerlink" href="#exploratory-data-analysis-a-id-exploratory-a" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="create-seasonal-mean-of-all-regridded-models">
-<h2>Create seasonal mean of all regridded models<a class="headerlink" href="#create-seasonal-mean-of-all-regridded-models" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="exploratory-data-analysis-a-id-exploratory-a">
+<h1>3. Exploratory Data Analysis <a id='exploratory'></a><a class="headerlink" href="#exploratory-data-analysis-a-id-exploratory-a" title="Permalink to this headline">#</a></h1>
+<section id="create-seasonal-mean-of-all-regridded-models">
+<h2>Create seasonal mean of all regridded models<a class="headerlink" href="#create-seasonal-mean-of-all-regridded-models" title="Permalink to this headline">#</a></h2>
 <p>…and plot seasonal mean of each individual model</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -3442,9 +3559,9 @@ $<span class="math notranslate nohighlight">\(fraction = \frac{IWC}{IWC + LWC}\)
 <img alt="../_images/CMIP6_hr_1985-2014_43_16.png" src="../_images/CMIP6_hr_1985-2014_43_16.png" />
 </div>
 </div>
-</div>
-<div class="section" id="create-model-mean-spread-of-seasonal-mean-of-all-regridded-models">
-<h2>Create model mean/spread of seasonal mean of all regridded models<a class="headerlink" href="#create-model-mean-spread-of-seasonal-mean-of-all-regridded-models" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="create-model-mean-spread-of-seasonal-mean-of-all-regridded-models">
+<h2>Create model mean/spread of seasonal mean of all regridded models<a class="headerlink" href="#create-model-mean-spread-of-seasonal-mean-of-all-regridded-models" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds_cmip</span><span class="p">[</span><span class="n">variable_id</span><span class="p">[</span><span class="n">variable_id</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;prsn&#39;</span><span class="p">)]</span><span class="o">+</span><span class="s1">&#39;_season_model_mean&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_cmip</span><span class="p">[</span><span class="n">variable_id</span><span class="p">[</span><span class="n">variable_id</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;prsn&#39;</span><span class="p">)]</span><span class="o">+</span><span class="s1">&#39;_season_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">skipna</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
@@ -3566,10 +3683,10 @@ $<span class="math notranslate nohighlight">\(fraction = \frac{IWC}{IWC + LWC}\)
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="tex2jax_ignore mathjax_ignore section" id="references-a-id-references-a">
-<h1>References <a id='references'></a><a class="headerlink" href="#references-a-id-references-a" title="Permalink to this headline">¶</a></h1>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="references-a-id-references-a">
+<h1>References <a id='references'></a><a class="headerlink" href="#references-a-id-references-a" title="Permalink to this headline">#</a></h1>
 <p>[1] Zelinka, M. D., Myers, T. A., McCoy, D. T., Po-Chedley, S., Caldwell, P. M., Ceppi, P., et al. (2020). Causes of higher climate sensitivity in CMIP6 models. Geophysical Research Letters, 47, e2019GL085782. <a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1029/2019GL085782">https://doi-org.ezproxy.uio.no/10.1029/2019GL085782</a></p>
 <p>[2] Bjordal, J., Storelvmo, T., Alterskjær, K. et al. Equilibrium climate sensitivity above 5 °C plausible due to state-dependent cloud feedback. Nat. Geosci. 13, 718–721 (2020). <a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1038/s41561-020-00649-1">https://doi-org.ezproxy.uio.no/10.1038/s41561-020-00649-1</a></p>
 <p>[3] Wu, T., Lu, Y., Fang, Y., Xin, X., Li, L., Li, W., Jie, W., Zhang, J., Liu, Y., Zhang, L., Zhang, F., Zhang, Y., Wu, F., Li, J., Chu, M., Wang, Z., Shi, X., Liu, X., Wei, M., Huang, A., Zhang, Y., and Liu, X.: The Beijing Climate Center Climate System Model (BCC-CSM): the main progress from CMIP5 to CMIP6 , Geosci. Model Dev., 12, 1573–1600, <a class="reference external" href="https://doi.org/10.5194/gmd-12-1573-2019">https://doi.org/10.5194/gmd-12-1573-2019</a>, 2019.</p>
@@ -3590,7 +3707,7 @@ $<span class="math notranslate nohighlight">\(fraction = \frac{IWC}{IWC + LWC}\)
 <img src="https://reliance.rohub.org/static/media/Reliance-logo.433dc2e9.png"  height="100" />
 <img src="https://www.uio.no/vrtx/decorating/resources/dist/src2/images/footer/uio-logo-en.svg"  height="100" />
 <img src="https://erc.europa.eu/sites/default/files/logo_0.png"  height="100" />
-</div>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -3614,9 +3731,11 @@ $<span class="math notranslate nohighlight">\(fraction = \frac{IWC}{IWC + LWC}\)
 
               </div>
               
-            
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
     <a class='left-prev' id="prev-link" href="../CMIP6_ERA5_CloudSat/plt_seasonal_mean.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -3632,24 +3751,28 @@ $<span class="math notranslate nohighlight">\(fraction = \frac{IWC}{IWC + LWC}\)
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-            
+            </footer>
         </div>
     </div>
-    <footer class="footer">
-  <p>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Franziska Hellmuth<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
     
-      By Franziska Hellmuth<br/>
-    
-        &copy; Copyright 2022.<br/>
-  </p>
-</footer>
-</main>
+</div>
 
 
       </div>
     </div>
   
-  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
 
   </body>
 </html>
