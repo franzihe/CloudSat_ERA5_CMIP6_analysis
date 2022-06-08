@@ -1441,36 +1441,36 @@ $<span class="math notranslate nohighlight">\(SLF = \frac{LWC}{IWC + LWC}\)</spa
         <span class="n">_season</span><span class="o">=</span><span class="n">ds_era_1deg</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;level&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">_lat</span><span class="o">-</span><span class="n">step</span><span class="p">,</span> <span class="n">_lat</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;lat&#39;</span><span class="p">),</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.season&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">_month</span><span class="o">=</span><span class="n">ds_era_1deg</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;level&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">_lat</span><span class="o">-</span><span class="n">step</span><span class="p">,</span> <span class="n">_lat</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;lat&#39;</span><span class="p">),</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.month&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
        
-        <span class="n">_season</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">statistic</span><span class="o">=</span><span class="s1">&#39;ERA5_50&#39;</span><span class="p">,</span> <span class="n">season</span><span class="o">=</span><span class="n">season</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;pressure&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;[</span><span class="si">{}</span><span class="s1"> : </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_lat</span><span class="o">-</span><span class="n">step</span><span class="p">,</span> <span class="n">_lat</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;p&#39;</span><span class="p">)</span>
+        <span class="n">_season</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">statistic</span><span class="o">=</span><span class="n">stat</span><span class="p">,</span> <span class="n">season</span><span class="o">=</span><span class="n">season</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;pressure&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;[</span><span class="si">{}</span><span class="s1"> : </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_lat</span><span class="o">-</span><span class="n">step</span><span class="p">,</span> <span class="n">_lat</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;p&#39;</span><span class="p">)</span>
         <span class="c1"># if season ==&#39;DJF&#39;:</span>
-        <span class="c1">#     for month, marker in zip(_month.sel(statistic=&#39;ERA5_50&#39;).month.values[11:], markers):</span>
-        <span class="c1">#         _month.sel(statistic=&#39;ERA5_50&#39;, month=month).plot.scatter(ax=ax, </span>
+        <span class="c1">#     for month, marker in zip(_month.sel(statistic=stat).month.values[11:], markers):</span>
+        <span class="c1">#         _month.sel(statistic=stat, month=month).plot.scatter(ax=ax, </span>
         <span class="c1">#                                                                   x=&#39;pressure&#39;, y=&#39;t&#39;,</span>
         <span class="c1">#                                                                   label=&#39;[{} : {})&#39;.format(_lat-step, _lat),</span>
         <span class="c1">#                                                                   color=c, marker=marker)</span>
-        <span class="c1">#     for month, marker in zip(_month.sel(statistic=&#39;ERA5_50&#39;).month.values[:2], markers[1:]):</span>
-        <span class="c1">#         _month.sel(statistic=&#39;ERA5_50&#39;, month=month).plot.scatter(ax=ax, </span>
+        <span class="c1">#     for month, marker in zip(_month.sel(statistic=stat).month.values[:2], markers[1:]):</span>
+        <span class="c1">#         _month.sel(statistic=stat, month=month).plot.scatter(ax=ax, </span>
         <span class="c1">#                                                                  x=&#39;pressure&#39;, y=&#39;t&#39;,</span>
         <span class="c1">#                                                                  label=&#39;[{} : {})&#39;.format(_lat-step, _lat),</span>
         <span class="c1">#                                                                  color=c, marker=marker)</span>
         
         <span class="c1"># if season==&#39;MAM&#39;:</span>
-        <span class="c1">#     for month, marker in zip(_month.sel(statistic=&#39;ERA5_50&#39;).month.values[2:5], markers):</span>
-        <span class="c1">#         _month.sel(statistic=&#39;ERA5_50&#39;, month=month).plot.scatter(ax=ax, </span>
+        <span class="c1">#     for month, marker in zip(_month.sel(statistic=stat).month.values[2:5], markers):</span>
+        <span class="c1">#         _month.sel(statistic=stat, month=month).plot.scatter(ax=ax, </span>
         <span class="c1">#                                                                  x=&#39;pressure&#39;, y=&#39;t&#39;,</span>
         <span class="c1">#                                                                  label=&#39;[{} : {})&#39;.format(_lat-step, _lat),</span>
         <span class="c1">#                                                                  color=c, marker=marker)</span>
         
         <span class="c1"># if season==&#39;JJA&#39;:</span>
-        <span class="c1">#     for month, marker in zip(_month.sel(statistic=&#39;ERA5_50&#39;).month.values[5:8], markers):</span>
-        <span class="c1">#         _month.sel(statistic=&#39;ERA5_50&#39;, month=month).plot.scatter(ax=ax, </span>
+        <span class="c1">#     for month, marker in zip(_month.sel(statistic=stat).month.values[5:8], markers):</span>
+        <span class="c1">#         _month.sel(statistic=stat, month=month).plot.scatter(ax=ax, </span>
         <span class="c1">#                                                                   x=&#39;pressure&#39;, y=&#39;t&#39;,</span>
         <span class="c1">#                                                                   label=&#39;[{} : {})&#39;.format(_lat-step, _lat),</span>
         <span class="c1">#                                                                   color=c, marker=marker)</span>
 
         <span class="c1"># if season==&#39;SON&#39;:</span>
-        <span class="c1">#     for month, marker in zip(_month.sel(statistic=&#39;ERA5_50&#39;).month.values[8:11], markers):</span>
-        <span class="c1">#         _month.sel(statistic=&#39;ERA5_50&#39;, month=month).plot.scatter(ax=ax, </span>
+        <span class="c1">#     for month, marker in zip(_month.sel(statistic=stat).month.values[8:11], markers):</span>
+        <span class="c1">#         _month.sel(statistic=stat, month=month).plot.scatter(ax=ax, </span>
         <span class="c1">#                                                                  x=&#39;pressure&#39;, y=&#39;t&#39;,</span>
         <span class="c1">#                                                                  label=&#39;[{} : {})&#39;.format(_lat-step, _lat),</span>
         <span class="c1">#                                                                  color=c, marker=marker)</span>
@@ -1482,10 +1482,62 @@ $<span class="math notranslate nohighlight">\(SLF = \frac{LWC}{IWC + LWC}\)</spa
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f2663b533a0&gt;
+<img alt="../_images/ERA5_1985-2014_39_0.png" src="../_images/ERA5_1985-2014_39_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axsm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">],</span><span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">axs</span> <span class="o">=</span> <span class="n">axsm</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">season</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span> <span class="n">season_mean_1deg</span><span class="o">.</span><span class="n">season</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+
+    <span class="k">for</span> <span class="n">_lat</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">iteration_SH</span><span class="p">,</span> <span class="n">cm</span><span class="o">.</span><span class="n">hawaii</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mi">256</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">iteration_SH</span><span class="p">))))):</span>
+
+        <span class="n">_season</span><span class="o">=</span><span class="n">ds_era_1deg</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;level&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">_lat</span><span class="o">-</span><span class="n">step</span><span class="p">,</span> <span class="n">_lat</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;lat&#39;</span><span class="p">),</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.season&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">_month</span><span class="o">=</span><span class="n">ds_era_1deg</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;level&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">_lat</span><span class="o">-</span><span class="n">step</span><span class="p">,</span> <span class="n">_lat</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;lat&#39;</span><span class="p">),</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.month&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+       
+        <span class="n">_season</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">statistic</span><span class="o">=</span><span class="n">stat</span><span class="p">,</span> <span class="n">season</span><span class="o">=</span><span class="n">season</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;pressure&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;t_220&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;[</span><span class="si">{}</span><span class="s1"> : </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_lat</span><span class="o">-</span><span class="n">step</span><span class="p">,</span> <span class="n">_lat</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;p&#39;</span><span class="p">)</span>
+        <span class="c1"># if season ==&#39;DJF&#39;:</span>
+        <span class="c1">#     for month, marker in zip(_month.sel(statistic=stat).month.values[11:], markers):</span>
+        <span class="c1">#         _month.sel(statistic=stat, month=month).plot.scatter(ax=ax, </span>
+        <span class="c1">#                                                                   x=&#39;pressure&#39;, y=&#39;t&#39;,</span>
+        <span class="c1">#                                                                   label=&#39;[{} : {})&#39;.format(_lat-step, _lat),</span>
+        <span class="c1">#                                                                   color=c, marker=marker)</span>
+        <span class="c1">#     for month, marker in zip(_month.sel(statistic=stat).month.values[:2], markers[1:]):</span>
+        <span class="c1">#         _month.sel(statistic=stat, month=month).plot.scatter(ax=ax, </span>
+        <span class="c1">#                                                                  x=&#39;pressure&#39;, y=&#39;t&#39;,</span>
+        <span class="c1">#                                                                  label=&#39;[{} : {})&#39;.format(_lat-step, _lat),</span>
+        <span class="c1">#                                                                  color=c, marker=marker)</span>
+        
+        <span class="c1"># if season==&#39;MAM&#39;:</span>
+        <span class="c1">#     for month, marker in zip(_month.sel(statistic=stat).month.values[2:5], markers):</span>
+        <span class="c1">#         _month.sel(statistic=stat, month=month).plot.scatter(ax=ax, </span>
+        <span class="c1">#                                                                  x=&#39;pressure&#39;, y=&#39;t&#39;,</span>
+        <span class="c1">#                                                                  label=&#39;[{} : {})&#39;.format(_lat-step, _lat),</span>
+        <span class="c1">#                                                                  color=c, marker=marker)</span>
+        
+        <span class="c1"># if season==&#39;JJA&#39;:</span>
+        <span class="c1">#     for month, marker in zip(_month.sel(statistic=stat).month.values[5:8], markers):</span>
+        <span class="c1">#         _month.sel(statistic=stat, month=month).plot.scatter(ax=ax, </span>
+        <span class="c1">#                                                                   x=&#39;pressure&#39;, y=&#39;t&#39;,</span>
+        <span class="c1">#                                                                   label=&#39;[{} : {})&#39;.format(_lat-step, _lat),</span>
+        <span class="c1">#                                                                   color=c, marker=marker)</span>
+
+        <span class="c1"># if season==&#39;SON&#39;:</span>
+        <span class="c1">#     for month, marker in zip(_month.sel(statistic=stat).month.values[8:11], markers):</span>
+        <span class="c1">#         _month.sel(statistic=stat, month=month).plot.scatter(ax=ax, </span>
+        <span class="c1">#                                                                  x=&#39;pressure&#39;, y=&#39;t&#39;,</span>
+        <span class="c1">#                                                                  label=&#39;[{} : {})&#39;.format(_lat-step, _lat),</span>
+        <span class="c1">#                                                                  color=c, marker=marker)</span>
+
+
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;small&quot;</span><span class="p">,</span> <span class="n">fancybox</span><span class="o">=</span><span class="kc">True</span><span class="p">,)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/ERA5_1985-2014_39_1.png" src="../_images/ERA5_1985-2014_39_1.png" />
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ERA5_1985-2014_40_0.png" src="../_images/ERA5_1985-2014_40_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
