@@ -797,3 +797,15 @@ def get_data_var(h5file, varname):
 
 def exponential_fit(x, a, b, c):
     return a * np.exp(b * x) + c
+
+def set4D_latitude_values_nan(array, upper_lat, lower_lat):
+    array[:,:,array['latitude'].where(array['latitude']==upper_lat).argmin('latitude').values+1:\
+              array['latitude'].where(array['latitude']==lower_lat).argmin('latitude').values,:] = xr.DataArray(data=da.full(shape =(array[:,:,array['latitude'].where(array['latitude']==upper_lat).argmin('latitude').values+1:\
+                                                                                                                               array['latitude'].where(array['latitude']==lower_lat).argmin('latitude').values,:]).shape,
+                                                                                                             fill_value=np.nan),
+                                                                                                dims=(array[:,:,array['latitude'].where(array['latitude']==upper_lat).argmin('latitude').values+1:\
+                                                                                                                array['latitude'].where(array['latitude']==lower_lat).argmin('latitude').values,:]).dims, 
+                                                                                                coords=(array[:,:,array['latitude'].where(array['latitude']==upper_lat).argmin('latitude').values+1:\
+                                                                                                                  array['latitude'].where(array['latitude']==lower_lat).argmin('latitude').values,:]).coords)
+
+    return array
