@@ -30,3 +30,5 @@ import h5py
 from scipy.optimize import curve_fit
 
 import functions as fct
+import wget
+
