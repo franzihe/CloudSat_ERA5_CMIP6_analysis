@@ -23,7 +23,7 @@
 # This study will retrieve the CloudSat mean pressure grid from the [ECMWF-AUX files](https://www.cloudsat.cira.colostate.edu/data-products/ecmwf-aux). We decided to use the CloudSat overpasses from 2008 as this is the year with the most CloudSat available data. We make use of the `scipy.optimize.curve_fit` function to calculate pressure levels.
 # 
 # 
-# - Time period: 2008
+# - Time period: 2007
 # - time resolution: daily atmospheric overpasses 
 # - Variables:
 #   
@@ -44,7 +44,6 @@ hostname = socket.gethostname()
 
 abs_path = str(pathlib.Path(hostname).parent.absolute())
 WORKDIR = abs_path[:- (len(abs_path.split('/')[-2] + abs_path.split('/')[-1])+1)]
-
 
 if "mimi" in hostname:
     print(hostname)
@@ -76,6 +75,8 @@ sys.path.append(UTILS_DIR)
 import warnings
 warnings.filterwarnings('ignore') # don't output warnings
 
+
+    
 # import packages
 from imports import(xr, ccrs, cy, plt, glob, fct, np, da, datetime, timedelta, h5py, curve_fit)
 
@@ -111,7 +112,7 @@ DATA_VARNAMES_EC = ["Pressure", ]
 # %%
 datasets = []
 
-for file in ff_ec:
+for file in ff_ec[:]:
     year = int(file.split('/')[-1].split('_')[0][0:4])
     doy = int(file.split('/')[-1].split('_')[0][4:7])  # day of the year
     tt = datetime(year, 1, 1) + timedelta(doy - 1)
@@ -120,14 +121,21 @@ for file in ff_ec:
         if tt.month == month:
             ds = xr.Dataset()
             
-            # load ECMWF-AUX file
-            h5file = h5py.File(file, "r")
+            try: 
+                # load ECMWF-AUX file
+                print('load ECMWF-AUX...', file)
+                h5file = h5py.File(file, "r")
 
-            for var in DATA_VARNAMES_EC:
-                ds[var] = fct.get_data_var(h5file['ECMWF-AUX'], var)
+                for var in DATA_VARNAMES_EC:
+                    ds[var] = fct.get_data_var(h5file['ECMWF-AUX'], var)
 
-            datasets.append(ds)
+                datasets.append(ds)
 
+                h5file.close()
+            except OSError:
+                datasets.append(xr.Dataset(coords=dict(nray=(['nray'], np.arange(0,37081)),
+                                                       nbin=(['nbin'], np.arange(0,125)))))
+                continue
     ds_cs = xr.concat(datasets,dim='nray')
 
 
