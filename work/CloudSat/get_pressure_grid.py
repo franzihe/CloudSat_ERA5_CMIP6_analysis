@@ -81,8 +81,8 @@ from imports import(xr, ccrs, cy, plt, glob, fct, np, da, datetime, timedelta, h
 
 # %%
 # reload imports
-%load_ext autoreload
-%autoreload 2
+# %load_ext autoreload
+# %autoreload 2
 
 # %% [markdown]
 # ## Open CloudSat variables
