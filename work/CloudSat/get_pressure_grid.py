@@ -45,6 +45,7 @@ hostname = socket.gethostname()
 abs_path = str(pathlib.Path(hostname).parent.absolute())
 WORKDIR = abs_path[:- (len(abs_path.split('/')[-2] + abs_path.split('/')[-1])+1)]
 
+
 if "mimi" in hostname:
     print(hostname)
     DATA_DIR = "/scratch/franzihe/"
@@ -75,15 +76,9 @@ sys.path.append(UTILS_DIR)
 import warnings
 warnings.filterwarnings('ignore') # don't output warnings
 
-
-    
 # import packages
 from imports import(xr, ccrs, cy, plt, glob, fct, np, da, datetime, timedelta, h5py, curve_fit)
 
-# %%
-# reload imports
-# %load_ext autoreload
-# %autoreload 2
 
 # %% [markdown]
 # ## Open CloudSat variables
@@ -110,14 +105,19 @@ ff_ec = sorted(glob('{}/2007/*/*_ECMWF-AUX_GRANULE_P_R05_*.h5'.format(cs_in, )))
 DATA_VARNAMES_EC = ["Pressure", ]
 
 # %%
+empty = np.empty(shape=(37081, 125), dtype='float64')
+empty[:] = np.nan
+
+# %%
 datasets = []
 
-for file in ff_ec[:]:
+for file in ff_ec:
     year = int(file.split('/')[-1].split('_')[0][0:4])
     doy = int(file.split('/')[-1].split('_')[0][4:7])  # day of the year
     tt = datetime(year, 1, 1) + timedelta(doy - 1)
     
-    for month in range(1, 13):
+    # for month in range(1, 13):
+    for month in range(1, 2):
         if tt.month == month:
             ds = xr.Dataset()
             
@@ -130,11 +130,17 @@ for file in ff_ec[:]:
                     ds[var] = fct.get_data_var(h5file['ECMWF-AUX'], var)
 
                 datasets.append(ds)
-
                 h5file.close()
             except OSError:
-                datasets.append(xr.Dataset(coords=dict(nray=(['nray'], np.arange(0,37081)),
-                                                       nbin=(['nbin'], np.arange(0,125)))))
+                ds[var] = xr.DataArray(data=empty,
+                                       dims=["nray", "nbin"],
+                                       coords=dict(
+                                           nray=(["nray"], np.arange(0,37081)),
+                                           nbin=(["nbin"], np.arange(0,125)),),
+                                       attrs=dict(
+                                           longname='Pressure',
+                                           units='Pa'),)
+                datasets.append(ds)
                 continue
     ds_cs = xr.concat(datasets,dim='nray')
 
