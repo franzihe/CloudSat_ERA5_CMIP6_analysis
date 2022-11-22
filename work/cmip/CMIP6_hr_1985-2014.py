@@ -129,11 +129,11 @@ import warnings
 warnings.filterwarnings('ignore') # don't output warnings
 
 # import packages
-from imports import (xr, intake, cftime, xe, glob, np, cm, pd, fct,ccrs, cy, plt, da, gc, datetime)
+from imports import (xr, intake, cftime, xe, glob, np, cm, pd, fct,ccrs, cy, plt, da, gc, datetime, LogNorm)
 xr.set_options(display_style="html")
 
-# # %%
-# # reload imports
+# %%
+# reload imports
 # %load_ext autoreload
 # %autoreload 2
 
@@ -516,10 +516,10 @@ def find_precip_cloud(dset):
     
     # 2. find where snowfall >= 0.01mmh-1
     unit_sf = dset['prsn']
-    sf = sf.where(unit_sf>0.01)
-    lwp = lwp.where(unit_sf>0.01)
-    iwp = iwp.where(unit_sf>0.01)
-    t2 = t2.where(unit_sf>0.01)
+    sf = sf.where(unit_sf>=0.01)
+    lwp = lwp.where(unit_sf>=0.01)
+    iwp = iwp.where(unit_sf>=0.01)
+    t2 = t2.where(unit_sf>=0.01)
         
     # 3. find where 2m-temperature <= 0C
     sf = sf.where(dset['tas']<=273.15)
@@ -570,30 +570,134 @@ def plt_seasonal_NH_SH(variable,levels,cbar_label,plt_title):
 
 # %%
 for model in dset_dict.keys():
+        
+
+# %%
+    dset_dict[model]['lcc_count'],dset_dict[model]['sf_lcc'],dset_dict[model]['iwp_lcc'],dset_dict[model]['lwp_lcc'] = find_precip_cloud(dset_dict[model])
     
-    dset_dict[model]['sf_count'],dset_dict[model]['sf'],dset_dict[model]['iwp'],dset_dict[model]['lwp'] = find_precip_cloud(dset_dict[model])
     
     
-    # Cummulative snowfall days
+# Cummulative snowfall days
     figname = '{}_cum_sf_days_season_mean_{}_{}.png'.format(model,starty, endy)
-    plt_seasonal_NH_SH(dset_dict[model]['sf_count'].where(dset_dict[model]['sf_count']>0.), levels=np.arange(0,105,5), cbar_label='{} frequency (month)'.format(dset_dict[model]['sf_count'].attrs['long_name'],), plt_title='{} {} ({} - {})'.format(model, dset_dict[model]['sf_count'].attrs['long_name'], starty,endy))
+    plt_seasonal_NH_SH(dset_dict[model]['lcc_count'].where(dset_dict[model]['lcc_count']>0.), levels=np.arange(0,350,10), cbar_label='{} frequency (month)'.format(dset_dict[model]['lcc_count'].attrs['long_name'],), plt_title='{} {} ({} - {})'.format(model, dset_dict[model]['lcc_count'].attrs['long_name'], starty,endy))
     plt.savefig(FIG_DIR + figname, format = 'png', bbox_inches = 'tight', transparent = False)
 
     # Seasonal precipictation efficency ICE
     figname = '{}_ice_precip_eff_season_mean_{}_{}.png'.format(model,starty, endy)
-    sf_iwp = ((dset_dict[model]['sf']/(dset_dict[model]['iwp'])).groupby('time.season').mean('time', keep_attrs=True, skipna=True))*1000
-    plt_seasonal_NH_SH(sf_iwp,np.arange(0, 2.1,0.1),cbar_label='Mean seasonal ice precip. efficency',plt_title='{} Snowfall/IWP ({} - {})'.format(model,starty,endy))
+    sf_iwp = ((dset_dict[model]['sf_lcc']/(dset_dict[model]['iwp_lcc'])).groupby('time.season').mean('time', keep_attrs=True, skipna=True))*1000
+    plt_seasonal_NH_SH(sf_iwp,np.arange(0, 2.6,0.1),cbar_label='Mean seasonal ice precip. efficency',plt_title='{} Snowfall/IWP ({} - {})'.format(model,starty,endy))
     plt.savefig(FIG_DIR + figname, format = 'png', bbox_inches = 'tight', transparent = False)
 
     # seasonal precip efficeny ICE+LIQUID
     figname = '{}_ice_liquid_precip_eff_season_mean_{}_{}.png'.format(model,starty, endy)
-    sf_iwp_lwp = ((dset_dict[model]['sf']/(dset_dict[model]['lwp']+dset_dict[model]['iwp'])).groupby('time.season').mean('time', keep_attrs=True, skipna=True))*1000
-    plt_seasonal_NH_SH(sf_iwp_lwp, np.arange(0, 2.1, 0.1),cbar_label='Mean seasonal precip. efficency', plt_title='{} Snowfall/(IWP + LWP) ({} {})'.format(model,starty,endy))
+    sf_iwp_lwp = ((dset_dict[model]['sf_lcc']/(dset_dict[model]['lwp_lcc']+dset_dict[model]['iwp_lcc'])).groupby('time.season').mean('time', keep_attrs=True, skipna=True))*1000
+    plt_seasonal_NH_SH(sf_iwp_lwp, np.arange(0, 2.6, 0.1),cbar_label='Mean seasonal precip. efficency', plt_title='{} Snowfall/(IWP + LWP) ({} {})'.format(model,starty,endy))
     plt.savefig(FIG_DIR + figname, format = 'png', bbox_inches = 'tight', transparent = False)
 
     # seasonal liquid water path
     figname = '{}_lwp_season_mean_{}_{}.png'.format(model,starty, endy)
-    lwp_season = dset_dict[model]['lwp'].groupby('time.season').mean(dim='time',keep_attrs=True, skipna=True)
+    lwp_season = dset_dict[model]['lwp_lcc'].groupby('time.season').mean(dim='time',keep_attrs=True, skipna=True)
     plt_seasonal_NH_SH(lwp_season, np.arange(0, 310, 10),cbar_label='{} ({})'.format(lwp_season.attrs['long_name'], lwp_season.attrs['units']),plt_title='ERA5 {} ({} - {})'.format(lwp_season.attrs['long_name'], starty,endy))
     plt.savefig(FIG_DIR + figname, format = 'png', bbox_inches = 'tight', transparent = False)
+
+
+# %% [markdown]
+# ## Calculating bin and bin sizes
+# https://www.statisticshowto.com/choose-bin-sizes-statistics/
+# %%
+def plt_seasonal_2dhist_wp_sf(x_value, y_value, plt_title, xlabel, ylabel):
+    f, axsm = plt.subplots(nrows=2,ncols=4,figsize =[10,5], sharex=True, sharey=True)
+    cmap = cm.batlow
+    # levels = np.arange(0.1,65000,5000)
+    # norm = BoundaryNorm(levels, ncolors=cmap.N, )
+    norm = LogNorm(vmin=1, vmax=50000)
+
+
+
+    for ax, season in zip(axsm.flatten()[:4], x_value.season):
+        Z, xedges, yedges = np.histogram2d((x_value.where(x_value['lat'] >=45).sel(season=season).values.flatten()), 
+                                        (y_value.where(y_value['lat'] >=45).sel(season=season).values.flatten()), 
+                                        bins=[40, 40], 
+                                        range=[[0,4],[0, 4]])   
+
+        im = ax.pcolormesh(xedges, yedges, Z.transpose(),cmap=cmap,norm=norm,)
+        # cbar = f.colorbar(im, ax=ax,)
+        ax.set(title =r'lat$\geq 45^\circ$N; season = {}'.format(season.values))
+        ax.grid()
+        
+        _corr = xr.corr(x_value.where(x_value['lat'] >=45).sel(season=season), y_value.where(y_value['lat'] >=45).sel(season=season))
+        props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+        ax.text(0.55, 0.95, 'Corr: {}'.format(np.round(_corr,3).values), transform=ax.transAxes, fontsize=11,
+        verticalalignment='top', bbox=props)
+        
+        
+
+    for ax, season in zip(axsm.flatten()[4:], x_value.season):
+        Z, xedges, yedges = np.histogram2d((x_value.where(x_value['lat'] <=-45).sel(season=season).values.flatten()), 
+                                        (y_value.where(y_value['lat'] <=-45).sel(season=season).values.flatten()), 
+                                        bins=[40, 40], 
+                                        range=[[0,4],[0, 4]])   
+
+        im = ax.pcolormesh(xedges, yedges, Z.transpose(), cmap=cmap,norm=norm,)
+        # cbar = f.colorbar(im, ax=ax, )
+        ax.set(title =r'lat$\leq-45^\circ$S; season = {}'.format(season.values))
+        
+        ax.set_xlabel('{} ({})'.format(xlabel,x_value.attrs['units']))
+        ax.grid()
+        
+        _corr = xr.corr(x_value.where(x_value['lat'] <=-45).sel(season=season), y_value.where(y_value['lat'] <=-45).sel(season=season))
+        props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+        ax.text(0.55, 0.95, 'Corr: {}'.format(np.round(_corr,3).values), transform=ax.transAxes, fontsize=11,
+        verticalalignment='top', bbox=props)
+        
+    axsm.flatten()[0].set_ylabel('{} ({})'.format(ylabel, y_value.attrs['units']))
+    axsm.flatten()[4].set_ylabel('{} ({})'.format(ylabel, y_value.attrs['units']))
+
+
+    cbaxes = f.add_axes([1.0125, 0.025, 0.025, 0.9])
+    cbar = plt.colorbar(im, cax=cbaxes, shrink=0.5, orientation='vertical', label='Frequency')
+    f.suptitle(plt_title, fontweight="bold");
+    
+    
+    
+    
+    plt.tight_layout(pad=0.5, w_pad=0.5, h_pad=0.5)
+
+
+# %%
+for model in dset_dict[model]:
+    lwp = dset_dict[model]['lwp_lcc']/1000
+    lwp.attrs = {'units': 'kg m-2', 'long_name': 'Total column cloud liquid water'}
+    iwp = dset_dict[model]['iwp_lcc']/1000
+    iwp.attrs = {'units': 'kg m-2', 'long_name': 'Total column cloud ice and snow water'}
+
+# %%
+# dset_dict[model]['lwp'] = dset_dict[model]['lwp']/1000
+# dset_dict[model]['lwp'].attrs = {'units': 'kg m-2', }#'long_name': 'Total column cloud liquid water'}
+# dset_dict[model]['iwp'] = dset_dict[model]['iwp']/1000
+# dset_dict[model]['iwp'].attrs = {'units': 'kg m-2',}# 'long_name': 'Total column cloud ice and snow water'}
+
+# %%
+    _lwp = lwp.groupby('time.season').mean(('time', ), keep_attrs=True, skipna=True)
+    _iwp = iwp.groupby('time.season').mean(('time', ), keep_attrs=True, skipna=True)
+    _sf = dset_dict[model]['sf_lcc'].groupby('time.season').mean(('time', ), keep_attrs=True, skipna=True)
+
+
+
+    # %%
+    # precip efficency from ice
+    figname = '{}_2dhist_iwp_sf_season_mean_{}_{}.png'.format(model,starty, endy)
+    plt_seasonal_2dhist_wp_sf(_iwp, _sf, '{} ({} - {}) Mean seasonal ice precip. efficency'.format(model,starty,endy), 'Ice Water Path', 'Snowfall')
+    plt.savefig(FIG_DIR + figname, format = 'png', bbox_inches = 'tight', transparent = False)
+
+    # precip efficency from liquid
+    figname = '{}_2dhist_lwp_sf_season_mean_{}_{}.png'.format(model,starty, endy)
+    plt_seasonal_2dhist_wp_sf(_lwp, _sf, '{} ({} - {}) Mean seasonal liquid precip. efficency'.format(model,starty,endy), 'Liquid Water Path', 'Snowfall')
+    plt.savefig(FIG_DIR + figname, format = 'png', bbox_inches = 'tight', transparent = False)
+
+    # precip efficency from mixed-phase clouds
+    figname = '{}_2dhist_lwp_iwp_sf_season_mean_{}_{}.png'.format(model,starty, endy)
+    plt_seasonal_2dhist_wp_sf(_iwp+_lwp, _sf, '{} ({} - {}) Mean seasonal ice+liquid precip. efficency'.format(model,starty,endy), 'Liquid + Ice Water Path', 'Snowfall')
+    plt.savefig(FIG_DIR + figname, format = 'png', bbox_inches = 'tight', transparent = False)
+
 
