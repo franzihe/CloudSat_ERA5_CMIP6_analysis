@@ -1,5 +1,5 @@
 # %% [markdown]
-# # Example with high-resolution CMIP6 models (~100 km) using Pangeo catalog 
+# # Example with CMIP6 models (100 - 500 km)
 # 
 # 
 # # Table of Contents
@@ -19,23 +19,23 @@
 # 
 # In this context, this work aims to expand our knowledge on how the representation of the cloud phase affects snow formation in GCMs. Better understanding this aspect is necessary to develop climate models further and improve future climate predictions. 
 # 
-# * Retrieve CMIP6 data through [Pangeo](https://pangeo-data.github.io/pangeo-cmip6-cloud/)
+# * Retrieve CMIP6 data through [ESGF](https://esgf-node.llnl.gov/search/cmip6/)
 # * Hybrid sigma-pressure coordinates to isobaric pressure levels of the European Centre for Medium-Range Weather Forecast Re-Analysis 5 (ERA5) with [GeoCAT-comb](https://geocat-comp.readthedocs.io/en/latest/index.html)
 # * Regridd the CMIP6 variables to the exact horizontal resolution with [`xesmf`](https://xesmf.readthedocs.io/en/latest/)
 # * Calculate an ensemble mean of all used models
 # * Calculate and plot the seasonal mean of the ensemble mean
 # 
 # **Questions**
-# * How is the cloud phase and snowfall varying between 1985 and 2014?
+# * How is the cloud phase and snowfall varying between 2007 and 2010?
 # 
 # > **_NOTE:_** We answer questions related to the comparison of CMIP models to ERA5 in another [Jupyter Notebook](../CMIP6_ERA5_CloudSat/plt_seasonal_mean.ipynb).
 
 # %% [markdown]
 # # 2. Data Wrangling <a id='data_wrangling'></a>
 # 
-# This study will compare surface snowfall, ice, and liquid water content from the Coupled Model Intercomparison Project Phase 6 ([CMIP6](https://esgf-node.llnl.gov/projects/cmip6/)) climate models (accessed through [Pangeo](https://pangeo.io/)) to the European Centre for Medium-Range Weather Forecast Re-Analysis 5 ([ERA5](https://www.ecmwf.int/en/forecasts/datasets/reanalysis-datasets/era5)) data from **1985 to 2014**. We conduct statistical analysis at the annual and seasonal timescales to determine the biases in cloud phase and precipitation (liquid and solid) in the CMIP6 models and their potential connection between them. 
+# This study will compare surface snowfall, ice, and liquid water content from the Coupled Model Intercomparison Project Phase 6 ([CMIP6](https://esgf-node.llnl.gov/projects/cmip6/)) climate models to the European Centre for Medium-Range Weather Forecast Re-Analysis 5 ([ERA5](https://www.ecmwf.int/en/forecasts/datasets/reanalysis-datasets/era5)) data from **2006 to 2009**. We conduct statistical analysis at the annual and seasonal timescales to determine the biases in cloud phase and precipitation (liquid and solid) in the CMIP6 models and their potential connection between them. 
 # 
-# - Time period: 1985 to 2014
+# - Time period: 2006 to 2009
 # - horizonal resolution: ~100km
 # - time resolution: monthly atmospheric data (Amon, AERmon)
 # - Variables:
@@ -45,35 +45,24 @@
 # |  prsn         |    Snowfall Flux                        | [kg m-2 s-1]  | surface |
 # | clw           |    Mass Fraction of Cloud Liquid Water  |  [kg kg-1]    |    ml   | 
 # |               |                                         | to calculate lwp use integral clw -dp/dg | |
-# | cli           |    Mass Fraction of Cloud Ice           | [kg kg-1]     |    ml   |
 # | tas           |    Near-Surface Air Temperature         |   [K]         | surface |
-# | ta            |    Air Temperature                      |  [K]          |  plev   |
 # | clivi         |    Ice Water Path                       | [kg m-2]      |         |
 # | lwp           |    Liquid Water Path                    | [kg m-2]      |         |
-# | pr            |    Precipitation                        | [kg m-2 s-1]  | surface |
 # 
 # - CMIP6 models:
 # 
 # | Institution                                            |     Model name    | Reference                                                     |
 # | ------------------------------------------------------ |:-----------------:|--------------------------------------------------------------:|
-# | [AS-RCEC](https://www.rcec.sinica.edu.tw/index_en.php) | TaiESM1           | [Lee et al. (2020)](https://doi.org/10.5194/gmd-13-3887-2020) |
-# | [BCC](http://bcc.ncc-cma.net/)                         | BCC-CSM2-M        | [Wu et al. (2019)](https://doi.org/10.5194/gmd-12-1573-2019)  |
-# | [CAMS](http://www.cma.gov.cn/en2014/)                  | CAMS-CSM1-0       |                                                               |
-# | [CAS](http://english.iap.cas.cn/)                      | FGOALS-f3-L       | [Bian et al. (2020)](https://doi-org.ezproxy.uio.no/10.1080/16742834.2020.1778419) |
-# | [CMCC](https://www.cmcc.it/)                           | CMCC-CM2-SR5      | [Cherchi et al. (2019)](https://doi-org.ezproxy.uio.no/10.1029/2018MS001369)|
-# |                                                        | CMCC-CM2-HR4      | [Cherchi et al. (2019)](https://doi-org.ezproxy.uio.no/10.1029/2018MS001369)|
-# |                                                        | CMCC-ESM2         | [CMCC website](https://www.cmcc.it/models/cmcc-esm-earth-system-model)    |
-# | [EC-Earth-Consortium](http://www.ec-earth.org/)        | EC-Earth3-AerChem | [van Noije et al. (2021)](https://doi.org/10.5194/gmd-14-5637-2021)  |
-# | [E3SM-Project](https://e3sm.org/)                      | E3SM-1-1          | [Golaz et al. (2019)](https://doi-org.ezproxy.uio.no/10.1029/2018MS001603); [Burrows et al. (2020)](https://doi-org.ezproxy.uio.no/10.1029/2019MS001766) Text S8|
-# |                                                        | E3SM-1-1-ECA      | |
-# | [MPI-M](https://mpimet.mpg.de/en/homepage)             | MPI-ESM1-2-HR     | [Müller et al. (2018)](https://doi-org.ezproxy.uio.no/10.1029/2017MS001217)|
-# | [MRI](https://www.mri-jma.go.jp/index_en.html)         | MRI-ESM2-0        | [Yukimoto et al. (2019)](https://doi.org/10.2151/jmsj.2019-051) |
-# | [NCC](https://folk.uib.no/ngfhd/EarthClim/index.htm)   | NorESM2-MM        | [Seland et al. (2020)](https://doi.org/10.5194/gmd-13-6165-2020)|
-# | [NOAA-GFDL](https://www.gfdl.noaa.gov/)                | GFDL-CM4          | [Held et al. (2019)](https://doi-org.ezproxy.uio.no/10.1029/2019MS001829) |
-# |                                                        | GFDL-ESM4         | [Dunne et al. (2020)](https://doi-org.ezproxy.uio.no/10.1029/2019MS002015) |
-# | [SNU](https://en.snu.ac.kr/index.html)                 | SAM0-UNICON       | [Park et al. (2019)](https://doi-org.ezproxy.uio.no/10.1175/JCLI-D-18-0796.1) |
-# | [THU](https://www.tsinghua.edu.cn/en/)                 | CIESM             | [Lin et al. (2020)](https://doi-org.ezproxy.uio.no/10.1029/2019MS002036) |
-# 
+# | [MIROC]() | MIROC6           | [Tatebe et al. (2019)]() |
+# | [NCAR]()  | CESM2            | [Danabasoglu et al. (2020)]()  |
+# | [CCCma]() | CanESM5          | [Swart et al. (2019)]()     |
+# | [AWI]()   | AWI-ESM-1-1-LR   | []() |
+# | [MOHC]()  | UKESM1-0-LL      | []() |
+# | [MOHC]()  | HadGem3-GC31-LL  | [Roberts et al. (2019)]() |
+# | [CNRM-CERFACS]() | CNRM-CM6-1 | [Voldoire et al. (2019)]() |
+# | [CNRM-CERFACS]() | CNRM-ESM2-1| [Seferian et al. (2019)]() |
+# | [IPSL]() | IPSL-CM6A-LR | [Boucher et al. (2020)]() |
+# | [IPSL]() | IPSL-CM5A2-INCA | []()|
 
 # %% [markdown]
 # ## Organize my data
@@ -133,25 +122,6 @@ from imports import (xr, intake, cftime, xe, glob, np, cm, pd, fct,ccrs, cy, plt
 xr.set_options(display_style="html")
 
 
-# %%
-# ### Create dask cluster to work parallel in large datasets
-
-# from dask.distributed import Client
-# client = Client(n_workers=4, 
-#                 threads_per_worker=2, 
-#                 memory_limit='100GB',
-#                 processes=False)
-# client
-# chunks={'time' : 10,}
-# client 
-
-# %%
-# # These are the usual ipython objects, including this one you are creating
-# ipython_vars = ['In', 'Out', 'exit', 'quit', 'get_ipython', 'ipython_vars']
-
-# # Get a sorted list of the objects and their sizes
-# sorted([(x, sys.getsizeof(globals().get(x))) for x in dir() if not x.startswith('_') and x not in sys.modules and x not in ipython_vars], key=lambda x: x[1], reverse=True)
-
 
 # %% [markdown]
 # ## Open CMIP6 variables
@@ -180,8 +150,8 @@ variable_id = ['clw', 'cli', 'clivi', 'tas', 'prsn']
 # %%
 # source_id
 list_models = [
-            #    'MIROC6', 
-               'CESM2', 
+               'MIROC6', 
+            #    'CESM2', 
             #    'CanESM5', 
             #    'AWI-ESM-1-1-LR', 
             #    'MPI-ESM1-2-LR', 
@@ -220,51 +190,7 @@ for model in list_models:
     else:
         continue
 
-# %% [markdown]
-# ## Calendar
-# Not all models in CMIP6 use the same calendar. Hence we double check the time axis. Later, when we regrid to the same horizontal resolution (<a href="#regrid_hz">Regrid CMIP6 data</a>) we will assign the same calendars for each model. 
 
-# # %%
-# # metadata of the historical run:
-# _d2 = pd.Series(["calendar",
-#                  "branch_time_in_parent", #"parent_activity_id", "parent_experiment_id",	"parent_mip_era",
-#                  "parent_source_id",#"parent_sub_experiment_id", 
-#                  "parent_time_units",# "parent_variant_label"
-#                   ])
-# _d2 = pd.DataFrame(_d2).rename(columns={0:'index'})
-# for model in dset_dict.keys():
-#     _data = []
-#     _names =[]
-#     _data.append(dset_dict[model].time.to_index().calendar)
-#     for k, v in dset_dict[model].attrs.items():
-        
-#         if 'parent_time_units' in k or 'branch_time_in_parent' in k or 'parent_source_id' in k:
-#             _data.append(v)
-#             _names.append(k)
-#     _d2 = pd.concat([_d2,   pd.Series(_data)], axis=1)
-
-# _d2.dropna(how='all', axis=1, inplace=True)
-# _d2 = _d2.set_index('index')
-# _d2.columns = _d2.loc['parent_source_id']
-# _d2.drop('parent_source_id').T
-
-# %% [markdown]
-# ## Show attributes and individual identifier
-# ... is going to be the reference model for the horizontal grid. The `xarray` datasets inside `dset_dict` can be extracted as any value in a Python dictionary.
-# 
-# The dictonary key is the source_id from `list_models`.
-
-# # %%
-# for model in dset_dict.keys():
-#     print('Institution: {}, \
-#           Model: {},   \
-#           Nominal res: {},  \
-#           lon x lat, level, top,: {}, \
-#           tracking_id: {}'.format(dset_dict[model].attrs['institution_id'],
-#                                   dset_dict[model].attrs['source_id'], 
-#                                   dset_dict[model].attrs['nominal_resolution'], 
-#                                   dset_dict[model].attrs['source'],
-#                                   dset_dict[model].attrs['tracking_id']))
 
 # %% [markdown]
 # ## Assign attributes to the variables
@@ -280,38 +206,7 @@ for model in list_models:
 now = datetime.utcnow()
 for model in dset_dict.keys():
 # 
-    for var_id in dset_dict[model].keys():
-        if var_id == 'clivi' or var_id == 'clw' or var_id == 'cli':
-            dset_dict[model][var_id] = dset_dict[model][var_id]*1000
-        if var_id == 'cli':
-            dset_dict[model][var_id] = dset_dict[model][var_id].assign_attrs({'standard_name': 'mass_fraction_of_cloud_ice_in_air',
-    'long_name': 'Mass Fraction of Cloud Ice',
-    'comment': 'Includes both large-scale and convective cloud. This is calculated as the mass of cloud ice in the grid cell divided by the mass of air (including the water in all phases) in the grid cell. It includes precipitating hydrometeors ONLY if the precipitating hydrometeors affect the calculation of radiative transfer in model.',
-    'units': 'g kg-1',
-    'original_units': 'kg/kg',
-    'history': "{}Z altered by F. Hellmuth: Converted units from 'kg kg-1' to 'g kg-1'. Interpolate data from hybrid-sigma levels to isobaric levels with geocat.comp.interpolation.interp_hybrid_to_pressure".format(now.strftime("%d/%m/%Y %H:%M:%S")),
-    'cell_methods': 'area: time: mean',
-    'cell_measures': 'area: areacella'})
-                
-        if var_id == 'clw':
-            dset_dict[model][var_id] = dset_dict[model][var_id].assign_attrs({'standard_name': 'mass_fraction_of_cloud_liquid_water_in_air',
-    'long_name': 'Mass Fraction of Cloud Liquid Water',
-    'comment': 'Includes both large-scale and convective cloud. Calculate as the mass of cloud liquid water in the grid cell divided by the mass of air (including the water in all phases) in the grid cells. Precipitating hydrometeors are included ONLY if the precipitating hydrometeors affect the calculation of radiative transfer in model.',
-    'units': 'g kg-1',
-    'original_units': 'kg/kg',
-    'history': "{}Z altered by F. Hellmuth: Converted units from 'kg kg-1' to 'g kg-1'. Interpolate data from hybrid-sigma levels to isobaric levels with geocat.comp.interpolation.interp_hybrid_to_pressure".format(now.strftime("%d/%m/%Y %H:%M:%S")),
-    'cell_methods': 'area: time: mean',
-    'cell_measures': 'area: areacella'})
-            
-        if var_id == 'clivi':
-            dset_dict[model][var_id] = dset_dict[model][var_id].assign_attrs({'standard_name': 'atmosphere_mass_content_of_cloud_ice',
-    'long_name': 'Ice Water Path',
-    'comment': 'mass of ice water in the column divided by the area of the column (not just the area of the cloudy portion of the column). Includes precipitating frozen hydrometeors ONLY if the precipitating hydrometeor affects the calculation of radiative transfer in model.',
-    'units': 'g m-2',
-    'original_units': 'kg m-2',
-    'history': "{}Z altered by F. Hellmuth: Converted units from 'kg m-2' to 'g m-2'.".format(now.strftime("%d/%m/%Y %H:%M:%S")),
-    'cell_methods': 'area: time: mean',
-    'cell_measures': 'area: areacella',})         
+    for var_id in dset_dict[model].keys():       
         if var_id == 'prsn':
             dset_dict[model][var_id] = dset_dict[model][var_id]*3600
             dset_dict[model][var_id] = dset_dict[model][var_id].assign_attrs({'standard_name': 'snowfall_flux',
@@ -326,42 +221,12 @@ for model in dset_dict.keys():
 # %% [markdown]
 #  ## Interpolate from CMIP6 hybrid sigma-pressure levels to ERA5 isobaric pressure levels
 # 
-# The vertical variables in the CMIP6 models are in hybrid sigma-pressure levels. Hence the vertical variable in the xarray datasets in `dset_dict` will be calculated by using the [GeoCAT-comb](https://geocat-comp.readthedocs.io/en/latest/index.html#) function to [interpolate data from hybrid-sigma levels to isobaric levels](https://geocat-comp.readthedocs.io/en/latest/user_api/generated/geocat.comp.interpolation.interp_hybrid_to_pressure.html#geocat.comp.interpolation.interp_hybrid_to_pressure).
-# 
-# The GeoCAT-comb function takes the following input:
-# * `data`:   Multidimensional data array, which holds hybrid-sigma levels and has a lev_dim coordinate.
-# * `ps`:     A multi-dimensional array of surface pressures (Pa), same time/space shape as data. Not all variables include the surface pressure, hence we will search the `Pangeo.io` catalog to find the surface pressure associated with the model. 
-# * `hyam`:     One-dimensional arrays containing the hybrid A coefficients. Must have the same dimension size as the lev_dim dimension of data.
-# * `hybm`:     One-dimensional arrays containing the hybrid B coefficients. Must have the same dimension size as the lev_dim dimension of data.
-# * `p0`:       Scalar numeric value equal to surface reference pressure (Pa). Defaults to 100000 Pa.
-# * `new_levels`: A one-dimensional array of output pressure levels (Pa). We will use the pressure of `air_temperature` (19 levels).
-# 
-# 
+# The vertical variables in the CMIP6 models are in hybrid sigma-pressure levels. Hence the vertical variable in the xarray datasets in `dset_dict` will be calculated by using the formula:
 # $$ P(i,j,k) = hyam(k) p0 + hybm(k) ps(i,j)$$
+# to calculate the pressure
 # 
-# ```
-# import geocat
 # 
-# geocat.comp.interpolation.interp_hybrid_to_pressure(data      =ds['variable'], 
-#                                                     ps        =ds['ps'], 
-#                                                     hyam      =ds['a'], 
-#                                                     hybm      =ds['b'], 
-#                                                     p0        =ds['p0'], 
-#                                                     new_levels=ds['plev'])
-# ```
 # 
-
-# %%
-new_levels = np.array([100000., 97500., 95000., 92500., 90000., 
-                       87500., 85000., 82500., 80000.,
-                       77500., 75000., 70000., 
-                       65000., 60000., 
-                       55000., 50000., 
-                       45000., 40000., 
-                       35000., 30000., 
-                       25000., 22500., 20000., 
-                       17500., 15000., 12500., 10000., 
-                       7000., 5000., 3000., 2000., 1000., 700., 500., 300., 200., 100.], dtype=np.float32)
 
 # %%
 # Rename datasets with different naming convention for constant hyam
@@ -386,18 +251,12 @@ for model in dset_dict.keys():
                 if ('lev' in list(dset_dict[model][var_id].coords)) == True and \
                     ('lev' in list(dset_dict[model]['ap'].coords)) == True and \
                     ('lev' in list(dset_dict[model]['b'].coords)) == True:
-                        print(model, 'lev, ap, ps, p0')
-                        dset_dict[model][var_id] = gc.interpolation.interp_hybrid_to_pressure(data = dset_dict[model][var_id],
-                                                                                                        ps   = dset_dict[model]['ps'], 
-                                                                                                        hyam = dset_dict[model]['ap'], 
-                                                                                                        hybm = dset_dict[model]['b'], 
-                                                                                                        p0   = dset_dict[model]['p0'], 
-                                                                                                        new_levels=new_levels,
-                                                                                                        lev_dim='lev')
-
+                        print(model, var_id, 'lev, ap, ps, p0')
+                        dset_dict[model]['plev'] = dset_dict[model]['ap']*dset_dict[model]['p0'] + dset_dict[model]['b']*dset_dict[model]['ps']
+                        dset_dict[model]['plev'] = dset_dict[model]['plev'].transpose('time', 'lev','lat','lon')
                 
                 if ('plev' in list(dset_dict[model][var_id].coords)) == True:
-                    print(model, 'variable on pressure levels', )
+                    print(model, var_id, 'variable on pressure levels', )
                 # if ('lev' in list(dset_dict[model][var_id].coords)) == True and \
                 #     ('lev' in list(dset_dict[model]['ap'].coords)) == False and \
                 #     ('lev' in list(dset_dict[model]['b'].coords)) == False:
@@ -410,17 +269,12 @@ for model in dset_dict.keys():
                 if ('lev' in list(dset_dict[model][var_id].coords)) == True and \
                     ('lev' in list(dset_dict[model]['ap'].coords)) == True and \
                     ('lev' in list(dset_dict[model]['b'].coords)) == True:
-                        print(model, 'lev, ap, ps,')
-                        dset_dict[model][var_id] = gc.interpolation.interp_hybrid_to_pressure(data = dset_dict[model][var_id],
-                                                                                                        ps   = dset_dict[model]['ps'], 
-                                                                                                        hyam = dset_dict[model]['ap'], 
-                                                                                                        hybm = dset_dict[model]['b'], 
-                                                                                                        new_levels=new_levels,
-                                                                                                        lev_dim='lev')
-
+                        print(model,var_id, 'lev, ap, ps,')
+                        dset_dict[model]['plev'] = dset_dict[model]['ap'] + dset_dict[model]['b']*dset_dict[model]['ps']
+                        dset_dict[model]['plev'] = dset_dict[model]['plev'].transpose('time', 'lev','lat','lon')
                 
                 if ('plev' in list(dset_dict[model][var_id].coords)) == True:
-                    print(model, 'variable on pressure levels', )
+                    print(model, var_id, 'variable on pressure levels', )
                 
             if ('b' in list(dset_dict[model].keys())) == True and \
                 ('orog' in list(dset_dict[model].keys())) == True:
@@ -428,70 +282,123 @@ for model in dset_dict.keys():
                     ('lev' in list(dset_dict[model]['pfull'].coords)) == True:
                         print(model, 'hybrid height coordinate')
                 
-                    
+
 
 # %% [markdown]
 # ## Calculate liquid water path from content
 
 # %%
 for model in dset_dict.keys():
-    if ('plev' in list(dset_dict[model]['clw'].coords)) == True:
+    
+    if ('plev' in list(dset_dict[model].keys())) == True:
+        print(model, 'plev')
         _lwp = xr.DataArray(data=da.full(shape=dset_dict[model]['clw'].shape,fill_value=np.nan),
-                            dims=dset_dict[model]['clw'].dims,
-                            coords=dset_dict[model]['clw'].coords)
-
-        dset_dict[model] = dset_dict[model].reindex(plev=dset_dict[model]['plev'][::-1])
-        for lev2, lev, i in zip(dset_dict[model]['plev'].values, dset_dict[model]['plev'][1:].values, range(1,len(dset_dict[model]['plev']))):
-            
+                                dims=dset_dict[model]['clw'].dims,
+                                coords=dset_dict[model]['clw'].coords)
+        # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
+        for i in range(len(dset_dict[model]['lev'])-1):
             # calculate pressure difference between two levels
-            dp = dset_dict[model]['plev'].sel(plev=slice(lev2,lev)).diff(dim='plev')
-            # calculate liquid water path in each layer
-            _lwp[:,i,:,:] = (dset_dict[model]['clw'].sel(plev=slice(lev2,lev)).diff(dim='plev') * 9.81 * dp)[:,0,:,:]
-            # sum over all layers to get the liquid water path in the atmospheric column
-            dset_dict[model]['lwp'] = _lwp.sum(dim='plev', skipna=True)
+            dp = (dset_dict[model]['plev'].isel(lev=i) - dset_dict[model]['plev'].isel(lev=i+1))
+            # calculate mean liquid water content between two layers
+            dlwc = (dset_dict[model]['clw'].isel(lev=i) + dset_dict[model]['clw'].isel(lev=i+1))/2
+            # calculate liquid water path between two layers
+            _lwp[:,i,:,:] = dp[:,:,:]/9.81 * dlwc[:,:,:]
+        
+            # sum over all layers to ge the liquid water path in the atmospheric column
+            dset_dict[model]['lwp'] = _lwp.sum(dim='lev',skipna=True)
+            
             # assign attributes to data array
             dset_dict[model]['lwp'] = dset_dict[model]['lwp'].assign_attrs(dset_dict[model]['clw'].attrs)
             dset_dict[model]['lwp'] = dset_dict[model]['lwp'].assign_attrs({'long_name':'Liquid Water Path', 
-                                                                            'mipTable':'', 'out_name': 'lwp',
-                                                                            'standard_name': 'atmosphere_mass_content_of_cloud_liquid_water',
-                                                                            'title': 'Liquid Water Path',
-                                                                            'variable_id': 'lwp', 'original_units': 'kg/kg',
-                                                                            'history': "{}Z altered by F. Hellmuth: Converted units from 'kg kg-1' to 'g kg-1'. Interpolate data from hybrid-sigma levels to isobaric levels with geocat.comp.interpolation.interp_hybrid_to_pressure. Calculate lwp with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
+                                                                            'units' : 'kg m-2',
+                                                                                'mipTable':'', 'out_name': 'lwp',
+                                                                                'standard_name': 'atmosphere_mass_content_of_cloud_liquid_water',
+                                                                                'title': 'Liquid Water Path',
+                                                                                'variable_id': 'lwp', 'original_units': 'kg/kg',
+                                                                                'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate lwp with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
         # when ice water path does not exist
         if ('clivi' in list(dset_dict[model].keys())) == False:
-            # print(model)
-            _iwp = xr.DataArray(data=da.full(shape=dset_dict[model]['cli'].shape, fill_value=np.nan,),
-                                dims=dset_dict[model]['cli'].dims,
-                                coords=dset_dict[model]['cli'].coords)
-            dset_dict[model] = dset_dict[model].reindex(plev=dset_dict[model]['plev'][::-1])
-            for lev2, lev, i in zip(dset_dict[model]['plev'].values, dset_dict[model]['plev'][1:].values, range(1,len(dset_dict[model]['plev']))):
-                
+            _iwp = xr.DataArray(data=da.full(shape=dset_dict[model]['cli'].shape,fill_value=np.nan),
+                                    dims=dset_dict[model]['cli'].dims,
+                                    coords=dset_dict[model]['cli'].coords)
+            # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
+            for i in range(len(dset_dict[model]['lev'])-1):
                 # calculate pressure difference between two levels
-                dp = dset_dict[model]['plev'].sel(plev=slice(lev2,lev)).diff(dim='plev')
-                # calculate Ice water path in each layer
-                _iwp[:,i,:,:] = (dset_dict[model]['cli'].sel(plev=slice(lev2,lev)).diff(dim='plev') * 9.81 * dp)[:,0,:,:]
-                # sum over all layers to get the Ice water path in the atmospheric column
-                dset_dict[model]['clivi'] = _iwp.sum(dim='plev', skipna=True)
+                dp = (dset_dict[model]['plev'].isel(lev=i) - dset_dict[model]['plev'].isel(lev=i+1))
+                # calculate mean liquid water content between two layers
+                diwc = (dset_dict[model]['cli'].isel(lev=i) + dset_dict[model]['cli'].isel(lev=i+1))/2
+                # calculate liquid water path between two layers
+                _iwp[:,i,:,:] = dp[:,:,:]/9.81 * diwc[:,:,:]
+            
+                
+                # sum over all layers to ge the Ice water path in the atmospheric column
+                dset_dict[model]['clivi'] = _iwp.sum(dim='lev',skipna=True)
+                
                 # assign attributes to data array
                 dset_dict[model]['clivi'] = dset_dict[model]['clivi'].assign_attrs(dset_dict[model]['cli'].attrs)
                 dset_dict[model]['clivi'] = dset_dict[model]['clivi'].assign_attrs({'long_name':'Ice Water Path', 
+                                                                                'units' : 'kg m-2',
                                                                                     'mipTable':'', 'out_name': 'clivi',
-                                                                                    'standard_name': 'atmosphere_mass_content_of_cloud_ice',
+                                                                                    'standard_name': 'atmosphere_mass_content_of_cloud_ice_water',
                                                                                     'title': 'Ice Water Path',
                                                                                     'variable_id': 'clivi', 'original_units': 'kg/kg',
-                                                                                    'history': "{}Z altered by F. Hellmuth: Converted units from 'kg kg-1' to 'g kg-1'. Interpolate data from hybrid-sigma levels to isobaric levels with geocat.comp.interpolation.interp_hybrid_to_pressure. Calculate clivi with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
-        
+                                                                                    'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate clivi with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
             
-    
-    if ('pfull' in list(dset_dict[model].keys())) == True:
+    if ('plev' in list(dset_dict[model].coords)) == True:
+        print(model, 'plev coord')
         _lwp = xr.DataArray(data=da.full(shape=dset_dict[model]['clw'].shape,fill_value=np.nan),
-                            dims=dset_dict[model]['clw'].dims,
-                            coords=dset_dict[model]['clw'].coords)
-        dset_dict[model] = dset_dict[model].reindex(lev=dset_dict[model]['lev'][::-1])
+                                dims=dset_dict[model]['clw'].dims,
+                                coords=dset_dict[model]['clw'].coords)
+        # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
+        for i in range(len(dset_dict[model]['plev'])-1):
+            # calculate pressure difference between two levels
+            dp = (dset_dict[model]['plev'].isel(plev=i) - dset_dict[model]['plev'].isel(plev=i+1))
+            # calculate mean liquid water content between two layers
+            dlwc = (dset_dict[model]['clw'].isel(plev=i) + dset_dict[model]['clw'].isel(plev=i+1))/2
+            # calculate liquid water path between two layers
+            _lwp[:,i,:,:] = dp/9.81 * dlwc[:,:,:]
         
+            # sum over all layers to ge the liquid water path in the atmospheric column
+            dset_dict[model]['lwp'] = _lwp.sum(dim='plev',skipna=True)
+            
+            # assign attributes to data array
+            dset_dict[model]['lwp'] = dset_dict[model]['lwp'].assign_attrs(dset_dict[model]['clw'].attrs)
+            dset_dict[model]['lwp'] = dset_dict[model]['lwp'].assign_attrs({'long_name':'Liquid Water Path', 
+                                                                            'units' : 'kg m-2',
+                                                                                'mipTable':'', 'out_name': 'lwp',
+                                                                                'standard_name': 'atmosphere_mass_content_of_cloud_liquid_water',
+                                                                                'title': 'Liquid Water Path',
+                                                                                'variable_id': 'lwp', 'original_units': 'kg/kg',
+                                                                                'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate lwp with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
+        # when ice water path does not exist
+        if ('clivi' in list(dset_dict[model].keys())) == False:
+            _iwp = xr.DataArray(data=da.full(shape=dset_dict[model]['cli'].shape,fill_value=np.nan),
+                                    dims=dset_dict[model]['cli'].dims,
+                                    coords=dset_dict[model]['cli'].coords)
+            # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
+            for i in range(len(dset_dict[model]['plev'])-1):
+                # calculate pressure difference between two levels
+                dp = (dset_dict[model]['plev'].isel(plev=i) - dset_dict[model]['plev'].isel(plev=i+1))
+                # calculate mean liquid water content between two layers
+                diwc = (dset_dict[model]['cli'].isel(plev=i) + dset_dict[model]['cli'].isel(plev=i+1))/2
+                # calculate liquid water path between two layers
+                _iwp[:,i,:,:] = dp/9.81 * diwc[:,:,:]
+            
+                
+                # sum over all layers to ge the Ice water path in the atmospheric column
+                dset_dict[model]['clivi'] = _iwp.sum(dim='plev',skipna=True)
+                
+                # assign attributes to data array
+                dset_dict[model]['clivi'] = dset_dict[model]['clivi'].assign_attrs(dset_dict[model]['clw'].attrs)
+                dset_dict[model]['clivi'] = dset_dict[model]['clivi'].assign_attrs({'long_name':'Ice Water Path', 
+                                                                                'units' : 'kg m-2',
+                                                                                    'mipTable':'', 'out_name': 'clivi',
+                                                                                    'standard_name': 'atmosphere_mass_content_of_cloud_ice_water',
+                                                                                    'title': 'Ice Water Path',
+                                                                                    'variable_id': 'clivi', 'original_units': 'kg/kg',
+                                                                                    'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate clivi with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
+            
 
-# %% [markdown]
-# 
 
 # %% [markdown]
 # # Set values between -45S and 45N to nan
@@ -548,8 +455,11 @@ for model in dset_dict.keys():
                 except ValueError:
                     print('model does not contain')
 
+
+
 # %% [markdown]
 # ## Create files with variables needed
+
 
 # %%
 for model in dset_dict.keys():
@@ -558,3 +468,4 @@ for model in dset_dict.keys():
             print('Writing files: var: {}, year: {}, model: {}'.format(var, year, model))
             (dset_dict[model][var].sel(time=slice(str(year)), lat=slice(-90,-45))).to_netcdf('{}/{}_{}_-90_-45_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
             (dset_dict[model][var].sel(time=slice(str(year)), lat=slice(45,90))).to_netcdf('{}/{}_{}_45_90_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
+
