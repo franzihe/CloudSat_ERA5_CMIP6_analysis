@@ -150,14 +150,14 @@ variable_id = ['clw', 'cli', 'clivi', 'tas', 'prsn']
 # %%
 # source_id
 list_models = [
-               'MIROC6', 
-            #    'CESM2', 
+            #    'MIROC6', 
+               # 'CESM2', 
             #    'CanESM5', 
             #    'AWI-ESM-1-1-LR', 
             #    'MPI-ESM1-2-LR', 
             # #    'UKESM1-0-LL', 
             # #    'HadGEM3-GC31-LL',
-            #    'CNRM-CM6-1',
+               'CNRM-CM6-1',
             #    'CNRM-ESM2-1',
             #    'IPSL-CM6A-LR',
             #    'IPSL-CM5A2-INCA'
@@ -175,7 +175,7 @@ t_res = ['day',]
 # . 
 
 # %%
-starty = 2006; endy = 2009
+starty = 2006; endy = 2006
 year_range = range(starty, endy+1)
 
 dset_dict = dict()
@@ -190,15 +190,11 @@ for model in list_models:
     else:
         continue
 
-
-
 # %% [markdown]
 # ## Assign attributes to the variables
 # 
 # We will assign the attributes to the variables as in ERA5 to make CMIP6 and ERA5 variables comperable.
 # 
-# * [`cli`](http://clipc-services.ceda.ac.uk/dreq/u/dd916e3e2eca18cda5d9f81749d0c91c.html) and [`clw`](http://clipc-services.ceda.ac.uk/dreq/u/86b2b3318a73839edfafa9d46864aadc.html) in **kg kg-1** $\rightarrow$ Multiply by **1000** to get **g kg-1**
-# * [`clivi`](http://clipc-services.ceda.ac.uk/dreq/u/73c496f5669cc122cf1cddfe4df2a27a.html) and [`lwp`](http://clipc-services.ceda.ac.uk/dreq/u/e6b31a1928879fcd3c92fe7b592f070e.html) in **kg m-2** $\rightarrow$ Multiply by **1000** to get **g m-2**
 # * [`pr`](http://clipc-services.ceda.ac.uk/dreq/u/62f26742cf240c1b5169a5cd511196b6.html) and [`prsn`](http://clipc-services.ceda.ac.uk/dreq/u/051919eddec810e292c883205c944ceb.html) in **kg m-2 s-1** $\rightarrow$ Multiply by **3600** to get **mm h-1**
 # 
 
@@ -206,7 +202,8 @@ for model in list_models:
 now = datetime.utcnow()
 for model in dset_dict.keys():
 # 
-    for var_id in dset_dict[model].keys():       
+    for var_id in dset_dict[model].keys():
+         
         if var_id == 'prsn':
             dset_dict[model][var_id] = dset_dict[model][var_id]*3600
             dset_dict[model][var_id] = dset_dict[model][var_id].assign_attrs({'standard_name': 'snowfall_flux',
@@ -252,6 +249,13 @@ for model in dset_dict.keys():
                     ('lev' in list(dset_dict[model]['ap'].coords)) == True and \
                     ('lev' in list(dset_dict[model]['b'].coords)) == True:
                         print(model, var_id, 'lev, ap, ps, p0')
+                        # dset_dict[model][var_id] = gc.interpolation.interp_hybrid_to_pressure(data = dset_dict[model][var_id],
+                        #                                                                                 ps   = dset_dict[model]['ps'], 
+                        #                                                                                 hyam = dset_dict[model]['ap'], 
+                        #                                                                                 hybm = dset_dict[model]['b'], 
+                        #                                                                                 p0   = dset_dict[model]['p0'], 
+                        #                                                                                 new_levels=new_levels,
+                        #                                                                                 lev_dim='lev')
                         dset_dict[model]['plev'] = dset_dict[model]['ap']*dset_dict[model]['p0'] + dset_dict[model]['b']*dset_dict[model]['ps']
                         dset_dict[model]['plev'] = dset_dict[model]['plev'].transpose('time', 'lev','lat','lon')
                 
@@ -270,6 +274,12 @@ for model in dset_dict.keys():
                     ('lev' in list(dset_dict[model]['ap'].coords)) == True and \
                     ('lev' in list(dset_dict[model]['b'].coords)) == True:
                         print(model,var_id, 'lev, ap, ps,')
+                        # dset_dict[model][var_id] = gc.interpolation.interp_hybrid_to_pressure(data = dset_dict[model][var_id],
+                        #                                                                                 ps   = dset_dict[model]['ps'], 
+                        #                                                                                 hyam = dset_dict[model]['ap'], 
+                        #                                                                                 hybm = dset_dict[model]['b'], 
+                        #                                                                                 new_levels=new_levels,
+                        #                                                                                 lev_dim='lev')
                         dset_dict[model]['plev'] = dset_dict[model]['ap'] + dset_dict[model]['b']*dset_dict[model]['ps']
                         dset_dict[model]['plev'] = dset_dict[model]['plev'].transpose('time', 'lev','lat','lon')
                 
@@ -399,73 +409,30 @@ for model in dset_dict.keys():
                                                                                     'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate clivi with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
             
 
-
-# %% [markdown]
-# # Set values between -45S and 45N to nan
-
-# %%
-def set3D_lat_values_nan(array, upper_lat, lower_lat):
-    l_lat = array['lat'].loc[array['lat'] == (array['lat'].sel(lat=slice(lower_lat,upper_lat))).min()][0].values
-    u_lat = array['lat'].loc[array['lat'] == (array['lat'].sel(lat=slice(lower_lat,upper_lat))).max()][0].values
-    array[:,array['lat'].where(array['lat']==l_lat).argmin('lat').values: array['lat'].where(array['lat']==u_lat).argmin('lat').values,:] = xr.DataArray(data=da.full(shape=(array[:,array['lat'].where(array['lat']==l_lat).argmin('lat').values: array['lat'].where(array['lat']==u_lat).argmin('lat').values,:]).shape,
-                                                                                                                                                                      fill_value=np.nan),
-                                                                                                                                                         dims=(array[:,array['lat'].where(array['lat']==l_lat).argmin('lat').values: array['lat'].where(array['lat']==u_lat).argmin('lat').values,:]).dims,
-                                                                                                                                                         coords=(array[:,array['lat'].where(array['lat']==l_lat).argmin('lat').values: array['lat'].where(array['lat']==u_lat).argmin('lat').values,:]).coords)
-    return array
-    
-
-# %%
-for model in dset_dict.keys():
-    
-    dset_dict[model]['prsn'] = set3D_lat_values_nan(dset_dict[model]['prsn'], 45, -45)
-    dset_dict[model]['lwp']  = set3D_lat_values_nan(dset_dict[model]['lwp'], 45, -45)
-    dset_dict[model]['clivi']= set3D_lat_values_nan(dset_dict[model]['clivi'], 45, -45)
-    dset_dict[model]['tas']  = set3D_lat_values_nan(dset_dict[model]['tas'], 45, -45)
-
-# %% [markdown]
-# ## Reduce dataset to only include 3D values (time,lat,lon)
-
-# %%
-for model in dset_dict.keys():
-    if 'plev' in list(dset_dict[model].dims) and 'lev' in list(dset_dict[model].dims):
-        # print('drop: plev, lev', list(dset_dict[model].dims))
-        dset_dict[model] = dset_dict[model].drop_dims(('lev', 'plev'))
-        try: 
-            dset_dict[model] = dset_dict[model].drop_dims(('nbnd'))
-        except ValueError:
-            try:
-                dset_dict[model] = dset_dict[model].drop_dims(('bnds'))
-            except ValueError:
-                try: 
-                    dset_dict[model] = dset_dict[model].drop_dims(('axis_nbounds'))
-                except ValueError:
-                    print('model does not contain')
-                
-    if 'plev' in list(dset_dict[model].dims) and 'klevp1' in list(dset_dict[model].dims):
-        # print('drop: plev, kplev1', list(dset_dict[model].dims))
-        dset_dict[model] = dset_dict[model].drop_dims(('plev', 'klevp1'))
-        try: 
-            dset_dict[model] = dset_dict[model].drop_dims(('nbnd'))
-        except ValueError:
-            try:
-                dset_dict[model] = dset_dict[model].drop_dims(('bnds'))
-            except ValueError:
-                try: 
-                    dset_dict[model] = dset_dict[model].drop_dims(('axis_nbounds'))
-                except ValueError:
-                    print('model does not contain')
-
-
-
-# %% [markdown]
-# ## Create files with variables needed
-
-
 # %%
 for model in dset_dict.keys():
     for var in ['prsn', 'tas', 'clivi', 'lwp',]:
         for year in year_range:
             print('Writing files: var: {}, year: {}, model: {}'.format(var, year, model))
-            (dset_dict[model][var].sel(time=slice(str(year)), lat=slice(-90,-45))).to_netcdf('{}/{}_{}_-90_-45_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
             (dset_dict[model][var].sel(time=slice(str(year)), lat=slice(45,90))).to_netcdf('{}/{}_{}_45_90_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
+            (dset_dict[model][var].sel(time=slice(str(year)), lat=slice(-90,-45))).to_netcdf('{}/{}_{}_-90_-45_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
+            
+            # (dset_dict[model][var].sel(time=slice(str(year)), lat=slice(-90,-45))).to_netcdf('{}/{}_{}_-90_-45_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
+            # (dset_dict[model][var].sel(time=slice(str(year)), lat=slice(45,90))).to_netcdf('{}/{}_{}_45_90_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
+
+# %%
+
+
+# %% [markdown]
+# 
+# <img src="https://drive.google.com/uc?id=1zb0LHvipx8JOXLLrCxzYToJM7eNK4eaw"  height="100" />
+# <img src="https://reliance.rohub.org/static/media/Reliance-logo.433dc2e9.png"  height="100" />
+# 
+# <img src="https://www.uio.no/vrtx/decorating/resources/dist/src2/images/footer/uio-logo-en.svg"  height="100" />
+# <img src="https://erc.europa.eu/sites/default/files/logo_0.png"  height="100" />
+# 
+
+# %% [markdown]
+# 
+
 
