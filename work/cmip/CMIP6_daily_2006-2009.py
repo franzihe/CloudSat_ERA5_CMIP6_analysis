@@ -150,17 +150,17 @@ variable_id = ['clw', 'cli', 'clivi', 'tas', 'prsn']
 # %%
 # source_id
 list_models = [
-            #    'MIROC6', 
-               # 'CESM2', 
-            #    'CanESM5', 
-            #    'AWI-ESM-1-1-LR', 
-            #    'MPI-ESM1-2-LR', 
+               'MIROC6', 
+               'CESM2', 
+               'CanESM5', 
+               'AWI-ESM-1-1-LR', 
+               'MPI-ESM1-2-LR', 
             # #    'UKESM1-0-LL', 
             # #    'HadGEM3-GC31-LL',
-               'CNRM-CM6-1',
-            #    'CNRM-ESM2-1',
-            #    'IPSL-CM6A-LR',
-            #    'IPSL-CM5A2-INCA'
+               # 'CNRM-CM6-1',
+               # 'CNRM-ESM2-1',
+               'IPSL-CM6A-LR',
+               'IPSL-CM5A2-INCA'
             ]
 
 ## experiment
@@ -175,151 +175,262 @@ t_res = ['day',]
 # . 
 
 # %%
-starty = 2006; endy = 2006
+def search_data(cmip_in, t_res, list_models, year_range):
+    dset_dict = dict()
+    for model in list_models:
+        cmip_file_in = glob('{}/*{}_{}_{}*'.format(cmip_in, t_res[0], model, experiment_id[0]))
+        if len(cmip_file_in) != 0:
+            dset_dict[model] = xr.open_mfdataset(sorted(cmip_file_in), combine='nested', compat='override', use_cftime=True, parallel =True)
+            # select only years needed for analysis
+            dset_dict[model] = dset_dict[model].sel(time = dset_dict[model]['time'].dt.year.isin(year_range)).squeeze()
+            # shift longitude to be from -180 to 180
+            dset_dict[model] = dset_dict[model].assign_coords(lon=(((dset_dict[model]['lon'] + 180) % 360) - 180)).sortby('lon').sortby('time')
+        else:
+            continue
+    
+    return dset_dict    
+
+# %%
+starty = 2006; endy = 2009
 year_range = range(starty, endy+1)
 
-dset_dict = dict()
-for model in list_models:
-    cmip_file_in = glob('{}/*{}_{}_{}*'.format(cmip_in, t_res[0], model, experiment_id[0]))
-    if len(cmip_file_in) != 0:
-        dset_dict[model] = xr.open_mfdataset(sorted(cmip_file_in), combine='nested', compat='override', use_cftime=True)
-        # select only years needed for analysis
-        dset_dict[model] = dset_dict[model].sel(time = dset_dict[model]['time'].dt.year.isin(year_range)).squeeze()
-        # shift longitude to be from -180 to 180
-        dset_dict[model] = dset_dict[model].assign_coords(lon=(((dset_dict[model]['lon'] + 180) % 360) - 180)).sortby('lon').sortby('time')
-    else:
-        continue
+# dset_dict = search_data(cmip_in, t_res, list_models, year_range)
+# dset_dict = dict()
+# for model in list_models:
+#     cmip_file_in = glob('{}/*{}_{}_{}*'.format(cmip_in, t_res[0], model, experiment_id[0]))
+#     if len(cmip_file_in) != 0:
+#         dset_dict[model] = xr.open_mfdataset(sorted(cmip_file_in), combine='nested', compat='override', use_cftime=True)
+#         # select only years needed for analysis
+#         dset_dict[model] = dset_dict[model].sel(time = dset_dict[model]['time'].dt.year.isin(year_range)).squeeze()
+#         # shift longitude to be from -180 to 180
+#         dset_dict[model] = dset_dict[model].assign_coords(lon=(((dset_dict[model]['lon'] + 180) % 360) - 180)).sortby('lon').sortby('time')
+#     else:
+#         continue
 
 # %% [markdown]
 # ## Assign attributes to the variables
-# 
+#  
 # We will assign the attributes to the variables as in ERA5 to make CMIP6 and ERA5 variables comperable.
-# 
-# * [`pr`](http://clipc-services.ceda.ac.uk/dreq/u/62f26742cf240c1b5169a5cd511196b6.html) and [`prsn`](http://clipc-services.ceda.ac.uk/dreq/u/051919eddec810e292c883205c944ceb.html) in **kg m-2 s-1** $\rightarrow$ Multiply by **3600** to get **mm h-1**
-# 
+#  
+# * [`pr`](http://clipc-services.ceda.ac.uk/dreq/u/62f26742cf240c1b5169a5cd511196b6.html) and [`prsn`](http://clipc-services.ceda.ac.uk/dreq/u/051919eddec810e292c883205c944ceb.html) in **kg m-2 s-1** $\rightarrow$ Multiply by **3600** to get **mm h-1** $\rightarrow$ Multiply by **24** to get **mm day-1**
+#  
 
 # %%
-now = datetime.utcnow()
-for model in dset_dict.keys():
-# 
-    for var_id in dset_dict[model].keys():
+def assign_att(dset):
+    now = datetime.utcnow()
+    # 
+    for var_id in dset.keys():
+            
+            if var_id == 'prsn':
+                dset[var_id] = dset[var_id]*3600*24
+                dset[var_id] = dset[var_id].assign_attrs({'standard_name': 'snowfall_flux',
+        'long_name': 'Snowfall Flux',
+        'comment': 'At surface; includes precipitation of all forms of water in the solid phase',
+        'units': 'mm day-1',
+        'original_units': 'kg m-2 s-1',
+        'history': "{}Z altered by F. Hellmuth: Converted units from 'kg m-2 s-1' to 'kg m-2 day-1'.".format(now.strftime("%d/%m/%Y %H:%M:%S")),
+        'cell_methods': 'area: time: mean',
+        'cell_measures': 'area: areacella'})
+                
+        
+                
+    return dset
+
+# %%
+# for model in dset_dict.keys():
+#     dset_dict[model] = assign_att(dset_dict[model])
+
+# %%
+# now = datetime.utcnow()
+# for model in dset_dict.keys():
+# # 
+#     for var_id in dset_dict[model].keys():
          
-        if var_id == 'prsn':
-            dset_dict[model][var_id] = dset_dict[model][var_id]*3600
-            dset_dict[model][var_id] = dset_dict[model][var_id].assign_attrs({'standard_name': 'snowfall_flux',
-    'long_name': 'Snowfall Flux',
-    'comment': 'At surface; includes precipitation of all forms of water in the solid phase',
-    'units': 'mm h-1',
-    'original_units': 'kg m-2 s-1',
-    'history': "{}Z altered by F. Hellmuth: Converted units from 'kg m-2 s-1' to 'mm h-1'.".format(now.strftime("%d/%m/%Y %H:%M:%S")),
-    'cell_methods': 'area: time: mean',
-    'cell_measures': 'area: areacella'})
+#         if var_id == 'prsn':
+#             dset_dict[model][var_id] = dset_dict[model][var_id]*3600
+#             dset_dict[model][var_id] = dset_dict[model][var_id].assign_attrs({'standard_name': 'snowfall_flux',
+#     'long_name': 'Snowfall Flux',
+#     'comment': 'At surface; includes precipitation of all forms of water in the solid phase',
+#     'units': 'mm h-1',
+#     'original_units': 'kg m-2 s-1',
+#     'history': "{}Z altered by F. Hellmuth: Converted units from 'kg m-2 s-1' to 'mm h-1'.".format(now.strftime("%d/%m/%Y %H:%M:%S")),
+#     'cell_methods': 'area: time: mean',
+#     'cell_measures': 'area: areacella'})
 
 # %% [markdown]
-#  ## Interpolate from CMIP6 hybrid sigma-pressure levels to ERA5 isobaric pressure levels
+# ## Interpolate from CMIP6 hybrid sigma-pressure levels to ERA5 isobaric pressure levels
 # 
 # The vertical variables in the CMIP6 models are in hybrid sigma-pressure levels. Hence the vertical variable in the xarray datasets in `dset_dict` will be calculated by using the formula:
 # $$ P(i,j,k) = hyam(k) p0 + hybm(k) ps(i,j)$$
 # to calculate the pressure
-# 
-# 
-# 
 
 # %%
+def interp_hybrid_plev(dset, model):
 # Rename datasets with different naming convention for constant hyam
-for model in dset_dict.keys():
-    if ('a' in list(dset_dict[model].keys())) == True:
-        dset_dict[model] = dset_dict[model].rename({'a':'ap', 'a_bnds': 'ap_bnds'})
+    if ('a' in list(dset.keys())) == True:
+        dset = dset.rename({'a':'ap', 'a_bnds': 'ap_bnds'})
     if model == 'IPSL-CM6A-LR':
-        dset_dict[model] = dset_dict[model].rename({'presnivs':'plev'})
+        dset = dset.rename({'presnivs':'plev'})
     if model == 'IPSL-CM5A2-INCA':
-        dset_dict[model] = dset_dict[model].rename({'lev':'plev'})
-    
-
-# %%
-for model in dset_dict.keys():
-    for var_id in dset_dict[model].keys():#['clw', 'cli']:
+        dset = dset.rename({'lev':'plev'})  
+        
+    for var_id in dset.keys():#['clw', 'cli']:
         if var_id == 'clw' or var_id == 'cli':
             # Convert the model level to isobaric levels
             #### ap, b, ps, p0
-            if ('ap' in list(dset_dict[model].keys())) == True and \
-                ('ps' in list(dset_dict[model].keys())) == True and \
-                ('p0' in list(dset_dict[model].keys())) == True:
-                if ('lev' in list(dset_dict[model][var_id].coords)) == True and \
-                    ('lev' in list(dset_dict[model]['ap'].coords)) == True and \
-                    ('lev' in list(dset_dict[model]['b'].coords)) == True:
+            if ('ap' in list(dset.keys())) == True and \
+                ('ps' in list(dset.keys())) == True and \
+                ('p0' in list(dset.keys())) == True:
+                if ('lev' in list(dset[var_id].coords)) == True and \
+                    ('lev' in list(dset['ap'].coords)) == True and \
+                    ('lev' in list(dset['b'].coords)) == True:
                         print(model, var_id, 'lev, ap, ps, p0')
-                        # dset_dict[model][var_id] = gc.interpolation.interp_hybrid_to_pressure(data = dset_dict[model][var_id],
-                        #                                                                                 ps   = dset_dict[model]['ps'], 
-                        #                                                                                 hyam = dset_dict[model]['ap'], 
-                        #                                                                                 hybm = dset_dict[model]['b'], 
-                        #                                                                                 p0   = dset_dict[model]['p0'], 
+                        # dset[var_id] = gc.interpolation.interp_hybrid_to_pressure(data = dset[var_id],
+                        #                                                                                 ps   = dset['ps'], 
+                        #                                                                                 hyam = dset['ap'], 
+                        #                                                                                 hybm = dset['b'], 
+                        #                                                                                 p0   = dset['p0'], 
                         #                                                                                 new_levels=new_levels,
                         #                                                                                 lev_dim='lev')
-                        dset_dict[model]['plev'] = dset_dict[model]['ap']*dset_dict[model]['p0'] + dset_dict[model]['b']*dset_dict[model]['ps']
-                        dset_dict[model]['plev'] = dset_dict[model]['plev'].transpose('time', 'lev','lat','lon')
+                        dset['plev'] = dset['ap']*dset['p0'] + dset['b']*dset['ps']
+                        dset['plev'] = dset['plev'].transpose('time', 'lev','lat','lon')
                 
-                if ('plev' in list(dset_dict[model][var_id].coords)) == True:
+                if ('plev' in list(dset[var_id].coords)) == True:
                     print(model, var_id, 'variable on pressure levels', )
-                # if ('lev' in list(dset_dict[model][var_id].coords)) == True and \
-                #     ('lev' in list(dset_dict[model]['ap'].coords)) == False and \
-                #     ('lev' in list(dset_dict[model]['b'].coords)) == False:
+                # if ('lev' in list(dset[var_id].coords)) == True and \
+                #     ('lev' in list(dset['ap'].coords)) == False and \
+                #     ('lev' in list(dset['b'].coords)) == False:
                 #         print(model, 'variable on pressure levels', 'lev, ap, ps,')
             # Convert the model level to isobaric levels
             #### ap, b, p0
-            if ('ap' in list(dset_dict[model].keys())) == True and \
-                ('ps' in list(dset_dict[model].keys())) == True and \
-                ('p0' in list(dset_dict[model].keys())) == False:
-                if ('lev' in list(dset_dict[model][var_id].coords)) == True and \
-                    ('lev' in list(dset_dict[model]['ap'].coords)) == True and \
-                    ('lev' in list(dset_dict[model]['b'].coords)) == True:
+            if ('ap' in list(dset.keys())) == True and \
+                ('ps' in list(dset.keys())) == True and \
+                ('p0' in list(dset.keys())) == False:
+                if ('lev' in list(dset[var_id].coords)) == True and \
+                    ('lev' in list(dset['ap'].coords)) == True and \
+                    ('lev' in list(dset['b'].coords)) == True:
                         print(model,var_id, 'lev, ap, ps,')
-                        # dset_dict[model][var_id] = gc.interpolation.interp_hybrid_to_pressure(data = dset_dict[model][var_id],
-                        #                                                                                 ps   = dset_dict[model]['ps'], 
-                        #                                                                                 hyam = dset_dict[model]['ap'], 
-                        #                                                                                 hybm = dset_dict[model]['b'], 
+                        # dset[var_id] = gc.interpolation.interp_hybrid_to_pressure(data = dset[var_id],
+                        #                                                                                 ps   = dset['ps'], 
+                        #                                                                                 hyam = dset['ap'], 
+                        #                                                                                 hybm = dset['b'], 
                         #                                                                                 new_levels=new_levels,
                         #                                                                                 lev_dim='lev')
-                        dset_dict[model]['plev'] = dset_dict[model]['ap'] + dset_dict[model]['b']*dset_dict[model]['ps']
-                        dset_dict[model]['plev'] = dset_dict[model]['plev'].transpose('time', 'lev','lat','lon')
+                        dset['plev'] = dset['ap'] + dset['b']*dset['ps']
+                        dset['plev'] = dset['plev'].transpose('time', 'lev','lat','lon')
                 
-                if ('plev' in list(dset_dict[model][var_id].coords)) == True:
+                if ('plev' in list(dset[var_id].coords)) == True:
                     print(model, var_id, 'variable on pressure levels', )
                 
-            if ('b' in list(dset_dict[model].keys())) == True and \
-                ('orog' in list(dset_dict[model].keys())) == True:
-                if ('lev' in list(dset_dict[model][var_id].coords)) == True and \
-                    ('lev' in list(dset_dict[model]['pfull'].coords)) == True:
+            if ('b' in list(dset.keys())) == True and \
+                ('orog' in list(dset.keys())) == True:
+                if ('lev' in list(dset[var_id].coords)) == True and \
+                    ('lev' in list(dset['pfull'].coords)) == True:
                         print(model, 'hybrid height coordinate')
                 
+        
+    return dset  
 
+# %%
+# for model in dset_dict.keys():
+#     dset_dict[model] = interp_hybrid_plev(dset_dict[model])
+
+# %%
+# # Rename datasets with different naming convention for constant hyam
+# for model in dset_dict.keys():
+#     if ('a' in list(dset_dict[model].keys())) == True:
+#         dset_dict[model] = dset_dict[model].rename({'a':'ap', 'a_bnds': 'ap_bnds'})
+#     if model == 'IPSL-CM6A-LR':
+#         dset_dict[model] = dset_dict[model].rename({'presnivs':'plev'})
+#     if model == 'IPSL-CM5A2-INCA':
+#         dset_dict[model] = dset_dict[model].rename({'lev':'plev'})
+    
+
+
+# %%
+# for model in dset_dict.keys():
+#     for var_id in dset_dict[model].keys():#['clw', 'cli']:
+#         if var_id == 'clw' or var_id == 'cli':
+#             # Convert the model level to isobaric levels
+#             #### ap, b, ps, p0
+#             if ('ap' in list(dset_dict[model].keys())) == True and \
+#                 ('ps' in list(dset_dict[model].keys())) == True and \
+#                 ('p0' in list(dset_dict[model].keys())) == True:
+#                 if ('lev' in list(dset_dict[model][var_id].coords)) == True and \
+#                     ('lev' in list(dset_dict[model]['ap'].coords)) == True and \
+#                     ('lev' in list(dset_dict[model]['b'].coords)) == True:
+#                         print(model, var_id, 'lev, ap, ps, p0')
+#                         # dset_dict[model][var_id] = gc.interpolation.interp_hybrid_to_pressure(data = dset_dict[model][var_id],
+#                         #                                                                                 ps   = dset_dict[model]['ps'], 
+#                         #                                                                                 hyam = dset_dict[model]['ap'], 
+#                         #                                                                                 hybm = dset_dict[model]['b'], 
+#                         #                                                                                 p0   = dset_dict[model]['p0'], 
+#                         #                                                                                 new_levels=new_levels,
+#                         #                                                                                 lev_dim='lev')
+#                         dset_dict[model]['plev'] = dset_dict[model]['ap']*dset_dict[model]['p0'] + dset_dict[model]['b']*dset_dict[model]['ps']
+#                         dset_dict[model]['plev'] = dset_dict[model]['plev'].transpose('time', 'lev','lat','lon')
+                
+#                 if ('plev' in list(dset_dict[model][var_id].coords)) == True:
+#                     print(model, var_id, 'variable on pressure levels', )
+#                 # if ('lev' in list(dset_dict[model][var_id].coords)) == True and \
+#                 #     ('lev' in list(dset_dict[model]['ap'].coords)) == False and \
+#                 #     ('lev' in list(dset_dict[model]['b'].coords)) == False:
+#                 #         print(model, 'variable on pressure levels', 'lev, ap, ps,')
+#             # Convert the model level to isobaric levels
+#             #### ap, b, p0
+#             if ('ap' in list(dset_dict[model].keys())) == True and \
+#                 ('ps' in list(dset_dict[model].keys())) == True and \
+#                 ('p0' in list(dset_dict[model].keys())) == False:
+#                 if ('lev' in list(dset_dict[model][var_id].coords)) == True and \
+#                     ('lev' in list(dset_dict[model]['ap'].coords)) == True and \
+#                     ('lev' in list(dset_dict[model]['b'].coords)) == True:
+#                         print(model,var_id, 'lev, ap, ps,')
+#                         # dset_dict[model][var_id] = gc.interpolation.interp_hybrid_to_pressure(data = dset_dict[model][var_id],
+#                         #                                                                                 ps   = dset_dict[model]['ps'], 
+#                         #                                                                                 hyam = dset_dict[model]['ap'], 
+#                         #                                                                                 hybm = dset_dict[model]['b'], 
+#                         #                                                                                 new_levels=new_levels,
+#                         #                                                                                 lev_dim='lev')
+#                         dset_dict[model]['plev'] = dset_dict[model]['ap'] + dset_dict[model]['b']*dset_dict[model]['ps']
+#                         dset_dict[model]['plev'] = dset_dict[model]['plev'].transpose('time', 'lev','lat','lon')
+                
+#                 if ('plev' in list(dset_dict[model][var_id].coords)) == True:
+#                     print(model, var_id, 'variable on pressure levels', )
+                
+#             if ('b' in list(dset_dict[model].keys())) == True and \
+#                 ('orog' in list(dset_dict[model].keys())) == True:
+#                 if ('lev' in list(dset_dict[model][var_id].coords)) == True and \
+#                     ('lev' in list(dset_dict[model]['pfull'].coords)) == True:
+#                         print(model, 'hybrid height coordinate')
+                
 
 # %% [markdown]
 # ## Calculate liquid water path from content
 
 # %%
-for model in dset_dict.keys():
+def calc_water_path(dset, model):
+    now = datetime.utcnow()
     
-    if ('plev' in list(dset_dict[model].keys())) == True:
+    if ('plev' in list(dset.keys())) == True:
         print(model, 'plev')
-        _lwp = xr.DataArray(data=da.full(shape=dset_dict[model]['clw'].shape,fill_value=np.nan),
-                                dims=dset_dict[model]['clw'].dims,
-                                coords=dset_dict[model]['clw'].coords)
+        _lwp = xr.DataArray(data=da.full(shape=dset['clw'].shape,fill_value=np.nan),
+                                dims=dset['clw'].dims,
+                                coords=dset['clw'].coords)
         # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
-        for i in range(len(dset_dict[model]['lev'])-1):
+        for i in range(len(dset['lev'])-1):
             # calculate pressure difference between two levels
-            dp = (dset_dict[model]['plev'].isel(lev=i) - dset_dict[model]['plev'].isel(lev=i+1))
+            dp = (dset['plev'].isel(lev=i) - dset['plev'].isel(lev=i+1))
             # calculate mean liquid water content between two layers
-            dlwc = (dset_dict[model]['clw'].isel(lev=i) + dset_dict[model]['clw'].isel(lev=i+1))/2
+            dlwc = (dset['clw'].isel(lev=i) + dset['clw'].isel(lev=i+1))/2
             # calculate liquid water path between two layers
             _lwp[:,i,:,:] = dp[:,:,:]/9.81 * dlwc[:,:,:]
         
             # sum over all layers to ge the liquid water path in the atmospheric column
-            dset_dict[model]['lwp'] = _lwp.sum(dim='lev',skipna=True)
+            dset['lwp'] = _lwp.sum(dim='lev',skipna=True)
             
             # assign attributes to data array
-            dset_dict[model]['lwp'] = dset_dict[model]['lwp'].assign_attrs(dset_dict[model]['clw'].attrs)
-            dset_dict[model]['lwp'] = dset_dict[model]['lwp'].assign_attrs({'long_name':'Liquid Water Path', 
+            dset['lwp'] = dset['lwp'].assign_attrs(dset['clw'].attrs)
+            dset['lwp'] = dset['lwp'].assign_attrs({'long_name':'Liquid Water Path', 
                                                                             'units' : 'kg m-2',
                                                                                 'mipTable':'', 'out_name': 'lwp',
                                                                                 'standard_name': 'atmosphere_mass_content_of_cloud_liquid_water',
@@ -327,26 +438,26 @@ for model in dset_dict.keys():
                                                                                 'variable_id': 'lwp', 'original_units': 'kg/kg',
                                                                                 'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate lwp with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
         # when ice water path does not exist
-        if ('clivi' in list(dset_dict[model].keys())) == False:
-            _iwp = xr.DataArray(data=da.full(shape=dset_dict[model]['cli'].shape,fill_value=np.nan),
-                                    dims=dset_dict[model]['cli'].dims,
-                                    coords=dset_dict[model]['cli'].coords)
+        if ('clivi' in list(dset.keys())) == False:
+            _iwp = xr.DataArray(data=da.full(shape=dset['cli'].shape,fill_value=np.nan),
+                                    dims=dset['cli'].dims,
+                                    coords=dset['cli'].coords)
             # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
-            for i in range(len(dset_dict[model]['lev'])-1):
+            for i in range(len(dset['lev'])-1):
                 # calculate pressure difference between two levels
-                dp = (dset_dict[model]['plev'].isel(lev=i) - dset_dict[model]['plev'].isel(lev=i+1))
+                dp = (dset['plev'].isel(lev=i) - dset['plev'].isel(lev=i+1))
                 # calculate mean liquid water content between two layers
-                diwc = (dset_dict[model]['cli'].isel(lev=i) + dset_dict[model]['cli'].isel(lev=i+1))/2
+                diwc = (dset['cli'].isel(lev=i) + dset['cli'].isel(lev=i+1))/2
                 # calculate liquid water path between two layers
                 _iwp[:,i,:,:] = dp[:,:,:]/9.81 * diwc[:,:,:]
             
                 
                 # sum over all layers to ge the Ice water path in the atmospheric column
-                dset_dict[model]['clivi'] = _iwp.sum(dim='lev',skipna=True)
+                dset['clivi'] = _iwp.sum(dim='lev',skipna=True)
                 
                 # assign attributes to data array
-                dset_dict[model]['clivi'] = dset_dict[model]['clivi'].assign_attrs(dset_dict[model]['cli'].attrs)
-                dset_dict[model]['clivi'] = dset_dict[model]['clivi'].assign_attrs({'long_name':'Ice Water Path', 
+                dset['clivi'] = dset['clivi'].assign_attrs(dset['cli'].attrs)
+                dset['clivi'] = dset['clivi'].assign_attrs({'long_name':'Ice Water Path', 
                                                                                 'units' : 'kg m-2',
                                                                                     'mipTable':'', 'out_name': 'clivi',
                                                                                     'standard_name': 'atmosphere_mass_content_of_cloud_ice_water',
@@ -354,26 +465,26 @@ for model in dset_dict.keys():
                                                                                     'variable_id': 'clivi', 'original_units': 'kg/kg',
                                                                                     'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate clivi with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
             
-    if ('plev' in list(dset_dict[model].coords)) == True:
+    if ('plev' in list(dset.coords)) == True:
         print(model, 'plev coord')
-        _lwp = xr.DataArray(data=da.full(shape=dset_dict[model]['clw'].shape,fill_value=np.nan),
-                                dims=dset_dict[model]['clw'].dims,
-                                coords=dset_dict[model]['clw'].coords)
+        _lwp = xr.DataArray(data=da.full(shape=dset['clw'].shape,fill_value=np.nan),
+                                dims=dset['clw'].dims,
+                                coords=dset['clw'].coords)
         # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
-        for i in range(len(dset_dict[model]['plev'])-1):
+        for i in range(len(dset['plev'])-1):
             # calculate pressure difference between two levels
-            dp = (dset_dict[model]['plev'].isel(plev=i) - dset_dict[model]['plev'].isel(plev=i+1))
+            dp = (dset['plev'].isel(plev=i) - dset['plev'].isel(plev=i+1))
             # calculate mean liquid water content between two layers
-            dlwc = (dset_dict[model]['clw'].isel(plev=i) + dset_dict[model]['clw'].isel(plev=i+1))/2
+            dlwc = (dset['clw'].isel(plev=i) + dset['clw'].isel(plev=i+1))/2
             # calculate liquid water path between two layers
             _lwp[:,i,:,:] = dp/9.81 * dlwc[:,:,:]
         
             # sum over all layers to ge the liquid water path in the atmospheric column
-            dset_dict[model]['lwp'] = _lwp.sum(dim='plev',skipna=True)
+            dset['lwp'] = _lwp.sum(dim='plev',skipna=True)
             
             # assign attributes to data array
-            dset_dict[model]['lwp'] = dset_dict[model]['lwp'].assign_attrs(dset_dict[model]['clw'].attrs)
-            dset_dict[model]['lwp'] = dset_dict[model]['lwp'].assign_attrs({'long_name':'Liquid Water Path', 
+            dset['lwp'] = dset['lwp'].assign_attrs(dset['clw'].attrs)
+            dset['lwp'] = dset['lwp'].assign_attrs({'long_name':'Liquid Water Path', 
                                                                             'units' : 'kg m-2',
                                                                                 'mipTable':'', 'out_name': 'lwp',
                                                                                 'standard_name': 'atmosphere_mass_content_of_cloud_liquid_water',
@@ -381,26 +492,26 @@ for model in dset_dict.keys():
                                                                                 'variable_id': 'lwp', 'original_units': 'kg/kg',
                                                                                 'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate lwp with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
         # when ice water path does not exist
-        if ('clivi' in list(dset_dict[model].keys())) == False:
-            _iwp = xr.DataArray(data=da.full(shape=dset_dict[model]['cli'].shape,fill_value=np.nan),
-                                    dims=dset_dict[model]['cli'].dims,
-                                    coords=dset_dict[model]['cli'].coords)
+        if ('clivi' in list(dset.keys())) == False:
+            _iwp = xr.DataArray(data=da.full(shape=dset['cli'].shape,fill_value=np.nan),
+                                    dims=dset['cli'].dims,
+                                    coords=dset['cli'].coords)
             # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
-            for i in range(len(dset_dict[model]['plev'])-1):
+            for i in range(len(dset['plev'])-1):
                 # calculate pressure difference between two levels
-                dp = (dset_dict[model]['plev'].isel(plev=i) - dset_dict[model]['plev'].isel(plev=i+1))
+                dp = (dset['plev'].isel(plev=i) - dset['plev'].isel(plev=i+1))
                 # calculate mean liquid water content between two layers
-                diwc = (dset_dict[model]['cli'].isel(plev=i) + dset_dict[model]['cli'].isel(plev=i+1))/2
+                diwc = (dset['cli'].isel(plev=i) + dset['cli'].isel(plev=i+1))/2
                 # calculate liquid water path between two layers
                 _iwp[:,i,:,:] = dp/9.81 * diwc[:,:,:]
             
                 
                 # sum over all layers to ge the Ice water path in the atmospheric column
-                dset_dict[model]['clivi'] = _iwp.sum(dim='plev',skipna=True)
+                dset['clivi'] = _iwp.sum(dim='plev',skipna=True)
                 
                 # assign attributes to data array
-                dset_dict[model]['clivi'] = dset_dict[model]['clivi'].assign_attrs(dset_dict[model]['clw'].attrs)
-                dset_dict[model]['clivi'] = dset_dict[model]['clivi'].assign_attrs({'long_name':'Ice Water Path', 
+                dset['clivi'] = dset['clivi'].assign_attrs(dset['clw'].attrs)
+                dset['clivi'] = dset['clivi'].assign_attrs({'long_name':'Ice Water Path', 
                                                                                 'units' : 'kg m-2',
                                                                                     'mipTable':'', 'out_name': 'clivi',
                                                                                     'standard_name': 'atmosphere_mass_content_of_cloud_ice_water',
@@ -408,6 +519,149 @@ for model in dset_dict.keys():
                                                                                     'variable_id': 'clivi', 'original_units': 'kg/kg',
                                                                                     'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate clivi with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
             
+            
+    return dset
+
+    
+
+# %%
+# for model in dset_dict.keys():
+#     dset_dict[model] = calc_water_path(dset_dict[model])
+
+# %%
+
+# for model in dset_dict.keys():
+    
+#     if ('plev' in list(dset_dict[model].keys())) == True:
+#         print(model, 'plev')
+#         _lwp = xr.DataArray(data=da.full(shape=dset_dict[model]['clw'].shape,fill_value=np.nan),
+#                                 dims=dset_dict[model]['clw'].dims,
+#                                 coords=dset_dict[model]['clw'].coords)
+#         # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
+#         for i in range(len(dset_dict[model]['lev'])-1):
+#             # calculate pressure difference between two levels
+#             dp = (dset_dict[model]['plev'].isel(lev=i) - dset_dict[model]['plev'].isel(lev=i+1))
+#             # calculate mean liquid water content between two layers
+#             dlwc = (dset_dict[model]['clw'].isel(lev=i) + dset_dict[model]['clw'].isel(lev=i+1))/2
+#             # calculate liquid water path between two layers
+#             _lwp[:,i,:,:] = dp[:,:,:]/9.81 * dlwc[:,:,:]
+        
+#             # sum over all layers to ge the liquid water path in the atmospheric column
+#             dset_dict[model]['lwp'] = _lwp.sum(dim='lev',skipna=True)
+            
+#             # assign attributes to data array
+#             dset_dict[model]['lwp'] = dset_dict[model]['lwp'].assign_attrs(dset_dict[model]['clw'].attrs)
+#             dset_dict[model]['lwp'] = dset_dict[model]['lwp'].assign_attrs({'long_name':'Liquid Water Path', 
+#                                                                             'units' : 'kg m-2',
+#                                                                                 'mipTable':'', 'out_name': 'lwp',
+#                                                                                 'standard_name': 'atmosphere_mass_content_of_cloud_liquid_water',
+#                                                                                 'title': 'Liquid Water Path',
+#                                                                                 'variable_id': 'lwp', 'original_units': 'kg/kg',
+#                                                                                 'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate lwp with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
+#         # when ice water path does not exist
+#         if ('clivi' in list(dset_dict[model].keys())) == False:
+#             _iwp = xr.DataArray(data=da.full(shape=dset_dict[model]['cli'].shape,fill_value=np.nan),
+#                                     dims=dset_dict[model]['cli'].dims,
+#                                     coords=dset_dict[model]['cli'].coords)
+#             # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
+#             for i in range(len(dset_dict[model]['lev'])-1):
+#                 # calculate pressure difference between two levels
+#                 dp = (dset_dict[model]['plev'].isel(lev=i) - dset_dict[model]['plev'].isel(lev=i+1))
+#                 # calculate mean liquid water content between two layers
+#                 diwc = (dset_dict[model]['cli'].isel(lev=i) + dset_dict[model]['cli'].isel(lev=i+1))/2
+#                 # calculate liquid water path between two layers
+#                 _iwp[:,i,:,:] = dp[:,:,:]/9.81 * diwc[:,:,:]
+            
+                
+#                 # sum over all layers to ge the Ice water path in the atmospheric column
+#                 dset_dict[model]['clivi'] = _iwp.sum(dim='lev',skipna=True)
+                
+#                 # assign attributes to data array
+#                 dset_dict[model]['clivi'] = dset_dict[model]['clivi'].assign_attrs(dset_dict[model]['cli'].attrs)
+#                 dset_dict[model]['clivi'] = dset_dict[model]['clivi'].assign_attrs({'long_name':'Ice Water Path', 
+#                                                                                 'units' : 'kg m-2',
+#                                                                                     'mipTable':'', 'out_name': 'clivi',
+#                                                                                     'standard_name': 'atmosphere_mass_content_of_cloud_ice_water',
+#                                                                                     'title': 'Ice Water Path',
+#                                                                                     'variable_id': 'clivi', 'original_units': 'kg/kg',
+#                                                                                     'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate clivi with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
+            
+#     if ('plev' in list(dset_dict[model].coords)) == True:
+#         print(model, 'plev coord')
+#         _lwp = xr.DataArray(data=da.full(shape=dset_dict[model]['clw'].shape,fill_value=np.nan),
+#                                 dims=dset_dict[model]['clw'].dims,
+#                                 coords=dset_dict[model]['clw'].coords)
+#         # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
+#         for i in range(len(dset_dict[model]['plev'])-1):
+#             # calculate pressure difference between two levels
+#             dp = (dset_dict[model]['plev'].isel(plev=i) - dset_dict[model]['plev'].isel(plev=i+1))
+#             # calculate mean liquid water content between two layers
+#             dlwc = (dset_dict[model]['clw'].isel(plev=i) + dset_dict[model]['clw'].isel(plev=i+1))/2
+#             # calculate liquid water path between two layers
+#             _lwp[:,i,:,:] = dp/9.81 * dlwc[:,:,:]
+        
+#             # sum over all layers to ge the liquid water path in the atmospheric column
+#             dset_dict[model]['lwp'] = _lwp.sum(dim='plev',skipna=True)
+            
+#             # assign attributes to data array
+#             dset_dict[model]['lwp'] = dset_dict[model]['lwp'].assign_attrs(dset_dict[model]['clw'].attrs)
+#             dset_dict[model]['lwp'] = dset_dict[model]['lwp'].assign_attrs({'long_name':'Liquid Water Path', 
+#                                                                             'units' : 'kg m-2',
+#                                                                                 'mipTable':'', 'out_name': 'lwp',
+#                                                                                 'standard_name': 'atmosphere_mass_content_of_cloud_liquid_water',
+#                                                                                 'title': 'Liquid Water Path',
+#                                                                                 'variable_id': 'lwp', 'original_units': 'kg/kg',
+#                                                                                 'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate lwp with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
+#         # when ice water path does not exist
+#         if ('clivi' in list(dset_dict[model].keys())) == False:
+#             _iwp = xr.DataArray(data=da.full(shape=dset_dict[model]['cli'].shape,fill_value=np.nan),
+#                                     dims=dset_dict[model]['cli'].dims,
+#                                     coords=dset_dict[model]['cli'].coords)
+#             # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
+#             for i in range(len(dset_dict[model]['plev'])-1):
+#                 # calculate pressure difference between two levels
+#                 dp = (dset_dict[model]['plev'].isel(plev=i) - dset_dict[model]['plev'].isel(plev=i+1))
+#                 # calculate mean liquid water content between two layers
+#                 diwc = (dset_dict[model]['cli'].isel(plev=i) + dset_dict[model]['cli'].isel(plev=i+1))/2
+#                 # calculate liquid water path between two layers
+#                 _iwp[:,i,:,:] = dp/9.81 * diwc[:,:,:]
+            
+                
+#                 # sum over all layers to ge the Ice water path in the atmospheric column
+#                 dset_dict[model]['clivi'] = _iwp.sum(dim='plev',skipna=True)
+                
+#                 # assign attributes to data array
+#                 dset_dict[model]['clivi'] = dset_dict[model]['clivi'].assign_attrs(dset_dict[model]['clw'].attrs)
+#                 dset_dict[model]['clivi'] = dset_dict[model]['clivi'].assign_attrs({'long_name':'Ice Water Path', 
+#                                                                                 'units' : 'kg m-2',
+#                                                                                     'mipTable':'', 'out_name': 'clivi',
+#                                                                                     'standard_name': 'atmosphere_mass_content_of_cloud_ice_water',
+#                                                                                     'title': 'Ice Water Path',
+#                                                                                     'variable_id': 'clivi', 'original_units': 'kg/kg',
+#                                                                                     'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate clivi with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
+            
+
+
+# %%
+# year = year_range[0]
+# ['prsn', 'tas', 'clivi', 'lwp',]
+# var = 'lwp'
+
+# %%
+def process(cmip_in, t_res, list_models, year_range):
+    
+    dset_dict = search_data(cmip_in, t_res, list_models, year_range)
+    for model in dset_dict.keys():
+        dset_dict[model] = assign_att(dset_dict[model])
+        dset_dict[model] = interp_hybrid_plev(dset_dict[model],model)
+        dset_dict[model] = calc_water_path(dset_dict[model], model)
+        
+        dset_dict[model] = dset_dict[model][['prsn', 'tas', 'clivi', 'lwp',]]
+    
+    return dset_dict
+
+# %%
+dset_dict = process(cmip_in, t_res, list_models, year_range)
 
 # %%
 for model in dset_dict.keys():
