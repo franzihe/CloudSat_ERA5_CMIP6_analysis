@@ -169,6 +169,12 @@ experiment_id = ['historical']
 ## time resolution
 t_res = ['day',]
 
+# %%
+starty = 2006; endy = 2009
+year_range = range(starty, endy+1)
+
+
+
 # %% [markdown]
 # ## Search corresponding data
 # Get the data required for the analysis. Define variables, models, experiment, and time resolution as defined in <a href="#data_wrangling">2. Data Wrangling</a>
@@ -190,23 +196,6 @@ def search_data(cmip_in, t_res, list_models, year_range):
     
     return dset_dict    
 
-# %%
-starty = 2006; endy = 2009
-year_range = range(starty, endy+1)
-
-# dset_dict = search_data(cmip_in, t_res, list_models, year_range)
-# dset_dict = dict()
-# for model in list_models:
-#     cmip_file_in = glob('{}/*{}_{}_{}*'.format(cmip_in, t_res[0], model, experiment_id[0]))
-#     if len(cmip_file_in) != 0:
-#         dset_dict[model] = xr.open_mfdataset(sorted(cmip_file_in), combine='nested', compat='override', use_cftime=True)
-#         # select only years needed for analysis
-#         dset_dict[model] = dset_dict[model].sel(time = dset_dict[model]['time'].dt.year.isin(year_range)).squeeze()
-#         # shift longitude to be from -180 to 180
-#         dset_dict[model] = dset_dict[model].assign_coords(lon=(((dset_dict[model]['lon'] + 180) % 360) - 180)).sortby('lon').sortby('time')
-#     else:
-#         continue
-
 # %% [markdown]
 # ## Assign attributes to the variables
 #  
@@ -223,8 +212,7 @@ def assign_att(dset):
             
             if var_id == 'prsn':
                 dset[var_id] = dset[var_id]*3600*24
-                dset[var_id] = dset[var_id].assign_attrs({'standard_name': 'snowfall_flux',
-        'long_name': 'Snowfall Flux',
+                dset[var_id] = dset[var_id].assign_attrs({'standard_name': 'Total snowfall per day',
         'comment': 'At surface; includes precipitation of all forms of water in the solid phase',
         'units': 'mm day-1',
         'original_units': 'kg m-2 s-1',
@@ -232,33 +220,11 @@ def assign_att(dset):
         'cell_methods': 'area: time: mean',
         'cell_measures': 'area: areacella'})
                 
-        
                 
     return dset
 
-# %%
-# for model in dset_dict.keys():
-#     dset_dict[model] = assign_att(dset_dict[model])
-
-# %%
-# now = datetime.utcnow()
-# for model in dset_dict.keys():
-# # 
-#     for var_id in dset_dict[model].keys():
-         
-#         if var_id == 'prsn':
-#             dset_dict[model][var_id] = dset_dict[model][var_id]*3600
-#             dset_dict[model][var_id] = dset_dict[model][var_id].assign_attrs({'standard_name': 'snowfall_flux',
-#     'long_name': 'Snowfall Flux',
-#     'comment': 'At surface; includes precipitation of all forms of water in the solid phase',
-#     'units': 'mm h-1',
-#     'original_units': 'kg m-2 s-1',
-#     'history': "{}Z altered by F. Hellmuth: Converted units from 'kg m-2 s-1' to 'mm h-1'.".format(now.strftime("%d/%m/%Y %H:%M:%S")),
-#     'cell_methods': 'area: time: mean',
-#     'cell_measures': 'area: areacella'})
-
 # %% [markdown]
-# ## Interpolate from CMIP6 hybrid sigma-pressure levels to ERA5 isobaric pressure levels
+# ## Interpolate from CMIP6 hybrid sigma-pressure levels to isobaric pressure levels
 # 
 # The vertical variables in the CMIP6 models are in hybrid sigma-pressure levels. Hence the vertical variable in the xarray datasets in `dset_dict` will be calculated by using the formula:
 # $$ P(i,j,k) = hyam(k) p0 + hybm(k) ps(i,j)$$
@@ -331,9 +297,201 @@ def interp_hybrid_plev(dset, model):
         
     return dset  
 
+# %% [markdown]
+# ## Calculate liquid water path from content
+
 # %%
+def calc_water_path(dset, model):
+    now = datetime.utcnow()
+    
+    if ('plev' in list(dset.keys())) == True:
+        print(model, 'plev')
+        _lwp = xr.DataArray(data=da.full(shape=dset['clw'].shape,fill_value=np.nan),
+                                dims=dset['clw'].dims,
+                                coords=dset['clw'].coords)
+        # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
+        for i in range(len(dset['lev'])-1):
+            # calculate pressure difference between two levels
+            dp = (dset['plev'].isel(lev=i) - dset['plev'].isel(lev=i+1))
+            # calculate mean liquid water content between two layers
+            dlwc = (dset['clw'].isel(lev=i) + dset['clw'].isel(lev=i+1))/2
+            # calculate liquid water path between two layers
+            _lwp[:,i,:,:] = dp[:,:,:]/9.81 * dlwc[:,:,:]
+        
+            # sum over all layers to ge the liquid water path in the atmospheric column
+            dset['lwp'] = _lwp.sum(dim='lev',skipna=True)
+            
+            # assign attributes to data array
+            dset['lwp'] = dset['lwp'].assign_attrs(dset['clw'].attrs)
+            dset['lwp'] = dset['lwp'].assign_attrs({'long_name':'Daily average Liquid Water Path', 
+                                                                            'units' : 'kg m-2',
+                                                                                'mipTable':'', 'out_name': 'lwp',
+                                                                                'standard_name': 'atmosphere_mass_content_of_cloud_liquid_water',
+                                                                                'title': 'Liquid Water Path',
+                                                                                'variable_id': 'lwp', 'original_units': 'kg/kg',
+                                                                                'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate lwp with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
+        # when ice water path does not exist
+        if ('clivi' in list(dset.keys())) == False:
+            _iwp = xr.DataArray(data=da.full(shape=dset['cli'].shape,fill_value=np.nan),
+                                    dims=dset['cli'].dims,
+                                    coords=dset['cli'].coords)
+            # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
+            for i in range(len(dset['lev'])-1):
+                # calculate pressure difference between two levels
+                dp = (dset['plev'].isel(lev=i) - dset['plev'].isel(lev=i+1))
+                # calculate mean liquid water content between two layers
+                diwc = (dset['cli'].isel(lev=i) + dset['cli'].isel(lev=i+1))/2
+                # calculate liquid water path between two layers
+                _iwp[:,i,:,:] = dp[:,:,:]/9.81 * diwc[:,:,:]
+            
+                
+                # sum over all layers to ge the Ice water path in the atmospheric column
+                dset['clivi'] = _iwp.sum(dim='lev',skipna=True)
+                
+                # assign attributes to data array
+                dset['clivi'] = dset['clivi'].assign_attrs(dset['cli'].attrs)
+                dset['clivi'] = dset['clivi'].assign_attrs({'long_name':'Daily average Ice Water Path', 
+                                                                                'units' : 'kg m-2',
+                                                                                    'mipTable':'', 'out_name': 'clivi',
+                                                                                    'standard_name': 'atmosphere_mass_content_of_cloud_ice_water',
+                                                                                    'title': 'Ice Water Path',
+                                                                                    'variable_id': 'clivi', 'original_units': 'kg/kg',
+                                                                                    'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate clivi with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
+        if ('clivi' in list(dset.keys())) == True:
+            dset['clivi'] = dset['clivi'].assign_attrs({'long_name':'Daily average Ice Water Path', 
+                                                                                'units' : 'kg m-2',
+                                                                                    'mipTable':'', 'out_name': 'clivi',
+                                                                                    'standard_name': 'atmosphere_mass_content_of_cloud_ice_water',
+                                                                                    'title': 'Ice Water Path',
+                                                                                    'variable_id': 'clivi', 'original_units': 'kg/m2',
+                                                                                    'history': "{}Z altered by F. Hellmuth: Rename attributes to daily average ice water path".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
+            
+            
+    if ('plev' in list(dset.coords)) == True:
+        print(model, 'plev coord')
+        _lwp = xr.DataArray(data=da.full(shape=dset['clw'].shape,fill_value=np.nan),
+                                dims=dset['clw'].dims,
+                                coords=dset['clw'].coords)
+        # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
+        for i in range(len(dset['plev'])-1):
+            # calculate pressure difference between two levels
+            dp = (dset['plev'].isel(plev=i) - dset['plev'].isel(plev=i+1))
+            # calculate mean liquid water content between two layers
+            dlwc = (dset['clw'].isel(plev=i) + dset['clw'].isel(plev=i+1))/2
+            # calculate liquid water path between two layers
+            _lwp[:,i,:,:] = dp/9.81 * dlwc[:,:,:]
+        
+            # sum over all layers to ge the liquid water path in the atmospheric column
+            dset['lwp'] = _lwp.sum(dim='plev',skipna=True)
+            
+            # assign attributes to data array
+            dset['lwp'] = dset['lwp'].assign_attrs(dset['clw'].attrs)
+            dset['lwp'] = dset['lwp'].assign_attrs({'long_name':'Daily average Liquid Water Path', 
+                                                                            'units' : 'kg m-2',
+                                                                                'mipTable':'', 'out_name': 'lwp',
+                                                                                'standard_name': 'atmosphere_mass_content_of_cloud_liquid_water',
+                                                                                'title': 'Liquid Water Path',
+                                                                                'variable_id': 'lwp', 'original_units': 'kg/kg',
+                                                                                'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate lwp with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
+        # when ice water path does not exist
+        if ('clivi' in list(dset.keys())) == False:
+            _iwp = xr.DataArray(data=da.full(shape=dset['cli'].shape,fill_value=np.nan),
+                                    dims=dset['cli'].dims,
+                                    coords=dset['cli'].coords)
+            # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
+            for i in range(len(dset['plev'])-1):
+                # calculate pressure difference between two levels
+                dp = (dset['plev'].isel(plev=i) - dset['plev'].isel(plev=i+1))
+                # calculate mean liquid water content between two layers
+                diwc = (dset['cli'].isel(plev=i) + dset['cli'].isel(plev=i+1))/2
+                # calculate liquid water path between two layers
+                _iwp[:,i,:,:] = dp/9.81 * diwc[:,:,:]
+            
+                
+                # sum over all layers to ge the Ice water path in the atmospheric column
+                dset['clivi'] = _iwp.sum(dim='plev',skipna=True)
+                
+                # assign attributes to data array
+                dset['clivi'] = dset['clivi'].assign_attrs(dset['clw'].attrs)
+                dset['clivi'] = dset['clivi'].assign_attrs({'long_name':'Daily average Ice Water Path', 
+                                                                                'units' : 'kg m-2',
+                                                                                    'mipTable':'', 'out_name': 'clivi',
+                                                                                    'standard_name': 'atmosphere_mass_content_of_cloud_ice_water',
+                                                                                    'title': 'Ice Water Path',
+                                                                                    'variable_id': 'clivi', 'original_units': 'kg/kg',
+                                                                                    'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate clivi with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
+            
+        
+        if ('clivi' in list(dset.keys())) == True:
+            dset['clivi'] = dset['clivi'].assign_attrs({'long_name':'Daily average Ice Water Path', 
+                                                                                'units' : 'kg m-2',
+                                                                                    'mipTable':'', 'out_name': 'clivi',
+                                                                                    'standard_name': 'atmosphere_mass_content_of_cloud_ice_water',
+                                                                                    'title': 'Ice Water Path',
+                                                                                    'variable_id': 'clivi', 'original_units': 'kg/m2',
+                                                                                    'history': "{}Z altered by F. Hellmuth: Rename attributes to daily average ice water path".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
+               
+    return dset
+
+    
+
+# %%
+def process(cmip_in, t_res, list_models, year_range):
+    
+    dset_dict = search_data(cmip_in, t_res, list_models, year_range)
+    for model in dset_dict.keys():
+        dset_dict[model] = assign_att(dset_dict[model])
+        dset_dict[model] = interp_hybrid_plev(dset_dict[model],model)
+        dset_dict[model] = calc_water_path(dset_dict[model], model)
+        
+        dset_dict[model] = dset_dict[model][['prsn', 'tas', 'clivi', 'lwp',]]
+    
+    return dset_dict
+
+# %%
+dset_dict = process(cmip_in, t_res, list_models, year_range)
+
+# %%
+for model in dset_dict.keys():
+    for var in ['prsn', 'tas', 'clivi', 'lwp',]:
+        for year in year_range:
+            print('Writing files: var: {}, year: {}, model: {}'.format(var, year, model))
+            (dset_dict[model][var].sel(time=slice(str(year)), lat=slice(45,90))).to_netcdf('{}/{}_{}_45_90_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
+            (dset_dict[model][var].sel(time=slice(str(year)), lat=slice(-90,-45))).to_netcdf('{}/{}_{}_-90_-45_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
+            
+            # (dset_dict[model][var].sel(time=slice(str(year)), lat=slice(-90,-45))).to_netcdf('{}/{}_{}_-90_-45_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
+            # (dset_dict[model][var].sel(time=slice(str(year)), lat=slice(45,90))).to_netcdf('{}/{}_{}_45_90_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
+
+# %%
+# dset_dict = search_data(cmip_in, t_res, list_models, year_range)
+# dset_dict = dict()
+# for model in list_models:
+#     cmip_file_in = glob('{}/*{}_{}_{}*'.format(cmip_in, t_res[0], model, experiment_id[0]))
+#     if len(cmip_file_in) != 0:
+#         dset_dict[model] = xr.open_mfdataset(sorted(cmip_file_in), combine='nested', compat='override', use_cftime=True)
+#         # select only years needed for analysis
+#         dset_dict[model] = dset_dict[model].sel(time = dset_dict[model]['time'].dt.year.isin(year_range)).squeeze()
+#         # shift longitude to be from -180 to 180
+#         dset_dict[model] = dset_dict[model].assign_coords(lon=(((dset_dict[model]['lon'] + 180) % 360) - 180)).sortby('lon').sortby('time')
+#     else:
+#         continue
+
+# %%
+# now = datetime.utcnow()
 # for model in dset_dict.keys():
-#     dset_dict[model] = interp_hybrid_plev(dset_dict[model])
+# # 
+#     for var_id in dset_dict[model].keys():
+         
+#         if var_id == 'prsn':
+#             dset_dict[model][var_id] = dset_dict[model][var_id]*3600
+#             dset_dict[model][var_id] = dset_dict[model][var_id].assign_attrs({'standard_name': 'snowfall_flux',
+#     'long_name': 'Snowfall Flux',
+#     'comment': 'At surface; includes precipitation of all forms of water in the solid phase',
+#     'units': 'mm h-1',
+#     'original_units': 'kg m-2 s-1',
+#     'history': "{}Z altered by F. Hellmuth: Converted units from 'kg m-2 s-1' to 'mm h-1'.".format(now.strftime("%d/%m/%Y %H:%M:%S")),
+#     'cell_methods': 'area: time: mean',
+#     'cell_measures': 'area: areacella'})
 
 # %%
 # # Rename datasets with different naming convention for constant hyam
@@ -403,130 +561,6 @@ def interp_hybrid_plev(dset, model):
 #                     ('lev' in list(dset_dict[model]['pfull'].coords)) == True:
 #                         print(model, 'hybrid height coordinate')
                 
-
-# %% [markdown]
-# ## Calculate liquid water path from content
-
-# %%
-def calc_water_path(dset, model):
-    now = datetime.utcnow()
-    
-    if ('plev' in list(dset.keys())) == True:
-        print(model, 'plev')
-        _lwp = xr.DataArray(data=da.full(shape=dset['clw'].shape,fill_value=np.nan),
-                                dims=dset['clw'].dims,
-                                coords=dset['clw'].coords)
-        # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
-        for i in range(len(dset['lev'])-1):
-            # calculate pressure difference between two levels
-            dp = (dset['plev'].isel(lev=i) - dset['plev'].isel(lev=i+1))
-            # calculate mean liquid water content between two layers
-            dlwc = (dset['clw'].isel(lev=i) + dset['clw'].isel(lev=i+1))/2
-            # calculate liquid water path between two layers
-            _lwp[:,i,:,:] = dp[:,:,:]/9.81 * dlwc[:,:,:]
-        
-            # sum over all layers to ge the liquid water path in the atmospheric column
-            dset['lwp'] = _lwp.sum(dim='lev',skipna=True)
-            
-            # assign attributes to data array
-            dset['lwp'] = dset['lwp'].assign_attrs(dset['clw'].attrs)
-            dset['lwp'] = dset['lwp'].assign_attrs({'long_name':'Liquid Water Path', 
-                                                                            'units' : 'kg m-2',
-                                                                                'mipTable':'', 'out_name': 'lwp',
-                                                                                'standard_name': 'atmosphere_mass_content_of_cloud_liquid_water',
-                                                                                'title': 'Liquid Water Path',
-                                                                                'variable_id': 'lwp', 'original_units': 'kg/kg',
-                                                                                'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate lwp with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
-        # when ice water path does not exist
-        if ('clivi' in list(dset.keys())) == False:
-            _iwp = xr.DataArray(data=da.full(shape=dset['cli'].shape,fill_value=np.nan),
-                                    dims=dset['cli'].dims,
-                                    coords=dset['cli'].coords)
-            # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
-            for i in range(len(dset['lev'])-1):
-                # calculate pressure difference between two levels
-                dp = (dset['plev'].isel(lev=i) - dset['plev'].isel(lev=i+1))
-                # calculate mean liquid water content between two layers
-                diwc = (dset['cli'].isel(lev=i) + dset['cli'].isel(lev=i+1))/2
-                # calculate liquid water path between two layers
-                _iwp[:,i,:,:] = dp[:,:,:]/9.81 * diwc[:,:,:]
-            
-                
-                # sum over all layers to ge the Ice water path in the atmospheric column
-                dset['clivi'] = _iwp.sum(dim='lev',skipna=True)
-                
-                # assign attributes to data array
-                dset['clivi'] = dset['clivi'].assign_attrs(dset['cli'].attrs)
-                dset['clivi'] = dset['clivi'].assign_attrs({'long_name':'Ice Water Path', 
-                                                                                'units' : 'kg m-2',
-                                                                                    'mipTable':'', 'out_name': 'clivi',
-                                                                                    'standard_name': 'atmosphere_mass_content_of_cloud_ice_water',
-                                                                                    'title': 'Ice Water Path',
-                                                                                    'variable_id': 'clivi', 'original_units': 'kg/kg',
-                                                                                    'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate clivi with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
-            
-    if ('plev' in list(dset.coords)) == True:
-        print(model, 'plev coord')
-        _lwp = xr.DataArray(data=da.full(shape=dset['clw'].shape,fill_value=np.nan),
-                                dims=dset['clw'].dims,
-                                coords=dset['clw'].coords)
-        # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
-        for i in range(len(dset['plev'])-1):
-            # calculate pressure difference between two levels
-            dp = (dset['plev'].isel(plev=i) - dset['plev'].isel(plev=i+1))
-            # calculate mean liquid water content between two layers
-            dlwc = (dset['clw'].isel(plev=i) + dset['clw'].isel(plev=i+1))/2
-            # calculate liquid water path between two layers
-            _lwp[:,i,:,:] = dp/9.81 * dlwc[:,:,:]
-        
-            # sum over all layers to ge the liquid water path in the atmospheric column
-            dset['lwp'] = _lwp.sum(dim='plev',skipna=True)
-            
-            # assign attributes to data array
-            dset['lwp'] = dset['lwp'].assign_attrs(dset['clw'].attrs)
-            dset['lwp'] = dset['lwp'].assign_attrs({'long_name':'Liquid Water Path', 
-                                                                            'units' : 'kg m-2',
-                                                                                'mipTable':'', 'out_name': 'lwp',
-                                                                                'standard_name': 'atmosphere_mass_content_of_cloud_liquid_water',
-                                                                                'title': 'Liquid Water Path',
-                                                                                'variable_id': 'lwp', 'original_units': 'kg/kg',
-                                                                                'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate lwp with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
-        # when ice water path does not exist
-        if ('clivi' in list(dset.keys())) == False:
-            _iwp = xr.DataArray(data=da.full(shape=dset['cli'].shape,fill_value=np.nan),
-                                    dims=dset['cli'].dims,
-                                    coords=dset['cli'].coords)
-            # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
-            for i in range(len(dset['plev'])-1):
-                # calculate pressure difference between two levels
-                dp = (dset['plev'].isel(plev=i) - dset['plev'].isel(plev=i+1))
-                # calculate mean liquid water content between two layers
-                diwc = (dset['cli'].isel(plev=i) + dset['cli'].isel(plev=i+1))/2
-                # calculate liquid water path between two layers
-                _iwp[:,i,:,:] = dp/9.81 * diwc[:,:,:]
-            
-                
-                # sum over all layers to ge the Ice water path in the atmospheric column
-                dset['clivi'] = _iwp.sum(dim='plev',skipna=True)
-                
-                # assign attributes to data array
-                dset['clivi'] = dset['clivi'].assign_attrs(dset['clw'].attrs)
-                dset['clivi'] = dset['clivi'].assign_attrs({'long_name':'Ice Water Path', 
-                                                                                'units' : 'kg m-2',
-                                                                                    'mipTable':'', 'out_name': 'clivi',
-                                                                                    'standard_name': 'atmosphere_mass_content_of_cloud_ice_water',
-                                                                                    'title': 'Ice Water Path',
-                                                                                    'variable_id': 'clivi', 'original_units': 'kg/kg',
-                                                                                    'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate clivi with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
-            
-            
-    return dset
-
-    
-
-# %%
-# for model in dset_dict.keys():
-#     dset_dict[model] = calc_water_path(dset_dict[model])
 
 # %%
 
@@ -641,38 +675,6 @@ def calc_water_path(dset, model):
 #                                                                                     'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate clivi with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
             
 
-
-# %%
-# year = year_range[0]
-# ['prsn', 'tas', 'clivi', 'lwp',]
-# var = 'lwp'
-
-# %%
-def process(cmip_in, t_res, list_models, year_range):
-    
-    dset_dict = search_data(cmip_in, t_res, list_models, year_range)
-    for model in dset_dict.keys():
-        dset_dict[model] = assign_att(dset_dict[model])
-        dset_dict[model] = interp_hybrid_plev(dset_dict[model],model)
-        dset_dict[model] = calc_water_path(dset_dict[model], model)
-        
-        dset_dict[model] = dset_dict[model][['prsn', 'tas', 'clivi', 'lwp',]]
-    
-    return dset_dict
-
-# %%
-dset_dict = process(cmip_in, t_res, list_models, year_range)
-
-# %%
-for model in dset_dict.keys():
-    for var in ['prsn', 'tas', 'clivi', 'lwp',]:
-        for year in year_range:
-            print('Writing files: var: {}, year: {}, model: {}'.format(var, year, model))
-            (dset_dict[model][var].sel(time=slice(str(year)), lat=slice(45,90))).to_netcdf('{}/{}_{}_45_90_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
-            (dset_dict[model][var].sel(time=slice(str(year)), lat=slice(-90,-45))).to_netcdf('{}/{}_{}_-90_-45_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
-            
-            # (dset_dict[model][var].sel(time=slice(str(year)), lat=slice(-90,-45))).to_netcdf('{}/{}_{}_-90_-45_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
-            # (dset_dict[model][var].sel(time=slice(str(year)), lat=slice(45,90))).to_netcdf('{}/{}_{}_45_90_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
 
 # %%
 
