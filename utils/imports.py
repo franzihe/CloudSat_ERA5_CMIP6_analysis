@@ -32,4 +32,6 @@ from scipy.optimize import curve_fit
 import functions as fct
 import wget
 from matplotlib.colors import LogNorm
+from urllib.error import HTTPError
+
 
