@@ -36,8 +36,8 @@
 # This study will compare surface snowfall, ice, and liquid water content from the Coupled Model Intercomparison Project Phase 6 ([CMIP6](https://esgf-node.llnl.gov/projects/cmip6/)) climate models to the European Centre for Medium-Range Weather Forecast Re-Analysis 5 ([ERA5](https://www.ecmwf.int/en/forecasts/datasets/reanalysis-datasets/era5)) data from **2006 to 2009**. We conduct statistical analysis at the annual and seasonal timescales to determine the biases in cloud phase and precipitation (liquid and solid) in the CMIP6 models and their potential connection between them. 
 # 
 # - Time period: 2006 to 2009
-# - horizonal resolution: ~100km
-# - time resolution: monthly atmospheric data (Amon, AERmon)
+# - horizonal resolution: depending on model
+# - time resolution: daily mean atmospheric data (CFday, day)
 # - Variables:
 #   
 # | shortname     |             Long name                   |      Units    |  levels |
@@ -72,7 +72,7 @@
 #     - output folder where all the results to keep are stored
 #     - tool folder where all the tools
 # 
-# The ERA5 0.25deg data is located in the folder `/input/cmip6_hist/daily_means`.
+# `/input/cmip6_hist/daily_means`.
 # 
 
 # %%
@@ -122,7 +122,6 @@ from imports import (xr, intake, cftime, xe, glob, np, cm, pd, fct,ccrs, cy, plt
 xr.set_options(display_style="html")
 
 
-
 # %% [markdown]
 # ## Open CMIP6 variables
 # Get the data required for the analysis. Beforehand we downloaded the daily averaged data on single levels and model levels via.
@@ -141,7 +140,7 @@ except OSError:
 variable_id = ['clw', 'cli', 'clivi', 'tas', 'prsn']
 
 # %% [markdown]
-# At the moment we have downloaded the end of the historical simulations for CMIP6 models. We define start and end year to ensure to only extract the 4-year period between 2007 and 2010.
+# At the moment we have downloaded the end of the historical simulations for CMIP6 models. We define start and end year to ensure to only extract the 4-year period between 2006 and 2009.
 # 
 # $\rightarrow$ Define a start and end year
 # 
@@ -155,10 +154,10 @@ list_models = [
                'CanESM5', 
                'AWI-ESM-1-1-LR', 
                'MPI-ESM1-2-LR', 
-            # #    'UKESM1-0-LL', 
-            # #    'HadGEM3-GC31-LL',
-               # 'CNRM-CM6-1',
-               # 'CNRM-ESM2-1',
+            #    'UKESM1-0-LL', 
+            #    'HadGEM3-GC31-LL',
+               'CNRM-CM6-1',
+               'CNRM-ESM2-1',
                'IPSL-CM6A-LR',
                'IPSL-CM5A2-INCA'
             ]
@@ -184,6 +183,7 @@ year_range = range(starty, endy+1)
 def search_data(cmip_in, t_res, list_models, year_range):
     dset_dict = dict()
     for model in list_models:
+        # print(model)
         cmip_file_in = glob('{}/*{}_{}_{}*'.format(cmip_in, t_res[0], model, experiment_id[0]))
         if len(cmip_file_in) != 0:
             dset_dict[model] = xr.open_mfdataset(sorted(cmip_file_in), combine='nested', compat='override', use_cftime=True, parallel =True)
@@ -235,10 +235,16 @@ def interp_hybrid_plev(dset, model):
 # Rename datasets with different naming convention for constant hyam
     if ('a' in list(dset.keys())) == True:
         dset = dset.rename({'a':'ap', 'a_bnds': 'ap_bnds'})
+    if ('nbnd' in list(dset.dims)) == True:
+        dset = dset.rename({'nbnd':'bnds', })
+
     if model == 'IPSL-CM6A-LR':
         dset = dset.rename({'presnivs':'plev'})
     if model == 'IPSL-CM5A2-INCA':
         dset = dset.rename({'lev':'plev'})  
+        
+    if ('klevp1' in list(dset.dims)) == True:
+        dset = dset.rename({'klevp1':'lev', })
         
     for var_id in dset.keys():#['clw', 'cli']:
         if var_id == 'clw' or var_id == 'cli':
@@ -260,9 +266,14 @@ def interp_hybrid_plev(dset, model):
                         #                                                                                 lev_dim='lev')
                         dset['plev'] = dset['ap']*dset['p0'] + dset['b']*dset['ps']
                         dset['plev'] = dset['plev'].transpose('time', 'lev','lat','lon')
+                        
+                        dset['plev_bnds'] = dset['ap_bnds']*dset['p0'] + dset['b_bnds']*dset['ps']
+                        dset['plev_bnds'] = dset['plev_bnds'].transpose('time', 'lev','lat','lon', 'bnds')
                 
                 if ('plev' in list(dset[var_id].coords)) == True:
                     print(model, var_id, 'variable on pressure levels', )
+                    dset['plev_bnds'] = dset['ap_bnds']*dset['p0'] + dset['b_bnds']*dset['ps']
+                    dset['plev_bnds'] = dset['plev_bnds'].transpose('time', 'lev','lat','lon', 'bnds')
                 # if ('lev' in list(dset[var_id].coords)) == True and \
                 #     ('lev' in list(dset['ap'].coords)) == False and \
                 #     ('lev' in list(dset['b'].coords)) == False:
@@ -284,21 +295,54 @@ def interp_hybrid_plev(dset, model):
                         #                                                                                 lev_dim='lev')
                         dset['plev'] = dset['ap'] + dset['b']*dset['ps']
                         dset['plev'] = dset['plev'].transpose('time', 'lev','lat','lon')
+                        
+                        dset['plev_bnds'] = dset['ap_bnds'] + dset['b_bnds']*dset['ps']
+                        dset['plev_bnds'] = dset['plev_bnds'].transpose('time', 'lev','lat','lon', 'bnds')
+                        
+                        
                 
                 if ('plev' in list(dset[var_id].coords)) == True:
                     print(model, var_id, 'variable on pressure levels', )
+                    dset['plev_bnds'] = dset['ap_bnds'] + dset['b_bnds']*dset['ps']
+                    dset['plev_bnds'] = dset['plev_bnds'].transpose('time', 'lev','lat','lon', 'bnds')
                 
             if ('b' in list(dset.keys())) == True and \
                 ('orog' in list(dset.keys())) == True:
                 if ('lev' in list(dset[var_id].coords)) == True and \
                     ('lev' in list(dset['pfull'].coords)) == True:
                         print(model, 'hybrid height coordinate')
+                        
+    dset = dset.transpose('time', 'lat', 'lon', 'plev', 'lev', 'bnds','axis_nbounds' , missing_dims="ignore" )
+    
                 
         
     return dset  
 
 # %% [markdown]
 # ## Calculate liquid water path from content
+# 
+# Once the pressure levels are calculated the daily average LWP (IWP) is calculated for each CMIP6 model.
+# \begin{equation}
+#         LWP = \rho_{air} \cdot \Delta clw \cdot \Delta Z 
+# \end{equation}
+# 
+# with hydrostatic equation
+# 
+# \begin{equation}
+#          \frac{\Delta p}{\Delta Z}  = -\rho_{air} \cdot g  
+# \end{equation}
+# 
+# \begin{equation}
+#          \leftrightarrow LWP = - \frac{\rho_{air}}{\rho_{air} g} \cdot \Delta clw \Delta p
+# \end{equation}
+# 
+# with $\Delta clw = clw(NLEV-k)$ and $\Delta p = p(NLEV-k + 1/2) - p(NLEV-k - 1/2)$ follows for the total liquid water path in the column:
+# 
+# \begin{equation}
+#          -\frac{1}{g} \sum_{k=0}^{NLEV+1} LWP(k) = -\frac{1}{g} \sum_{k=0}^{NLEV+1} clw(NLEV-k) \cdot [p(NLEV-k + 1/2) - p(NLEV-k - 1/2)]
+# \end{equation}
+# 
+# 
 
 # %%
 def calc_water_path(dset, model):
@@ -310,16 +354,18 @@ def calc_water_path(dset, model):
                                 dims=dset['clw'].dims,
                                 coords=dset['clw'].coords)
         # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
-        for i in range(len(dset['lev'])-1):
-            # calculate pressure difference between two levels
-            dp = (dset['plev'].isel(lev=i) - dset['plev'].isel(lev=i+1))
-            # calculate mean liquid water content between two layers
-            dlwc = (dset['clw'].isel(lev=i) + dset['clw'].isel(lev=i+1))/2
+        for i in range(len(dset['lev'])):
+                        
+            # calculate pressure difference between two levels, where the hight of the two layers is given in lev_bnds
+            dp = (dset['plev_bnds'].isel(lev=i).diff(dim='bnds'))
+            # use liquid water content between two layers, meaning at lev
+            dlwc = (dset['clw'].isel(lev=i))
             # calculate liquid water path between two layers
-            _lwp[:,i,:,:] = dp[:,:,:]/9.81 * dlwc[:,:,:]
-        
+            _lwp[:,:,:,i] = - dp[:,:,:,0]/9.81 * dlwc[:,:,:]
+                
             # sum over all layers to ge the liquid water path in the atmospheric column
             dset['lwp'] = _lwp.sum(dim='lev',skipna=True)
+            
             
             # assign attributes to data array
             dset['lwp'] = dset['lwp'].assign_attrs(dset['clw'].attrs)
@@ -332,20 +378,21 @@ def calc_water_path(dset, model):
                                                                                 'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate lwp with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
         # when ice water path does not exist
         if ('clivi' in list(dset.keys())) == False:
+        # if ('clivi' in list(dset.keys())) == True:
             _iwp = xr.DataArray(data=da.full(shape=dset['cli'].shape,fill_value=np.nan),
                                     dims=dset['cli'].dims,
                                     coords=dset['cli'].coords)
             # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
-            for i in range(len(dset['lev'])-1):
-                # calculate pressure difference between two levels
-                dp = (dset['plev'].isel(lev=i) - dset['plev'].isel(lev=i+1))
-                # calculate mean liquid water content between two layers
-                diwc = (dset['cli'].isel(lev=i) + dset['cli'].isel(lev=i+1))/2
+            for i in range(len(dset['lev'])):
+                                
+                # calculate pressure difference between two levels, where the hight of the two layers is given in lev_bnds
+                dp = (dset['plev_bnds'].isel(lev=i).diff(dim='bnds'))
+                # use liquid water content between two layers, meaning at lev
+                diwc = (dset['cli'].isel(lev=i))
                 # calculate liquid water path between two layers
-                _iwp[:,i,:,:] = dp[:,:,:]/9.81 * diwc[:,:,:]
-            
-                
-                # sum over all layers to ge the Ice water path in the atmospheric column
+                _lwp[:,:,:,i] = - dp[:,:,:,0]/9.81 * dlwc[:,:,:]
+                    
+                # sum over all layers to ge the liquid water path in the atmospheric column
                 dset['clivi'] = _iwp.sum(dim='lev',skipna=True)
                 
                 # assign attributes to data array
@@ -373,14 +420,15 @@ def calc_water_path(dset, model):
                                 dims=dset['clw'].dims,
                                 coords=dset['clw'].coords)
         # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
-        for i in range(len(dset['plev'])-1):
-            # calculate pressure difference between two levels
-            dp = (dset['plev'].isel(plev=i) - dset['plev'].isel(plev=i+1))
-            # calculate mean liquid water content between two layers
-            dlwc = (dset['clw'].isel(plev=i) + dset['clw'].isel(plev=i+1))/2
+        for i in range(len(dset['plev'])):
+                        
+            # calculate pressure difference between two levels, where the hight of the two layers is given in lev_bnds
+            dp = (dset['plev_bnds'].isel(lev=i).diff(dim='bnds'))
+            # use liquid water content between two layers, meaning at lev
+            dlwc = (dset['clw'].isel(plev=i))
             # calculate liquid water path between two layers
-            _lwp[:,i,:,:] = dp/9.81 * dlwc[:,:,:]
-        
+            _lwp[:,:,:,i] = - dp[:,:,:,0]/9.81 * dlwc[:,:,:]
+                
             # sum over all layers to ge the liquid water path in the atmospheric column
             dset['lwp'] = _lwp.sum(dim='plev',skipna=True)
             
@@ -395,21 +443,22 @@ def calc_water_path(dset, model):
                                                                                 'history': "{}Z altered by F. Hellmuth: Interpolate data from hybrid-sigma levels to isobaric levels with P=a*p0 + b*psfc. Calculate lwp with hydrostatic equation.".format(now.strftime("%d/%m/%Y %H:%M:%S"))})
         # when ice water path does not exist
         if ('clivi' in list(dset.keys())) == False:
+        # if ('clivi' in list(dset.keys())) == True:
             _iwp = xr.DataArray(data=da.full(shape=dset['cli'].shape,fill_value=np.nan),
                                     dims=dset['cli'].dims,
                                     coords=dset['cli'].coords)
             # lev2 is the atmospheric pressure, lower in the atmosphere than lev. Sigma-pressure coordinates are from 1 to 0, with 1 at the surface
-            for i in range(len(dset['plev'])-1):
-                # calculate pressure difference between two levels
-                dp = (dset['plev'].isel(plev=i) - dset['plev'].isel(plev=i+1))
-                # calculate mean liquid water content between two layers
-                diwc = (dset['cli'].isel(plev=i) + dset['cli'].isel(plev=i+1))/2
+            for i in range(len(dset['plev'])):
+                                
+                # calculate pressure difference between two levels, where the hight of the two layers is given in lev_bnds
+                dp = (dset['plev_bnds'].isel(lev=i).diff(dim='bnds'))
+                # use liquid water content between two layers, meaning at lev
+                diwc = (dset['cli'].isel(lev=i))
                 # calculate liquid water path between two layers
-                _iwp[:,i,:,:] = dp/9.81 * diwc[:,:,:]
-            
-                
-                # sum over all layers to ge the Ice water path in the atmospheric column
-                dset['clivi'] = _iwp.sum(dim='plev',skipna=True)
+                _lwp[:,:,:,i] = - dp[:,:,:,0]/9.81 * dlwc[:,:,:]
+                    
+                # sum over all layers to ge the liquid water path in the atmospheric column
+                dset['clivi'] = _iwp.sum(dim='lev',skipna=True)
                 
                 # assign attributes to data array
                 dset['clivi'] = dset['clivi'].assign_attrs(dset['clw'].attrs)
