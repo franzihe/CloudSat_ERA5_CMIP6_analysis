@@ -1,3 +1,4 @@
+# export PYTHONPATH="${PYTHONPATH}:/uio/kant/geo-metos-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/utils/"
 # %% [markdown]
 # # Example with CMIP6 models (100 - 500 km)
 # 
@@ -96,7 +97,7 @@ elif "glefsekaldt" in hostname:
 
 INPUT_DATA_DIR = os.path.join(DATA_DIR, 'input')
 OUTPUT_DATA_DIR = os.path.join(DATA_DIR, 'output')
-UTILS_DIR = os.path.join(WORKDIR, 'utils')
+UTILS_DIR = os.path.join(WORKDIR, 'utils/')
 
 sys.path.append(UTILS_DIR)
 # make figure directory
@@ -120,6 +121,7 @@ warnings.filterwarnings('ignore') # don't output warnings
 # import packages
 from imports import (xr, intake, cftime, xe, glob, np, cm, pd, fct,ccrs, cy, plt, da, gc, datetime, LogNorm)
 xr.set_options(display_style="html")
+
 
 
 # %% [markdown]
@@ -149,15 +151,15 @@ variable_id = ['clw', 'cli', 'clivi', 'tas', 'prsn']
 # %%
 # source_id
 list_models = [
-               'MIROC6', 
-               'CESM2', 
-               'CanESM5', 
-               'AWI-ESM-1-1-LR', 
-               'MPI-ESM1-2-LR', 
+            #    'MIROC6', 
+            #    'CESM2', 
+            #    'CanESM5', 
+            #    'AWI-ESM-1-1-LR', 
+            #    'MPI-ESM1-2-LR', 
             #    'UKESM1-0-LL', 
             #    'HadGEM3-GC31-LL',
-               'CNRM-CM6-1',
-               'CNRM-ESM2-1',
+            #    'CNRM-CM6-1',
+            #    'CNRM-ESM2-1',
                'IPSL-CM6A-LR',
                'IPSL-CM5A2-INCA'
             ]
