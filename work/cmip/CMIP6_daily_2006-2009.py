@@ -139,7 +139,7 @@ except OSError:
     pass
 
 # %%
-variable_id = ['clw', 'cli', 'clivi', 'tas', 'prsn']
+variable_id = ['clw', 'cli', 'clivi', 'tas', 'prsn', 'pr', 'areacella']
 
 # %% [markdown]
 # At the moment we have downloaded the end of the historical simulations for CMIP6 models. We define start and end year to ensure to only extract the 4-year period between 2006 and 2009.
@@ -151,15 +151,15 @@ variable_id = ['clw', 'cli', 'clivi', 'tas', 'prsn']
 # %%
 # source_id
 list_models = [
-            #    'MIROC6', 
-            #    'CESM2', 
-            #    'CanESM5', 
-            #    'AWI-ESM-1-1-LR', 
-            #    'MPI-ESM1-2-LR', 
-            #    'UKESM1-0-LL', 
-            #    'HadGEM3-GC31-LL',
-            #    'CNRM-CM6-1',
-            #    'CNRM-ESM2-1',
+               'MIROC6', 
+               'CESM2', 
+               'CanESM5', 
+               'AWI-ESM-1-1-LR', 
+               'MPI-ESM1-2-LR', 
+               'UKESM1-0-LL', 
+               'HadGEM3-GC31-LL',
+               'CNRM-CM6-1',
+               'CNRM-ESM2-1',
                'IPSL-CM6A-LR',
                'IPSL-CM5A2-INCA'
             ]
