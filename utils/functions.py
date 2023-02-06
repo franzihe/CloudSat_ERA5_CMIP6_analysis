@@ -861,9 +861,9 @@ def __weighted_average(dim, weights, xa, xa_copy):
     '''helper function for masked_average'''
     _, weights_all_dims = xr.broadcast(xa, weights)  # broadcast to all dims
     x_times_w = xa_copy * weights_all_dims
-    xw_sum = x_times_w.sum(dim)
-    x_tot = weights_all_dims.where(xa_copy.notnull()).sum(dim=dim)
-    xa_weighted_average = xw_sum / x_tot
+    xw_sum = x_times_w.sum(dim)   # area of each grid cell
+    x_tot = weights_all_dims.where(xa_copy.notnull()).sum(dim=dim) #total area of earth
+    xa_weighted_average = xw_sum / x_tot  # weighted mean
     return xa_weighted_average
 
 
@@ -875,9 +875,9 @@ def __weighted_average_with_mask(dim, mask, weights, xa, xa_copy):
         _, weights_all_dims = xr.broadcast(xa, weights)  # broadcast to all dims
         weights_all_dims = weights_all_dims.where(~mask_all_dims)
         x_times_w = xa_copy * weights_all_dims
-        xw_sum = x_times_w.sum(dim=dim)
-        x_tot = weights_all_dims.where(xa_copy.notnull()).sum(dim=dim)
-        xa_weighted_average = xw_sum / x_tot
+        xw_sum = x_times_w.sum(dim=dim) # area of each grid cell
+        x_tot = weights_all_dims.where(xa_copy.notnull()).sum(dim=dim) #total area of earth
+        xa_weighted_average = xw_sum / x_tot    # weighted mean
     else:
         xa_weighted_average = xa_copy.mean(dim)
     return xa_weighted_average
