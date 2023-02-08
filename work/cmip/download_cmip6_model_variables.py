@@ -51,7 +51,7 @@ from imports import(pd, glob, np, plt, wget,cm, HTTPError)
 
 # %%
 cmip_in = os.path.join(INPUT_DATA_DIR, 'cmip6_hist')
-cmip_out = os.path.join(INPUT_DATA_DIR, 'cmip6_hist/daily_means')
+cmip_out = os.path.join(INPUT_DATA_DIR, 'cmip6_hist/daily_means/')
 # make output data directory
 try:
     os.mkdir(cmip_out)
@@ -139,20 +139,20 @@ def get_download_dict(var_id):
                 #                 'pr_day_CESM2_historical_{}_gn_20100101-20150101.nc'.format(var_id),
                 #                 'areacella_fx_CESM2_historical_{}_gn.nc'.format(var_id)],
                 #         'var_id': ['{}']},
-                'CanESM5': {'node':['http://crd-esgf-drc.ec.gc.ca/thredds/fileServer/esgC_dataroot/AR6/CMIP6/CMIP/'],
-                        'mdir':['CCCma/CanESM5/historical/{}/day/prsn/gn/v20190429/'.format(var_id),
-                                'CCCma/CanESM5/historical/{}/day/tas/gn/v20190429/'.format(var_id),
-                                'CCCma/CanESM5/historical/{}/CFday/clivi/gn/v20190429/'.format(var_id),
-                                'CCCma/CanESM5/historical/{}/CFday/clw/gn/v20190429/'.format(var_id),
-                                'CCCma/CanESM5/historical/{}/day/pr/gn/v20190429/'.format(var_id),
-                                'CCCma/CanESM5/historical/{}/fx/areacella/gn/v20190429/'.format(var_id)],
-                        'file':['prsn_day_CanESM5_historical_{}_gn_18500101-20141231.nc'.format(var_id),
-                                'tas_day_CanESM5_historical_{}_gn_18500101-20141231.nc'.format(var_id),
-                                'clivi_CFday_CanESM5_historical_{}_gn_18500101-20141231.nc'.format(var_id),
-                                'clw_CFday_CanESM5_historical_{}_gn_20010101-20101231.nc'.format(var_id),
-                                'pr_day_CanESM5_historical_{}_gn_18500101-20141231.nc'.format(var_id),
-                                'areacella_fx_CanESM5_historical_{}_gn.nc'.format(var_id)],
-                        'var_id': []},
+                # 'CanESM5': {'node':['http://crd-esgf-drc.ec.gc.ca/thredds/fileServer/esgC_dataroot/AR6/CMIP6/CMIP/'],
+                #         'mdir':['CCCma/CanESM5/historical/{}/day/prsn/gn/v20190429/'.format(var_id),
+                #                 'CCCma/CanESM5/historical/{}/day/tas/gn/v20190429/'.format(var_id),
+                #                 'CCCma/CanESM5/historical/{}/CFday/clivi/gn/v20190429/'.format(var_id),
+                #                 'CCCma/CanESM5/historical/{}/CFday/clw/gn/v20190429/'.format(var_id),
+                #                 'CCCma/CanESM5/historical/{}/day/pr/gn/v20190429/'.format(var_id),
+                #                 'CCCma/CanESM5/historical/{}/fx/areacella/gn/v20190429/'.format(var_id)],
+                #         'file':['prsn_day_CanESM5_historical_{}_gn_18500101-20141231.nc'.format(var_id),
+                #                 'tas_day_CanESM5_historical_{}_gn_18500101-20141231.nc'.format(var_id),
+                #                 'clivi_CFday_CanESM5_historical_{}_gn_18500101-20141231.nc'.format(var_id),
+                #                 'clw_CFday_CanESM5_historical_{}_gn_20010101-20101231.nc'.format(var_id),
+                #                 'pr_day_CanESM5_historical_{}_gn_18500101-20141231.nc'.format(var_id),
+                #                 'areacella_fx_CanESM5_historical_{}_gn.nc'.format(var_id)],
+                #         'var_id': []},
                 # 'MIROC6': {'node':[ 'https://esgf-data1.llnl.gov/thredds/fileServer/css03_data/CMIP6/CMIP/'],
                 #         'mdir': ['MIROC/MIROC6/historical/{}/day/prsn/gn/v20191016/'.format(var_id),
                 #                 'MIROC/MIROC6/historical/{}/day/tas/gn/v20191016/'.format(var_id),
