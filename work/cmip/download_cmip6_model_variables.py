@@ -51,7 +51,7 @@ from imports import(pd, glob, np, plt, wget,cm, HTTPError)
 
 # %%
 cmip_in = os.path.join(INPUT_DATA_DIR, 'cmip6_hist')
-cmip_out = os.path.join(INPUT_DATA_DIR, 'cmip6_hist/daily_means/single_model/')
+cmip_out = os.path.join(INPUT_DATA_DIR, 'cmip6_hist/daily_means/')
 # make output data directory
 try:
     os.mkdir(cmip_out)
@@ -298,39 +298,30 @@ def get_download_dict(var_id):
         return down
 
 # %%
-# counter = 0
-# for vid in var_id:
-#     down = get_download_dict(vid)
-#     for model in down.keys():
-#         for node in down[model]['node']:
-#             for mdir in down[model]['mdir']:
-#                 for file in down[model]['file']:
-#                     dwf = node + mdir + file
-#                     file_out = cmip_out + '/' + file
+counter = 0
+for vid in var_id:
+    down = get_download_dict(vid)
+    for model in down.keys():
+        for node in down[model]['node']:
+            for mdir in down[model]['mdir']:
+                for file in down[model]['file']:
+                    dwf = node + mdir + file
+                    file_out = cmip_out + '/' + file
             
-#                     files = glob(file_out)
-#                     if file_out in files:
-#                         print(file + ' is downloaded')
-#                         counter += 1
-#                         print("Have downloaded in total : " + str(counter) + " files")
-#                     else:
-#                         print(dwf)
-#                         print(file)
+                    files = glob(file_out)
+                    if file_out in files:
+                        print(file + ' is downloaded')
+                        counter += 1
+                        print("Have downloaded in total : " + str(counter) + " files")
+                    else:
+                        print(dwf)
+                        print(file)
                         
-#                         # Download file
-#                         try:
-#                             wget.download(dwf, file_out)
-#                             print('Download file ... ' + file)
-#                         except HTTPError:
-#                             print('File {} does not exist'.format(file))
-#                             continue
-
-
-# file = 'areacella_fx_MPI-ESM1-2-LR_historical_r1i1p1f1_gn.nc'
-# dwf = 'http://esgf3.dkrz.de/thredds/fileServer/cmip6/CMIP/MPI-M/MPI-ESM1-2-LR/historical/r1i1p1f1/fx/areacella/gn/v20190710/'
-
-# file_out = cmip_out + '/' + file
-# wget.download(dwf, file_out)
-
-
+                        # Download file
+                        try:
+                            wget.download(dwf, file_out)
+                            print('Download file ... ' + file)
+                        except HTTPError:
+                            print('File {} does not exist'.format(file))
+                            continue
 
