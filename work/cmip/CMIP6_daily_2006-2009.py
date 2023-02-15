@@ -129,7 +129,7 @@ xr.set_options(display_style="html")
 # Get the data required for the analysis. Beforehand we downloaded the daily averaged data on single levels and model levels via.
 
 # %%
-cmip_in = os.path.join(INPUT_DATA_DIR, 'cmip6_hist/daily_means')
+cmip_in = os.path.join(INPUT_DATA_DIR, 'cmip6_hist/daily_means/single_model')
 cmip_out = os.path.join(OUTPUT_DATA_DIR, 'cmip6_hist/daily_means/common_grid')
 
 # make output data directory
@@ -151,17 +151,17 @@ variable_id = ['clw', 'cli', 'clivi', 'tas', 'prsn', 'pr', 'areacella']
 # %%
 # source_id
 list_models = [
-               'MIROC6', 
-               'CESM2', 
-               'CanESM5', 
-               'AWI-ESM-1-1-LR', 
-               'MPI-ESM1-2-LR', 
-               'UKESM1-0-LL', 
-               'HadGEM3-GC31-LL',
-               'CNRM-CM6-1',
-               'CNRM-ESM2-1',
+            #    'MIROC6', 
+            #    'CESM2', 
+            #    'CanESM5', 
+            #    'AWI-ESM-1-1-LR', 
+            #    'MPI-ESM1-2-LR', 
+            #    'UKESM1-0-LL', 
+            #    'HadGEM3-GC31-LL',
+            #    'CNRM-CM6-1',
+            #    'CNRM-ESM2-1',
                'IPSL-CM6A-LR',
-               'IPSL-CM5A2-INCA'
+            #    'IPSL-CM5A2-INCA'
             ]
 
 ## experiment
@@ -171,7 +171,7 @@ experiment_id = ['historical']
 t_res = ['day',]
 
 # %%
-starty = 2006; endy = 2009
+starty = 2006; endy = 2006
 year_range = range(starty, endy+1)
 
 
@@ -491,7 +491,7 @@ def process(cmip_in, t_res, list_models, year_range):
     
     dset_dict = search_data(cmip_in, t_res, list_models, year_range)
     for model in dset_dict.keys():
-        dset_dict[model] = assign_att(dset_dict[model])
+        # dset_dict[model] = assign_att(dset_dict[model])
         dset_dict[model] = interp_hybrid_plev(dset_dict[model],model)
         dset_dict[model] = calc_water_path(dset_dict[model], model)
         
