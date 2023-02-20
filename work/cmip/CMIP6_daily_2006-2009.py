@@ -1,4 +1,7 @@
+# %%
 # export PYTHONPATH="${PYTHONPATH}:/uio/kant/geo-metos-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/utils/"
+
+
 # %% [markdown]
 # # Example with CMIP6 models (100 - 500 km)
 # 
@@ -151,6 +154,7 @@ variable_id = ['clw', 'cli', 'clivi', 'tas', 'prsn', 'pr', 'areacella']
 # %%
 # source_id
 list_models = [
+<<<<<<< HEAD
             #    'MIROC6', 
             #    'CESM2', 
             #    'CanESM5', 
@@ -162,6 +166,19 @@ list_models = [
             #    'CNRM-ESM2-1',
                'IPSL-CM6A-LR',
             #    'IPSL-CM5A2-INCA'
+=======
+               'MIROC6', #area
+               'CESM2', #area
+               'CanESM5', # area
+               'AWI-ESM-1-1-LR', # area
+               'MPI-ESM1-2-LR', # area
+               # 'UKESM1-0-LL', 
+               # 'HadGEM3-GC31-LL',
+               'CNRM-CM6-1', #area
+               'CNRM-ESM2-1',
+               'IPSL-CM6A-LR', #area
+               'IPSL-CM5A2-INCA' #area
+>>>>>>> 2fa997a5cfb50ba087aaccdb18e76c2037dec00f
             ]
 
 ## experiment
@@ -187,6 +204,9 @@ def search_data(cmip_in, t_res, list_models, year_range):
     for model in list_models:
         # print(model)
         cmip_file_in = glob('{}/*{}_{}_{}*'.format(cmip_in, t_res[0], model, experiment_id[0]))
+        # get also areacella data
+        # print(model)
+        cmip_file_in.append(glob('{}/areacella*{}_{}*.nc'.format(cmip_in,model,  experiment_id[0]))[0])
         if len(cmip_file_in) != 0:
             dset_dict[model] = xr.open_mfdataset(sorted(cmip_file_in), combine='nested', compat='override', use_cftime=True, parallel =True)
             # select only years needed for analysis
@@ -197,6 +217,36 @@ def search_data(cmip_in, t_res, list_models, year_range):
             continue
     
     return dset_dict    
+
+# %%
+# variant_label = ['r10i1p1f1',
+# 'r11i1p1f1',
+# 'r1i1p1f1',
+# 'r1i1p1f2',
+# 'r1i1p2f1',
+# 'r2i1p1f2',
+# 'r5i1p1f3',]
+
+# model = 'IPSL-CM6A-LR'
+# model = list_models[5]
+# # for model in list_models:
+# cmip_file_in = sorted(glob('{}/*{}_{}_{}*'.format(cmip_in, t_res[0], model, experiment_id[0])))
+# cmip_file_in.append(glob('{}/areacella*{}_{}*.nc'.format(cmip_in,model,  experiment_id[0]))[0])
+# _cmip_file_in = []#dict()
+# for i in range(len(cmip_file_in)):
+#             # k = variant_label[0]
+#         for k in variant_label:
+#             if cmip_file_in[i].find(str(k)) != -1:
+#                 print("Contains "+str(k), cmip_file_in[i][59:63])
+#                 _cmip_file_in.append(cmip_file_in[i])
+#             # else:
+#             # # cmip_file_in.remove(cmip_file_in[i])
+#             #     print(cmip_file_in[i])
+# print(model, len(_cmip_file_in))
+
+# %%
+# dset_dict = search_data(cmip_in, t_res, list_models, year_range)
+
 
 # %% [markdown]
 # ## Assign attributes to the variables
@@ -319,6 +369,10 @@ def interp_hybrid_plev(dset, model):
                 
         
     return dset  
+
+# %%
+# for model in dset_dict.keys():
+#     dset_dict[model] = interp_hybrid_plev(dset_dict[model],model)
 
 # %% [markdown]
 # ## Calculate liquid water path from content
@@ -485,6 +539,10 @@ def calc_water_path(dset, model):
     return dset
 
     
+
+# %%
+# for model in dset_dict.keys():
+#     dset_dict[model] = calc_water_path(dset_dict[model], model)
 
 # %%
 def process(cmip_in, t_res, list_models, year_range):
