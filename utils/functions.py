@@ -16,6 +16,7 @@ from imports import (
 
 import warnings
 
+fig_label = ['a)', 'b)', 'c)', 'd)', 'e)', 'f)', 'g)', 'h)', 'i)', 'j)', 'k)', 'l)', 'm)']
 
 def rename_coords_lon_lat(ds):
     for k in ds.indexes.keys():
@@ -823,3 +824,100 @@ def set3D_latitude_values_nan(array, upper_lat, lower_lat):
     return array
 
 
+def plt_seasonal_NH_SH(variable,levels,cbar_label,plt_title, extend):
+
+    f, axsm = plt.subplots(nrows=2,ncols=4,figsize =[10,7], subplot_kw={'projection': ccrs.NorthPolarStereo(central_longitude=0.0,globe=None)})
+
+    coast = cy.feature.NaturalEarthFeature(category='physical', scale='110m',
+                            facecolor='none', name='coastline')
+    
+    for ax, k, season in zip(axsm.flatten()[:4], range(len(fig_label)), variable.season):
+        # ax.add_feature(cy.feature.COASTLINE, alpha=0.5)
+        ax.add_feature(coast,alpha=0.5)
+        ax.set_extent([-180, 180, 90, 45], ccrs.PlateCarree())
+        gl = ax.gridlines(draw_labels=True)
+        gl.top_labels   = False
+        gl.right_labels = False
+        variable.sel(season=season, lat=slice(45,90)).plot(ax=ax, transform=ccrs.PlateCarree(), extend=extend, add_colorbar=False,
+                            cmap=cm.hawaii_r, levels=levels)
+        ax.set(title ='season = {}'.format(season.values))
+        
+        
+        ax.text(0.05, 0.95,
+                        fig_label[k],
+                        fontweight='bold',
+                        horizontalalignment='center',
+                        verticalalignment='center',
+                        transform = ax.transAxes)
+
+    for ax, i, k, season in zip(axsm.flatten()[4:], np.arange(5,9), range(len(fig_label))[4:], variable.season):
+        ax.remove()
+        ax = f.add_subplot(2,4,i, projection=ccrs.SouthPolarStereo(central_longitude=0.0, globe=None))
+        # ax.add_feature(cy.feature.COASTLINE, alpha=0.5)
+        ax.add_feature(coast,alpha=0.5)
+        ax.set_extent([-180, 180, -90, -45], ccrs.PlateCarree())
+        gl = ax.gridlines(draw_labels=True)
+        gl.top_labels   = False
+        gl.right_labels = False
+        cf = variable.sel(season=season, lat=slice(-90,-45)).plot(ax=ax, transform=ccrs.PlateCarree(), extend=extend, add_colorbar=False,
+                            cmap=cm.hawaii_r, levels=levels)
+        ax.set(title ='season = {}'.format(season.values))
+        ax.text(0.05, 0.95,
+                        fig_label[k],
+                        fontweight='bold',
+                        horizontalalignment='center',
+                        verticalalignment='center',
+                        transform = ax.transAxes)
+
+    cbaxes = f.add_axes([1.0125, 0.025, 0.025, 0.9])
+    cbar = plt.colorbar(cf, cax=cbaxes, shrink=0.5,extend=extend, orientation='vertical', label=cbar_label)
+    f.suptitle(plt_title, fontweight="bold");
+    plt.tight_layout(pad=0., w_pad=0., h_pad=0.)
+    
+
+def plt_seasonal_diff(variable, levels, cbar_label, plt_title):
+    f, axsm = plt.subplots(nrows=2,ncols=4,figsize =[10,7], subplot_kw={'projection': ccrs.NorthPolarStereo(central_longitude=0.0,globe=None)})
+
+    coast = cy.feature.NaturalEarthFeature(category='physical', scale='110m',
+                            facecolor='none', name='coastline')
+    
+    for ax,k , season in zip(axsm.flatten()[:4], range(len(fig_label)),variable.season):
+        # ax.add_feature(cy.feature.COASTLINE, alpha=0.5)
+        ax.add_feature(coast,alpha=0.5)
+        ax.set_extent([-180, 180, 90, 45], ccrs.PlateCarree())
+        gl = ax.gridlines(draw_labels=True)
+        gl.top_labels   = False
+        gl.right_labels = False
+        variable.sel(season=season, lat=slice(45,90)).plot(ax=ax, transform=ccrs.PlateCarree(), extend='both', add_colorbar=False,
+                            cmap=cm.vik, levels=levels)
+        ax.set(title ='season = {}'.format(season.values))
+        ax.text(0.05, 0.95,
+                        fig_label[k],
+                        fontweight='bold',
+                        horizontalalignment='center',
+                        verticalalignment='center',
+                        transform = ax.transAxes)
+
+    for ax, i, k, season in zip(axsm.flatten()[4:], np.arange(5,9), range(len(fig_label))[4:], variable.season):
+        ax.remove()
+        ax = f.add_subplot(2,4,i, projection=ccrs.SouthPolarStereo(central_longitude=0.0, globe=None))
+        # ax.add_feature(cy.feature.COASTLINE, alpha=0.5)
+        ax.add_feature(coast,alpha=0.5)
+        ax.set_extent([-180, 180, -90, -45], ccrs.PlateCarree())
+        gl = ax.gridlines(draw_labels=True)
+        gl.top_labels   = False
+        gl.right_labels = False
+        cf = variable.sel(season=season, lat=slice(-90,-45)).plot(ax=ax, transform=ccrs.PlateCarree(), extend='both', add_colorbar=False,
+                            cmap=cm.vik,levels=levels)
+        ax.set(title ='season = {}'.format(season.values))
+        ax.text(0.05, 0.95,
+                        fig_label[k],
+                        fontweight='bold',
+                        horizontalalignment='center',
+                        verticalalignment='center',
+                        transform = ax.transAxes)
+
+    cbaxes = f.add_axes([1.0125, 0.025, 0.025, 0.9])
+    cbar = plt.colorbar(cf, cax=cbaxes, shrink=0.5,extend='both', orientation='vertical', label=cbar_label)
+    f.suptitle(plt_title, fontweight="bold");
+    plt.tight_layout(pad=0., w_pad=0., h_pad=0.)
