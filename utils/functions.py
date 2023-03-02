@@ -921,3 +921,133 @@ def plt_seasonal_diff(variable, levels, cbar_label, plt_title):
     cbar = plt.colorbar(cf, cax=cbaxes, shrink=0.5,extend='both', orientation='vertical', label=cbar_label)
     f.suptitle(plt_title, fontweight="bold");
     plt.tight_layout(pad=0., w_pad=0., h_pad=0.)
+    
+    
+# Radius and area of earth equations
+def earth_radius(lat):
+    '''
+    calculate radius of Earth assuming oblate spheroid
+    defined by WGS84
+    
+    Input
+    ---------
+    lat: vector or lats in degrees  
+    
+    Output
+    ----------
+    r: vector of radius in meters
+    
+    Notes
+    -----------
+    WGS84: https://earth-info.nga.mil/GandG/publications/tr8350.2/tr8350.2-a/Chapter%203.pdf
+    '''
+    from numpy import deg2rad, sin, cos
+
+    # define oblate spheroid from WGS84
+    a = 6378137
+    b = 6356752.3142
+    e2 = 1 - (b**2/a**2)
+    
+    # convert from geodecic to geocentric
+    # see equation 3-110 in WGS84
+    lat = deg2rad(lat)
+    lat_gc = np.arctan( (1-e2)*np.tan(lat) )
+
+    # radius equation
+    # see equation 3-107 in WGS84
+    r = (
+        (a * (1 - e2)**0.5) 
+         / (1 - (e2 * np.cos(lat_gc)**2))**0.5 
+        )
+
+    return r
+
+
+def area_grid(lat, lon):
+    """
+    Calculate the area of each grid cell
+    Area is in square meters
+    
+    Input
+    -----------
+    lat: vector of lat in degrees
+    lon: vector of lon in degrees
+    
+    Output
+    -----------
+    area: grid-cell area in square-meters with dimensions, [lat,lon]
+    
+    Notes
+    -----------
+    Based on the function in
+    https://github.com/chadagreene/CDT/blob/master/cdt/cdtarea.m
+    """
+    from numpy import meshgrid, deg2rad, gradient, cos
+    from xarray import DataArray
+
+    xlon, ylat = meshgrid(lon, lat)
+    R = earth_radius(ylat)
+
+    dlat = deg2rad(gradient(ylat, axis=0))
+    dlon = deg2rad(gradient(xlon, axis=1))
+
+    dy = dlat * R
+    dx = dlon * R * cos(deg2rad(ylat))
+
+    area = dy * dx
+
+    xda = DataArray(
+        area,
+        dims=["lat", "lon"],
+        coords={"lat": lat, "lon": lon},
+        attrs={
+            "long_name": "area_per_pixel",
+            "description": "area per pixel",
+            "units": "m^2",
+        },
+    )
+    return xda
+
+
+def plt_annual_cycle(NH_mean, SH_mean, NH_std, SH_std, y_label,plt_title):
+    f, axsm = plt.subplots(nrows=1,ncols=2,figsize =[10,3.5], sharex=True, sharey=True)
+
+    axs = axsm.flatten()
+    # for c in cm.hawaii_r(range(0,256, int(256/8))):
+    NH_mean.plot.line(ax=axs[0], x='month', add_legend=False, ylim=[0,1], xlim=[1,12], color=[0.703779, 0.948977, 0.993775, 1.      ])
+    SH_mean.plot.line(ax=axs[1], x='month', add_legend=False, ylim=[0,1], xlim=[1,12], color=[0.703779, 0.948977, 0.993775, 1.      ])
+
+    # for year in np.unique(ds_era['time.year']):
+    #     axs[0].scatter(NH_mean['lcc_wo_snow_month_'+str(year)].month.values, NH_mean['lcc_wo_snow_month_'+str(year)].values, marker='x')
+    #     axs[1].scatter(SH_mean['lcc_wo_snow_month_'+str(year)].month.values, SH_mean['lcc_wo_snow_month_'+str(year)].values, marker='x')
+
+    axs[0].fill_between(NH_mean.month,
+                    NH_mean - NH_std,
+                    NH_mean + NH_std,
+                    alpha=0.3, color=[0.703779, 0.948977, 0.993775, 1.      ])
+
+    axs[1].fill_between(SH_mean.month,
+                    SH_mean - SH_std,
+                    SH_mean + SH_std,
+                    alpha=0.3, color=[0.703779, 0.948977, 0.993775, 1.      ])
+    for i in range(len(axsm)):
+        axs[i].text(0.05, 0.95,
+                        fig_label[i],
+                        fontweight='bold',
+                        horizontalalignment='center',
+                        verticalalignment='center',
+                        transform = axs[i].transAxes)
+        axs[i].set_xticks(np.arange(1,13))
+        axs[i].set_xticklabels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])
+        axs[i].grid(alpha=0.3)
+        axs[i].set_xlabel('')
+
+    axs[0].set_ylabel(y_label)
+    axs[1].set_ylabel('')
+    axs[0].set(title ='Arctic')
+    axs[1].set(title ='Antarctic')
+
+
+    f.suptitle(plt_title, fontweight="bold");
+    axs[1].legend(['ERA5'], bbox_to_anchor=(.71, 1.01, -1., .102), loc='lower left', ncol = 1)
+    plt.tight_layout(pad=0.15, w_pad=0.15, h_pad=0.15)
