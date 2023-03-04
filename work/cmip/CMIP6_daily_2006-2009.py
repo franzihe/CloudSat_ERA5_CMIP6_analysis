@@ -1,4 +1,7 @@
+# %%
 # export PYTHONPATH="${PYTHONPATH}:/uio/kant/geo-metos-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/utils/"
+
+
 # %% [markdown]
 # # Example with CMIP6 models (100 - 500 km)
 # 
@@ -129,7 +132,7 @@ xr.set_options(display_style="html")
 # Get the data required for the analysis. Beforehand we downloaded the daily averaged data on single levels and model levels via.
 
 # %%
-cmip_in = os.path.join(INPUT_DATA_DIR, 'cmip6_hist/daily_means')
+cmip_in = os.path.join(INPUT_DATA_DIR, 'cmip6_hist/daily_means/single_model')
 cmip_out = os.path.join(OUTPUT_DATA_DIR, 'cmip6_hist/daily_means/common_grid')
 
 # make output data directory
@@ -151,17 +154,17 @@ variable_id = ['clw', 'cli', 'clivi', 'tas', 'prsn', 'pr', 'areacella']
 # %%
 # source_id
 list_models = [
-               'MIROC6', 
-               'CESM2', 
-               'CanESM5', 
-               'AWI-ESM-1-1-LR', 
-               'MPI-ESM1-2-LR', 
-               'UKESM1-0-LL', 
-               'HadGEM3-GC31-LL',
-               'CNRM-CM6-1',
-               'CNRM-ESM2-1',
-               'IPSL-CM6A-LR',
-               'IPSL-CM5A2-INCA'
+               'MIROC6', #area
+               'CESM2', #area
+               'CanESM5', # area
+               'AWI-ESM-1-1-LR', # area
+               'MPI-ESM1-2-LR', # area
+            #    'UKESM1-0-LL', 
+            #    'HadGEM3-GC31-LL',
+            #    'CNRM-CM6-1', #area
+            #    'CNRM-ESM2-1',
+            #    'IPSL-CM6A-LR', #area
+            #    'IPSL-CM5A2-INCA' #area
             ]
 
 ## experiment
@@ -187,6 +190,9 @@ def search_data(cmip_in, t_res, list_models, year_range):
     for model in list_models:
         # print(model)
         cmip_file_in = glob('{}/*{}_{}_{}*'.format(cmip_in, t_res[0], model, experiment_id[0]))
+        # get also areacella data
+        # print(model)
+        cmip_file_in.append(glob('{}/areacella*{}_{}*.nc'.format(cmip_in,model,  experiment_id[0]))[0])
         if len(cmip_file_in) != 0:
             dset_dict[model] = xr.open_mfdataset(sorted(cmip_file_in), combine='nested', compat='override', use_cftime=True, parallel =True)
             # select only years needed for analysis
@@ -197,6 +203,36 @@ def search_data(cmip_in, t_res, list_models, year_range):
             continue
     
     return dset_dict    
+
+# %%
+# variant_label = ['r10i1p1f1',
+# 'r11i1p1f1',
+# 'r1i1p1f1',
+# 'r1i1p1f2',
+# 'r1i1p2f1',
+# 'r2i1p1f2',
+# 'r5i1p1f3',]
+
+# model = 'IPSL-CM6A-LR'
+# model = list_models[5]
+# # for model in list_models:
+# cmip_file_in = sorted(glob('{}/*{}_{}_{}*'.format(cmip_in, t_res[0], model, experiment_id[0])))
+# cmip_file_in.append(glob('{}/areacella*{}_{}*.nc'.format(cmip_in,model,  experiment_id[0]))[0])
+# _cmip_file_in = []#dict()
+# for i in range(len(cmip_file_in)):
+#             # k = variant_label[0]
+#         for k in variant_label:
+#             if cmip_file_in[i].find(str(k)) != -1:
+#                 print("Contains "+str(k), cmip_file_in[i][59:63])
+#                 _cmip_file_in.append(cmip_file_in[i])
+#             # else:
+#             # # cmip_file_in.remove(cmip_file_in[i])
+#             #     print(cmip_file_in[i])
+# print(model, len(_cmip_file_in))
+
+# %%
+# dset_dict = search_data(cmip_in, t_res, list_models, year_range)
+
 
 # %% [markdown]
 # ## Assign attributes to the variables
@@ -213,12 +249,24 @@ def assign_att(dset):
     for var_id in dset.keys():
             
             if var_id == 'prsn':
-                dset[var_id] = dset[var_id]*3600*24
-                dset[var_id] = dset[var_id].assign_attrs({'standard_name': 'Total snowfall per day',
+                # print('assign attrs', var_id)
+                dset[var_id] = dset[var_id]*3600
+                dset[var_id] = dset[var_id].assign_attrs({'standard_name': 'Total snowfall per hour',
         'comment': 'At surface; includes precipitation of all forms of water in the solid phase',
-        'units': 'mm day-1',
+        'units': 'kg m-2 h-1',
         'original_units': 'kg m-2 s-1',
-        'history': "{}Z altered by F. Hellmuth: Converted units from 'kg m-2 s-1' to 'kg m-2 day-1'.".format(now.strftime("%d/%m/%Y %H:%M:%S")),
+        'history': "{}Z altered by F. Hellmuth: Converted units from 'kg m-2 s-1' to 'kg m-2 h-1'.".format(now.strftime("%d/%m/%Y %H:%M:%S")),
+        'cell_methods': 'area: time: mean',
+        'cell_measures': 'area: areacella'})
+                
+            if var_id == 'pr':
+                # print('assign attrs', var_id)
+                dset[var_id] = dset[var_id]*3600
+                dset[var_id] = dset[var_id].assign_attrs({'standard_name': 'Precipitation flux per hour',
+        'comment': 'At surface; includes precipitation of all forms of water in the solid phase',
+        'units': 'kg m-2 h-1',
+        'original_units': 'kg m-2 s-1',
+        'history': "{}Z altered by F. Hellmuth: Converted units from 'kg m-2 s-1' to 'kg m-2 h-1'.".format(now.strftime("%d/%m/%Y %H:%M:%S")),
         'cell_methods': 'area: time: mean',
         'cell_measures': 'area: areacella'})
                 
@@ -319,6 +367,10 @@ def interp_hybrid_plev(dset, model):
                 
         
     return dset  
+
+# %%
+# for model in dset_dict.keys():
+#     dset_dict[model] = interp_hybrid_plev(dset_dict[model],model)
 
 # %% [markdown]
 # ## Calculate liquid water path from content
@@ -487,15 +539,20 @@ def calc_water_path(dset, model):
     
 
 # %%
+# for model in dset_dict.keys():
+#     dset_dict[model] = calc_water_path(dset_dict[model], model)
+
+# %%
 def process(cmip_in, t_res, list_models, year_range):
     
     dset_dict = search_data(cmip_in, t_res, list_models, year_range)
     for model in dset_dict.keys():
         dset_dict[model] = assign_att(dset_dict[model])
+        # print('prsn attrs:', dset_dict[model]['prsn'].attrs['units'], 'pr attrs:', dset_dict[model]['pr'].attrs['units'])
         dset_dict[model] = interp_hybrid_plev(dset_dict[model],model)
         dset_dict[model] = calc_water_path(dset_dict[model], model)
         
-        dset_dict[model] = dset_dict[model][['prsn', 'tas', 'clivi', 'lwp',]]
+        dset_dict[model] = dset_dict[model][['prsn', 'tas', 'clivi', 'lwp','pr', 'areacella']]
     
     return dset_dict
 
@@ -504,11 +561,16 @@ dset_dict = process(cmip_in, t_res, list_models, year_range)
 
 # %%
 for model in dset_dict.keys():
-    for var in ['prsn', 'tas', 'clivi', 'lwp',]:
+    for var in ['prsn', 'tas', 'clivi','pr', 'areacella','lwp',]:
         for year in year_range:
-            print('Writing files: var: {}, year: {}, model: {}'.format(var, year, model))
-            (dset_dict[model][var].sel(time=slice(str(year)), lat=slice(45,90))).to_netcdf('{}/{}_{}_45_90_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
-            (dset_dict[model][var].sel(time=slice(str(year)), lat=slice(-90,-45))).to_netcdf('{}/{}_{}_-90_-45_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
+            if var == 'areacella':
+                print('Writing files... var: {}, year: {}, model: {}'.format(var, year, model))
+                (dset_dict[model][var].sel(lat=slice(45,90))).to_netcdf('{}/{}_{}_45_90_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
+                (dset_dict[model][var].sel(lat=slice(-90,-45))).to_netcdf('{}/{}_{}_-90_-45_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
+            else:
+                print('Writing files... var: {}, year: {}, model: {}'.format(var, year, model))
+                (dset_dict[model][var].sel(time=slice(str(year)), lat=slice(45,90))).to_netcdf('{}/{}_{}_45_90_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
+                (dset_dict[model][var].sel(time=slice(str(year)), lat=slice(-90,-45))).to_netcdf('{}/{}_{}_-90_-45_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
             
             # (dset_dict[model][var].sel(time=slice(str(year)), lat=slice(-90,-45))).to_netcdf('{}/{}_{}_-90_-45_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
             # (dset_dict[model][var].sel(time=slice(str(year)), lat=slice(45,90))).to_netcdf('{}/{}_{}_45_90_historical_{}_gn_{}0101-{}1231.nc'.format(cmip_in,var, model, dset_dict[model].attrs['variant_label'],year, year))
