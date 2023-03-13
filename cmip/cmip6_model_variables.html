@@ -1,0 +1,1208 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Import python packages &#8212; globalsnow</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'cmip/cmip6_model_variables';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Welcome to Global Snow project website
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../ERA5/ERA5_1985-2014.html">Example with ERA5 high-resolution (~0.25deg) monthly means</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../CMIP6_ERA5_CloudSat/plt_seasonal_mean.html">Analysis of CMIP6, ERA5, and CloudSat</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="CMIP6_hr_1985-2014.html">Example with CMIP6 models (100 - 500 km)</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1 has-children"><a class="reference internal" href="../cloudsat.html">Cloudsat</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../CloudSat/get_pressure_grid.html">Example to get CloudSat mean pressure level profile</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../CloudSat/read_2C_snow.html">Regrid CloudSat data to horizontal grid</a></li>
+
+
+
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/franzihe/CloudSat_ERA5_CMIP6_analysis" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/franzihe/CloudSat_ERA5_CMIP6_analysis/issues/new?title=Issue%20on%20page%20%2Fcmip/cmip6_model_variables.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/cmip/cmip6_model_variables.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Import python packages</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+
+<span class="n">hostname</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">()</span>
+
+<span class="n">abs_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">hostname</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">absolute</span><span class="p">())</span>
+<span class="n">WORKDIR</span> <span class="o">=</span> <span class="n">abs_path</span><span class="p">[:</span><span class="o">-</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">abs_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">abs_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+
+
+<span class="k">if</span> <span class="s2">&quot;mimi&quot;</span> <span class="ow">in</span> <span class="n">hostname</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">hostname</span><span class="p">)</span>
+    <span class="n">DATA_DIR</span> <span class="o">=</span> <span class="s2">&quot;/scratch/franzihe/&quot;</span>
+    <span class="n">FIG_DIR</span> <span class="o">=</span> <span class="s2">&quot;/uio/kant/geo-metos-u1/franzihe/Documents/Figures/CMIP6/&quot;</span>
+<span class="k">elif</span> <span class="s2">&quot;glefsekaldt&quot;</span> <span class="ow">in</span> <span class="n">hostname</span><span class="p">:</span> 
+    <span class="n">DATA_DIR</span> <span class="o">=</span> <span class="s2">&quot;/home/franzihe/Data/&quot;</span>
+    <span class="n">FIG_DIR</span> <span class="o">=</span> <span class="s2">&quot;/home/franzihe/Documents/Figures/CMIP6/&quot;</span>
+
+<span class="n">INPUT_DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">)</span>
+<span class="n">OUTPUT_DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">)</span>
+<span class="n">UTILS_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">WORKDIR</span><span class="p">,</span> <span class="s1">&#39;utils&#39;</span><span class="p">)</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">UTILS_DIR</span><span class="p">)</span>
+<span class="c1"># make figure directory</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">FIG_DIR</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mimi.uio.no
+</pre></div>
+</div>
+</div>
+</div>
+<section id="import-python-packages">
+<h1>Import python packages<a class="headerlink" href="#import-python-packages" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Python</span></code> environment requirements: file <a class="reference download internal" download="" href="../_downloads/06f3f4f78bf14ffb9f9cfdf395203c3c/requirements_globalsnow.txt"><span class="xref download myst">requirements_globalsnow.txt</span></a></p></li>
+<li><p>load <code class="docutils literal notranslate"><span class="pre">python</span></code> packages from <a class="reference download internal" download="" href="../_downloads/5eb7796ec8541cded4dcee2282ad687a/imports.py"><span class="xref download myst">imports.py</span></a></p></li>
+<li><p>load <code class="docutils literal notranslate"><span class="pre">functions</span></code> from <a class="reference download internal" download="" href="../_downloads/3afa0d66b1ce4f3999c315ad3a2e691d/functions.py"><span class="xref download myst">functions.py</span></a></p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># supress warnings</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span> <span class="c1"># don&#39;t output warnings</span>
+
+<span class="c1"># import packages</span>
+<span class="kn">from</span> <span class="nn">imports</span> <span class="kn">import</span><span class="p">(</span><span class="n">pd</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">np</span><span class="p">,</span> <span class="n">plt</span><span class="p">,</span> <span class="n">wget</span><span class="p">,</span><span class="n">cm</span><span class="p">,</span> <span class="n">HTTPError</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># reload imports</span>
+<span class="o">%</span><span class="k">load_ext</span> autoreload
+<span class="o">%</span><span class="k">autoreload</span> 2
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cmip_in</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INPUT_DATA_DIR</span><span class="p">,</span> <span class="s1">&#39;cmip6_hist&#39;</span><span class="p">)</span>
+<span class="n">cmip_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INPUT_DATA_DIR</span><span class="p">,</span> <span class="s1">&#39;cmip6_hist/daily_means&#39;</span><span class="p">)</span>
+<span class="c1"># make output data directory</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">cmip_out</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">cmip_in</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">da</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+<span class="c1"># for file in sorted(glob(&#39;{}/*clw_cli_clivi_lwp_tas_prsn*.json&#39;.format(cmip_in))):</span>
+<span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">/*clw_cli_clivi_lwp_tas_prsn_pfull*.json&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cmip_in</span><span class="p">))):</span>
+
+<span class="c1"># for file in sorted(glob(&#39;esgf_search*&#39;)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;reading file:&#39;</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    
+    <span class="n">_da</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;index&#39;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="s1">&#39;docs&#39;</span><span class="p">]))},</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;activity_id&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;institution_id&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;source_id&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;xloc&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;experiment_id&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;member_id&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;yloc&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;table_id&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;variable_id&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;grid_label&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;version&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;data_node&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;directory_format_template_&#39;</span><span class="p">])</span>
+    <span class="n">_da</span> <span class="o">=</span> <span class="n">_da</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">)</span>
+
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="s1">&#39;docs&#39;</span><span class="p">])):</span>
+        <span class="n">_da</span><span class="p">[</span><span class="s1">&#39;activity_id&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>    <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="s1">&#39;docs&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;activity_id&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">_da</span><span class="p">[</span><span class="s1">&#39;institution_id&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="s1">&#39;docs&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;institution_id&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">_da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>      <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="s1">&#39;docs&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;source_id&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">_da</span><span class="p">[</span><span class="s1">&#39;experiment_id&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>  <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="s1">&#39;docs&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;experiment_id&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">_da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>      <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="s1">&#39;docs&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;member_id&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">_da</span><span class="p">[</span><span class="s1">&#39;table_id&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>       <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="s1">&#39;docs&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;table_id&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">_da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>    <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="s1">&#39;docs&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;variable_id&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">_da</span><span class="p">[</span><span class="s1">&#39;grid_label&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>     <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="s1">&#39;docs&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;grid_label&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">_da</span><span class="p">[</span><span class="s1">&#39;version&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>        <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="s1">&#39;docs&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;version&#39;</span><span class="p">]</span>
+        <span class="n">_da</span><span class="p">[</span><span class="s1">&#39;data_node&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>      <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="s1">&#39;docs&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;data_node&#39;</span><span class="p">]</span>
+        <span class="c1"># _da[&#39;directory_format_template_&#39;][i] = df[&#39;response&#39;][&#39;docs&#39;][i][&#39;directory_format_template_&#39;]</span>
+       
+        <span class="c1"># </span>
+    <span class="n">da</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">da</span><span class="p">,</span> <span class="n">_da</span><span class="p">])</span>
+
+<span class="n">da</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>reading file: /scratch/franzihe/input/cmip6_hist/esgf_search_(clw_cli_clivi_lwp_tas_prsn_pfull)_day_01.json
+reading file: /scratch/franzihe/input/cmip6_hist/esgf_search_(clw_cli_clivi_lwp_tas_prsn_pfull)_day_02.json
+reading file: /scratch/franzihe/input/cmip6_hist/esgf_search_(clw_cli_clivi_lwp_tas_prsn_pfull)_day_03.json
+reading file: /scratch/franzihe/input/cmip6_hist/esgf_search_(clw_cli_clivi_lwp_tas_prsn_pfull)_day_04.json
+reading file: /scratch/franzihe/input/cmip6_hist/esgf_search_(clw_cli_clivi_lwp_tas_prsn_pfull)_day_05.json
+reading file: /scratch/franzihe/input/cmip6_hist/esgf_search_(clw_cli_clivi_lwp_tas_prsn_pfull)_day_06.json
+reading file: /scratch/franzihe/input/cmip6_hist/esgf_search_(clw_cli_clivi_lwp_tas_prsn_pfull)_day_07.json
+reading file: /scratch/franzihe/input/cmip6_hist/esgf_search_(clw_cli_clivi_lwp_tas_prsn_pfull)_day_08.json
+reading file: /scratch/franzihe/input/cmip6_hist/esgf_search_(clw_cli_clivi_lwp_tas_prsn_pfull)_day_09.json
+reading file: /scratch/franzihe/input/cmip6_hist/esgf_search_(clw_cli_clivi_lwp_tas_prsn_pfull)_day_10.json
+reading file: /scratch/franzihe/input/cmip6_hist/esgf_search_(clw_cli_clivi_lwp_tas_prsn_pfull)_day_11.json
+reading file: /scratch/franzihe/input/cmip6_hist/esgf_search_(clw_cli_clivi_lwp_tas_prsn_pfull)_day_12.json
+reading file: /scratch/franzihe/input/cmip6_hist/esgf_search_(clw_cli_clivi_lwp_tas_prsn_pfull)_day_13.json
+reading file: /scratch/franzihe/input/cmip6_hist/esgf_search_(clw_cli_clivi_lwp_tas_prsn_pfull)_day_14.json
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">model</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">(),</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()))):</span>
+    <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()):</span>        
+        <span class="c1"># remove models and ensemble member where no snow available</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">member</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;prsn&#39;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">idx3</span> <span class="o">=</span> <span class="p">(((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">member</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;clw&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">index</span>
+            <span class="n">da</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">idx3</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+            <span class="n">idx3</span> <span class="o">=</span> <span class="p">(((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">member</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;cli&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">index</span>
+            <span class="n">da</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">idx3</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+            <span class="n">idx3</span> <span class="o">=</span> <span class="p">(((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">member</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;clivi&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">index</span>
+            <span class="n">da</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">idx3</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+            <span class="n">idx3</span> <span class="o">=</span> <span class="p">(((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">member</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;tas&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">index</span>
+            <span class="n">da</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">idx3</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="c1"># remove models and ensemble member where no 2m temperature available</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">member</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;tas&#39;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">idx3</span> <span class="o">=</span> <span class="p">(((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">member</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;clw&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">index</span>
+            <span class="n">da</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">idx3</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+            <span class="n">idx3</span> <span class="o">=</span> <span class="p">(((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">member</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;cli&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">index</span>
+            <span class="n">da</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">idx3</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+            <span class="n">idx3</span> <span class="o">=</span> <span class="p">(((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">member</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;clivi&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">index</span>
+            <span class="n">da</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">idx3</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+            <span class="n">idx3</span> <span class="o">=</span> <span class="p">(((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">member</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;prsn&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">index</span>
+            <span class="n">da</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">idx3</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="c1"># remove models and ensemble member where no cloud liquid water available</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">member</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;clw&#39;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">idx3</span> <span class="o">=</span> <span class="p">(((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">member</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;tas&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">index</span>
+            <span class="n">da</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">idx3</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+            <span class="n">idx3</span> <span class="o">=</span> <span class="p">(((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">member</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;cli&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">index</span>
+            <span class="n">da</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">idx3</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+            <span class="n">idx3</span> <span class="o">=</span> <span class="p">(((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">member</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;clivi&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">index</span>
+            <span class="n">da</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">idx3</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+            <span class="n">idx3</span> <span class="o">=</span> <span class="p">(((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">member</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;prsn&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">index</span>
+            <span class="n">da</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">idx3</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<span class="k">for</span> <span class="n">model</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">(),</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()))):</span>      
+    <span class="k">for</span> <span class="n">member</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()),</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())))):</span>
+    <span class="c1">#     (da.loc[da[&#39;member_id&#39;] == member])[&#39;yloc&#39;] = k </span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">member</span><span class="p">]))</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span><span class="c1"># and len((da.loc[da[&#39;source_id&#39;] == model]).loc[da[&#39;variable_id&#39;] == &#39;prsn&#39;]) != 0:</span>
+            <span class="n">idx2</span> <span class="o">=</span> <span class="p">((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">member</span><span class="p">])</span><span class="o">.</span><span class="n">index</span>
+            <span class="n">da</span><span class="p">[</span><span class="s1">&#39;yloc&#39;</span><span class="p">][</span><span class="n">idx2</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">member</span><span class="p">]))</span> <span class="o">&lt;</span><span class="mi">4</span><span class="p">:</span><span class="c1"># and </span>
+            <span class="n">idx2</span> <span class="o">=</span> <span class="p">((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;member_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">member</span><span class="p">])</span><span class="o">.</span><span class="n">index</span>
+            <span class="n">da</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">idx2</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for id in ((da.loc[da[&#39;source_id&#39;] == &#39;IPSL-CM5A2-INCA&#39;])[&#39;member_id&#39;]).unique():</span>
+<span class="c1">#     if id == &#39;r1i1p1f1&#39;:</span>
+<span class="c1">#         continue</span>
+<span class="c1">#     else:</span>
+<span class="c1">#         da.drop(((da.loc[da[&#39;source_id&#39;] == &#39;IPSL-CM5A2-INCA&#39;]).loc[da[&#39;member_id&#39;] == id]).index, inplace=True)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">model</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">(),</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()))):</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="p">((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;clw&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">index</span>
+    <span class="n">da</span><span class="p">[</span><span class="s1">&#39;xloc&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mf">.05</span>
+    
+    <span class="n">idx</span> <span class="o">=</span> <span class="p">((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;cli&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">index</span>
+    <span class="n">da</span><span class="p">[</span><span class="s1">&#39;xloc&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mf">.22</span>
+    
+    <span class="n">idx</span> <span class="o">=</span> <span class="p">((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;clivi&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">index</span>
+    <span class="n">da</span><span class="p">[</span><span class="s1">&#39;xloc&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mf">.39</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="p">((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;tas&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">index</span>
+    <span class="n">da</span><span class="p">[</span><span class="s1">&#39;xloc&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mf">.56</span>
+    
+    <span class="n">idx</span> <span class="o">=</span> <span class="p">((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;prsn&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">index</span>
+    <span class="n">da</span><span class="p">[</span><span class="s1">&#39;xloc&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mf">.73</span>
+    
+    <span class="n">idx</span> <span class="o">=</span> <span class="p">((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;pfull&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">index</span>
+    <span class="n">da</span><span class="p">[</span><span class="s1">&#39;xloc&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mf">.9</span>
+    
+<span class="n">da</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span> <span class="n">axsm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mf">7.5</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">])</span>
+
+<span class="k">for</span> <span class="n">model</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">(),</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())),</span> <span class="p">):</span>
+    
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="p">((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;clw&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axsm</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;xloc&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;member_id&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">romaO</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mi">256</span> <span class="o">/</span> <span class="mi">6</span><span class="p">)))[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;clw&#39;</span><span class="p">,</span> <span class="p">)</span><span class="c1">#alpha=0.5, edgecolors=&#39;none&#39;)</span>
+        <span class="p">((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;cli&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axsm</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;xloc&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;member_id&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">romaO</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mi">256</span> <span class="o">/</span> <span class="mi">6</span><span class="p">)))[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;cli&#39;</span><span class="p">,</span> <span class="p">)</span><span class="c1">#alpha=0.5, edgecolors=&#39;none&#39;)</span>
+        <span class="p">((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;clivi&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axsm</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;xloc&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;member_id&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">romaO</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mi">256</span> <span class="o">/</span> <span class="mi">6</span><span class="p">)))[</span><span class="mi">2</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;clivi&#39;</span><span class="p">,</span> <span class="p">)</span><span class="c1">#alpha=0.5, edgecolors=&#39;none&#39;)</span>
+        <span class="p">((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;tas&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axsm</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;xloc&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;member_id&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">romaO</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mi">256</span> <span class="o">/</span> <span class="mi">6</span><span class="p">)))[</span><span class="mi">3</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;tas&#39;</span><span class="p">,</span> <span class="p">)</span><span class="c1">#alpha=0.5, edgecolors=&#39;none&#39;)</span>
+        <span class="p">((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;prsn&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axsm</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;xloc&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;member_id&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">romaO</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mi">256</span> <span class="o">/</span> <span class="mi">6</span><span class="p">)))[</span><span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;prsn&#39;</span><span class="p">,</span> <span class="p">)</span><span class="c1">#alpha=0.5, edgecolors=&#39;none&#39;)</span>
+        <span class="p">((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;pfull&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axsm</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;xloc&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;member_id&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">romaO</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mi">256</span> <span class="o">/</span> <span class="mi">6</span><span class="p">)))[</span><span class="mi">5</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;pfull&#39;</span><span class="p">,</span> <span class="p">)</span><span class="c1">#alpha=0.5, edgecolors=&#39;none&#39;)</span>
+    
+    
+    <span class="k">else</span><span class="p">:</span>
+        <span class="p">((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;clw&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axsm</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;xloc&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;member_id&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">romaO</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mi">256</span> <span class="o">/</span> <span class="mi">6</span><span class="p">)))[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;_nolegend_&#39;</span><span class="p">,</span> <span class="p">)</span><span class="c1">#alpha=0.5, edgecolors=&#39;none&#39;)</span>
+        <span class="p">((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;cli&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axsm</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;xloc&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;member_id&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">romaO</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mi">256</span> <span class="o">/</span> <span class="mi">6</span><span class="p">)))[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;_nolegend_&#39;</span><span class="p">,</span> <span class="p">)</span><span class="c1">#alpha=0.5, edgecolors=&#39;none&#39;)</span>
+        <span class="p">((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;clivi&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axsm</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;xloc&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;member_id&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">romaO</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mi">256</span> <span class="o">/</span> <span class="mi">6</span><span class="p">)))[</span><span class="mi">2</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;_nolegend_&#39;</span><span class="p">,</span> <span class="p">)</span><span class="c1">#alpha=0.5, edgecolors=&#39;none&#39;)</span>
+        <span class="p">((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;tas&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axsm</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;xloc&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;member_id&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">romaO</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mi">256</span> <span class="o">/</span> <span class="mi">6</span><span class="p">)))[</span><span class="mi">3</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;_nolegend_&#39;</span><span class="p">,</span> <span class="p">)</span><span class="c1">#alpha=0.5, edgecolors=&#39;none&#39;)</span>
+        <span class="p">((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;prsn&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axsm</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;xloc&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;member_id&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">romaO</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mi">256</span> <span class="o">/</span> <span class="mi">6</span><span class="p">)))[</span><span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;_nolegend_&#39;</span><span class="p">,</span> <span class="p">)</span><span class="c1">#alpha=0.5, edgecolors=&#39;none&#39;)</span>
+        <span class="p">((</span><span class="n">da</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">==</span> <span class="n">model</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;variable_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;pfull&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axsm</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;xloc&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;member_id&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">romaO</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mi">256</span> <span class="o">/</span> <span class="mi">6</span><span class="p">)))[</span><span class="mi">5</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;pfull&#39;</span><span class="p">,</span> <span class="p">)</span><span class="c1">#alpha=0.5, edgecolors=&#39;none&#39;)</span>
+    
+
+<span class="n">axsm</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;clw&#39;</span><span class="p">,</span> <span class="s1">&#39;cli&#39;</span><span class="p">,</span> <span class="s1">&#39;clivi&#39;</span><span class="p">,</span> <span class="s1">&#39;tas&#39;</span><span class="p">,</span> <span class="s1">&#39;prsn&#39;</span><span class="p">,</span> <span class="s1">&#39;pfull&#39;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Variable ID&#39;</span><span class="p">,</span> <span class="p">)</span>
+<span class="n">axsm</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">ticks</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())),</span> <span class="n">labels</span><span class="o">=</span><span class="n">da</span><span class="p">[</span><span class="s1">&#39;source_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">(),</span><span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># axsm.set_yticks(da[&#39;yloc&#39;].unique(), labels=da[&#39;member_id&#39;].unique(), fontsize=8)</span>
+<span class="n">axsm</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="c1"># Set common labels</span>
+<span class="n">axsm</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Source ID&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">axsm</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Member ID&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">);</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">+</span> <span class="s1">&#39;cmip6_model_variables.png&#39;</span><span class="p">,</span> <span class="nb">format</span> <span class="o">=</span> <span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">transparent</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+*c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* &amp; *y*.  Please use the *color* keyword-argument or provide a 2D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+</pre></div>
+</div>
+<img alt="../_images/02e4bf9d676da32814a5586ea622c508e9d32192f6237ee112ba43dbcfe83317.png" src="../_images/02e4bf9d676da32814a5586ea622c508e9d32192f6237ee112ba43dbcfe83317.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">var_id</span> <span class="o">=</span> <span class="p">[</span>
+<span class="c1">#     &#39;r10i1p1f1&#39;,</span>
+<span class="c1"># &#39;r10i1p2f1&#39;,</span>
+<span class="c1"># &#39;r11i1p1f1&#39;,</span>
+<span class="c1"># &#39;r11i1p2f1&#39;,</span>
+<span class="c1"># &#39;r12i1p1f1&#39;,</span>
+<span class="c1"># &#39;r13i1p1f1&#39;,</span>
+<span class="c1"># &#39;r14i1p1f1&#39;,</span>
+<span class="c1"># &#39;r15i1p1f1&#39;,</span>
+<span class="c1"># &#39;r16i1p1f1&#39;,</span>
+<span class="c1"># &#39;r17i1p1f1&#39;,</span>
+<span class="c1"># &#39;r18i1p1f1&#39;,</span>
+<span class="c1"># &#39;r19i1p1f1&#39;,</span>
+<span class="c1"># &#39;r1i1p2f1&#39;,</span>
+<span class="c1"># &#39;r1i1p1f1&#39;,</span>
+<span class="c1"># &#39;r20i1p1f1&#39;,</span>
+<span class="c1"># &#39;r21i1p1f1&#39;,</span>
+<span class="c1"># &#39;r22i1p1f1&#39;,</span>
+<span class="c1"># &#39;r23i1p1f1&#39;,</span>
+<span class="c1"># &#39;r24i1p1f1&#39;,</span>
+<span class="c1"># &#39;r25i1p1f1&#39;,</span>
+<span class="c1"># &#39;r26i1p1f1&#39;,</span>
+<span class="c1"># &#39;r27i1p1f1&#39;,</span>
+<span class="c1"># &#39;r28i1p1f1&#39;,</span>
+<span class="c1"># &#39;r29i1p1f1&#39;,</span>
+<span class="c1"># &#39;r2i1p1f1&#39;,</span>
+<span class="c1"># &#39;r2i1p2f1&#39;,</span>
+<span class="c1"># &#39;r30i1p1f1&#39;,</span>
+<span class="c1"># &#39;r31i1p1f1&#39;,</span>
+<span class="c1"># &#39;r32i1p1f1&#39;,</span>
+<span class="c1"># &#39;r33i1p1f1&#39;,</span>
+<span class="c1"># &#39;r34i1p1f1&#39;,</span>
+<span class="c1"># &#39;r35i1p1f1&#39;,</span>
+<span class="c1"># &#39;r36i1p1f1&#39;,</span>
+<span class="c1"># &#39;r37i1p1f1&#39;,</span>
+<span class="c1"># &#39;r38i1p1f1&#39;,</span>
+<span class="c1"># &#39;r39i1p1f1&#39;,</span>
+<span class="c1"># &#39;r3i1p1f1&#39;,</span>
+<span class="c1"># &#39;r3i1p2f1&#39;,</span>
+<span class="c1"># &#39;r40i1p1f1&#39;,</span>
+<span class="c1"># &#39;r4i1p1f1&#39;,</span>
+<span class="c1"># &#39;r4i1p2f1&#39;,</span>
+<span class="c1"># &#39;r5i1p1f1&#39;,</span>
+<span class="c1"># &#39;r5i1p2f1&#39;,</span>
+<span class="c1"># &#39;r6i1p1f1&#39;,</span>
+<span class="c1"># &#39;r6i1p2f1&#39;,</span>
+<span class="c1"># &#39;r7i1p1f1&#39;,</span>
+<span class="c1"># &#39;r7i1p2f1&#39;,</span>
+<span class="c1"># &#39;r8i1p1f1&#39;,</span>
+<span class="c1"># &#39;r8i1p2f1&#39;,</span>
+<span class="c1"># &#39;r9i1p1f1&#39;,</span>
+<span class="c1"># &#39;r9i1p2f1&#39;,</span>
+<span class="s1">&#39;r11i1p1f1&#39;</span><span class="p">,</span>
+<span class="s1">&#39;r1i1p1f1&#39;</span><span class="p">,</span>
+<span class="s1">&#39;r1i1p1f2&#39;</span><span class="p">,</span>
+<span class="s1">&#39;r1i1p2f1&#39;</span><span class="p">,</span>
+<span class="s1">&#39;r2i1p1f2&#39;</span><span class="p">,</span>
+<span class="s1">&#39;r5i1p1f3&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_download_dict</span><span class="p">(</span><span class="n">var_id</span><span class="p">):</span>
+        <span class="n">down</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;CESM2&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;node&#39;</span><span class="p">:[</span><span class="s1">&#39;http://esgf-data.ucar.edu/thredds/fileServer/esg_dataroot/CMIP6/CMIP/&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;mdir&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;NCAR/CESM2/historical/</span><span class="si">{}</span><span class="s1">/day/prsn/gn/v20200124/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;NCAR/CESM2/historical/</span><span class="si">{}</span><span class="s1">/day/tas/gn/v20190514/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;NCAR/CESM2/historical/</span><span class="si">{}</span><span class="s1">/CFday/clivi/gn/v20190514/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;NCAR/CESM2/historical/</span><span class="si">{}</span><span class="s1">/CFday/clw/gn/v20190514/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;NCAR/CESM2/historical/</span><span class="si">{}</span><span class="s1">/day/pr/gn/v20190514/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;NCAR/CESM2/historical/</span><span class="si">{}</span><span class="s1">/fx/areacella/gn/v20190514/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">)],</span>
+                        <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;prsn_day_CESM2_historical_</span><span class="si">{}</span><span class="s1">_gn_20000101-20150101.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;tas_day_CESM2_historical_</span><span class="si">{}</span><span class="s1">_gn_20000101-20091231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;clivi_CFday_CESM2_historical_</span><span class="si">{}</span><span class="s1">_gn_20000101-20091231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;clw_CFday_CESM2_historical_</span><span class="si">{}</span><span class="s1">_gn_20000101-20091231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;pr_day_CESM2_historical_</span><span class="si">{}</span><span class="s1">_gn_20100101-20150101.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;areacella_fx_CESM2_historical_</span><span class="si">{}</span><span class="s1">_gn.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">)],</span>
+                        <span class="s1">&#39;var_id&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">]},</span>
+                <span class="s1">&#39;CanESM5&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;node&#39;</span><span class="p">:[</span><span class="s1">&#39;http://crd-esgf-drc.ec.gc.ca/thredds/fileServer/esgC_dataroot/AR6/CMIP6/CMIP/&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;mdir&#39;</span><span class="p">:[</span><span class="s1">&#39;CCCma/CanESM5/historical/</span><span class="si">{}</span><span class="s1">/day/prsn/gn/v20190429/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;CCCma/CanESM5/historical/</span><span class="si">{}</span><span class="s1">/day/tas/gn/v20190429/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;CCCma/CanESM5/historical/</span><span class="si">{}</span><span class="s1">/CFday/clivi/gn/v20190429/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;CCCma/CanESM5/historical/</span><span class="si">{}</span><span class="s1">/CFday/clw/gn/v20190429/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;CCCma/CanESM5/historical/</span><span class="si">{}</span><span class="s1">/day/pr/gn/v20190429/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;CCCma/CanESM5/historical/</span><span class="si">{}</span><span class="s1">/fx/areacella/gn/v20190429/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">)],</span>
+                        <span class="s1">&#39;file&#39;</span><span class="p">:[</span><span class="s1">&#39;prsn_day_CanESM5_historical_</span><span class="si">{}</span><span class="s1">_gn_18500101-20141231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;tas_day_CanESM5_historical_</span><span class="si">{}</span><span class="s1">_gn_18500101-20141231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;clivi_CFday_CanESM5_historical_</span><span class="si">{}</span><span class="s1">_gn_18500101-20141231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;clw_CFday_CanESM5_historical_</span><span class="si">{}</span><span class="s1">_gn_20010101-20101231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;pr_day_CanESM5_historical_</span><span class="si">{}</span><span class="s1">_gn_18500101-20141231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;areacella_fx_CanESM5_historical_</span><span class="si">{}</span><span class="s1">_gn.nc&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;var_id&#39;</span><span class="p">:</span> <span class="p">[]},</span>
+                <span class="s1">&#39;MIROC6&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;node&#39;</span><span class="p">:[</span> <span class="s1">&#39;https://esgf-data1.llnl.gov/thredds/fileServer/css03_data/CMIP6/CMIP/&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;mdir&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;MIROC/MIROC6/historical/</span><span class="si">{}</span><span class="s1">/day/prsn/gn/v20191016/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;MIROC/MIROC6/historical/</span><span class="si">{}</span><span class="s1">/day/tas/gn/v20191016/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;MIROC/MIROC6/historical/</span><span class="si">{}</span><span class="s1">/CFday/cli/gn/v20191212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;MIROC/MIROC6/historical/</span><span class="si">{}</span><span class="s1">/CFday/clw/gn/v20191212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;MIROC/MIROC6/historical/</span><span class="si">{}</span><span class="s1">/CFday/cli/gn/v20191212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;MIROC/MIROC6/historical/</span><span class="si">{}</span><span class="s1">/CFday/clw/gn/v20191212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;MIROC/MIROC6/historical/</span><span class="si">{}</span><span class="s1">/CFday/cli/gn/v20191212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;MIROC/MIROC6/historical/</span><span class="si">{}</span><span class="s1">/CFday/clw/gn/v20191212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;MIROC/MIROC6/historical/</span><span class="si">{}</span><span class="s1">/CFday/cli/gn/v20191212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;MIROC/MIROC6/historical/</span><span class="si">{}</span><span class="s1">/CFday/clw/gn/v20191212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;MIROC/MIROC6/historical/</span><span class="si">{}</span><span class="s1">/day/pr/gn/v20200519/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;MIROC/MIROC6/historical/</span><span class="si">{}</span><span class="s1">/fx/areacella/gn/v20200519/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">)],</span>
+                        <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;prsn_day_MIROC6_historical_</span><span class="si">{}</span><span class="s1">_gn_20000101-20091231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;tas_day_MIROC6_historical_</span><span class="si">{}</span><span class="s1">_gn_20000101-20091231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;cli_CFday_MIROC6_historical_</span><span class="si">{}</span><span class="s1">_gn_20060101-20061231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;clw_CFday_MIROC6_historical_</span><span class="si">{}</span><span class="s1">_gn_20060101-20061231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;cli_CFday_MIROC6_historical_</span><span class="si">{}</span><span class="s1">_gn_20070101-20071231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;clw_CFday_MIROC6_historical_</span><span class="si">{}</span><span class="s1">_gn_20070101-20071231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;cli_CFday_MIROC6_historical_</span><span class="si">{}</span><span class="s1">_gn_20080101-20081231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;clw_CFday_MIROC6_historical_</span><span class="si">{}</span><span class="s1">_gn_20080101-20081231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;cli_CFday_MIROC6_historical_</span><span class="si">{}</span><span class="s1">_gn_20090101-20091231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;clw_CFday_MIROC6_historical_</span><span class="si">{}</span><span class="s1">_gn_20090101-20091231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;pr_day_MIROC6_historical_</span><span class="si">{}</span><span class="s1">_gn_20000101-20091231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                <span class="s1">&#39;areacella_fx_MIROC6_historical_</span><span class="si">{}</span><span class="s1">_gn.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">)],</span>
+                        <span class="s1">&#39;var_id&#39;</span><span class="p">:</span> <span class="p">[]},</span>
+                <span class="s1">&#39;AWI-ESM-1-1-LR&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;node&#39;</span><span class="p">:[</span> <span class="s1">&#39;http://esgf3.dkrz.de/thredds/fileServer/cmip6/CMIP/&#39;</span><span class="p">],</span>
+                                <span class="s1">&#39;mdir&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;AWI/AWI-ESM-1-1-LR/historical/</span><span class="si">{}</span><span class="s1">/day/prsn/gn/v20200212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;AWI/AWI-ESM-1-1-LR/historical/</span><span class="si">{}</span><span class="s1">/day/tas/gn/v20200212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;AWI/AWI-ESM-1-1-LR/historical/</span><span class="si">{}</span><span class="s1">/CFday/clivi/gn/v20200212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;AWI/AWI-ESM-1-1-LR/historical/</span><span class="si">{}</span><span class="s1">/CFday/clw/gn/v20200212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;AWI/AWI-ESM-1-1-LR/historical/</span><span class="si">{}</span><span class="s1">/day/pr/gn/v20200212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;AWI/AWI-ESM-1-1-LR/historical/</span><span class="si">{}</span><span class="s1">/day/prsn/gn/v20200212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;AWI/AWI-ESM-1-1-LR/historical/</span><span class="si">{}</span><span class="s1">/day/tas/gn/v20200212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;AWI/AWI-ESM-1-1-LR/historical/</span><span class="si">{}</span><span class="s1">/CFday/clivi/gn/v20200212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;AWI/AWI-ESM-1-1-LR/historical/</span><span class="si">{}</span><span class="s1">/CFday/clw/gn/v20200212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;AWI/AWI-ESM-1-1-LR/historical/</span><span class="si">{}</span><span class="s1">/day/pr/gn/v20200212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;AWI/AWI-ESM-1-1-LR/historical/</span><span class="si">{}</span><span class="s1">/day/prsn/gn/v20200212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;AWI/AWI-ESM-1-1-LR/historical/</span><span class="si">{}</span><span class="s1">/day/tas/gn/v20200212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;AWI/AWI-ESM-1-1-LR/historical/</span><span class="si">{}</span><span class="s1">/CFday/clivi/gn/v20200212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;AWI/AWI-ESM-1-1-LR/historical/</span><span class="si">{}</span><span class="s1">/CFday/clw/gn/v20200212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;AWI/AWI-ESM-1-1-LR/historical/</span><span class="si">{}</span><span class="s1">/day/pr/gn/v20200212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;AWI/AWI-ESM-1-1-LR/historical/</span><span class="si">{}</span><span class="s1">/day/prsn/gn/v20200212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;AWI/AWI-ESM-1-1-LR/historical/</span><span class="si">{}</span><span class="s1">/day/tas/gn/v20200212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;AWI/AWI-ESM-1-1-LR/historical/</span><span class="si">{}</span><span class="s1">/CFday/clivi/gn/v20200212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;AWI/AWI-ESM-1-1-LR/historical/</span><span class="si">{}</span><span class="s1">/CFday/clw/gn/v20200212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;AWI/AWI-ESM-1-1-LR/historical/</span><span class="si">{}</span><span class="s1">/day/pr/gn/v20200212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;AWI/AWI-ESM-1-1-LR/historical/</span><span class="si">{}</span><span class="s1">/fx/areacella/gn/v20200212/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">)],</span>
+                                <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;prsn_day_AWI-ESM-1-1-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_20060101-20061231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;tas_day_AWI-ESM-1-1-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_20060101-20061231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;clivi_CFday_AWI-ESM-1-1-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_20060101-20061231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;clw_CFday_AWI-ESM-1-1-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_20060101-20061231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;pr_day_AWI-ESM-1-1-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_20060101-20061231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;prsn_day_AWI-ESM-1-1-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_20070101-20071231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;tas_day_AWI-ESM-1-1-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_20070101-20071231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;clivi_CFday_AWI-ESM-1-1-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_20070101-20071231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;clw_CFday_AWI-ESM-1-1-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_20070101-20071231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;pr_day_AWI-ESM-1-1-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_20070101-20071231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;prsn_day_AWI-ESM-1-1-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_20080101-20081231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;tas_day_AWI-ESM-1-1-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_20080101-20081231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;clivi_CFday_AWI-ESM-1-1-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_20080101-20081231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;clw_CFday_AWI-ESM-1-1-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_20080101-20081231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;pr_day_AWI-ESM-1-1-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_20080101-20081231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;prsn_day_AWI-ESM-1-1-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_20090101-20091231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;tas_day_AWI-ESM-1-1-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_20090101-20091231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;clivi_CFday_AWI-ESM-1-1-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_20090101-20091231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;clw_CFday_AWI-ESM-1-1-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_20090101-20091231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;pr_day_AWI-ESM-1-1-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_20090101-20091231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;areacella_fx_AWI-ESM-1-1-LR_historical_</span><span class="si">{}</span><span class="s1">_gn.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">)],</span>
+                                <span class="s1">&#39;var_id&#39;</span><span class="p">:[]},</span>
+                
+                <span class="s1">&#39;MPI-ESM1-2-LR&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;node&#39;</span><span class="p">:[</span><span class="s1">&#39;http://esgf3.dkrz.de/thredds/fileServer/cmip6/CMIP/&#39;</span><span class="p">],</span>
+                                <span class="s1">&#39;mdir&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;MPI-M/MPI-ESM1-2-LR/historical/</span><span class="si">{}</span><span class="s1">/day/prsn/gn/v20210901/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;MPI-M/MPI-ESM1-2-LR/historical/</span><span class="si">{}</span><span class="s1">/day/tas/gn/v20210901/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;MPI-M/MPI-ESM1-2-LR/historical/</span><span class="si">{}</span><span class="s1">/CFday/clivi/gn/v20210901/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;MPI-M/MPI-ESM1-2-LR/historical/</span><span class="si">{}</span><span class="s1">/CFday/clw/gn/v20210901/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;MPI-M/MPI-ESM1-2-LR/historical/</span><span class="si">{}</span><span class="s1">/day/pr/gn/v20190710/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;MPI-M/MPI-ESM1-2-LR/historical/</span><span class="si">{}</span><span class="s1">/fx/areacella/gn/v20190710/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">)],</span>
+                                <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;prsn_day_MPI-ESM1-2-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_19900101-20091231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;tas_day_MPI-ESM1-2-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_19900101-20091231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;clivi_CFday_MPI-ESM1-2-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_19900101-20091231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;clw_CFday_MPI-ESM1-2-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_19900101-20091231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;pr_day_MPI-ESM1-2-LR_historical_</span><span class="si">{}</span><span class="s1">_gn_19900101-20091231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;areacella_fx_MPI-ESM1-2-LR_historical_</span><span class="si">{}</span><span class="s1">_gn.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">)],</span>
+                                <span class="s1">&#39;var_id&#39;</span><span class="p">:[]},</span>
+                <span class="s1">&#39;CNRM-CM6-1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;node&#39;</span><span class="p">:[</span> <span class="s1">&#39;http://esg1.umr-cnrm.fr/thredds/fileServer/CMIP6_CNRM/CMIP/&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;mdir&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;CNRM-CERFACS/CNRM-CM6-1/historical/</span><span class="si">{}</span><span class="s1">/day/prsn/gr/v20180917/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;CNRM-CERFACS/CNRM-CM6-1/historical/</span><span class="si">{}</span><span class="s1">/day/tas/gr/v20180917/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;CNRM-CERFACS/CNRM-CM6-1/historical/</span><span class="si">{}</span><span class="s1">/CFday/clivi/gr/v20180917/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;CNRM-CERFACS/CNRM-CM6-1/historical/</span><span class="si">{}</span><span class="s1">/CFday/clw/gr/v20180917/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;CNRM-CERFACS/CNRM-CM6-1/historical/</span><span class="si">{}</span><span class="s1">/day/pr/gr/v20181126/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;CNRM-CERFACS/CNRM-CM6-1/historical/</span><span class="si">{}</span><span class="s1">/fx/areacella/gr/v20180917/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">)],</span>
+                        <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;prsn_day_CNRM-CM6-1_historical_</span><span class="si">{}</span><span class="s1">_gr_19500101-20141231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;tas_day_CNRM-CM6-1_historical_</span><span class="si">{}</span><span class="s1">_gr_18500101-20141231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;clivi_CFday_CNRM-CM6-1_historical_</span><span class="si">{}</span><span class="s1">_gr_19500101-20141231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;clw_CFday_CNRM-CM6-1_historical_</span><span class="si">{}</span><span class="s1">_gr_20060101-20091231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;pr_day_CNRM-CM6-1_historical_</span><span class="si">{}</span><span class="s1">_gr_19500101-20141231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;areacella_fx_CNRM-CM6-1_historical_</span><span class="si">{}</span><span class="s1">_gr.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">)],</span>
+                        <span class="s1">&#39;var_id&#39;</span><span class="p">:</span> <span class="p">[]},</span>
+                <span class="s1">&#39;CNRM-ESM2-1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;node&#39;</span><span class="p">:[</span> <span class="s1">&#39;http://esg1.umr-cnrm.fr/thredds/fileServer/CMIP6_CNRM/CMIP/&#39;</span><span class="p">],</span>
+                                <span class="s1">&#39;mdir&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;CNRM-CERFACS/CNRM-ESM2-1/historical/</span><span class="si">{}</span><span class="s1">/day/prsn/gr/v20181206/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;CNRM-CERFACS/CNRM-ESM2-1/historical/</span><span class="si">{}</span><span class="s1">/day/tas/gr/v20181206/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;CNRM-CERFACS/CNRM-ESM2-1/historical/</span><span class="si">{}</span><span class="s1">/CFday/clivi/gr/v20181206/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;CNRM-CERFACS/CNRM-ESM2-1/historical/</span><span class="si">{}</span><span class="s1">/CFday/clw/gr/v20181206/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;CNRM-CERFACS/CNRM-ESM2-1/historical/</span><span class="si">{}</span><span class="s1">/day/pr/gr/v20181206/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;CNRM-CERFACS/CNRM-ESM2-1/historical/</span><span class="si">{}</span><span class="s1">/fx/areacella/gr/v20190125/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),],</span>
+                                <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;prsn_day_CNRM-ESM2-1_historical_</span><span class="si">{}</span><span class="s1">_gr_19500101-20141231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;tas_day_CNRM-ESM2-1_historical_</span><span class="si">{}</span><span class="s1">_gr_18500101-20141231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;clivi_CFday_CNRM-ESM2-1_historical_</span><span class="si">{}</span><span class="s1">_gr_19500101-20141231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;clw_CFday_CNRM-ESM2-1_historical_</span><span class="si">{}</span><span class="s1">_gr_20060101-20091231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;pr_day_CNRM-ESM2-1_historical_</span><span class="si">{}</span><span class="s1">_gr_19500101-20141231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;areacella_fx_CNRM-ESM2-1_historical_</span><span class="si">{}</span><span class="s1">_gr.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),],</span>
+                                <span class="s1">&#39;var_id&#39;</span><span class="p">:[]},</span>
+                <span class="s1">&#39;IPSL-CM6A-LR&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;node&#39;</span><span class="p">:[</span> <span class="s1">&#39;http://vesg.ipsl.upmc.fr/thredds/fileServer/cmip6/CMIP/&#39;</span><span class="p">],</span>
+                                <span class="s1">&#39;mdir&#39;</span><span class="p">:[</span><span class="s1">&#39;IPSL/IPSL-CM6A-LR/historical/</span><span class="si">{}</span><span class="s1">/day/prsn/gr/v20180803/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;IPSL/IPSL-CM6A-LR/historical/</span><span class="si">{}</span><span class="s1">/day/tas/gr/v20190614/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;IPSL/IPSL-CM6A-LR/historical/</span><span class="si">{}</span><span class="s1">/CFday/clivi/gr/v20180803/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;IPSL/IPSL-CM6A-LR/historical/</span><span class="si">{}</span><span class="s1">/CFday/clw/gr/v20180803/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;IPSL/IPSL-CM6A-LR/historical/</span><span class="si">{}</span><span class="s1">/day/pr/gr/v20180803/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;IPSL/IPSL-CM6A-LR/historical/</span><span class="si">{}</span><span class="s1">/fx/areacella/gr/v20180803/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">)],</span>
+                                <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;prsn_day_IPSL-CM6A-LR_historical_</span><span class="si">{}</span><span class="s1">_gr_18500101-20141231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;tas_day_IPSL-CM6A-LR_historical_</span><span class="si">{}</span><span class="s1">_gr_18500101-20141231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;clivi_CFday_IPSL-CM6A-LR_historical_</span><span class="si">{}</span><span class="s1">_gr_18500101-20141231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;clw_CFday_IPSL-CM6A-LR_historical_</span><span class="si">{}</span><span class="s1">_gr_20000101-20091231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;pr_day_IPSL-CM6A-LR_historical_</span><span class="si">{}</span><span class="s1">_gr_18500101-20141231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;areacella_fx_IPSL-CM6A-LR_historical_</span><span class="si">{}</span><span class="s1">_gr.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">)],</span>
+                                <span class="s1">&#39;var_id&#39;</span><span class="p">:[]},</span>
+                <span class="s1">&#39;IPSL-CM5A2-INCA&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;node&#39;</span><span class="p">:[</span> <span class="s1">&#39;http://vesg.ipsl.upmc.fr/thredds/fileServer/cmip6/CMIP/&#39;</span><span class="p">],</span>
+                                <span class="s1">&#39;mdir&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;IPSL/IPSL-CM5A2-INCA/historical/</span><span class="si">{}</span><span class="s1">/day/prsn/gr/v20200729/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;IPSL/IPSL-CM5A2-INCA/historical/</span><span class="si">{}</span><span class="s1">/day/tas/gr/v20200729/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;IPSL/IPSL-CM5A2-INCA/historical/</span><span class="si">{}</span><span class="s1">/CFday/clivi/gr/v20200729/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;IPSL/IPSL-CM5A2-INCA/historical/</span><span class="si">{}</span><span class="s1">/CFday/clw/gr/v20200729/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;IPSL/IPSL-CM5A2-INCA/historical/</span><span class="si">{}</span><span class="s1">/day/pr/gr/v20200729/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;IPSL/IPSL-CM5A2-INCA/historical/</span><span class="si">{}</span><span class="s1">/fx/areacella/gr/v20200729/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">)],</span>
+                                <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;prsn_day_IPSL-CM5A2-INCA_historical_</span><span class="si">{}</span><span class="s1">_gr_18500101-20141231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;tas_day_IPSL-CM5A2-INCA_historical_</span><span class="si">{}</span><span class="s1">_gr_18500101-20141231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;clivi_CFday_IPSL-CM5A2-INCA_historical_</span><span class="si">{}</span><span class="s1">_gr_18500101-20141231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;clw_CFday_IPSL-CM5A2-INCA_historical_</span><span class="si">{}</span><span class="s1">_gr_19500101-20091231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;pr_day_IPSL-CM5A2-INCA_historical_</span><span class="si">{}</span><span class="s1">_gr_18500101-20141231.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">),</span>
+                                        <span class="s1">&#39;areacella_fx_IPSL-CM5A2-INCA_historical_</span><span class="si">{}</span><span class="s1">_gr.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_id</span><span class="p">)],</span>
+                                <span class="s1">&#39;var_id&#39;</span><span class="p">:</span> <span class="p">[]}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">down</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">vid</span> <span class="ow">in</span> <span class="n">var_id</span><span class="p">:</span>
+    <span class="n">down</span> <span class="o">=</span> <span class="n">get_download_dict</span><span class="p">(</span><span class="n">vid</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">down</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">down</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s1">&#39;node&#39;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">mdir</span> <span class="ow">in</span> <span class="n">down</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s1">&#39;mdir&#39;</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">down</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s1">&#39;file&#39;</span><span class="p">]:</span>
+                    <span class="n">dwf</span> <span class="o">=</span> <span class="n">node</span> <span class="o">+</span> <span class="n">mdir</span> <span class="o">+</span> <span class="n">file</span>
+                    <span class="n">file_out</span> <span class="o">=</span> <span class="n">cmip_out</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">file</span>
+            
+                    <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="n">file_out</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">file_out</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="n">file</span> <span class="o">+</span> <span class="s1">&#39; is downloaded&#39;</span><span class="p">)</span>
+                        <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Have downloaded in total : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">counter</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; files&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="n">dwf</span><span class="p">)</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+                        
+                        <span class="c1"># Download file</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">wget</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">dwf</span><span class="p">,</span> <span class="n">file_out</span><span class="p">)</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Download file ... &#39;</span> <span class="o">+</span> <span class="n">file</span><span class="p">)</span>
+                        <span class="k">except</span> <span class="n">HTTPError</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;File </span><span class="si">{}</span><span class="s1"> does not exist&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file</span><span class="p">))</span>
+                            <span class="k">continue</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>prsn_day_MIROC6_historical_r1i1p1f1_gn_20000101-20091231.nc is downloaded
+Have downloaded in total : 1 files
+tas_day_MIROC6_historical_r1i1p1f1_gn_20000101-20091231.nc is downloaded
+Have downloaded in total : 2 files
+cli_CFday_MIROC6_historical_r1i1p1f1_gn_20060101-20061231.nc is downloaded
+Have downloaded in total : 3 files
+clw_CFday_MIROC6_historical_r1i1p1f1_gn_20060101-20061231.nc is downloaded
+Have downloaded in total : 4 files
+https://esgf-data1.llnl.gov/thredds/fileServer/css03_data/CMIP6/CMIP/MIROC/MIROC6/historical/r1i1p1f1/day/prsn/gn/v20191016/cli_CFday_MIROC6_historical_r1i1p1f1_gn_20070101-20071231.nc
+/scratch/franzihe/input/cmip6_hist/daily_means/cli_CFday_MIROC6_historical_r1i1p1f1_gn_20070101-20071231.nc
+File cli_CFday_MIROC6_historical_r1i1p1f1_gn_20070101-20071231.nc does not exist
+clw_CFday_MIROC6_historical_r1i1p1f1_gn_20070101-20071231.nc is downloaded
+Have downloaded in total : 5 files
+cli_CFday_MIROC6_historical_r1i1p1f1_gn_20080101-20081231.nc is downloaded
+Have downloaded in total : 6 files
+clw_CFday_MIROC6_historical_r1i1p1f1_gn_20080101-20081231.nc is downloaded
+Have downloaded in total : 7 files
+cli_CFday_MIROC6_historical_r1i1p1f1_gn_20090101-20091231.nc is downloaded
+Have downloaded in total : 8 files
+clw_CFday_MIROC6_historical_r1i1p1f1_gn_20090101-20091231.nc is downloaded
+Have downloaded in total : 9 files
+prsn_day_MIROC6_historical_r1i1p1f1_gn_20000101-20091231.nc is downloaded
+Have downloaded in total : 10 files
+tas_day_MIROC6_historical_r1i1p1f1_gn_20000101-20091231.nc is downloaded
+Have downloaded in total : 11 files
+cli_CFday_MIROC6_historical_r1i1p1f1_gn_20060101-20061231.nc is downloaded
+Have downloaded in total : 12 files
+clw_CFday_MIROC6_historical_r1i1p1f1_gn_20060101-20061231.nc is downloaded
+Have downloaded in total : 13 files
+https://esgf-data1.llnl.gov/thredds/fileServer/css03_data/CMIP6/CMIP/MIROC/MIROC6/historical/r1i1p1f1/day/tas/gn/v20191016/cli_CFday_MIROC6_historical_r1i1p1f1_gn_20070101-20071231.nc
+/scratch/franzihe/input/cmip6_hist/daily_means/cli_CFday_MIROC6_historical_r1i1p1f1_gn_20070101-20071231.nc
+File cli_CFday_MIROC6_historical_r1i1p1f1_gn_20070101-20071231.nc does not exist
+clw_CFday_MIROC6_historical_r1i1p1f1_gn_20070101-20071231.nc is downloaded
+Have downloaded in total : 14 files
+cli_CFday_MIROC6_historical_r1i1p1f1_gn_20080101-20081231.nc is downloaded
+Have downloaded in total : 15 files
+clw_CFday_MIROC6_historical_r1i1p1f1_gn_20080101-20081231.nc is downloaded
+Have downloaded in total : 16 files
+cli_CFday_MIROC6_historical_r1i1p1f1_gn_20090101-20091231.nc is downloaded
+Have downloaded in total : 17 files
+clw_CFday_MIROC6_historical_r1i1p1f1_gn_20090101-20091231.nc is downloaded
+Have downloaded in total : 18 files
+prsn_day_MIROC6_historical_r1i1p1f1_gn_20000101-20091231.nc is downloaded
+Have downloaded in total : 19 files
+tas_day_MIROC6_historical_r1i1p1f1_gn_20000101-20091231.nc is downloaded
+Have downloaded in total : 20 files
+cli_CFday_MIROC6_historical_r1i1p1f1_gn_20060101-20061231.nc is downloaded
+Have downloaded in total : 21 files
+clw_CFday_MIROC6_historical_r1i1p1f1_gn_20060101-20061231.nc is downloaded
+Have downloaded in total : 22 files
+https://esgf-data1.llnl.gov/thredds/fileServer/css03_data/CMIP6/CMIP/MIROC/MIROC6/historical/r1i1p1f1/CFday/cli/gn/v20191212/cli_CFday_MIROC6_historical_r1i1p1f1_gn_20070101-20071231.nc
+/scratch/franzihe/input/cmip6_hist/daily_means/cli_CFday_MIROC6_historical_r1i1p1f1_gn_20070101-20071231.nc
+Download file ... cli_CFday_MIROC6_historical_r1i1p1f1_gn_20070101-20071231.nc
+clw_CFday_MIROC6_historical_r1i1p1f1_gn_20070101-20071231.nc is downloaded
+Have downloaded in total : 23 files
+cli_CFday_MIROC6_historical_r1i1p1f1_gn_20080101-20081231.nc is downloaded
+Have downloaded in total : 24 files
+clw_CFday_MIROC6_historical_r1i1p1f1_gn_20080101-20081231.nc is downloaded
+Have downloaded in total : 25 files
+cli_CFday_MIROC6_historical_r1i1p1f1_gn_20090101-20091231.nc is downloaded
+Have downloaded in total : 26 files
+clw_CFday_MIROC6_historical_r1i1p1f1_gn_20090101-20091231.nc is downloaded
+Have downloaded in total : 27 files
+prsn_day_MIROC6_historical_r1i1p1f1_gn_20000101-20091231.nc is downloaded
+Have downloaded in total : 28 files
+tas_day_MIROC6_historical_r1i1p1f1_gn_20000101-20091231.nc is downloaded
+Have downloaded in total : 29 files
+cli_CFday_MIROC6_historical_r1i1p1f1_gn_20060101-20061231.nc is downloaded
+Have downloaded in total : 30 files
+clw_CFday_MIROC6_historical_r1i1p1f1_gn_20060101-20061231.nc is downloaded
+Have downloaded in total : 31 files
+cli_CFday_MIROC6_historical_r1i1p1f1_gn_20070101-20071231.nc is downloaded
+Have downloaded in total : 32 files
+clw_CFday_MIROC6_historical_r1i1p1f1_gn_20070101-20071231.nc is downloaded
+Have downloaded in total : 33 files
+cli_CFday_MIROC6_historical_r1i1p1f1_gn_20080101-20081231.nc is downloaded
+Have downloaded in total : 34 files
+clw_CFday_MIROC6_historical_r1i1p1f1_gn_20080101-20081231.nc is downloaded
+Have downloaded in total : 35 files
+cli_CFday_MIROC6_historical_r1i1p1f1_gn_20090101-20091231.nc is downloaded
+Have downloaded in total : 36 files
+clw_CFday_MIROC6_historical_r1i1p1f1_gn_20090101-20091231.nc is downloaded
+Have downloaded in total : 37 files
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># save all models and variables in excel</span>
+<span class="n">da</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">/cmip6_model_variables.xlsx&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cmip_out</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;activity_id&#39;</span><span class="p">,</span> 
+                                                   <span class="s1">&#39;institution_id&#39;</span><span class="p">,</span> 
+                                                   <span class="s1">&#39;source_id&#39;</span><span class="p">,</span>
+                                                   <span class="s1">&#39;experiment_id&#39;</span><span class="p">,</span>
+                                                   <span class="s1">&#39;member_id&#39;</span><span class="p">,</span>
+                                                   <span class="s1">&#39;table_id&#39;</span><span class="p">,</span>
+                                                   <span class="s1">&#39;variable_id&#39;</span><span class="p">,</span>
+                                                   <span class="s1">&#39;grid_label&#39;</span><span class="p">,</span>
+                                                   <span class="s1">&#39;version&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./cmip"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner">
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Franziska Hellmuth
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div></div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

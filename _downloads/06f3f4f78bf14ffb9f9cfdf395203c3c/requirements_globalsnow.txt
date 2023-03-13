@@ -1,0 +1,26 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# name: globalsnow
+channels:
+  - defaults
+dependencies:
+  - geocat-comp
+  - intake
+  - intake-xarray
+  - intake-stac
+  - xesmf
+  - cmcrameri
+  - matplotlib
+  - ipykernel
+  - gcsfs
+  - notebook
+  - cmip6_preprocessing
+  - xarrayutils
+  - h5py
+  - zarr
+  - xarray
+  - cf_xarray
+  - cftime
+  - cartopy
+  - jupyter-book
+  - conda-lock
