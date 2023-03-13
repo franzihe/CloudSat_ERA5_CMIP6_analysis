@@ -1051,3 +1051,35 @@ def plt_annual_cycle(NH_mean, SH_mean, NH_std, SH_std, y_label,plt_title):
     f.suptitle(plt_title, fontweight="bold");
     axs[1].legend(['ERA5'], bbox_to_anchor=(.71, 1.01, -1., .102), loc='lower left', ncol = 1)
     plt.tight_layout(pad=0.15, w_pad=0.15, h_pad=0.15)
+    
+    
+def to_ERA5_date(ds, model):
+    if ds.time.dtype == 'datetime64[ns]':
+        print(model,ds.time[0].values)
+    if ds.time.dtype == 'object':
+        print(model, ds.time[0].values)
+        ds['time'] = ds.indexes['time'].to_datetimeindex()
+    
+    # remove leap day from dataset  
+    ds = ds.sel(time=~((ds.time.dt.month == 2) & (ds.time.dt.day == 29)))
+    
+    dates = ds.time.values
+    years = dates.astype('datetime64[Y]').astype(int)+1971 # add a year to be similar to ERA5
+    months = dates.astype('datetime64[M]').astype(int) % 12 + 1
+    days = (dates.astype('datetime64[D]') - dates.astype('datetime64[M]')).astype(int) + 1
+
+    
+    data = np.array([list(years),list(months), list(days),[0] * len(list(years)) ])
+    # Transpose the data so that columns become rows.
+    data = data.T
+    data = data.tolist()
+    # A simple list comprehension does the trick, '*' making sure
+    # the values are unpacked for 'datetime.datetime'.
+    new_data = [datetime(*x) for x in data]
+    # We assign the new time coordinate
+    ds = ds.assign_coords({'time':new_data})
+    
+    return ds
+
+def is_season(month, lower_val, upper_val):
+    return (month>=lower_val) & (month <= upper_val)
