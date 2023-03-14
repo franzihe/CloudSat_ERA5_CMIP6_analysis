@@ -540,7 +540,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7f64d1b9bca0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7f086478eb60&gt;
 </pre></div>
 </div>
 </div>
@@ -934,510 +934,23 @@ IPSL-CM5A2-INCA 2006-01-01 12:00:00
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_da</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cumm_era</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-<span class="n">_coord</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cumm_era</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-<span class="n">_ds</span> <span class="o">=</span> <span class="p">(</span><span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">objs</span><span class="o">=</span><span class="n">_da</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">_coord</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s1">&#39;concat_dim&#39;</span><span class="p">:</span><span class="s1">&#39;model&#39;</span><span class="p">})</span>
-<span class="n">era_cumm</span> <span class="o">=</span> <span class="n">_ds</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># _da = list(cumm_era.values())</span>
+<span class="c1"># _coord = list(cumm_era.keys())</span>
+<span class="c1"># _ds = (xr.concat(objs=_da, dim=_coord, coords=&#39;all&#39;)).rename({&#39;concat_dim&#39;:&#39;model&#39;})</span>
+<span class="c1"># era_cumm = _ds</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_da</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ratios_era</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-<span class="n">_coord</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ratios_era</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-<span class="n">_ds</span> <span class="o">=</span> <span class="p">(</span><span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">objs</span><span class="o">=</span><span class="n">_da</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">_coord</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s1">&#39;concat_dim&#39;</span><span class="p">:</span><span class="s1">&#39;model&#39;</span><span class="p">})</span>
-<span class="n">era_ratios</span> <span class="o">=</span> <span class="n">_ds</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># _da = list(ratios_era.values())</span>
+<span class="c1"># _coord = list(ratios_era.keys())</span>
+<span class="c1"># _ds = (xr.concat(objs=_da, dim=_coord, coords=&#39;all&#39;)).rename({&#39;concat_dim&#39;:&#39;model&#39;})</span>
+<span class="c1"># era_ratios = _ds</span>
 </pre></div>
 </div>
 </div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variable</span> <span class="o">=</span> <span class="n">era_cumm</span><span class="p">[</span><span class="s1">&#39;lcc_days&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variable</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
-<defs>
-<symbol id="icon-database" viewBox="0 0 32 32">
-<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
-<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
-<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
-</symbol>
-<symbol id="icon-file-text2" viewBox="0 0 32 32">
-<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
-<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-</symbol>
-</defs>
-</svg>
-<style>/* CSS stylesheet for displaying xarray objects in jupyterlab.
- *
- */
-
-:root {
-  --xr-font-color0: var(--jp-content-font-color0, rgba(0, 0, 0, 1));
-  --xr-font-color2: var(--jp-content-font-color2, rgba(0, 0, 0, 0.54));
-  --xr-font-color3: var(--jp-content-font-color3, rgba(0, 0, 0, 0.38));
-  --xr-border-color: var(--jp-border-color2, #e0e0e0);
-  --xr-disabled-color: var(--jp-layout-color3, #bdbdbd);
-  --xr-background-color: var(--jp-layout-color0, white);
-  --xr-background-color-row-even: var(--jp-layout-color1, white);
-  --xr-background-color-row-odd: var(--jp-layout-color2, #eeeeee);
-}
-
-html[theme=dark],
-body[data-theme=dark],
-body.vscode-dark {
-  --xr-font-color0: rgba(255, 255, 255, 1);
-  --xr-font-color2: rgba(255, 255, 255, 0.54);
-  --xr-font-color3: rgba(255, 255, 255, 0.38);
-  --xr-border-color: #1F1F1F;
-  --xr-disabled-color: #515151;
-  --xr-background-color: #111111;
-  --xr-background-color-row-even: #111111;
-  --xr-background-color-row-odd: #313131;
-}
-
-.xr-wrap {
-  display: block !important;
-  min-width: 300px;
-  max-width: 700px;
-}
-
-.xr-text-repr-fallback {
-  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
-  display: none;
-}
-
-.xr-header {
-  padding-top: 6px;
-  padding-bottom: 6px;
-  margin-bottom: 4px;
-  border-bottom: solid 1px var(--xr-border-color);
-}
-
-.xr-header > div,
-.xr-header > ul {
-  display: inline;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.xr-obj-type,
-.xr-array-name {
-  margin-left: 2px;
-  margin-right: 10px;
-}
-
-.xr-obj-type {
-  color: var(--xr-font-color2);
-}
-
-.xr-sections {
-  padding-left: 0 !important;
-  display: grid;
-  grid-template-columns: 150px auto auto 1fr 20px 20px;
-}
-
-.xr-section-item {
-  display: contents;
-}
-
-.xr-section-item input {
-  display: none;
-}
-
-.xr-section-item input + label {
-  color: var(--xr-disabled-color);
-}
-
-.xr-section-item input:enabled + label {
-  cursor: pointer;
-  color: var(--xr-font-color2);
-}
-
-.xr-section-item input:enabled + label:hover {
-  color: var(--xr-font-color0);
-}
-
-.xr-section-summary {
-  grid-column: 1;
-  color: var(--xr-font-color2);
-  font-weight: 500;
-}
-
-.xr-section-summary > span {
-  display: inline-block;
-  padding-left: 0.5em;
-}
-
-.xr-section-summary-in:disabled + label {
-  color: var(--xr-font-color2);
-}
-
-.xr-section-summary-in + label:before {
-  display: inline-block;
-  content: '►';
-  font-size: 11px;
-  width: 15px;
-  text-align: center;
-}
-
-.xr-section-summary-in:disabled + label:before {
-  color: var(--xr-disabled-color);
-}
-
-.xr-section-summary-in:checked + label:before {
-  content: '▼';
-}
-
-.xr-section-summary-in:checked + label > span {
-  display: none;
-}
-
-.xr-section-summary,
-.xr-section-inline-details {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-.xr-section-inline-details {
-  grid-column: 2 / -1;
-}
-
-.xr-section-details {
-  display: none;
-  grid-column: 1 / -1;
-  margin-bottom: 5px;
-}
-
-.xr-section-summary-in:checked ~ .xr-section-details {
-  display: contents;
-}
-
-.xr-array-wrap {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: 20px auto;
-}
-
-.xr-array-wrap > label {
-  grid-column: 1;
-  vertical-align: top;
-}
-
-.xr-preview {
-  color: var(--xr-font-color3);
-}
-
-.xr-array-preview,
-.xr-array-data {
-  padding: 0 5px !important;
-  grid-column: 2;
-}
-
-.xr-array-data,
-.xr-array-in:checked ~ .xr-array-preview {
-  display: none;
-}
-
-.xr-array-in:checked ~ .xr-array-data,
-.xr-array-preview {
-  display: inline-block;
-}
-
-.xr-dim-list {
-  display: inline-block !important;
-  list-style: none;
-  padding: 0 !important;
-  margin: 0;
-}
-
-.xr-dim-list li {
-  display: inline-block;
-  padding: 0;
-  margin: 0;
-}
-
-.xr-dim-list:before {
-  content: '(';
-}
-
-.xr-dim-list:after {
-  content: ')';
-}
-
-.xr-dim-list li:not(:last-child):after {
-  content: ',';
-  padding-right: 5px;
-}
-
-.xr-has-index {
-  font-weight: bold;
-}
-
-.xr-var-list,
-.xr-var-item {
-  display: contents;
-}
-
-.xr-var-item > div,
-.xr-var-item label,
-.xr-var-item > .xr-var-name span {
-  background-color: var(--xr-background-color-row-even);
-  margin-bottom: 0;
-}
-
-.xr-var-item > .xr-var-name:hover span {
-  padding-right: 5px;
-}
-
-.xr-var-list > li:nth-child(odd) > div,
-.xr-var-list > li:nth-child(odd) > label,
-.xr-var-list > li:nth-child(odd) > .xr-var-name span {
-  background-color: var(--xr-background-color-row-odd);
-}
-
-.xr-var-name {
-  grid-column: 1;
-}
-
-.xr-var-dims {
-  grid-column: 2;
-}
-
-.xr-var-dtype {
-  grid-column: 3;
-  text-align: right;
-  color: var(--xr-font-color2);
-}
-
-.xr-var-preview {
-  grid-column: 4;
-}
-
-.xr-var-name,
-.xr-var-dims,
-.xr-var-dtype,
-.xr-preview,
-.xr-attrs dt {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding-right: 10px;
-}
-
-.xr-var-name:hover,
-.xr-var-dims:hover,
-.xr-var-dtype:hover,
-.xr-attrs dt:hover {
-  overflow: visible;
-  width: auto;
-  z-index: 1;
-}
-
-.xr-var-attrs,
-.xr-var-data {
-  display: none;
-  background-color: var(--xr-background-color) !important;
-  padding-bottom: 5px !important;
-}
-
-.xr-var-attrs-in:checked ~ .xr-var-attrs,
-.xr-var-data-in:checked ~ .xr-var-data {
-  display: block;
-}
-
-.xr-var-data > table {
-  float: right;
-}
-
-.xr-var-name span,
-.xr-var-data,
-.xr-attrs {
-  padding-left: 25px !important;
-}
-
-.xr-attrs,
-.xr-var-attrs,
-.xr-var-data {
-  grid-column: 1 / -1;
-}
-
-dl.xr-attrs {
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: 125px auto;
-}
-
-.xr-attrs dt,
-.xr-attrs dd {
-  padding: 0;
-  margin: 0;
-  float: left;
-  padding-right: 10px;
-  width: auto;
-}
-
-.xr-attrs dt {
-  font-weight: normal;
-  grid-column: 1;
-}
-
-.xr-attrs dt:hover span {
-  display: inline-block;
-  background: var(--xr-background-color);
-  padding-right: 10px;
-}
-
-.xr-attrs dd {
-  grid-column: 2;
-  white-space: pre-wrap;
-  word-break: break-all;
-}
-
-.xr-icon-database,
-.xr-icon-file-text2 {
-  display: inline-block;
-  vertical-align: middle;
-  width: 1em;
-  height: 1.5em !important;
-  stroke-width: 0;
-  stroke: currentColor;
-  fill: currentColor;
-}
-</style><pre class='xr-text-repr-fallback'>&lt;xarray.DataArray &#x27;lcc_days&#x27; (model: 10, season: 4, lat: 389, lon: 1728)&gt;
-dask.array&lt;getitem, shape=(10, 4, 389, 1728), dtype=float64, chunksize=(1, 1, 389, 1728), chunktype=numpy.ndarray&gt;
-Coordinates:
-  * lat      (lat) float64 45.0 45.25 45.5 45.52 45.52 ... 89.25 89.5 89.75 90.0
-  * lon      (lon) float64 -180.0 -179.8 -179.5 -179.2 ... 179.2 179.5 179.8
-  * season   (season) object &#x27;DJF&#x27; &#x27;JJA&#x27; &#x27;MAM&#x27; &#x27;SON&#x27;
-  * model    (model) object &#x27;ERA5&#x27; &#x27;MIROC6&#x27; ... &#x27;IPSL-CM6A-LR&#x27; &#x27;IPSL-CM5A2-INCA&#x27;</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.DataArray</div><div class='xr-array-name'>'lcc_days'</div><ul class='xr-dim-list'><li><span class='xr-has-index'>model</span>: 10</li><li><span class='xr-has-index'>season</span>: 4</li><li><span class='xr-has-index'>lat</span>: 389</li><li><span class='xr-has-index'>lon</span>: 1728</li></ul></div><ul class='xr-sections'><li class='xr-section-item'><div class='xr-array-wrap'><input id='section-a451308f-0c57-45fe-a739-c7ae118ce555' class='xr-array-in' type='checkbox' checked><label for='section-a451308f-0c57-45fe-a739-c7ae118ce555' title='Show/hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-array-preview xr-preview'><span>dask.array&lt;chunksize=(1, 1, 389, 1728), meta=np.ndarray&gt;</span></div><div class='xr-array-data'><table>
-    <tr>
-        <td>
-            <table>
-                <thead>
-                    <tr>
-                        <td> </td>
-                        <th> Array </th>
-                        <th> Chunk </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                    <tr>
-                        <th> Bytes </th>
-                        <td> 205.14 MiB </td>
-                        <td> 5.13 MiB </td>
-                    </tr>
-                    
-                    <tr>
-                        <th> Shape </th>
-                        <td> (10, 4, 389, 1728) </td>
-                        <td> (1, 1, 389, 1728) </td>
-                    </tr>
-                    <tr>
-                        <th> Count </th>
-                        <td> 928 Graph Layers </td>
-                        <td> 40 Chunks </td>
-                    </tr>
-                    <tr>
-                    <th> Type </th>
-                    <td> float64 </td>
-                    <td> numpy.ndarray </td>
-                    </tr>
-                </tbody>
-            </table>
-        </td>
-        <td>
-        <svg width="374" height="107" style="stroke:rgb(0,0,0);stroke-width:1" >
-
-  <!-- Horizontal lines -->
-  <line x1="0" y1="0" x2="25" y2="0" style="stroke-width:2" />
-  <line x1="0" y1="25" x2="25" y2="25" style="stroke-width:2" />
-
-  <!-- Vertical lines -->
-  <line x1="0" y1="0" x2="0" y2="25" style="stroke-width:2" />
-  <line x1="2" y1="0" x2="2" y2="25" />
-  <line x1="5" y1="0" x2="5" y2="25" />
-  <line x1="7" y1="0" x2="7" y2="25" />
-  <line x1="10" y1="0" x2="10" y2="25" />
-  <line x1="12" y1="0" x2="12" y2="25" />
-  <line x1="15" y1="0" x2="15" y2="25" />
-  <line x1="17" y1="0" x2="17" y2="25" />
-  <line x1="20" y1="0" x2="20" y2="25" />
-  <line x1="22" y1="0" x2="22" y2="25" />
-  <line x1="25" y1="0" x2="25" y2="25" style="stroke-width:2" />
-
-  <!-- Colored Rectangle -->
-  <polygon points="0.0,0.0 25.412616514582485,0.0 25.412616514582485,25.412616514582485 0.0,25.412616514582485" style="fill:#ECB172A0;stroke-width:0"/>
-
-  <!-- Text -->
-  <text x="12.706308" y="45.412617" font-size="1.0rem" font-weight="100" text-anchor="middle" >10</text>
-  <text x="45.412617" y="12.706308" font-size="1.0rem" font-weight="100" text-anchor="middle" transform="rotate(0,45.412617,12.706308)">1</text>
-
-
-  <!-- Horizontal lines -->
-  <line x1="95" y1="0" x2="109" y2="14" style="stroke-width:2" />
-  <line x1="95" y1="42" x2="109" y2="57" style="stroke-width:2" />
-
-  <!-- Vertical lines -->
-  <line x1="95" y1="0" x2="95" y2="42" style="stroke-width:2" />
-  <line x1="98" y1="3" x2="98" y2="46" />
-  <line x1="102" y1="7" x2="102" y2="49" />
-  <line x1="106" y1="11" x2="106" y2="53" />
-  <line x1="109" y1="14" x2="109" y2="57" style="stroke-width:2" />
-
-  <!-- Colored Rectangle -->
-  <polygon points="95.0,0.0 109.9485979497544,14.948597949754403 109.9485979497544,57.44324281902707 95.0,42.49464486927267" style="fill:#ECB172A0;stroke-width:0"/>
-
-  <!-- Horizontal lines -->
-  <line x1="95" y1="0" x2="215" y2="0" style="stroke-width:2" />
-  <line x1="98" y1="3" x2="218" y2="3" />
-  <line x1="102" y1="7" x2="222" y2="7" />
-  <line x1="106" y1="11" x2="226" y2="11" />
-  <line x1="109" y1="14" x2="229" y2="14" style="stroke-width:2" />
-
-  <!-- Vertical lines -->
-  <line x1="95" y1="0" x2="109" y2="14" style="stroke-width:2" />
-  <line x1="215" y1="0" x2="229" y2="14" style="stroke-width:2" />
-
-  <!-- Colored Rectangle -->
-  <polygon points="95.0,0.0 215.0,0.0 229.9485979497544,14.948597949754403 109.9485979497544,14.948597949754403" style="fill:#ECB172A0;stroke-width:0"/>
-
-  <!-- Horizontal lines -->
-  <line x1="109" y1="14" x2="229" y2="14" style="stroke-width:2" />
-  <line x1="109" y1="57" x2="229" y2="57" style="stroke-width:2" />
-
-  <!-- Vertical lines -->
-  <line x1="109" y1="14" x2="109" y2="57" style="stroke-width:2" />
-  <line x1="229" y1="14" x2="229" y2="57" style="stroke-width:2" />
-
-  <!-- Colored Rectangle -->
-  <polygon points="109.9485979497544,14.948597949754403 229.9485979497544,14.948597949754403 229.9485979497544,57.44324281902707 109.9485979497544,57.44324281902707" style="fill:#ECB172A0;stroke-width:0"/>
-
-  <!-- Text -->
-  <text x="169.948598" y="77.443243" font-size="1.0rem" font-weight="100" text-anchor="middle" >1728</text>
-  <text x="249.948598" y="36.195920" font-size="1.0rem" font-weight="100" text-anchor="middle" transform="rotate(-90,249.948598,36.195920)">389</text>
-  <text x="92.474299" y="69.968944" font-size="1.0rem" font-weight="100" text-anchor="middle" transform="rotate(45,92.474299,69.968944)">4</text>
-</svg>
-        </td>
-    </tr>
-</table></div></div></li><li class='xr-section-item'><input id='section-6aa87526-0026-41e5-aed5-6c9b2d44ed90' class='xr-section-summary-in' type='checkbox'  checked><label for='section-6aa87526-0026-41e5-aed5-6c9b2d44ed90' class='xr-section-summary' >Coordinates: <span>(4)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>lat</span></div><div class='xr-var-dims'>(lat)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>45.0 45.25 45.5 ... 89.5 89.75 90.0</div><input id='attrs-5d4bc205-a207-4232-9451-4c98adce40cc' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-5d4bc205-a207-4232-9451-4c98adce40cc' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-eb5489af-51f6-420d-a0ca-00243f3e9b88' class='xr-var-data-in' type='checkbox'><label for='data-eb5489af-51f6-420d-a0ca-00243f3e9b88' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>units :</span></dt><dd>degrees_north</dd><dt><span>standard_name :</span></dt><dd>latitude</dd><dt><span>long_name :</span></dt><dd>latitude</dd><dt><span>stored_direction :</span></dt><dd>decreasing</dd><dt><span>axis :</span></dt><dd>Y</dd><dt><span>positive :</span></dt><dd>up</dd><dt><span>type :</span></dt><dd>double</dd><dt><span>valid_max :</span></dt><dd>90.0</dd><dt><span>valid_min :</span></dt><dd>-90.0</dd></dl></div><div class='xr-var-data'><pre>array([45.  , 45.25, 45.5 , ..., 89.5 , 89.75, 90.  ])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>lon</span></div><div class='xr-var-dims'>(lon)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>-180.0 -179.8 ... 179.5 179.8</div><input id='attrs-c2f1750e-d82e-4e8a-b4f3-eaebdc57862f' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-c2f1750e-d82e-4e8a-b4f3-eaebdc57862f' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-fecf0f11-13a3-4aaf-885f-128cbbc5597e' class='xr-var-data-in' type='checkbox'><label for='data-fecf0f11-13a3-4aaf-885f-128cbbc5597e' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>units :</span></dt><dd>degrees_east</dd><dt><span>standard_name :</span></dt><dd>longitude</dd><dt><span>long_name :</span></dt><dd>longitude</dd><dt><span>axis :</span></dt><dd>X</dd><dt><span>positive :</span></dt><dd>up</dd><dt><span>type :</span></dt><dd>double</dd><dt><span>valid_max :</span></dt><dd>360.0</dd><dt><span>valid_min :</span></dt><dd>-180.0</dd></dl></div><div class='xr-var-data'><pre>array([-180.  , -179.75, -179.5 , ...,  179.25,  179.5 ,  179.75])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>season</span></div><div class='xr-var-dims'>(season)</div><div class='xr-var-dtype'>object</div><div class='xr-var-preview xr-preview'>&#x27;DJF&#x27; &#x27;JJA&#x27; &#x27;MAM&#x27; &#x27;SON&#x27;</div><input id='attrs-259db639-4389-4b17-835e-888010eab32e' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-259db639-4389-4b17-835e-888010eab32e' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-ec067392-46ac-49ea-a3f1-082fb3024407' class='xr-var-data-in' type='checkbox'><label for='data-ec067392-46ac-49ea-a3f1-082fb3024407' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([&#x27;DJF&#x27;, &#x27;JJA&#x27;, &#x27;MAM&#x27;, &#x27;SON&#x27;], dtype=object)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>model</span></div><div class='xr-var-dims'>(model)</div><div class='xr-var-dtype'>object</div><div class='xr-var-preview xr-preview'>&#x27;ERA5&#x27; ... &#x27;IPSL-CM5A2-INCA&#x27;</div><input id='attrs-efe0510f-9ee5-4732-a4b4-f4a4fb65d52e' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-efe0510f-9ee5-4732-a4b4-f4a4fb65d52e' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-9b54ccb1-7c6a-41f7-a291-1de72301d35e' class='xr-var-data-in' type='checkbox'><label for='data-9b54ccb1-7c6a-41f7-a291-1de72301d35e' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([&#x27;ERA5&#x27;, &#x27;MIROC6&#x27;, &#x27;CESM2&#x27;, &#x27;CanESM5&#x27;, &#x27;AWI-ESM-1-1-LR&#x27;, &#x27;MPI-ESM1-2-LR&#x27;,
-       &#x27;CNRM-CM6-1&#x27;, &#x27;CNRM-ESM2-1&#x27;, &#x27;IPSL-CM6A-LR&#x27;, &#x27;IPSL-CM5A2-INCA&#x27;],
-      dtype=object)</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-8683164d-4f32-48b2-9c10-5eeea8cef6f4' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-8683164d-4f32-48b2-9c10-5eeea8cef6f4' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1816,7 +1329,7 @@ Coordinates:
   * lat      (lat) float64 45.52 46.93 48.33 49.73 ... 84.74 86.14 87.54 88.93
   * lon      (lon) float64 -180.0 -178.6 -177.2 -175.8 ... 175.8 177.2 178.6
   * season   (season) object &#x27;DJF&#x27; &#x27;JJA&#x27; &#x27;MAM&#x27; &#x27;SON&#x27;
-    height   float64 2.0</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.DataArray</div><div class='xr-array-name'>'lcc_days'</div><ul class='xr-dim-list'><li><span class='xr-has-index'>season</span>: 4</li><li><span class='xr-has-index'>lat</span>: 32</li><li><span class='xr-has-index'>lon</span>: 256</li></ul></div><ul class='xr-sections'><li class='xr-section-item'><div class='xr-array-wrap'><input id='section-46e41ac4-c866-4b1c-bd7c-d571f0f55e97' class='xr-array-in' type='checkbox' checked><label for='section-46e41ac4-c866-4b1c-bd7c-d571f0f55e97' title='Show/hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-array-preview xr-preview'><span>dask.array&lt;chunksize=(1, 32, 256), meta=np.ndarray&gt;</span></div><div class='xr-array-data'><table>
+    height   float64 2.0</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.DataArray</div><div class='xr-array-name'>'lcc_days'</div><ul class='xr-dim-list'><li><span class='xr-has-index'>season</span>: 4</li><li><span class='xr-has-index'>lat</span>: 32</li><li><span class='xr-has-index'>lon</span>: 256</li></ul></div><ul class='xr-sections'><li class='xr-section-item'><div class='xr-array-wrap'><input id='section-e3350462-ad59-404c-af4e-a34a88b618bf' class='xr-array-in' type='checkbox' checked><label for='section-e3350462-ad59-404c-af4e-a34a88b618bf' title='Show/hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-array-preview xr-preview'><span>dask.array&lt;chunksize=(1, 32, 256), meta=np.ndarray&gt;</span></div><div class='xr-array-data'><table>
     <tr>
         <td>
             <table>
@@ -1902,13 +1415,101 @@ Coordinates:
 </svg>
         </td>
     </tr>
-</table></div></div></li><li class='xr-section-item'><input id='section-ce60db96-3edb-4bc6-a1b5-0cfbfb4a4261' class='xr-section-summary-in' type='checkbox'  checked><label for='section-ce60db96-3edb-4bc6-a1b5-0cfbfb4a4261' class='xr-section-summary' >Coordinates: <span>(4)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>lat</span></div><div class='xr-var-dims'>(lat)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>45.52 46.93 48.33 ... 87.54 88.93</div><input id='attrs-58cadd9c-a6ba-4307-aa98-c051bacd5f69' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-58cadd9c-a6ba-4307-aa98-c051bacd5f69' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-85a68bd8-7cad-4452-9064-f8e30b3dac60' class='xr-var-data-in' type='checkbox'><label for='data-85a68bd8-7cad-4452-9064-f8e30b3dac60' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>bounds :</span></dt><dd>lat_bnds</dd><dt><span>units :</span></dt><dd>degrees_north</dd><dt><span>axis :</span></dt><dd>Y</dd><dt><span>long_name :</span></dt><dd>Latitude</dd><dt><span>standard_name :</span></dt><dd>latitude</dd></dl></div><div class='xr-var-data'><pre>array([45.52485 , 46.925606, 48.326361, 49.727115, 51.127867, 52.528617,
+</table></div></div></li><li class='xr-section-item'><input id='section-74993119-5977-4032-ab0e-a0db283799bd' class='xr-section-summary-in' type='checkbox'  checked><label for='section-74993119-5977-4032-ab0e-a0db283799bd' class='xr-section-summary' >Coordinates: <span>(4)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>lat</span></div><div class='xr-var-dims'>(lat)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>45.52 46.93 48.33 ... 87.54 88.93</div><input id='attrs-316785cf-9e29-44b3-94f8-1f8fa5bb638b' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-316785cf-9e29-44b3-94f8-1f8fa5bb638b' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-2b9b819a-6b03-4609-9dad-aac08f4b06d2' class='xr-var-data-in' type='checkbox'><label for='data-2b9b819a-6b03-4609-9dad-aac08f4b06d2' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>bounds :</span></dt><dd>lat_bnds</dd><dt><span>units :</span></dt><dd>degrees_north</dd><dt><span>axis :</span></dt><dd>Y</dd><dt><span>long_name :</span></dt><dd>Latitude</dd><dt><span>standard_name :</span></dt><dd>latitude</dd></dl></div><div class='xr-var-data'><pre>array([45.52485 , 46.925606, 48.326361, 49.727115, 51.127867, 52.528617,
        53.929366, 55.330112, 56.730857, 58.131598, 59.532337, 60.933072,
        62.333803, 63.73453 , 65.135251, 66.535966, 67.936673, 69.337372,
        70.738059, 72.138732, 73.539389, 74.940023, 76.340629, 77.741196,
        79.14171 , 80.542146, 81.942466, 83.342596, 84.742386, 86.141472,
-       87.538705, 88.927735])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>lon</span></div><div class='xr-var-dims'>(lon)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>-180.0 -178.6 ... 177.2 178.6</div><input id='attrs-d071afc4-4a7a-416c-a410-436a2542d642' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-d071afc4-4a7a-416c-a410-436a2542d642' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-7f886f5e-b2dc-4777-a847-fd8ed8f5c982' class='xr-var-data-in' type='checkbox'><label for='data-7f886f5e-b2dc-4777-a847-fd8ed8f5c982' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>bounds :</span></dt><dd>lon_bnds</dd><dt><span>units :</span></dt><dd>degrees_east</dd><dt><span>axis :</span></dt><dd>X</dd><dt><span>long_name :</span></dt><dd>Longitude</dd><dt><span>standard_name :</span></dt><dd>longitude</dd></dl></div><div class='xr-var-data'><pre>array([-180.     , -178.59375, -177.1875 , ...,  175.78125,  177.1875 ,
-        178.59375])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>season</span></div><div class='xr-var-dims'>(season)</div><div class='xr-var-dtype'>object</div><div class='xr-var-preview xr-preview'>&#x27;DJF&#x27; &#x27;JJA&#x27; &#x27;MAM&#x27; &#x27;SON&#x27;</div><input id='attrs-de020604-3394-4c11-8ee5-095fad3b16fc' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-de020604-3394-4c11-8ee5-095fad3b16fc' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-e19feac4-7ac6-40b7-9cfa-dcd7272c23d4' class='xr-var-data-in' type='checkbox'><label for='data-e19feac4-7ac6-40b7-9cfa-dcd7272c23d4' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([&#x27;DJF&#x27;, &#x27;JJA&#x27;, &#x27;MAM&#x27;, &#x27;SON&#x27;], dtype=object)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>height</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>2.0</div><input id='attrs-b93d3d46-3f7e-417d-98f5-21e0d3fa375b' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-b93d3d46-3f7e-417d-98f5-21e0d3fa375b' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-d543a038-721d-4410-ad94-b4e01473b9c4' class='xr-var-data-in' type='checkbox'><label for='data-d543a038-721d-4410-ad94-b4e01473b9c4' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>units :</span></dt><dd>m</dd><dt><span>axis :</span></dt><dd>Z</dd><dt><span>positive :</span></dt><dd>up</dd><dt><span>long_name :</span></dt><dd>height</dd><dt><span>standard_name :</span></dt><dd>height</dd></dl></div><div class='xr-var-data'><pre>array(2.)</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-128a7098-2c10-4230-9d78-f4119356b6ba' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-128a7098-2c10-4230-9d78-f4119356b6ba' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
+       87.538705, 88.927735])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>lon</span></div><div class='xr-var-dims'>(lon)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>-180.0 -178.6 ... 177.2 178.6</div><input id='attrs-43508ae2-4dbe-43bf-a16b-db6bc40cd298' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-43508ae2-4dbe-43bf-a16b-db6bc40cd298' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-f81d9037-2afa-40f2-b01a-4eb3b49312d3' class='xr-var-data-in' type='checkbox'><label for='data-f81d9037-2afa-40f2-b01a-4eb3b49312d3' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>bounds :</span></dt><dd>lon_bnds</dd><dt><span>units :</span></dt><dd>degrees_east</dd><dt><span>axis :</span></dt><dd>X</dd><dt><span>long_name :</span></dt><dd>Longitude</dd><dt><span>standard_name :</span></dt><dd>longitude</dd></dl></div><div class='xr-var-data'><pre>array([-180.     , -178.59375, -177.1875 , ...,  175.78125,  177.1875 ,
+        178.59375])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>season</span></div><div class='xr-var-dims'>(season)</div><div class='xr-var-dtype'>object</div><div class='xr-var-preview xr-preview'>&#x27;DJF&#x27; &#x27;JJA&#x27; &#x27;MAM&#x27; &#x27;SON&#x27;</div><input id='attrs-41eb9763-775c-48dd-bf18-fe0a1a7775c1' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-41eb9763-775c-48dd-bf18-fe0a1a7775c1' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-34e596bf-c159-4c50-a70e-0a53b217f1ba' class='xr-var-data-in' type='checkbox'><label for='data-34e596bf-c159-4c50-a70e-0a53b217f1ba' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([&#x27;DJF&#x27;, &#x27;JJA&#x27;, &#x27;MAM&#x27;, &#x27;SON&#x27;], dtype=object)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>height</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>2.0</div><input id='attrs-73d351cb-c7c8-42b0-9c81-6254a4f25f2f' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-73d351cb-c7c8-42b0-9c81-6254a4f25f2f' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-8af17e59-651f-4750-bb09-6aad50559501' class='xr-var-data-in' type='checkbox'><label for='data-8af17e59-651f-4750-bb09-6aad50559501' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>units :</span></dt><dd>m</dd><dt><span>axis :</span></dt><dd>Z</dd><dt><span>positive :</span></dt><dd>up</dd><dt><span>long_name :</span></dt><dd>height</dd><dt><span>standard_name :</span></dt><dd>height</dd></dl></div><div class='xr-var-data'><pre>array(2.)</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-6ab6bf77-9430-4159-b55a-61cbacd48fbb' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-6ab6bf77-9430-4159-b55a-61cbacd48fbb' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cumm_cmip</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;MIROC6&#39;, &#39;CESM2&#39;, &#39;CanESM5&#39;, &#39;AWI-ESM-1-1-LR&#39;, &#39;MPI-ESM1-2-LR&#39;, &#39;CNRM-CM6-1&#39;, &#39;IPSL-CM6A-LR&#39;, &#39;IPSL-CM5A2-INCA&#39;])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">cumm_cmip</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="n">var2</span> <span class="o">=</span> <span class="p">(</span><span class="n">cumm_era</span><span class="p">[</span><span class="n">model</span><span class="p">]</span> <span class="o">-</span> <span class="n">cumm_cmip</span><span class="p">[</span><span class="n">model</span><span class="p">])[</span><span class="s1">&#39;lcc_days&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="mi">20</span><span class="o">/</span><span class="mi">9</span><span class="o">*</span><span class="mi">7</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>15.555555555555557
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig_label</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;a)&#39;</span><span class="p">,</span> <span class="s1">&#39;b)&#39;</span><span class="p">,</span> <span class="s1">&#39;c)&#39;</span><span class="p">,</span> <span class="s1">&#39;d)&#39;</span><span class="p">,</span> <span class="s1">&#39;e)&#39;</span><span class="p">,</span> <span class="s1">&#39;f)&#39;</span><span class="p">,</span> <span class="s1">&#39;g)&#39;</span><span class="p">,</span> <span class="s1">&#39;h)&#39;</span><span class="p">,</span> <span class="s1">&#39;i)&#39;</span><span class="p">,</span> <span class="s1">&#39;j)&#39;</span><span class="p">,</span> <span class="s1">&#39;k)&#39;</span><span class="p">,</span> <span class="s1">&#39;l)&#39;</span><span class="p">,</span> <span class="s1">&#39;m)&#39;</span><span class="p">,</span> <span class="s1">&#39;n)&#39;</span><span class="p">,</span> <span class="s1">&#39;o)&#39;</span><span class="p">,</span> <span class="s1">&#39;p)&#39;</span><span class="p">,</span> <span class="s1">&#39;q)&#39;</span><span class="p">,</span> <span class="s1">&#39;r)&#39;</span><span class="p">,</span> <span class="s1">&#39;s)&#39;</span><span class="p">,</span> <span class="s1">&#39;t)&#39;</span><span class="p">,</span> <span class="s1">&#39;u)&#39;</span><span class="p">,</span> <span class="s1">&#39;v)&#39;</span><span class="p">,</span> <span class="s1">&#39;w)&#39;</span><span class="p">,</span> <span class="s1">&#39;x)&#39;</span><span class="p">,</span> <span class="s1">&#39;y)&#39;</span><span class="p">,</span> <span class="s1">&#39;z)&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;aa)&#39;</span><span class="p">,</span> <span class="s1">&#39;bb)&#39;</span><span class="p">,</span> <span class="s1">&#39;cc)&#39;</span><span class="p">,</span> <span class="s1">&#39;dd)&#39;</span><span class="p">,</span> <span class="s1">&#39;ee)&#39;</span><span class="p">,</span> <span class="s1">&#39;ff)&#39;</span><span class="p">,</span> <span class="s1">&#39;gg)&#39;</span><span class="p">,</span> <span class="s1">&#39;hh)&#39;</span><span class="p">,</span> <span class="s1">&#39;ii)&#39;</span><span class="p">,</span> <span class="s1">&#39;jj)&#39;</span><span class="p">,</span> <span class="s1">&#39;kk)&#39;</span><span class="p">,</span> <span class="s1">&#39;ll)&#39;</span><span class="p">,</span> <span class="s1">&#39;mm)&#39;</span><span class="p">,</span> <span class="s1">&#39;nn)&#39;</span><span class="p">,</span> <span class="s1">&#39;oo)&#39;</span><span class="p">,</span> <span class="s1">&#39;pp)&#39;</span><span class="p">,</span> <span class="s1">&#39;qq)&#39;</span><span class="p">,</span> <span class="s1">&#39;rr)&#39;</span><span class="p">,</span> <span class="s1">&#39;ss)&#39;</span><span class="p">,</span> <span class="s1">&#39;tt)&#39;</span><span class="p">,</span> <span class="s1">&#39;uu)&#39;</span><span class="p">,</span> <span class="s1">&#39;vv)&#39;</span><span class="p">,</span> <span class="s1">&#39;ww)&#39;</span><span class="p">,</span> <span class="s1">&#39;xx)&#39;</span><span class="p">,</span> <span class="s1">&#39;yy)&#39;</span><span class="p">,</span> <span class="s1">&#39;zz)&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span> <span class="n">axsm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">cumm_cmip</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">ncols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">figsize</span> <span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">],</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">NorthPolarStereo</span><span class="p">(</span><span class="n">central_longitude</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span><span class="n">globe</span><span class="o">=</span><span class="kc">None</span><span class="p">)})</span>
+<span class="n">coast</span> <span class="o">=</span> <span class="n">cy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span><span class="n">category</span><span class="o">=</span><span class="s1">&#39;physical&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;110m&#39;</span><span class="p">,</span>
+                            <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;coastline&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">season</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axsm</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[:</span><span class="mi">4</span><span class="p">],</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fig_label</span><span class="p">)),</span> <span class="n">var1</span><span class="o">.</span><span class="n">season</span><span class="p">):</span>
+    <span class="n">cf1</span> <span class="o">=</span> <span class="n">var1</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">var1</span><span class="o">&gt;</span><span class="mf">0.</span><span class="p">)</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">season</span><span class="o">=</span><span class="n">season</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">extend</span><span class="o">=</span><span class="n">extend</span><span class="p">,</span> <span class="n">add_colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">hawaii_r</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">levels</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+    
+    <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">coast</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_extent</span><span class="p">([</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">45</span><span class="p">],</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
+    <span class="n">gl</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">gridlines</span><span class="p">(</span><span class="n">draw_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">gl</span><span class="o">.</span><span class="n">top_labels</span>   <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">gl</span><span class="o">.</span><span class="n">right_labels</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span><span class="s1">&#39;season = </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">season</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> ERA5&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fig_label</span><span class="p">[</span><span class="n">k</span><span class="p">]),</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+<span class="n">cbaxes1</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">.95</span><span class="p">,</span> <span class="mf">0.885</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.095</span><span class="p">])</span>
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cf1</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cbaxes1</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">extend</span><span class="o">=</span><span class="n">extend</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">cbar_label</span><span class="p">)</span>
+         
+
+<span class="k">for</span> <span class="n">model</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">cumm_cmip</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cumm_cmip</span><span class="o">.</span><span class="n">keys</span><span class="p">()))):</span> 
+    <span class="n">var2</span> <span class="o">=</span> <span class="p">(</span><span class="n">cumm_era</span><span class="p">[</span><span class="n">model</span><span class="p">]</span> <span class="o">-</span> <span class="n">cumm_cmip</span><span class="p">[</span><span class="n">model</span><span class="p">])[</span><span class="s1">&#39;lcc_days&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">ax</span><span class="p">,</span><span class="n">k</span><span class="p">,</span> <span class="n">season</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axsm</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">4</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="n">i</span><span class="p">:],</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fig_label</span><span class="p">))[</span><span class="mi">4</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="n">i</span><span class="p">:],</span> <span class="n">var1</span><span class="o">.</span><span class="n">season</span><span class="p">):</span>
+        <span class="n">cf2</span> <span class="o">=</span> <span class="n">var2</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">var2</span><span class="o">&gt;</span><span class="mf">0.</span><span class="p">)</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">season</span><span class="o">=</span><span class="n">season</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">extend</span><span class="o">=</span><span class="n">extend</span><span class="p">,</span> <span class="n">add_colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">vikO</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.1</span><span class="p">,</span><span class="mf">.1</span><span class="p">),</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+        
+        <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">coast</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_extent</span><span class="p">([</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">45</span><span class="p">],</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
+        <span class="n">gl</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">gridlines</span><span class="p">(</span><span class="n">draw_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">gl</span><span class="o">.</span><span class="n">top_labels</span>   <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">gl</span><span class="o">.</span><span class="n">right_labels</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> ERA5 - </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fig_label</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">model</span><span class="p">),</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> 
+                <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+<span class="n">cbaxes2</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">.95</span><span class="p">,</span> <span class="mf">0.778</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.095</span><span class="p">])</span>
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cf2</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cbaxes2</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">extend</span><span class="o">=</span><span class="n">extend</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">cbar_label</span><span class="p">)</span>
+         
+    
+<span class="n">f</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">plt_title</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">w_pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">h_pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/0886377efc97bf7210a12a3c4fe8176cafa2ddbcd6d896267b4739bb6d0beccb.png" src="../_images/0886377efc97bf7210a12a3c4fe8176cafa2ddbcd6d896267b4739bb6d0beccb.png" />
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
