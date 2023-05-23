@@ -20,7 +20,9 @@ import numpy as np
 
 from cmcrameri import cm
 from scipy.stats import linregress
+import dask 
 import dask.array as da
+import dask.distributed as distributed
 
 import geocat.comp as gc
 from datetime import datetime, timedelta
