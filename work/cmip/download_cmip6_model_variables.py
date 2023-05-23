@@ -1,4 +1,4 @@
-# export PYTHONPATH="${PYTHONPATH}:/scratch/franzihe/python/globalsnow/CloudSat_ERA5_CMIP6_analysis/utils/"
+# export PYTHONPATH="${PYTHONPATH}:/uio/kant/geo-geofag-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/utils/"
 
 # %%
 import os
@@ -15,7 +15,7 @@ WORKDIR = abs_path[:- (len(abs_path.split('/')[-2] + abs_path.split('/')[-1])+1)
 if "mimi" in hostname:
     print(hostname)
     DATA_DIR = "/scratch/franzihe/"
-    FIG_DIR = "/uio/kant/geo-metos-u1/franzihe/Documents/Figures/CMIP6/"
+    FIG_DIR = "/uio/kant/geo-geofag-u1/franzihe/Documents/Figures/CMIP6/"
 elif "glefsekaldt" in hostname: 
     DATA_DIR = "/home/franzihe/Data/"
     FIG_DIR = "/home/franzihe/Documents/Figures/CMIP6/"
@@ -51,7 +51,7 @@ from imports import(pd, glob, np, plt, wget,cm, HTTPError)
 
 # %%
 cmip_in = os.path.join(INPUT_DATA_DIR, 'cmip6_hist')
-cmip_out = os.path.join(INPUT_DATA_DIR, 'cmip6_hist/daily_means/')
+cmip_out = os.path.join(INPUT_DATA_DIR, 'cmip6_hist/daily_means/single_model/')
 # make output data directory
 try:
     os.mkdir(cmip_out)
@@ -112,13 +112,13 @@ var_id = [
 # 'r8i1p2f1',
 # 'r9i1p1f1',
 # 'r9i1p2f1',
-'r10i1p1f1',
-'r11i1p1f1',
-'r1i1p1f1',
-'r1i1p1f2',
-'r1i1p2f1',
-'r2i1p1f2',
-'r5i1p1f3',
+# 'r10i1p1f1',
+# 'r11i1p1f1',
+# 'r1i1p1f1',
+# 'r1i1p1f2',
+# 'r1i1p2f1',
+# 'r2i1p1f2',
+# 'r5i1p1f3',
 ]
 
 
@@ -297,31 +297,45 @@ def get_download_dict(var_id):
         }
         return down
 
-# %%
-counter = 0
-for vid in var_id:
-    down = get_download_dict(vid)
-    for model in down.keys():
-        for node in down[model]['node']:
-            for mdir in down[model]['mdir']:
-                for file in down[model]['file']:
-                    dwf = node + mdir + file
-                    file_out = cmip_out + '/' + file
+
+# counter = 0
+# for vid in var_id:
+#     down = get_download_dict(vid)
+#     for model in down.keys():
+#         for node in down[model]['node']:
+#             for mdir in down[model]['mdir']:
+#                 for file in down[model]['file']:
+#                     dwf = node + mdir + file
+#                     file_out = cmip_out + '/' + file
             
-                    files = glob(file_out)
-                    if file_out in files:
-                        print(file + ' is downloaded')
-                        counter += 1
-                        print("Have downloaded in total : " + str(counter) + " files")
-                    else:
-                        print(dwf)
-                        print(file)
+#                     files = glob(file_out)
+#                     if file_out in files:
+#                         print(file + ' is downloaded')
+#                         counter += 1
+#                         print("Have downloaded in total : " + str(counter) + " files")
+#                     else:
+#                         print(dwf)
+#                         print(file)
                         
-                        # Download file
-                        try:
-                            wget.download(dwf, file_out)
-                            print('Download file ... ' + file)
-                        except HTTPError:
-                            print('File {} does not exist'.format(file))
-                            continue
+#                         # Download file
+#                         try:
+#                             wget.download(dwf, file_out)
+#                             print('Download file ... ' + file)
+#                         except HTTPError:
+#                             print('File {} does not exist'.format(file))
+#                             continue
+
+		
+node = 'http://vesg.ipsl.upmc.fr/thredds/fileServer/cmip6/CMIP/'
+mdir = 'IPSL/IPSL-CM5A2-INCA/historical/r1i1p1f1/CFday/phalf/gr/v20200729/'
+file = 'phalf_CFday_IPSL-CM5A2-INCA_historical_r1i1p1f1_gr_20000101-20091231.nc'
+dwf = node + mdir + file
+file_out = cmip_out + '/' + file
+
+print('Download file ... ' + file)
+wget.download(dwf, file_out)
+#                             
+
+
+
 
