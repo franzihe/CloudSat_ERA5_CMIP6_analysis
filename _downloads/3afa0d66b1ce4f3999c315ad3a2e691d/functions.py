@@ -1054,14 +1054,17 @@ def plt_annual_cycle(NH_mean, SH_mean, NH_std, SH_std, y_label,plt_title):
     
     
 def to_ERA5_date(ds, model):
-    if ds.time.dtype == 'datetime64[ns]':
-        print(model,ds.time[0].values)
+    # remove leap day from dataset  
+    ds = ds.sel(time=~((ds.time.dt.month == 2) & (ds.time.dt.day == 29)))
+    ds = ds.sel(time=~((ds.time.dt.month == 2) & (ds.time.dt.day == 30)))
+    
+    # if ds.time.dtype == 'datetime64[ns]':
+    #     print(model,ds.time[0].values)
     if ds.time.dtype == 'object':
         print(model, ds.time[0].values)
         ds['time'] = ds.indexes['time'].to_datetimeindex()
     
-    # remove leap day from dataset  
-    ds = ds.sel(time=~((ds.time.dt.month == 2) & (ds.time.dt.day == 29)))
+   
     
     dates = ds.time.values
     years = dates.astype('datetime64[Y]').astype(int)+1971 # add a year to be similar to ERA5

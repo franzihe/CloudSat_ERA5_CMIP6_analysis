@@ -399,6 +399,8 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specific-ice-and-snow-water-content">Specific ice and snow water content</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#total-column-cloud-ice-water-and-total-column-cloud-snow-water">Total column cloud ice water and total column cloud snow water</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#total-column-cloud-liquid-water-total-column-supercooled-liquid-water-total-column-rain-water">Total column cloud liquid water, total column supercooled liquid water, total column rain water</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-era5-file">Save ERA5 file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regrid-era5-data-to-common-cmip6-model-grid-a-id-regrid-hz-a">Regrid ERA5 data to common CMIP6 model grid <a id="regrid_hz"></a></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#count-the-days-in-one-season-over-year-range">Count the days in one season over year range</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supercooled-liquid-water-fraction">Supercooled liquid water fraction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#statistics">Statistics</a></li>
@@ -421,7 +423,6 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#frequency-of-freezing-rain">Frequency of freezing rain</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regrid-era5-data-to-common-cmip6-model-grid-a-id-regrid-hz-a">Regrid ERA5 data to common CMIP6 model grid <a id="regrid_hz"></a></a></li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#way-to-average-the-globe">Way to Average the Globe</a><ul class="visible nav section-nav flex-column">
@@ -452,7 +453,7 @@ document.write(`
                   
   <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># export PYTHONPATH=&quot;${PYTHONPATH}:/uio/kant/geo-metos-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/utils/&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># export PYTHONPATH=&quot;${PYTHONPATH}:/uio/kant/geo-geofag-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/utils/&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -565,8 +566,8 @@ document.write(`
 <span class="k">if</span> <span class="s2">&quot;mimi&quot;</span> <span class="ow">in</span> <span class="n">hostname</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">hostname</span><span class="p">)</span>
     <span class="n">DATA_DIR</span> <span class="o">=</span> <span class="s2">&quot;/scratch/franzihe/&quot;</span>
-    <span class="c1"># FIG_DIR = &quot;/uio/kant/geo-metos-u1/franzihe/Documents/Figures/ERA5/&quot;</span>
-    <span class="n">FIG_DIR</span> <span class="o">=</span> <span class="s2">&quot;/uio/kant/geo-metos-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/Figures/ERA5/&quot;</span>
+    <span class="c1"># FIG_DIR = &quot;/uio/kant/geo-geofag-u1/franzihe/Documents/Figures/ERA5/&quot;</span>
+    <span class="n">FIG_DIR</span> <span class="o">=</span> <span class="s2">&quot;/uio/kant/geo-geofag-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/Figures/ERA5/&quot;</span>
 <span class="k">elif</span> <span class="s2">&quot;glefsekaldt&quot;</span> <span class="ow">in</span> <span class="n">hostname</span><span class="p">:</span> 
     <span class="n">DATA_DIR</span> <span class="o">=</span> <span class="s2">&quot;/home/franzihe/Data/&quot;</span>
     <span class="n">FIG_DIR</span> <span class="o">=</span> <span class="s2">&quot;/home/franzihe/Documents/Figures/ERA5/&quot;</span>
@@ -611,7 +612,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7f69e69f14b0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7fb7e451af80&gt;
 </pre></div>
 </div>
 </div>
@@ -635,7 +636,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">era_in</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INPUT_DATA_DIR</span><span class="p">,</span> <span class="s1">&#39;ERA5/daily_means/&#39;</span><span class="p">)</span>
-<span class="n">era_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUTPUT_DATA_DIR</span><span class="p">,</span> <span class="s1">&#39;ERA5/daily_means/&#39;</span><span class="p">)</span>
+<span class="n">era_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INPUT_DATA_DIR</span><span class="p">,</span> <span class="s1">&#39;ERA5/common_grid/&#39;</span><span class="p">)</span>
 <span class="c1"># make output data directory</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">era_out</span><span class="p">)</span>
@@ -648,7 +649,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># needed for regridding ERA5 data to CMIP6 grids</span>
-<span class="n">cmip_in</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INPUT_DATA_DIR</span><span class="p">,</span> <span class="s1">&#39;cmip6_hist/daily_means/single_model&#39;</span><span class="p">)</span>
+<span class="n">cmip_in</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INPUT_DATA_DIR</span><span class="p">,</span> <span class="s1">&#39;cmip6_hist/single_model&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -682,33 +683,22 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">starty</span> <span class="o">=</span> <span class="mi">2007</span><span class="p">;</span> <span class="n">endy</span> <span class="o">=</span> <span class="mi">2010</span>
-<span class="n">year_range</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">starty</span><span class="p">,</span> <span class="n">endy</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="c1"># ds_era = xr.Dataset()</span>
-<span class="c1"># for var_id in variable_id:</span>
-<span class="c1">#     # Input data from ERA5 with a resolution of 0.25x0.25deg to be regridded</span>
-<span class="c1">#     era_file_in = glob(&#39;{}/{}_ERA5_*12.nc&#39;.format(era_in, var_id))       # search for data in the local directory </span>
-<span class="c1">#     ds = xr.open_mfdataset(era_file_in, )</span>
-<span class="n">era_file_in</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">/*_ERA5_*.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">era_in</span><span class="p">,</span> <span class="p">))</span>
-<span class="n">ds_era</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="n">era_file_in</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">starty</span> <span class="o">=</span> <span class="mi">2007</span>
+<span class="n">endy</span> <span class="o">=</span> <span class="mi">2010</span>
+<span class="n">year_range</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">starty</span><span class="p">,</span> <span class="n">endy</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
 
-<span class="c1"># rename variable name in dataset to match variable_id</span>
-<span class="n">ds_era</span> <span class="o">=</span> <span class="n">ds_era</span><span class="o">.</span><span class="n">rename_vars</span><span class="p">({</span><span class="s1">&#39;t2m&#39;</span><span class="p">:</span><span class="s1">&#39;2t&#39;</span><span class="p">})</span>
-    <span class="c1"># if var_id == &#39;2t&#39;:</span>
-    <span class="c1">#     ds = ds.rename({&#39;t2m&#39;:&#39;2t&#39;})</span>
-    <span class="c1"># # if var_id == &#39;clic&#39;:</span>
-    <span class="c1"># #     ds = ds.rename({&#39;ciwc&#39;:&#39;clic&#39;})</span>
-    <span class="c1"># ds_era[var_id] = ds[var_id].sel(time = ds.time.dt.year.isin(year_range)).squeeze() </span>
+<span class="c1"># Uncomment the line below if you want to search for files matching the pattern in the directory specified by `era_in`</span>
+<span class="n">era_file_in</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">era_in</span><span class="si">}</span><span class="s1">/*_ERA5_*.nc&#39;</span><span class="p">)</span>
+<span class="c1"># era_file_in = glob(f&#39;{era_in}/45NS/*_ERA5_*.nc&#39;)</span>
 
-<span class="n">ds_era</span> <span class="o">=</span> <span class="n">ds_era</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span> <span class="o">=</span> <span class="n">ds_era</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">year_range</span><span class="p">))</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+<span class="n">ds_era</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="n">era_file_in</span><span class="p">,</span> <span class="p">)</span>
+<span class="c1"># Uncomment the line below if you want to rename the variable `t2m` to `2t`</span>
+<span class="n">ds_era</span> <span class="o">=</span> <span class="n">ds_era</span><span class="o">.</span><span class="n">rename_vars</span><span class="p">({</span><span class="s1">&#39;t2m&#39;</span><span class="p">:</span> <span class="s1">&#39;2t&#39;</span><span class="p">})</span>
 
-<span class="c1"># shift longitude to be from -180 to 180</span>
-<span class="n">ds_era</span> <span class="o">=</span> <span class="n">ds_era</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">lon</span><span class="o">=</span><span class="p">(((</span><span class="n">ds_era</span><span class="o">.</span><span class="n">lon</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span><span class="p">)</span> <span class="o">-</span> <span class="mi">180</span><span class="p">))</span><span class="o">.</span><span class="n">sortby</span><span class="p">(</span><span class="s1">&#39;lon&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sortby</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+<span class="n">ds_era</span> <span class="o">=</span> <span class="n">ds_era</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">ds_era</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">year_range</span><span class="p">))</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
 
-<span class="c1"># rename dimensions</span>
-<span class="c1"># ds_era = ds_era.rename_dims({&#39;lat&#39;:&#39;latitude&#39;, &#39;lon&#39;:&#39;longitude&#39;})</span>
+<span class="n">ds_era</span> <span class="o">=</span> <span class="n">ds_era</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">lon</span><span class="o">=</span><span class="p">(((</span><span class="n">ds_era</span><span class="o">.</span><span class="n">lon</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span><span class="p">)</span> <span class="o">-</span> <span class="mi">180</span><span class="p">))</span><span class="o">.</span><span class="n">sortby</span><span class="p">([</span><span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -718,7 +708,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># remove leap day</span>
 <span class="n">ds_era</span> <span class="o">=</span> <span class="n">ds_era</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=~</span><span class="p">((</span><span class="n">ds_era</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">month</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">ds_era</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">day</span> <span class="o">==</span> <span class="mi">29</span><span class="p">)))</span>
 
-<span class="c1"># remove dim=realization</span>
+<span class="c1"># Remove the &#39;realization&#39; dimension</span>
 <span class="n">ds_era</span> <span class="o">=</span> <span class="n">ds_era</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;realization&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -739,34 +729,26 @@ document.write(`
 <p><strong>msr:</strong> 	This parameter is the rate of snowfall at the Earth’s surface. It is the sum of large-scale and convective snowfall. Large-scale snowfall is generated by the cloud scheme in the ECMWF Integrated Forecasting System (IFS). The cloud scheme represents the formation and dissipation of clouds and large-scale precipitation due to changes in atmospheric quantities (such as pressure, temperature and moisture) predicted directly at spatial scales of the grid box or larger. Convective snowfall is generated by the convection scheme in the IFS, which represents convection at spatial scales smaller than the grid box. In the IFS, precipitation is comprised of rain and snow. This parameter is a mean over a particular time period (the processing period) which depends on the data extracted. For the reanalysis, the processing period is over the 1 hour ending at the validity date and time. For the ensemble members, ensemble mean and ensemble spread, the processing period is over the 3 hours ending at the validity date and time. It is the rate the snowfall would have if it were spread evenly over the grid box. 1 kg of water spread over 1 square metre of surface is 1 mm deep (neglecting the effects of temperature on the density of water), therefore the units are equivalent to mm (of liquid water) per second. Care should be taken when comparing model parameters with observations, because observations are often local to a particular point in space and time, rather than representing averages over a model grid box.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="n">ds_era</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    
-    <span class="k">if</span> <span class="n">var_id</span> <span class="o">==</span> <span class="s1">&#39;sf&#39;</span><span class="p">:</span><span class="c1"># or var_id == &#39;tclw&#39; or var_id == &#39;tciw&#39; or var_id == &#39;tcsw&#39; or var_id == &#39;tcrw&#39; or var_id == &#39;tcslw&#39;:</span>
-        <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">*</span><span class="mi">1000</span><span class="c1">#*24</span>
-        
-        <span class="c1"># ds_era[var_id].attrs = {&#39;units&#39;: &#39;kg m-2 day-1&#39;, &#39;long_name&#39;: &#39;Total Snowfall per day&#39;,}</span>
-        <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;kg m-2&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Total Snowfall per day&#39;</span><span class="p">,}</span>
-        <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
-    
-    <span class="k">if</span> <span class="n">var_id</span> <span class="o">==</span> <span class="s1">&#39;tp&#39;</span><span class="p">:</span>
-        <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">*</span><span class="mi">1000</span><span class="c1">#*24</span>
-        <span class="c1"># ds_era[var_id].attrs = {&#39;units&#39;: &#39;kg m-2 day-1&#39;, &#39;long_name&#39;: &#39;Total Snowfall per day&#39;,}</span>
-        <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;kg m-2&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Total Snowfall per day&#39;</span><span class="p">,}</span>
-        <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
-        
-    <span class="k">if</span> <span class="n">var_id</span> <span class="o">==</span> <span class="s1">&#39;msr&#39;</span><span class="p">:</span>
-        <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">*</span><span class="mi">3600</span>
-        <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;kg m-2 h-1&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Mean snowfall rate&#39;</span><span class="p">}</span>
-        <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
-        
-    <span class="k">if</span> <span class="n">var_id</span> <span class="o">==</span> <span class="s1">&#39;mtpr&#39;</span><span class="p">:</span>
-        <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">*</span><span class="mi">3600</span>
-        <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;kg m-2 h-1&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Mean total precipitation rate&#39;</span><span class="p">}</span>
-        <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
-        
-        
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In this optimized version, you define a dictionary conversion_factors that maps each variable ID (var_id) </span>
+<span class="c1"># to its corresponding conversion factor and attributes. The code then iterates over the keys of the dataset </span>
+<span class="c1"># ds_era and checks if the variable ID exists in the conversion_factors dictionary. If it does, it retrieves </span>
+<span class="c1"># the conversion factor and attributes for that variable and performs the necessary operations.</span>
 
-    
+<span class="n">conversion_factors</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;sf&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;factor&#39;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span> <span class="s1">&#39;attrs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;kg m-2&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Total Snowfall per day&#39;</span><span class="p">}},</span>
+    <span class="s1">&#39;tp&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;factor&#39;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span> <span class="s1">&#39;attrs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;kg m-2&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Total Snowfall per day&#39;</span><span class="p">}},</span>
+    <span class="s1">&#39;msr&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;factor&#39;</span><span class="p">:</span> <span class="mi">3600</span><span class="p">,</span> <span class="s1">&#39;attrs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;kg m-2 h-1&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Mean snowfall rate&#39;</span><span class="p">}},</span>
+    <span class="s1">&#39;mtpr&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;factor&#39;</span><span class="p">:</span> <span class="mi">3600</span><span class="p">,</span> <span class="s1">&#39;attrs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;kg m-2 h-1&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Mean total precipitation rate&#39;</span><span class="p">}}</span>
+<span class="p">}</span>
+
+<span class="k">for</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="n">ds_era</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="n">conversion_factors</span><span class="p">:</span>
+        <span class="n">factor</span> <span class="o">=</span> <span class="n">conversion_factors</span><span class="p">[</span><span class="n">var_id</span><span class="p">][</span><span class="s1">&#39;factor&#39;</span><span class="p">]</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="n">conversion_factors</span><span class="p">[</span><span class="n">var_id</span><span class="p">][</span><span class="s1">&#39;attrs&#39;</span><span class="p">]</span>
+
+        <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">*</span> <span class="n">factor</span>
+        <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">attrs</span>
+        <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds_era</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -840,6 +822,124 @@ tp kg m-2
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds_era</span><span class="p">[</span><span class="s1">&#39;twp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_era</span><span class="p">[</span><span class="s1">&#39;iwp&#39;</span><span class="p">]</span> <span class="o">+</span><span class="n">ds_era</span><span class="p">[</span><span class="s1">&#39;lwp&#39;</span><span class="p">]</span>
 <span class="n">ds_era</span><span class="p">[</span><span class="s1">&#39;twp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;kg m-2&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Daily average total water path&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="save-era5-file">
+<h2>Save ERA5 file<a class="headerlink" href="#save-era5-file" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">starty</span> <span class="o">=</span> <span class="mi">2006</span><span class="p">;</span> <span class="n">endy</span> <span class="o">=</span> <span class="mi">2009</span>
+<span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c1"># Rename variables and drop unused variables</span>
+<span class="n">ds_era</span> <span class="o">=</span> <span class="n">ds_era</span><span class="o">.</span><span class="n">rename_vars</span><span class="p">({</span><span class="s1">&#39;msr&#39;</span><span class="p">:</span> <span class="s1">&#39;prsn&#39;</span><span class="p">,</span> <span class="s1">&#39;mtpr&#39;</span><span class="p">:</span> <span class="s1">&#39;pr&#39;</span><span class="p">,</span> <span class="s1">&#39;2t&#39;</span><span class="p">:</span> <span class="s1">&#39;tas&#39;</span><span class="p">})</span>
+<span class="n">ds_era</span> <span class="o">=</span> <span class="n">ds_era</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">((</span><span class="s1">&#39;sf&#39;</span><span class="p">,</span> <span class="s1">&#39;tciw&#39;</span><span class="p">,</span> <span class="s1">&#39;tclw&#39;</span><span class="p">,</span> <span class="s1">&#39;tcrw&#39;</span><span class="p">,</span> <span class="s1">&#39;tcslw&#39;</span><span class="p">,</span> <span class="s1">&#39;tcsw&#39;</span><span class="p">,</span> <span class="s1">&#39;tcw&#39;</span><span class="p">,</span> <span class="s1">&#39;tp&#39;</span><span class="p">),</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+<span class="n">ds_era</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;daily_mean_40NS_ERA5_</span><span class="si">{</span><span class="n">starty</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">01_</span><span class="si">{</span><span class="n">endy</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">12.nc&#39;</span>
+    
+<span class="c1"># era_file_out = os.path.join(era_in, f&#39;45NS/{filename}&#39;)</span>
+<span class="n">era_file_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">era_in</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">era_file_out</span><span class="p">):</span>
+    <span class="n">ds_era</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">era_file_out</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;file written: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">era_file_out</span><span class="p">))</span>
+        <span class="c1">#     print(f&#39;{era_file_out} is downloaded&#39;)</span>
+        <span class="c1">#     counter += 1</span>
+        <span class="c1">#     print(f&#39;Have regridded in total: {counter} files&#39;)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">ds_era</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">era_file_out</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;file written: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">era_file_out</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>file written: /scratch/franzihe/input/ERA5/daily_means/45NS/daily_mean_40NS_ERA5_200701_201012.nc
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="regrid-era5-data-to-common-cmip6-model-grid-a-id-regrid-hz-a">
+<h2>Regrid ERA5 data to common CMIP6 model grid <a id='regrid_hz'></a><a class="headerlink" href="#regrid-era5-data-to-common-cmip6-model-grid-a-id-regrid-hz-a" title="Permalink to this heading">#</a></h2>
+<p>We want to conduct statistical analysis at the annual and seasonal timescales to determine the biases in cloud phase and precipitation (liquid and solid) for the CMIP6 models in comparison to ERA5.</p>
+<p>The ERA5 data has a nominal resolution of 0.25 deg and has to be regridded to the same horizontal resolution as the CMIP6 model. Hence we will make use of the python package <code class="docutils literal notranslate"><span class="pre">xesmf</span></code> and <a class="reference external" href="https://xesmf.readthedocs.io/en/latest/notebooks/Compare_algorithms.html#Decreasing-resolution">decreasing resolution</a>, <a class="reference external" href="https://xesmf.readthedocs.io/en/latest/notebooks/Masking.html?highlight=conservative#Limitations-and-warnings">Limitations and warnings</a>.</p>
+<p><span class="math notranslate nohighlight">\(\rightarrow\)</span> Define CMIP6 model as the reference grid <code class="docutils literal notranslate"><span class="pre">ds_out</span></code>.</p>
+<p>Save all variables in one file and each variable to a <code class="docutils literal notranslate"><span class="pre">netcdf</span></code> datasets between 2007 an 2010, locally.</p>
+<blockquote>
+<div><p><strong><em>NOTE:</em></strong> This can take a while, so be patient</p>
+</div></blockquote>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">year_range</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">starty</span><span class="p">,</span> <span class="n">endy</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># source_id</span>
+<span class="n">list_models</span> <span class="o">=</span> <span class="p">[</span>
+               <span class="s1">&#39;ERA5&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;MIROC6&#39;</span><span class="p">,</span> 
+               <span class="s1">&#39;CanESM5&#39;</span><span class="p">,</span> 
+               <span class="s1">&#39;AWI-ESM-1-1-LR&#39;</span><span class="p">,</span> 
+               <span class="s1">&#39;MPI-ESM1-2-LR&#39;</span><span class="p">,</span> 
+               <span class="s1">&#39;UKESM1-0-LL&#39;</span><span class="p">,</span> 
+               <span class="s1">&#39;HadGEM3-GC31-LL&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;CNRM-CM6-1&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;CNRM-ESM2-1&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;IPSL-CM6A-LR&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;IPSL-CM5A2-INCA&#39;</span>
+            <span class="p">]</span>
+
+<span class="c1">## experiment</span>
+<span class="n">experiment_id</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;historical&#39;</span><span class="p">]</span>
+
+<span class="c1">## time resolution</span>
+<span class="n">t_res</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;day&#39;</span><span class="p">,]</span>
+
+<span class="n">variable_id</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;areacella&#39;</span><span class="p">,</span> <span class="s1">&#39;prsn&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Search corresponding data, select Northern and Southern Hemisphere, regrid ERA5 data to CMIP6 models resolution</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">list_models</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;ERA5&#39;</span><span class="p">:</span>
+        <span class="n">era_in_grid</span> <span class="o">=</span> <span class="n">ds_era</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;ERA5_daily_mean_</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">starty</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">01_</span><span class="si">{</span><span class="n">endy</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">12.nc&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">model</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;UKESM1-0-LL&#39;</span><span class="p">,</span> <span class="s1">&#39;HadGEM3-GC31-LL&#39;</span><span class="p">]:</span>
+            <span class="n">cmip_file_in</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cmip_in</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">variable_id</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">_day_</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">*&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmip_file_in</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cmip_in</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">variable_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">_fx_*</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">*&#39;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cmip_file_in</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">ds_cmip</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">cmip_file_in</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">drop_variables</span><span class="o">=</span><span class="n">variable_id</span><span class="p">)</span>
+            
+        <span class="c1"># Shift longitude to be from -180 to 180</span>
+        <span class="n">ds_cmip</span> <span class="o">=</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">lon</span><span class="o">=</span><span class="p">(((</span><span class="n">ds_cmip</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span><span class="p">)</span> <span class="o">-</span> <span class="mi">180</span><span class="p">))</span><span class="o">.</span><span class="n">sortby</span><span class="p">(</span><span class="s1">&#39;lon&#39;</span><span class="p">)</span>
+            
+        <span class="c1"># Regrid data</span>
+        <span class="n">SH</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">regrid_data</span><span class="p">(</span><span class="n">ds_era</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">40</span><span class="p">)),</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">40</span><span class="p">)))</span>
+        <span class="n">NH</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">regrid_data</span><span class="p">(</span><span class="n">ds_era</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span><span class="mi">90</span><span class="p">)),</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span><span class="mi">90</span><span class="p">)))</span>
+            
+        <span class="n">era_in_grid</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">SH</span><span class="p">,</span> <span class="n">NH</span><span class="p">],</span> <span class="s1">&#39;lat&#39;</span><span class="p">)</span>
+            
+        <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;ERA5_daily_mean_</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">starty</span><span class="si">}</span><span class="s1">01_</span><span class="si">{</span><span class="n">endy</span><span class="si">}</span><span class="s1">12.nc&#39;</span>
+    
+    <span class="n">era_file_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">era_out</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">era_file_out</span><span class="p">):</span>
+        <span class="n">era_in_grid</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">era_file_out</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;file written: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">era_file_out</span><span class="p">))</span>
+        <span class="c1">#     print(f&#39;{era_file_out} is downloaded&#39;)</span>
+        <span class="c1">#     counter += 1</span>
+        <span class="c1">#     print(f&#39;Have regridded in total: {counter} files&#39;)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">era_in_grid</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">era_file_out</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;file written: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">era_file_out</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -3213,223 +3313,6 @@ Attributes:
 </div>
 </div>
 </section>
-<section id="regrid-era5-data-to-common-cmip6-model-grid-a-id-regrid-hz-a">
-<h2>Regrid ERA5 data to common CMIP6 model grid <a id='regrid_hz'></a><a class="headerlink" href="#regrid-era5-data-to-common-cmip6-model-grid-a-id-regrid-hz-a" title="Permalink to this heading">#</a></h2>
-<p>We want to conduct statistical analysis at the annual and seasonal timescales to determine the biases in cloud phase and precipitation (liquid and solid) for the CMIP6 models in comparison to ERA5.</p>
-<p>The ERA5 data has a nominal resolution of 0.25 deg and has to be regridded to the same horizontal resolution as the CMIP6 model. Hence we will make use of the python package <code class="docutils literal notranslate"><span class="pre">xesmf</span></code> and <a class="reference external" href="https://xesmf.readthedocs.io/en/latest/notebooks/Compare_algorithms.html#Decreasing-resolution">decreasing resolution</a>, <a class="reference external" href="https://xesmf.readthedocs.io/en/latest/notebooks/Masking.html?highlight=conservative#Limitations-and-warnings">Limitations and warnings</a>.</p>
-<p><span class="math notranslate nohighlight">\(\rightarrow\)</span> Define CMIP6 model as the reference grid <code class="docutils literal notranslate"><span class="pre">ds_out</span></code>.</p>
-<p>Save all variables in one file and each variable to a <code class="docutils literal notranslate"><span class="pre">netcdf</span></code> datasets between 2007 an 2010, locally.</p>
-<blockquote>
-<div><p><strong><em>NOTE:</em></strong> This can take a while, so be patient</p>
-</div></blockquote>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">starty</span> <span class="o">=</span> <span class="mi">2006</span><span class="p">;</span> <span class="n">endy</span> <span class="o">=</span> <span class="mi">2009</span>
-<span class="n">year_range</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">starty</span><span class="p">,</span> <span class="n">endy</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-<span class="c1"># source_id</span>
-<span class="n">list_models</span> <span class="o">=</span> <span class="p">[</span>
-               <span class="s1">&#39;ERA5&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;MIROC6&#39;</span><span class="p">,</span> 
-               <span class="s1">&#39;CESM2&#39;</span><span class="p">,</span> 
-               <span class="s1">&#39;CanESM5&#39;</span><span class="p">,</span> 
-               <span class="s1">&#39;AWI-ESM-1-1-LR&#39;</span><span class="p">,</span> 
-               <span class="s1">&#39;MPI-ESM1-2-LR&#39;</span><span class="p">,</span> 
-               <span class="s1">&#39;UKESM1-0-LL&#39;</span><span class="p">,</span> 
-               <span class="s1">&#39;HadGEM3-GC31-LL&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;CNRM-CM6-1&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;CNRM-ESM2-1&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;IPSL-CM6A-LR&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;IPSL-CM5A2-INCA&#39;</span>
-            <span class="p">]</span>
-
-<span class="c1">## experiment</span>
-<span class="n">experiment_id</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;historical&#39;</span><span class="p">]</span>
-
-<span class="c1">## time resolution</span>
-<span class="n">t_res</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;day&#39;</span><span class="p">,]</span>
-
-<span class="n">variable_id</span> <span class="o">=</span> <span class="s1">&#39;areacella&#39;</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>Search corresponding data, select Northern and Southern Hemisphere, regrid ERA5 data to CMIP6 models resolution</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="c1"># rename variables and drop unused variables</span>
-<span class="n">ds_era</span> <span class="o">=</span> <span class="n">ds_era</span><span class="o">.</span><span class="n">rename_vars</span><span class="p">({</span><span class="s1">&#39;msr&#39;</span><span class="p">:</span><span class="s1">&#39;prsn&#39;</span><span class="p">,</span> <span class="s1">&#39;mtpr&#39;</span><span class="p">:</span><span class="s1">&#39;pr&#39;</span><span class="p">,</span> <span class="s1">&#39;2t&#39;</span><span class="p">:</span><span class="s1">&#39;tas&#39;</span><span class="p">,</span> <span class="p">})</span>
-<span class="n">ds_era</span> <span class="o">=</span> <span class="n">ds_era</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">((</span><span class="s1">&#39;sf&#39;</span><span class="p">,</span><span class="s1">&#39;tciw&#39;</span><span class="p">,</span> <span class="s1">&#39;tclw&#39;</span><span class="p">,</span> <span class="s1">&#39;tcrw&#39;</span><span class="p">,</span> <span class="s1">&#39;tcslw&#39;</span><span class="p">,</span> <span class="s1">&#39;tcsw&#39;</span><span class="p">,</span> <span class="s1">&#39;tcw&#39;</span><span class="p">,</span> <span class="s1">&#39;tp&#39;</span><span class="p">))</span>
-
-
-
-<span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">list_models</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;ERA5&#39;</span><span class="p">:</span>
-                <span class="n">era_in_grid</span> <span class="o">=</span> <span class="n">ds_era</span>
-                <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;ERA5_daily_mean_</span><span class="si">{}</span><span class="s1">_</span><span class="si">{}</span><span class="s1">01_</span><span class="si">{}</span><span class="s1">12.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">starty</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">endy</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-                <span class="n">cmip_file_in</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">_fx_*</span><span class="si">{}</span><span class="s1">*&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cmip_in</span><span class="p">,</span><span class="n">variable_id</span><span class="p">,</span> <span class="n">model</span><span class="p">,))</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cmip_file_in</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="k">continue</span>
-                <span class="k">else</span><span class="p">:</span>
-                        <span class="n">ds_cmip</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">cmip_file_in</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">drop_variables</span><span class="o">=</span><span class="n">variable_id</span><span class="p">)</span>
-                
-                        <span class="c1"># shift longitude to be from -180 to 180</span>
-                        <span class="n">ds_cmip</span> <span class="o">=</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">lon</span><span class="o">=</span><span class="p">(((</span><span class="n">ds_cmip</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span><span class="p">)</span> <span class="o">-</span> <span class="mi">180</span><span class="p">))</span><span class="o">.</span><span class="n">sortby</span><span class="p">(</span><span class="s1">&#39;lon&#39;</span><span class="p">)</span>
-                
-                
-                        <span class="c1"># Regrid data</span>
-                        <span class="n">SH</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">regrid_data</span><span class="p">(</span><span class="n">ds_era</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">)),</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">)))</span>
-                        <span class="n">NH</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">regrid_data</span><span class="p">(</span><span class="n">ds_era</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">)),</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">)))</span>
-
-                        <span class="n">era_in_grid</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">SH</span><span class="p">,</span> <span class="n">NH</span><span class="p">],</span> <span class="s1">&#39;lat&#39;</span><span class="p">)</span>
-                        
-                        <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;ERA5_daily_mean_</span><span class="si">{}</span><span class="s1">_</span><span class="si">{}</span><span class="s1">01_</span><span class="si">{}</span><span class="s1">12.nc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">starty</span><span class="p">,</span> <span class="n">endy</span><span class="p">)</span>
-                
-        <span class="n">era_file_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">era_out</span><span class="p">,</span> <span class="s1">&#39;model_grid/&#39;</span> <span class="o">+</span><span class="n">filename</span><span class="p">)</span>
-
-        <span class="k">try</span><span class="p">:</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">era_out</span><span class="p">,</span> <span class="s1">&#39;model_grid&#39;</span><span class="p">))</span>
-        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
-                <span class="k">pass</span>
-
-        <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="n">era_file_out</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">era_file_out</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-                <span class="n">era_in_grid</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">era_file_out</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;file written: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">era_file_out</span><span class="p">))</span>
-                <span class="c1">#     print(&#39;{} is downloaded&#39;.format(era_file_out))</span>
-                <span class="c1">#     counter += 1</span>
-                <span class="c1">#     print(&#39;Have regridded in total: {:} files&#39;.format(str(counter))) </span>
-        <span class="k">else</span><span class="p">:</span> <span class="c1"># Save to netcdf file</span>
-                <span class="n">era_in_grid</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">era_file_out</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;file written: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">era_file_out</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>file written: /scratch/franzihe/output/ERA5/daily_means/model_grid/ERA5_daily_mean_ERA5_200701_201012.nc
-prsn True
-pr True
-tas True
-iwp True
-lwp True
-twp True
-prsn True
-pr True
-tas True
-iwp True
-lwp True
-twp True
-file written: /scratch/franzihe/output/ERA5/daily_means/model_grid/ERA5_daily_mean_MIROC6_200601_200912.nc
-prsn True
-pr True
-tas True
-iwp True
-lwp True
-twp True
-prsn True
-pr True
-tas True
-iwp True
-lwp True
-twp True
-file written: /scratch/franzihe/output/ERA5/daily_means/model_grid/ERA5_daily_mean_CESM2_200601_200912.nc
-prsn True
-pr True
-tas True
-iwp True
-lwp True
-twp True
-prsn True
-pr True
-tas True
-iwp True
-lwp True
-twp True
-file written: /scratch/franzihe/output/ERA5/daily_means/model_grid/ERA5_daily_mean_CanESM5_200601_200912.nc
-prsn True
-pr True
-tas True
-iwp True
-lwp True
-twp True
-prsn True
-pr True
-tas True
-iwp True
-lwp True
-twp True
-file written: /scratch/franzihe/output/ERA5/daily_means/model_grid/ERA5_daily_mean_AWI-ESM-1-1-LR_200601_200912.nc
-prsn True
-pr True
-tas True
-iwp True
-lwp True
-twp True
-prsn True
-pr True
-tas True
-iwp True
-lwp True
-twp True
-file written: /scratch/franzihe/output/ERA5/daily_means/model_grid/ERA5_daily_mean_MPI-ESM1-2-LR_200601_200912.nc
-prsn True
-pr True
-tas True
-iwp True
-lwp True
-twp True
-prsn True
-pr True
-tas True
-iwp True
-lwp True
-twp True
-file written: /scratch/franzihe/output/ERA5/daily_means/model_grid/ERA5_daily_mean_CNRM-CM6-1_200601_200912.nc
-prsn True
-pr True
-tas True
-iwp True
-lwp True
-twp True
-prsn True
-pr True
-tas True
-iwp True
-lwp True
-twp True
-file written: /scratch/franzihe/output/ERA5/daily_means/model_grid/ERA5_daily_mean_CNRM-ESM2-1_200601_200912.nc
-prsn True
-pr True
-tas True
-iwp True
-lwp True
-twp True
-prsn True
-pr True
-tas True
-iwp True
-lwp True
-twp True
-file written: /scratch/franzihe/output/ERA5/daily_means/model_grid/ERA5_daily_mean_IPSL-CM6A-LR_200601_200912.nc
-prsn True
-pr True
-tas True
-iwp True
-lwp True
-twp True
-prsn True
-pr True
-tas True
-iwp True
-lwp True
-twp True
-file written: /scratch/franzihe/output/ERA5/daily_means/model_grid/ERA5_daily_mean_IPSL-CM5A2-INCA_200601_200912.nc
-</pre></div>
-</div>
-</div>
-</div>
-</section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="way-to-average-the-globe">
 <h1>Way to Average the Globe<a class="headerlink" href="#way-to-average-the-globe" title="Permalink to this heading">#</a></h1>
@@ -4732,6 +4615,8 @@ $<span class="math notranslate nohighlight">\(SLF = \frac{LWC}{IWC + LWC}\)</spa
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specific-ice-and-snow-water-content">Specific ice and snow water content</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#total-column-cloud-ice-water-and-total-column-cloud-snow-water">Total column cloud ice water and total column cloud snow water</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#total-column-cloud-liquid-water-total-column-supercooled-liquid-water-total-column-rain-water">Total column cloud liquid water, total column supercooled liquid water, total column rain water</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-era5-file">Save ERA5 file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regrid-era5-data-to-common-cmip6-model-grid-a-id-regrid-hz-a">Regrid ERA5 data to common CMIP6 model grid <a id="regrid_hz"></a></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#count-the-days-in-one-season-over-year-range">Count the days in one season over year range</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supercooled-liquid-water-fraction">Supercooled liquid water fraction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#statistics">Statistics</a></li>
@@ -4754,7 +4639,6 @@ $<span class="math notranslate nohighlight">\(SLF = \frac{LWC}{IWC + LWC}\)</spa
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#frequency-of-freezing-rain">Frequency of freezing rain</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regrid-era5-data-to-common-cmip6-model-grid-a-id-regrid-hz-a">Regrid ERA5 data to common CMIP6 model grid <a id="regrid_hz"></a></a></li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#way-to-average-the-globe">Way to Average the Globe</a><ul class="visible nav section-nav flex-column">
