@@ -623,7 +623,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7fabdeff5d50&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7f7cb817e110&gt;
 </pre></div>
 </div>
 </div>
@@ -1084,16 +1084,20 @@ LWP = \rho_{air} \cdot \Delta clw \cdot \Delta Z
     <span class="n">regridder</span> <span class="o">=</span> <span class="n">xe</span><span class="o">.</span><span class="n">Regridder</span><span class="p">(</span><span class="n">ds_in</span><span class="o">=</span><span class="n">dset</span><span class="p">,</span> <span class="n">ds_out</span><span class="o">=</span><span class="n">ds_out</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;conservative&quot;</span><span class="p">)</span>
     <span class="n">dset_regrid</span> <span class="o">=</span> <span class="n">regridder</span><span class="p">(</span><span class="n">dset</span><span class="p">)</span>
 
-    <span class="n">var_ids</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;clivi&#39;</span><span class="p">,</span> <span class="s1">&#39;lwp&#39;</span><span class="p">,</span> <span class="s1">&#39;pr&#39;</span><span class="p">,</span> <span class="s1">&#39;prsn&#39;</span><span class="p">,</span> <span class="s1">&#39;tas&#39;</span><span class="p">]</span>
+    <span class="n">var_ids</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;clivi&#39;</span><span class="p">,</span> <span class="s1">&#39;lwp&#39;</span><span class="p">,</span> <span class="s1">&#39;pr&#39;</span><span class="p">,</span> <span class="s1">&#39;prsn&#39;</span><span class="p">,</span> <span class="s1">&#39;tas&#39;</span><span class="p">,</span> <span class="s1">&#39;areacella&#39;</span><span class="p">]</span>
+    <span class="c1"># var_ids = [&#39;areacella&#39;]</span>
 
     <span class="k">for</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="n">var_ids</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Writing regrid files: var_id: </span><span class="si">{</span><span class="n">var_id</span><span class="si">}</span><span class="s1">, year: </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">, model: </span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">dset_regrid</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Writing regrid files: var_id: </span><span class="si">{</span><span class="n">var_id</span><span class="si">}</span><span class="s1">, year: </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">, model: </span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
-        <span class="n">variant_label</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;variant_label&#39;</span><span class="p">]</span>
-        <span class="n">NH_file_grid</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cmip_in</span><span class="si">}</span><span class="s1">/common_grid/</span><span class="si">{</span><span class="n">var_id</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">grid_model</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">_40_90_</span><span class="si">{</span><span class="n">experiment_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">variant_label</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">0101-</span><span class="si">{</span><span class="n">year</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">1231.nc&#39;</span>
-        <span class="n">SH_file_grid</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cmip_in</span><span class="si">}</span><span class="s1">/common_grid/</span><span class="si">{</span><span class="n">var_id</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">grid_model</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">_-40_-90_</span><span class="si">{</span><span class="n">experiment_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">variant_label</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">0101-</span><span class="si">{</span><span class="n">year</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">1231.nc&#39;</span>
-        <span class="p">(</span><span class="n">dset_regrid</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">90</span><span class="p">)))</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">NH_file_grid</span><span class="p">)</span>
-        <span class="p">(</span><span class="n">dset_regrid</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="o">-</span><span class="mi">40</span><span class="p">)))</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">SH_file_grid</span><span class="p">)</span>
+            <span class="n">variant_label</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;variant_label&#39;</span><span class="p">]</span>
+            <span class="n">NH_file_grid</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cmip_in</span><span class="si">}</span><span class="s1">/common_grid/</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">var_id</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">grid_model</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">_40_90_</span><span class="si">{</span><span class="n">experiment_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">variant_label</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">0101-</span><span class="si">{</span><span class="n">year</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">1231.nc&#39;</span>
+            <span class="n">SH_file_grid</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cmip_in</span><span class="si">}</span><span class="s1">/common_grid/</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">var_id</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">grid_model</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">_-40_-90_</span><span class="si">{</span><span class="n">experiment_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">variant_label</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">0101-</span><span class="si">{</span><span class="n">year</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">1231.nc&#39;</span>
+            <span class="p">(</span><span class="n">dset_regrid</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">90</span><span class="p">)))</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">NH_file_grid</span><span class="p">)</span>
+            <span class="p">(</span><span class="n">dset_regrid</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="o">-</span><span class="mi">40</span><span class="p">)))</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">SH_file_grid</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_id</span><span class="si">}</span><span class="s1"> does not exist in </span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1125,8 +1129,8 @@ LWP = \rho_{air} \cdot \Delta clw \cdot \Delta Z
             <span class="k">if</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">dset</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Writing files: var_id: </span><span class="si">{</span><span class="n">var_id</span><span class="si">}</span><span class="s1">, year: </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">, model: </span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
                 <span class="n">variant_label</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;variant_label&#39;</span><span class="p">]</span>
-                <span class="n">NH_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cmip_in</span><span class="si">}</span><span class="s1">/single_model/</span><span class="si">{</span><span class="n">var_id</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">_40_90_</span><span class="si">{</span><span class="n">experiment_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">variant_label</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">0101-</span><span class="si">{</span><span class="n">year</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">1231.nc&#39;</span>
-                <span class="n">SH_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cmip_in</span><span class="si">}</span><span class="s1">/single_model/</span><span class="si">{</span><span class="n">var_id</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">_-40_-90_</span><span class="si">{</span><span class="n">experiment_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">variant_label</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">0101-</span><span class="si">{</span><span class="n">year</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">1231.nc&#39;</span>
+                <span class="n">NH_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cmip_in</span><span class="si">}</span><span class="s1">/single_model/</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">var_id</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">_40_90_</span><span class="si">{</span><span class="n">experiment_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">variant_label</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">0101-</span><span class="si">{</span><span class="n">year</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">1231.nc&#39;</span>
+                <span class="n">SH_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cmip_in</span><span class="si">}</span><span class="s1">/single_model/</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">var_id</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">_-40_-90_</span><span class="si">{</span><span class="n">experiment_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">variant_label</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">0101-</span><span class="si">{</span><span class="n">year</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">1231.nc&#39;</span>
                 
                 <span class="p">(</span><span class="n">dset</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span><span class="mi">90</span><span class="p">)))</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">NH_file</span><span class="p">)</span>
                 <span class="p">(</span><span class="n">dset</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">40</span><span class="p">)))</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">SH_file</span><span class="p">)</span>
@@ -1135,7 +1139,7 @@ LWP = \rho_{air} \cdot \Delta clw \cdot \Delta Z
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_id</span><span class="si">}</span><span class="s1"> does not exist in </span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
             
         <span class="k">for</span> <span class="n">grid_model</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;IPSL-CM6A-LR&#39;</span><span class="p">,</span> <span class="s1">&#39;IPSL-CM5A2-INCA&#39;</span><span class="p">]:</span>
-                <span class="n">ds_out</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cmip_in</span><span class="si">}</span><span class="s2">/single_model/areacella_*</span><span class="si">{</span><span class="n">grid_model</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">experiment_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">*.nc&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],)</span>
+                <span class="n">ds_out</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cmip_in</span><span class="si">}</span><span class="s2">/single_model/</span><span class="si">{</span><span class="n">grid_model</span><span class="si">}</span><span class="s2">/areacella_*</span><span class="si">{</span><span class="n">grid_model</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">experiment_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">*.nc&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],)</span>
                 <span class="c1"># Shift longitude to be from -180 to 180</span>
                 <span class="n">ds_out</span> <span class="o">=</span> <span class="n">ds_out</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">lon</span><span class="o">=</span><span class="p">(((</span><span class="n">ds_out</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span><span class="p">)</span> <span class="o">-</span> <span class="mi">180</span><span class="p">))</span><span class="o">.</span><span class="n">sortby</span><span class="p">(</span><span class="s1">&#39;lon&#39;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">grid_model</span> <span class="o">==</span> <span class="s1">&#39;IPSL-CM6A-LR&#39;</span><span class="p">:</span>
@@ -1163,151 +1167,183 @@ LWP = \rho_{air} \cdot \Delta clw \cdot \Delta Z
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>no files found for clivi in MIROC6
 no files found for pfull in MIROC6
 no files found for phalf in MIROC6
-Writing files: var_id: areacella, year: 2006, model: MIROC6
+Writing regrid files: var_id: areacella, year: 2006, model: MIROC6
+Writing regrid files: var_id: areacella, year: 2006, model: MIROC6
 no files found for pfull in CanESM5
 no files found for phalf in CanESM5
-Writing files: var_id: areacella, year: 2006, model: CanESM5
+Writing regrid files: var_id: areacella, year: 2006, model: CanESM5
 no files found for cli in AWI-ESM-1-1-LR
 no files found for pfull in AWI-ESM-1-1-LR
 no files found for phalf in AWI-ESM-1-1-LR
-Writing files: var_id: areacella, year: 2006, model: AWI-ESM-1-1-LR
+Writing regrid files: var_id: areacella, year: 2006, model: AWI-ESM-1-1-LR
+Writing regrid files: var_id: areacella, year: 2006, model: AWI-ESM-1-1-LR
 no files found for cli in MPI-ESM1-2-LR
 no files found for pfull in MPI-ESM1-2-LR
 no files found for phalf in MPI-ESM1-2-LR
-Writing files: var_id: areacella, year: 2006, model: MPI-ESM1-2-LR
+Writing regrid files: var_id: areacella, year: 2006, model: MPI-ESM1-2-LR
+Writing regrid files: var_id: areacella, year: 2006, model: MPI-ESM1-2-LR
 no files found for cli in UKESM1-0-LL
+areacella does not exist in UKESM1-0-LL
 areacella does not exist in UKESM1-0-LL
 areacella does not exist in UKESM1-0-LL
 no files found for cli in HadGEM3-GC31-LL
 areacella does not exist in HadGEM3-GC31-LL
 areacella does not exist in HadGEM3-GC31-LL
+areacella does not exist in HadGEM3-GC31-LL
 no files found for cli in CNRM-CM6-1
 no files found for pfull in CNRM-CM6-1
 no files found for phalf in CNRM-CM6-1
-Writing files: var_id: areacella, year: 2006, model: CNRM-CM6-1
+Writing regrid files: var_id: areacella, year: 2006, model: CNRM-CM6-1
+Writing regrid files: var_id: areacella, year: 2006, model: CNRM-CM6-1
 no files found for cli in CNRM-ESM2-1
 no files found for pfull in CNRM-ESM2-1
 no files found for phalf in CNRM-ESM2-1
-Writing files: var_id: areacella, year: 2006, model: CNRM-ESM2-1
+Writing regrid files: var_id: areacella, year: 2006, model: CNRM-ESM2-1
+Writing regrid files: var_id: areacella, year: 2006, model: CNRM-ESM2-1
 no files found for cli in IPSL-CM6A-LR
 no files found for pfull in IPSL-CM6A-LR
 no files found for phalf in IPSL-CM6A-LR
-Writing files: var_id: areacella, year: 2006, model: IPSL-CM6A-LR
+Writing regrid files: var_id: areacella, year: 2006, model: IPSL-CM6A-LR
+Writing regrid files: var_id: areacella, year: 2006, model: IPSL-CM6A-LR
 no files found for cli in IPSL-CM5A2-INCA
 no files found for pfull in IPSL-CM5A2-INCA
 no files found for phalf in IPSL-CM5A2-INCA
-Writing files: var_id: areacella, year: 2006, model: IPSL-CM5A2-INCA
+Writing regrid files: var_id: areacella, year: 2006, model: IPSL-CM5A2-INCA
 no files found for clivi in MIROC6
 no files found for pfull in MIROC6
 no files found for phalf in MIROC6
-Writing files: var_id: areacella, year: 2007, model: MIROC6
+Writing regrid files: var_id: areacella, year: 2007, model: MIROC6
+Writing regrid files: var_id: areacella, year: 2007, model: MIROC6
 no files found for pfull in CanESM5
 no files found for phalf in CanESM5
-Writing files: var_id: areacella, year: 2007, model: CanESM5
+Writing regrid files: var_id: areacella, year: 2007, model: CanESM5
 no files found for cli in AWI-ESM-1-1-LR
 no files found for pfull in AWI-ESM-1-1-LR
 no files found for phalf in AWI-ESM-1-1-LR
-Writing files: var_id: areacella, year: 2007, model: AWI-ESM-1-1-LR
+Writing regrid files: var_id: areacella, year: 2007, model: AWI-ESM-1-1-LR
+Writing regrid files: var_id: areacella, year: 2007, model: AWI-ESM-1-1-LR
 no files found for cli in MPI-ESM1-2-LR
 no files found for pfull in MPI-ESM1-2-LR
 no files found for phalf in MPI-ESM1-2-LR
-Writing files: var_id: areacella, year: 2007, model: MPI-ESM1-2-LR
+Writing regrid files: var_id: areacella, year: 2007, model: MPI-ESM1-2-LR
+Writing regrid files: var_id: areacella, year: 2007, model: MPI-ESM1-2-LR
 no files found for cli in UKESM1-0-LL
+areacella does not exist in UKESM1-0-LL
 areacella does not exist in UKESM1-0-LL
 areacella does not exist in UKESM1-0-LL
 no files found for cli in HadGEM3-GC31-LL
 areacella does not exist in HadGEM3-GC31-LL
 areacella does not exist in HadGEM3-GC31-LL
+areacella does not exist in HadGEM3-GC31-LL
 no files found for cli in CNRM-CM6-1
 no files found for pfull in CNRM-CM6-1
 no files found for phalf in CNRM-CM6-1
-Writing files: var_id: areacella, year: 2007, model: CNRM-CM6-1
+Writing regrid files: var_id: areacella, year: 2007, model: CNRM-CM6-1
+Writing regrid files: var_id: areacella, year: 2007, model: CNRM-CM6-1
 no files found for cli in CNRM-ESM2-1
 no files found for pfull in CNRM-ESM2-1
 no files found for phalf in CNRM-ESM2-1
-Writing files: var_id: areacella, year: 2007, model: CNRM-ESM2-1
+Writing regrid files: var_id: areacella, year: 2007, model: CNRM-ESM2-1
+Writing regrid files: var_id: areacella, year: 2007, model: CNRM-ESM2-1
 no files found for cli in IPSL-CM6A-LR
 no files found for pfull in IPSL-CM6A-LR
 no files found for phalf in IPSL-CM6A-LR
-Writing files: var_id: areacella, year: 2007, model: IPSL-CM6A-LR
+Writing regrid files: var_id: areacella, year: 2007, model: IPSL-CM6A-LR
+Writing regrid files: var_id: areacella, year: 2007, model: IPSL-CM6A-LR
 no files found for cli in IPSL-CM5A2-INCA
 no files found for pfull in IPSL-CM5A2-INCA
 no files found for phalf in IPSL-CM5A2-INCA
-Writing files: var_id: areacella, year: 2007, model: IPSL-CM5A2-INCA
+Writing regrid files: var_id: areacella, year: 2007, model: IPSL-CM5A2-INCA
 no files found for clivi in MIROC6
 no files found for pfull in MIROC6
 no files found for phalf in MIROC6
-Writing files: var_id: areacella, year: 2008, model: MIROC6
+Writing regrid files: var_id: areacella, year: 2008, model: MIROC6
+Writing regrid files: var_id: areacella, year: 2008, model: MIROC6
 no files found for pfull in CanESM5
 no files found for phalf in CanESM5
-Writing files: var_id: areacella, year: 2008, model: CanESM5
+Writing regrid files: var_id: areacella, year: 2008, model: CanESM5
 no files found for cli in AWI-ESM-1-1-LR
 no files found for pfull in AWI-ESM-1-1-LR
 no files found for phalf in AWI-ESM-1-1-LR
-Writing files: var_id: areacella, year: 2008, model: AWI-ESM-1-1-LR
+Writing regrid files: var_id: areacella, year: 2008, model: AWI-ESM-1-1-LR
+Writing regrid files: var_id: areacella, year: 2008, model: AWI-ESM-1-1-LR
 no files found for cli in MPI-ESM1-2-LR
 no files found for pfull in MPI-ESM1-2-LR
 no files found for phalf in MPI-ESM1-2-LR
-Writing files: var_id: areacella, year: 2008, model: MPI-ESM1-2-LR
+Writing regrid files: var_id: areacella, year: 2008, model: MPI-ESM1-2-LR
+Writing regrid files: var_id: areacella, year: 2008, model: MPI-ESM1-2-LR
 no files found for cli in UKESM1-0-LL
+areacella does not exist in UKESM1-0-LL
 areacella does not exist in UKESM1-0-LL
 areacella does not exist in UKESM1-0-LL
 no files found for cli in HadGEM3-GC31-LL
 areacella does not exist in HadGEM3-GC31-LL
 areacella does not exist in HadGEM3-GC31-LL
+areacella does not exist in HadGEM3-GC31-LL
 no files found for cli in CNRM-CM6-1
 no files found for pfull in CNRM-CM6-1
 no files found for phalf in CNRM-CM6-1
-Writing files: var_id: areacella, year: 2008, model: CNRM-CM6-1
+Writing regrid files: var_id: areacella, year: 2008, model: CNRM-CM6-1
+Writing regrid files: var_id: areacella, year: 2008, model: CNRM-CM6-1
 no files found for cli in CNRM-ESM2-1
 no files found for pfull in CNRM-ESM2-1
 no files found for phalf in CNRM-ESM2-1
-Writing files: var_id: areacella, year: 2008, model: CNRM-ESM2-1
+Writing regrid files: var_id: areacella, year: 2008, model: CNRM-ESM2-1
+Writing regrid files: var_id: areacella, year: 2008, model: CNRM-ESM2-1
 no files found for cli in IPSL-CM6A-LR
 no files found for pfull in IPSL-CM6A-LR
 no files found for phalf in IPSL-CM6A-LR
-Writing files: var_id: areacella, year: 2008, model: IPSL-CM6A-LR
+Writing regrid files: var_id: areacella, year: 2008, model: IPSL-CM6A-LR
+Writing regrid files: var_id: areacella, year: 2008, model: IPSL-CM6A-LR
 no files found for cli in IPSL-CM5A2-INCA
 no files found for pfull in IPSL-CM5A2-INCA
 no files found for phalf in IPSL-CM5A2-INCA
-Writing files: var_id: areacella, year: 2008, model: IPSL-CM5A2-INCA
+Writing regrid files: var_id: areacella, year: 2008, model: IPSL-CM5A2-INCA
 no files found for clivi in MIROC6
 no files found for pfull in MIROC6
 no files found for phalf in MIROC6
-Writing files: var_id: areacella, year: 2009, model: MIROC6
+Writing regrid files: var_id: areacella, year: 2009, model: MIROC6
+Writing regrid files: var_id: areacella, year: 2009, model: MIROC6
 no files found for pfull in CanESM5
 no files found for phalf in CanESM5
-Writing files: var_id: areacella, year: 2009, model: CanESM5
+Writing regrid files: var_id: areacella, year: 2009, model: CanESM5
 no files found for cli in AWI-ESM-1-1-LR
 no files found for pfull in AWI-ESM-1-1-LR
 no files found for phalf in AWI-ESM-1-1-LR
-Writing files: var_id: areacella, year: 2009, model: AWI-ESM-1-1-LR
+Writing regrid files: var_id: areacella, year: 2009, model: AWI-ESM-1-1-LR
+Writing regrid files: var_id: areacella, year: 2009, model: AWI-ESM-1-1-LR
 no files found for cli in MPI-ESM1-2-LR
 no files found for pfull in MPI-ESM1-2-LR
 no files found for phalf in MPI-ESM1-2-LR
-Writing files: var_id: areacella, year: 2009, model: MPI-ESM1-2-LR
+Writing regrid files: var_id: areacella, year: 2009, model: MPI-ESM1-2-LR
+Writing regrid files: var_id: areacella, year: 2009, model: MPI-ESM1-2-LR
 no files found for cli in UKESM1-0-LL
+areacella does not exist in UKESM1-0-LL
 areacella does not exist in UKESM1-0-LL
 areacella does not exist in UKESM1-0-LL
 no files found for cli in HadGEM3-GC31-LL
 areacella does not exist in HadGEM3-GC31-LL
 areacella does not exist in HadGEM3-GC31-LL
+areacella does not exist in HadGEM3-GC31-LL
 no files found for cli in CNRM-CM6-1
 no files found for pfull in CNRM-CM6-1
 no files found for phalf in CNRM-CM6-1
-Writing files: var_id: areacella, year: 2009, model: CNRM-CM6-1
+Writing regrid files: var_id: areacella, year: 2009, model: CNRM-CM6-1
+Writing regrid files: var_id: areacella, year: 2009, model: CNRM-CM6-1
 no files found for cli in CNRM-ESM2-1
 no files found for pfull in CNRM-ESM2-1
 no files found for phalf in CNRM-ESM2-1
-Writing files: var_id: areacella, year: 2009, model: CNRM-ESM2-1
+Writing regrid files: var_id: areacella, year: 2009, model: CNRM-ESM2-1
+Writing regrid files: var_id: areacella, year: 2009, model: CNRM-ESM2-1
 no files found for cli in IPSL-CM6A-LR
 no files found for pfull in IPSL-CM6A-LR
 no files found for phalf in IPSL-CM6A-LR
-Writing files: var_id: areacella, year: 2009, model: IPSL-CM6A-LR
+Writing regrid files: var_id: areacella, year: 2009, model: IPSL-CM6A-LR
+Writing regrid files: var_id: areacella, year: 2009, model: IPSL-CM6A-LR
 no files found for cli in IPSL-CM5A2-INCA
 no files found for pfull in IPSL-CM5A2-INCA
 no files found for phalf in IPSL-CM5A2-INCA
-Writing files: var_id: areacella, year: 2009, model: IPSL-CM5A2-INCA
+Writing regrid files: var_id: areacella, year: 2009, model: IPSL-CM5A2-INCA
 </pre></div>
 </div>
 </div>
