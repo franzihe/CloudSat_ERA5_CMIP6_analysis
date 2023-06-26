@@ -596,11 +596,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mimi.uio.no
-</pre></div>
-</div>
-</div>
 </div>
 </section>
 <section id="import-python-packages">
@@ -619,11 +614,6 @@ document.write(`
 <span class="c1"># import packages</span>
 <span class="kn">from</span> <span class="nn">imports</span> <span class="kn">import</span> <span class="p">(</span><span class="n">xr</span><span class="p">,</span> <span class="n">intake</span><span class="p">,</span> <span class="n">cftime</span><span class="p">,</span> <span class="n">xe</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">np</span><span class="p">,</span> <span class="n">cm</span><span class="p">,</span> <span class="n">pd</span><span class="p">,</span> <span class="n">fct</span><span class="p">,</span><span class="n">ccrs</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">plt</span><span class="p">,</span> <span class="n">da</span><span class="p">,</span> <span class="n">gc</span><span class="p">,</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">LogNorm</span><span class="p">,</span> <span class="n">distributed</span><span class="p">,)</span><span class="c1"># dask)</span>
 <span class="n">xr</span><span class="o">.</span><span class="n">set_options</span><span class="p">(</span><span class="n">display_style</span><span class="o">=</span><span class="s2">&quot;html&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7fddcc379f60&gt;
 </pre></div>
 </div>
 </div>
@@ -678,17 +668,17 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># source_id</span>
 <span class="n">list_models</span> <span class="o">=</span> <span class="p">[</span>
-               <span class="s1">&#39;MIROC6&#39;</span><span class="p">,</span> <span class="c1">#area</span>
-               <span class="c1"># &#39;CESM2&#39;, #area # this model has snowfall only over land</span>
-               <span class="s1">&#39;CanESM5&#39;</span><span class="p">,</span> <span class="c1"># area</span>
+               <span class="c1"># &#39;MIROC6&#39;, #area</span>
+               <span class="c1"># # &#39;CESM2&#39;, #area # this model has snowfall only over land</span>
+               <span class="c1"># &#39;CanESM5&#39;, # area</span>
                <span class="s1">&#39;AWI-ESM-1-1-LR&#39;</span><span class="p">,</span> <span class="c1"># area</span>
                <span class="s1">&#39;MPI-ESM1-2-LR&#39;</span><span class="p">,</span> <span class="c1"># area</span>
-               <span class="s1">&#39;UKESM1-0-LL&#39;</span><span class="p">,</span> 
-               <span class="s1">&#39;HadGEM3-GC31-LL&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;CNRM-CM6-1&#39;</span><span class="p">,</span> <span class="c1">#area</span>
-               <span class="s1">&#39;CNRM-ESM2-1&#39;</span><span class="p">,</span> <span class="c1">#area</span>
-               <span class="s1">&#39;IPSL-CM6A-LR&#39;</span><span class="p">,</span> <span class="c1">#area</span>
-               <span class="s1">&#39;IPSL-CM5A2-INCA&#39;</span> <span class="c1">#area</span>
+               <span class="c1"># &#39;UKESM1-0-LL&#39;, </span>
+               <span class="c1"># &#39;HadGEM3-GC31-LL&#39;,</span>
+               <span class="c1"># &#39;CNRM-CM6-1&#39;, #area</span>
+               <span class="c1"># &#39;CNRM-ESM2-1&#39;, #area</span>
+               <span class="c1"># &#39;IPSL-CM6A-LR&#39;, #area</span>
+               <span class="c1"># &#39;IPSL-CM5A2-INCA&#39; #area</span>
             <span class="p">]</span>
 
 <span class="c1">## experiment</span>
@@ -792,9 +782,10 @@ document.write(`
     <span class="k">try</span><span class="p">:</span>
         <span class="n">ds_areacella</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span>
             <span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cmip_in</span><span class="si">}</span><span class="s2">/single_model/</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">/areacella_fx_*</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">experiment_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">*.nc&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
-            <span class="n">drop_variables</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;lat_bnds&quot;</span><span class="p">,</span> <span class="s2">&quot;lon_bnds&quot;</span><span class="p">],</span>
+            <span class="c1">#drop_variables=[&quot;lat_bnds&quot;, &quot;lon_bnds&quot;],</span>
         <span class="p">)</span>
-        <span class="n">dset</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">dset</span><span class="p">,</span> <span class="n">ds_areacella</span><span class="p">])</span>
+        <span class="c1"># dset = xr.merge([dset, ds_areacella])</span>
+        <span class="n">dset</span><span class="p">[</span><span class="s1">&#39;areacella&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_areacella</span><span class="p">[</span><span class="s1">&#39;areacella&#39;</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;areacella does not exist in </span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
         
@@ -818,37 +809,6 @@ document.write(`
                 <span class="n">dset</span><span class="p">[</span><span class="n">model</span><span class="p">]</span> <span class="o">=</span> <span class="n">search_data</span><span class="p">(</span><span class="n">cmip_in</span><span class="p">,</span> <span class="n">t_res</span><span class="p">,</span><span class="n">model</span><span class="p">,</span><span class="n">experiment_id</span><span class="p">,</span><span class="n">variable_id</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">year</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="p">)</span>
                 
 <span class="c1"># dset[model]#.attrs[&#39;references&#39;]</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>no files found for clivi in MIROC6
-no files found for pfull in MIROC6
-no files found for phalf in MIROC6
-no files found for pfull in CanESM5
-no files found for phalf in CanESM5
-no files found for cli in AWI-ESM-1-1-LR
-no files found for pfull in AWI-ESM-1-1-LR
-no files found for phalf in AWI-ESM-1-1-LR
-no files found for cli in MPI-ESM1-2-LR
-no files found for pfull in MPI-ESM1-2-LR
-no files found for phalf in MPI-ESM1-2-LR
-no files found for cli in UKESM1-0-LL
-areacella does not exist in UKESM1-0-LL
-no files found for cli in HadGEM3-GC31-LL
-areacella does not exist in HadGEM3-GC31-LL
-no files found for cli in CNRM-CM6-1
-no files found for pfull in CNRM-CM6-1
-no files found for phalf in CNRM-CM6-1
-no files found for cli in CNRM-ESM2-1
-no files found for pfull in CNRM-ESM2-1
-no files found for phalf in CNRM-ESM2-1
-no files found for cli in IPSL-CM6A-LR
-no files found for pfull in IPSL-CM6A-LR
-no files found for phalf in IPSL-CM6A-LR
-no files found for cli in IPSL-CM5A2-INCA
-no files found for pfull in IPSL-CM5A2-INCA
-no files found for phalf in IPSL-CM5A2-INCA
 </pre></div>
 </div>
 </div>
@@ -1005,7 +965,7 @@ LWP = \rho_{air} \cdot \Delta clw \cdot \Delta Z
             <span class="n">dp</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s1">&#39;klevp1&#39;</span><span class="p">:</span><span class="s1">&#39;lev&#39;</span><span class="p">})</span>
             <span class="n">dset</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s1">&#39;plev&#39;</span><span class="p">:</span><span class="s1">&#39;lev&#39;</span><span class="p">})</span>
     <span class="k">elif</span> <span class="s1">&#39;phalf&#39;</span> <span class="ow">in</span> <span class="n">dset</span><span class="p">:</span>
-        <span class="n">dp</span> <span class="o">=</span> <span class="p">(</span><span class="n">dset</span><span class="p">[</span><span class="s1">&#39;phalf&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s1">&#39;half_lev&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">dp</span> <span class="o">=</span> <span class="o">-</span> <span class="p">(</span><span class="n">dset</span><span class="p">[</span><span class="s1">&#39;phalf&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s1">&#39;half_lev&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
         <span class="n">dp</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">({</span><span class="s1">&#39;half_lev&#39;</span><span class="p">:</span> <span class="n">dset</span><span class="p">[</span><span class="s1">&#39;clw&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lev</span><span class="o">.</span><span class="n">data</span><span class="p">})</span>
         <span class="n">dp</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s1">&#39;half_lev&#39;</span><span class="p">:</span><span class="s1">&#39;lev&#39;</span><span class="p">})</span>
     <span class="k">else</span><span class="p">:</span>
@@ -1087,7 +1047,8 @@ LWP = \rho_{air} \cdot \Delta clw \cdot \Delta Z
         <span class="n">dset_regrid</span><span class="p">[</span><span class="s1">&#39;areacella&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_out</span><span class="p">[</span><span class="s1">&#39;areacella&#39;</span><span class="p">]</span>
 
     <span class="c1"># var_ids = [&#39;clivi&#39;, &#39;lwp&#39;, &#39;pr&#39;, &#39;prsn&#39;, &#39;tas&#39;, &#39;areacella&#39;]</span>
-    <span class="n">var_ids</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;areacella&#39;</span><span class="p">]</span>
+    <span class="c1"># var_ids = [&#39;areacella&#39;]</span>
+    <span class="n">var_ids</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;lwp&#39;</span><span class="p">]</span>
 
     <span class="k">for</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="n">var_ids</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">dset_regrid</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
@@ -1127,7 +1088,7 @@ LWP = \rho_{air} \cdot \Delta clw \cdot \Delta Z
         
        
         <span class="c1"># for var_id in [&#39;clivi&#39;, &#39;lwp&#39;, &#39;pr&#39;, &#39;prsn&#39;, &#39;tas&#39;, &#39;areacella&#39;]:</span>
-        <span class="k">for</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;areacella&#39;</span><span class="p">,]:</span>
+        <span class="k">for</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;lwp&#39;</span><span class="p">,]:</span>
             <span class="k">if</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">dset</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Writing files: var_id: </span><span class="si">{</span><span class="n">var_id</span><span class="si">}</span><span class="s1">, year: </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">, model: </span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
                 <span class="n">variant_label</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;variant_label&#39;</span><span class="p">]</span>
@@ -1162,284 +1123,6 @@ LWP = \rho_{air} \cdot \Delta clw \cdot \Delta Z
     <span class="c1"># This will run the process_year function for each year in parallel, using all available cores (n_jobs=-1).</span>
     <span class="c1"># Parallel(n_jobs=-1)(delayed(process_year)(year, list_models, t_res, experiment_id,variable_id))# for year in [2006, 2007, 2008, 2009])</span>
     <span class="n">process_year</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">list_models</span><span class="p">,</span><span class="n">cmip_in</span><span class="p">,</span> <span class="n">t_res</span><span class="p">,</span> <span class="n">experiment_id</span><span class="p">,</span><span class="n">variable_id</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>no files found for clivi in MIROC6
-no files found for pfull in MIROC6
-no files found for phalf in MIROC6
-Writing files: var_id: areacella, year: 2006, model: MIROC6
-Writing regrid files: var_id: areacella, year: 2006, model: MIROC6
-Writing regrid files: var_id: areacella, year: 2006, model: MIROC6
-no files found for pfull in CanESM5
-no files found for phalf in CanESM5
-Writing files: var_id: areacella, year: 2006, model: CanESM5
-Writing regrid files: var_id: areacella, year: 2006, model: CanESM5
-no files found for cli in AWI-ESM-1-1-LR
-no files found for pfull in AWI-ESM-1-1-LR
-no files found for phalf in AWI-ESM-1-1-LR
-Writing files: var_id: areacella, year: 2006, model: AWI-ESM-1-1-LR
-Writing regrid files: var_id: areacella, year: 2006, model: AWI-ESM-1-1-LR
-Writing regrid files: var_id: areacella, year: 2006, model: AWI-ESM-1-1-LR
-no files found for cli in MPI-ESM1-2-LR
-no files found for pfull in MPI-ESM1-2-LR
-no files found for phalf in MPI-ESM1-2-LR
-Writing files: var_id: areacella, year: 2006, model: MPI-ESM1-2-LR
-Writing regrid files: var_id: areacella, year: 2006, model: MPI-ESM1-2-LR
-Writing regrid files: var_id: areacella, year: 2006, model: MPI-ESM1-2-LR
-no files found for cli in UKESM1-0-LL
-areacella does not exist in UKESM1-0-LL
-areacella does not exist in UKESM1-0-LL
-Writing regrid files: var_id: areacella, year: 2006, model: UKESM1-0-LL
-Writing regrid files: var_id: areacella, year: 2006, model: UKESM1-0-LL
-no files found for cli in HadGEM3-GC31-LL
-areacella does not exist in HadGEM3-GC31-LL
-areacella does not exist in HadGEM3-GC31-LL
-Writing regrid files: var_id: areacella, year: 2006, model: HadGEM3-GC31-LL
-Writing regrid files: var_id: areacella, year: 2006, model: HadGEM3-GC31-LL
-no files found for cli in CNRM-CM6-1
-no files found for pfull in CNRM-CM6-1
-no files found for phalf in CNRM-CM6-1
-Writing files: var_id: areacella, year: 2006, model: CNRM-CM6-1
-Writing regrid files: var_id: areacella, year: 2006, model: CNRM-CM6-1
-Writing regrid files: var_id: areacella, year: 2006, model: CNRM-CM6-1
-no files found for cli in CNRM-ESM2-1
-no files found for pfull in CNRM-ESM2-1
-no files found for phalf in CNRM-ESM2-1
-Writing files: var_id: areacella, year: 2006, model: CNRM-ESM2-1
-Writing regrid files: var_id: areacella, year: 2006, model: CNRM-ESM2-1
-Writing regrid files: var_id: areacella, year: 2006, model: CNRM-ESM2-1
-no files found for cli in IPSL-CM6A-LR
-no files found for pfull in IPSL-CM6A-LR
-no files found for phalf in IPSL-CM6A-LR
-Writing files: var_id: areacella, year: 2006, model: IPSL-CM6A-LR
-Writing regrid files: var_id: areacella, year: 2006, model: IPSL-CM6A-LR
-Writing regrid files: var_id: areacella, year: 2006, model: IPSL-CM6A-LR
-no files found for cli in IPSL-CM5A2-INCA
-no files found for pfull in IPSL-CM5A2-INCA
-no files found for phalf in IPSL-CM5A2-INCA
-Writing files: var_id: areacella, year: 2006, model: IPSL-CM5A2-INCA
-Writing regrid files: var_id: areacella, year: 2006, model: IPSL-CM5A2-INCA
-no files found for clivi in MIROC6
-no files found for pfull in MIROC6
-no files found for phalf in MIROC6
-Writing files: var_id: areacella, year: 2007, model: MIROC6
-Writing regrid files: var_id: areacella, year: 2007, model: MIROC6
-Writing regrid files: var_id: areacella, year: 2007, model: MIROC6
-no files found for pfull in CanESM5
-no files found for phalf in CanESM5
-Writing files: var_id: areacella, year: 2007, model: CanESM5
-Writing regrid files: var_id: areacella, year: 2007, model: CanESM5
-no files found for cli in AWI-ESM-1-1-LR
-no files found for pfull in AWI-ESM-1-1-LR
-no files found for phalf in AWI-ESM-1-1-LR
-Writing files: var_id: areacella, year: 2007, model: AWI-ESM-1-1-LR
-Writing regrid files: var_id: areacella, year: 2007, model: AWI-ESM-1-1-LR
-Writing regrid files: var_id: areacella, year: 2007, model: AWI-ESM-1-1-LR
-no files found for cli in MPI-ESM1-2-LR
-no files found for pfull in MPI-ESM1-2-LR
-no files found for phalf in MPI-ESM1-2-LR
-Writing files: var_id: areacella, year: 2007, model: MPI-ESM1-2-LR
-Writing regrid files: var_id: areacella, year: 2007, model: MPI-ESM1-2-LR
-Writing regrid files: var_id: areacella, year: 2007, model: MPI-ESM1-2-LR
-no files found for cli in UKESM1-0-LL
-areacella does not exist in UKESM1-0-LL
-areacella does not exist in UKESM1-0-LL
-Writing regrid files: var_id: areacella, year: 2007, model: UKESM1-0-LL
-Writing regrid files: var_id: areacella, year: 2007, model: UKESM1-0-LL
-no files found for cli in HadGEM3-GC31-LL
-areacella does not exist in HadGEM3-GC31-LL
-areacella does not exist in HadGEM3-GC31-LL
-Writing regrid files: var_id: areacella, year: 2007, model: HadGEM3-GC31-LL
-Writing regrid files: var_id: areacella, year: 2007, model: HadGEM3-GC31-LL
-no files found for cli in CNRM-CM6-1
-no files found for pfull in CNRM-CM6-1
-no files found for phalf in CNRM-CM6-1
-Writing files: var_id: areacella, year: 2007, model: CNRM-CM6-1
-Writing regrid files: var_id: areacella, year: 2007, model: CNRM-CM6-1
-Writing regrid files: var_id: areacella, year: 2007, model: CNRM-CM6-1
-no files found for cli in CNRM-ESM2-1
-no files found for pfull in CNRM-ESM2-1
-no files found for phalf in CNRM-ESM2-1
-Writing files: var_id: areacella, year: 2007, model: CNRM-ESM2-1
-Writing regrid files: var_id: areacella, year: 2007, model: CNRM-ESM2-1
-Writing regrid files: var_id: areacella, year: 2007, model: CNRM-ESM2-1
-no files found for cli in IPSL-CM6A-LR
-no files found for pfull in IPSL-CM6A-LR
-no files found for phalf in IPSL-CM6A-LR
-Writing files: var_id: areacella, year: 2007, model: IPSL-CM6A-LR
-Writing regrid files: var_id: areacella, year: 2007, model: IPSL-CM6A-LR
-Writing regrid files: var_id: areacella, year: 2007, model: IPSL-CM6A-LR
-no files found for cli in IPSL-CM5A2-INCA
-no files found for pfull in IPSL-CM5A2-INCA
-no files found for phalf in IPSL-CM5A2-INCA
-Writing files: var_id: areacella, year: 2007, model: IPSL-CM5A2-INCA
-Writing regrid files: var_id: areacella, year: 2007, model: IPSL-CM5A2-INCA
-no files found for clivi in MIROC6
-no files found for pfull in MIROC6
-no files found for phalf in MIROC6
-Writing files: var_id: areacella, year: 2008, model: MIROC6
-Writing regrid files: var_id: areacella, year: 2008, model: MIROC6
-Writing regrid files: var_id: areacella, year: 2008, model: MIROC6
-no files found for pfull in CanESM5
-no files found for phalf in CanESM5
-Writing files: var_id: areacella, year: 2008, model: CanESM5
-Writing regrid files: var_id: areacella, year: 2008, model: CanESM5
-no files found for cli in AWI-ESM-1-1-LR
-no files found for pfull in AWI-ESM-1-1-LR
-no files found for phalf in AWI-ESM-1-1-LR
-Writing files: var_id: areacella, year: 2008, model: AWI-ESM-1-1-LR
-Writing regrid files: var_id: areacella, year: 2008, model: AWI-ESM-1-1-LR
-Writing regrid files: var_id: areacella, year: 2008, model: AWI-ESM-1-1-LR
-no files found for cli in MPI-ESM1-2-LR
-no files found for pfull in MPI-ESM1-2-LR
-no files found for phalf in MPI-ESM1-2-LR
-Writing files: var_id: areacella, year: 2008, model: MPI-ESM1-2-LR
-Writing regrid files: var_id: areacella, year: 2008, model: MPI-ESM1-2-LR
-Writing regrid files: var_id: areacella, year: 2008, model: MPI-ESM1-2-LR
-no files found for cli in UKESM1-0-LL
-areacella does not exist in UKESM1-0-LL
-areacella does not exist in UKESM1-0-LL
-Writing regrid files: var_id: areacella, year: 2008, model: UKESM1-0-LL
-Writing regrid files: var_id: areacella, year: 2008, model: UKESM1-0-LL
-no files found for cli in HadGEM3-GC31-LL
-areacella does not exist in HadGEM3-GC31-LL
-areacella does not exist in HadGEM3-GC31-LL
-Writing regrid files: var_id: areacella, year: 2008, model: HadGEM3-GC31-LL
-Writing regrid files: var_id: areacella, year: 2008, model: HadGEM3-GC31-LL
-no files found for cli in CNRM-CM6-1
-no files found for pfull in CNRM-CM6-1
-no files found for phalf in CNRM-CM6-1
-Writing files: var_id: areacella, year: 2008, model: CNRM-CM6-1
-Writing regrid files: var_id: areacella, year: 2008, model: CNRM-CM6-1
-Writing regrid files: var_id: areacella, year: 2008, model: CNRM-CM6-1
-no files found for cli in CNRM-ESM2-1
-no files found for pfull in CNRM-ESM2-1
-no files found for phalf in CNRM-ESM2-1
-Writing files: var_id: areacella, year: 2008, model: CNRM-ESM2-1
-Writing regrid files: var_id: areacella, year: 2008, model: CNRM-ESM2-1
-Writing regrid files: var_id: areacella, year: 2008, model: CNRM-ESM2-1
-no files found for cli in IPSL-CM6A-LR
-no files found for pfull in IPSL-CM6A-LR
-no files found for phalf in IPSL-CM6A-LR
-Writing files: var_id: areacella, year: 2008, model: IPSL-CM6A-LR
-Writing regrid files: var_id: areacella, year: 2008, model: IPSL-CM6A-LR
-Writing regrid files: var_id: areacella, year: 2008, model: IPSL-CM6A-LR
-no files found for cli in IPSL-CM5A2-INCA
-no files found for pfull in IPSL-CM5A2-INCA
-no files found for phalf in IPSL-CM5A2-INCA
-Writing files: var_id: areacella, year: 2008, model: IPSL-CM5A2-INCA
-Writing regrid files: var_id: areacella, year: 2008, model: IPSL-CM5A2-INCA
-no files found for clivi in MIROC6
-no files found for pfull in MIROC6
-no files found for phalf in MIROC6
-Writing files: var_id: areacella, year: 2009, model: MIROC6
-Writing regrid files: var_id: areacella, year: 2009, model: MIROC6
-Writing regrid files: var_id: areacella, year: 2009, model: MIROC6
-no files found for pfull in CanESM5
-no files found for phalf in CanESM5
-Writing files: var_id: areacella, year: 2009, model: CanESM5
-Writing regrid files: var_id: areacella, year: 2009, model: CanESM5
-no files found for cli in AWI-ESM-1-1-LR
-no files found for pfull in AWI-ESM-1-1-LR
-no files found for phalf in AWI-ESM-1-1-LR
-Writing files: var_id: areacella, year: 2009, model: AWI-ESM-1-1-LR
-Writing regrid files: var_id: areacella, year: 2009, model: AWI-ESM-1-1-LR
-Writing regrid files: var_id: areacella, year: 2009, model: AWI-ESM-1-1-LR
-no files found for cli in MPI-ESM1-2-LR
-no files found for pfull in MPI-ESM1-2-LR
-no files found for phalf in MPI-ESM1-2-LR
-Writing files: var_id: areacella, year: 2009, model: MPI-ESM1-2-LR
-Writing regrid files: var_id: areacella, year: 2009, model: MPI-ESM1-2-LR
-Writing regrid files: var_id: areacella, year: 2009, model: MPI-ESM1-2-LR
-no files found for cli in UKESM1-0-LL
-areacella does not exist in UKESM1-0-LL
-areacella does not exist in UKESM1-0-LL
-Writing regrid files: var_id: areacella, year: 2009, model: UKESM1-0-LL
-Writing regrid files: var_id: areacella, year: 2009, model: UKESM1-0-LL
-no files found for cli in HadGEM3-GC31-LL
-areacella does not exist in HadGEM3-GC31-LL
-areacella does not exist in HadGEM3-GC31-LL
-Writing regrid files: var_id: areacella, year: 2009, model: HadGEM3-GC31-LL
-Writing regrid files: var_id: areacella, year: 2009, model: HadGEM3-GC31-LL
-no files found for cli in CNRM-CM6-1
-no files found for pfull in CNRM-CM6-1
-no files found for phalf in CNRM-CM6-1
-Writing files: var_id: areacella, year: 2009, model: CNRM-CM6-1
-Writing regrid files: var_id: areacella, year: 2009, model: CNRM-CM6-1
-Writing regrid files: var_id: areacella, year: 2009, model: CNRM-CM6-1
-no files found for cli in CNRM-ESM2-1
-no files found for pfull in CNRM-ESM2-1
-no files found for phalf in CNRM-ESM2-1
-Writing files: var_id: areacella, year: 2009, model: CNRM-ESM2-1
-Writing regrid files: var_id: areacella, year: 2009, model: CNRM-ESM2-1
-Writing regrid files: var_id: areacella, year: 2009, model: CNRM-ESM2-1
-no files found for cli in IPSL-CM6A-LR
-no files found for pfull in IPSL-CM6A-LR
-no files found for phalf in IPSL-CM6A-LR
-Writing files: var_id: areacella, year: 2009, model: IPSL-CM6A-LR
-Writing regrid files: var_id: areacella, year: 2009, model: IPSL-CM6A-LR
-Writing regrid files: var_id: areacella, year: 2009, model: IPSL-CM6A-LR
-no files found for cli in IPSL-CM5A2-INCA
-no files found for pfull in IPSL-CM5A2-INCA
-no files found for phalf in IPSL-CM5A2-INCA
-Writing files: var_id: areacella, year: 2009, model: IPSL-CM5A2-INCA
-Writing regrid files: var_id: areacella, year: 2009, model: IPSL-CM5A2-INCA
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for year in [2006, 2007, 2008, 2009]:</span>
-<span class="c1">#     for model in list_models:</span>
-<span class="c1">#         for var_id in [&#39;clivi&#39;, &#39;lwp&#39;, &#39;pr&#39;, &#39;prsn&#39;, &#39;tas&#39;, &#39;areacella&#39;]:</span>
-<span class="c1">#             for grid_model in [&#39;IPSL-CM6A-LR&#39;, &#39;IPSL-CM5A2-INCA&#39;]:</span>
-<span class="c1">#                 file_list = sorted(glob(f&#39;{cmip_in}/common_grid/{model}/{var_id}_{grid_model}_{model}_40_90*_{year}0101-{year+1}1231.nc&#39;))</span>
-<span class="c1">#                 if len(file_list) &gt; 0:</span>
-<span class="c1">#                     old_name = file_list[0]</span>
-<span class="c1">#                     variant_label = old_name.split(&#39;_&#39;)[-2]</span>
-<span class="c1">#                     print(old_name)</span>
-<span class="c1">#                     new_name = f&#39;{cmip_in}/common_grid/{model}/{var_id}_{grid_model}_{model}_40_90_{experiment_id[0]}_{variant_label}_{year}0101-{year}1231.nc&#39;</span>
-<span class="c1">#                     print(new_name)</span>
-<span class="c1">#                     os.rename(old_name, new_name)</span>
-                    
-<span class="c1">#                 file_list = sorted(glob(f&#39;{cmip_in}/common_grid/{model}/{var_id}_{grid_model}_{model}_-40_-90*_{year}0101-{year+1}1231.nc&#39;))</span>
-<span class="c1">#                 if len(file_list) &gt; 0:</span>
-<span class="c1">#                     old_name = file_list[0]</span>
-<span class="c1">#                     variant_label = old_name.split(&#39;_&#39;)[-2]</span>
-<span class="c1">#                     # print(old_name)</span>
-<span class="c1">#                     new_name = f&#39;{cmip_in}/common_grid/{model}/{var_id}_{grid_model}_{model}_-40_-90_{experiment_id[0]}_{variant_label}_{year}0101-{year}1231.nc&#39;</span>
-<span class="c1">#                     # print(new_name)</span>
-<span class="c1">#                     os.rename(old_name, new_name)</span>
-        
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for year in [2006, 2007, 2008, 2009]:</span>
-<span class="c1">#     for model in list_models:</span>
-<span class="c1">#         for var_id in [&#39;clivi&#39;, &#39;lwp&#39;, &#39;pr&#39;, &#39;prsn&#39;, &#39;tas&#39;, &#39;areacella&#39;]:</span>
-<span class="c1">#             file_list = sorted(glob(f&#39;{cmip_in}/single_model/{model}/{var_id}_{model}_40_90*_{year}0101-{year+1}1231.nc&#39;))</span>
-<span class="c1">#             if len(file_list) &gt; 0:</span>
-<span class="c1">#                 old_name = file_list[0]</span>
-<span class="c1">#                 print(old_name)</span>
-<span class="c1">#                 variant_label = old_name.split(&#39;_&#39;)[-2]</span>
-<span class="c1">#                 new_name = f&#39;{cmip_in}/single_model/{model}/{var_id}_{model}_40_90_{experiment_id[0]}_{variant_label}_{year}0101-{year}1231.nc&#39;</span>
-<span class="c1">#                 print(new_name)</span>
-<span class="c1">#                 os.rename(old_name, new_name)</span>
-            
-<span class="c1">#             file_list = sorted(glob(f&#39;{cmip_in}/single_model/{model}/{var_id}_{model}_-40_-90*_{year}0101-{year+1}1231.nc&#39;))</span>
-<span class="c1">#             if len(file_list) &gt; 0:</span>
-<span class="c1">#                 old_name = file_list[0]</span>
-<span class="c1">#                 print(old_name)</span>
-<span class="c1">#                 variant_label = old_name.split(&#39;_&#39;)[-2]</span>
-<span class="c1">#                 new_name = f&#39;{cmip_in}/single_model/{model}/{var_id}_{model}_-40_-90_{experiment_id[0]}_{variant_label}_{year}0101-{year}1231.nc&#39;</span>
-<span class="c1">#                 print(new_name)</span>
-<span class="c1">#                 os.rename(old_name, new_name)</span>
 </pre></div>
 </div>
 </div>
