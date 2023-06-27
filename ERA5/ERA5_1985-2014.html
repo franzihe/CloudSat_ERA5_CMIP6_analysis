@@ -612,7 +612,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7fb7e451af80&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7f1f08899ed0&gt;
 </pre></div>
 </div>
 </div>
@@ -622,6 +622,12 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># reload imports</span>
 <span class="o">%</span><span class="k">load_ext</span> autoreload
 <span class="o">%</span><span class="k">autoreload</span> 2
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The autoreload extension is already loaded. To reload it, use:
+  %reload_ext autoreload
 </pre></div>
 </div>
 </div>
@@ -689,8 +695,11 @@ document.write(`
 
 
 <span class="c1"># Uncomment the line below if you want to search for files matching the pattern in the directory specified by `era_in`</span>
-<span class="n">era_file_in</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">era_in</span><span class="si">}</span><span class="s1">/*_ERA5_*.nc&#39;</span><span class="p">)</span>
-<span class="c1"># era_file_in = glob(f&#39;{era_in}/45NS/*_ERA5_*.nc&#39;)</span>
+<span class="c1"># era_file_in = glob(f&#39;{era_in}/*_ERA5_*.nc&#39;)</span>
+<span class="c1"># era_file_in = sorted(glob(f&#39;{era_in}/40NS/*_ERA5_*.nc&#39;))</span>
+<span class="n">era_file_in</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="n">variable_id</span><span class="p">:</span>
+    <span class="n">era_file_in</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">era_in</span><span class="si">}</span><span class="s1">/40NS/</span><span class="si">{</span><span class="n">var_id</span><span class="si">}</span><span class="s1">*_ERA5_*.nc&#39;</span><span class="p">)))</span>
 
 <span class="n">ds_era</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="n">era_file_in</span><span class="p">,</span> <span class="p">)</span>
 <span class="c1"># Uncomment the line below if you want to rename the variable `t2m` to `2t`</span>
@@ -768,9 +777,7 @@ sf kg m-2
 tciw kg m**-2
 tclw kg m**-2
 tcrw kg m**-2
-tcslw kg m**-2
 tcsw kg m**-2
-tcw kg m**-2
 tp kg m-2
 </pre></div>
 </div>
@@ -840,9 +847,11 @@ tp kg m-2
 
 <span class="n">ds_era</span>
 <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;daily_mean_40NS_ERA5_</span><span class="si">{</span><span class="n">starty</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">01_</span><span class="si">{</span><span class="n">endy</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">12.nc&#39;</span>
+<span class="c1"># filename = f&#39;daily_mean_40NS_ERA5_{starty+1}01_{endy+1}12.nc&#39;</span>
+
     
-<span class="c1"># era_file_out = os.path.join(era_in, f&#39;45NS/{filename}&#39;)</span>
-<span class="n">era_file_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">era_in</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+<span class="n">era_file_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">era_in</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;40NS/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="c1"># era_file_out = os.path.join(era_in, filename)</span>
 
 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">era_file_out</span><span class="p">):</span>
     <span class="n">ds_era</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">era_file_out</span><span class="p">)</span>
@@ -857,7 +866,7 @@ tp kg m-2
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>file written: /scratch/franzihe/input/ERA5/daily_means/45NS/daily_mean_40NS_ERA5_200701_201012.nc
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>file written: /scratch/franzihe/input/ERA5/daily_means/40NS/daily_mean_40NS_ERA5_200701_201012.nc
 </pre></div>
 </div>
 </div>
@@ -940,6 +949,141 @@ tp kg m-2
     <span class="k">else</span><span class="p">:</span>
         <span class="n">era_in_grid</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">era_file_out</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;file written: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">era_file_out</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>file written: /scratch/franzihe/input/ERA5/common_grid/ERA5_daily_mean_ERA5_200701_201012.nc
+prsn True
+pr True
+tas True
+iwp True
+lwp True
+twp True
+prsn True
+pr True
+tas True
+iwp True
+lwp True
+twp True
+file written: /scratch/franzihe/input/ERA5/common_grid/ERA5_daily_mean_MIROC6_200601_200912.nc
+prsn True
+pr True
+tas True
+iwp True
+lwp True
+twp True
+prsn True
+pr True
+tas True
+iwp True
+lwp True
+twp True
+file written: /scratch/franzihe/input/ERA5/common_grid/ERA5_daily_mean_CanESM5_200601_200912.nc
+prsn True
+pr True
+tas True
+iwp True
+lwp True
+twp True
+prsn True
+pr True
+tas True
+iwp True
+lwp True
+twp True
+file written: /scratch/franzihe/input/ERA5/common_grid/ERA5_daily_mean_AWI-ESM-1-1-LR_200601_200912.nc
+prsn True
+pr True
+tas True
+iwp True
+lwp True
+twp True
+prsn True
+pr True
+tas True
+iwp True
+lwp True
+twp True
+file written: /scratch/franzihe/input/ERA5/common_grid/ERA5_daily_mean_MPI-ESM1-2-LR_200601_200912.nc
+prsn True
+pr True
+tas True
+iwp True
+lwp True
+twp True
+prsn True
+pr True
+tas True
+iwp True
+lwp True
+twp True
+file written: /scratch/franzihe/input/ERA5/common_grid/ERA5_daily_mean_UKESM1-0-LL_200601_200912.nc
+prsn True
+pr True
+tas True
+iwp True
+lwp True
+twp True
+prsn True
+pr True
+tas True
+iwp True
+lwp True
+twp True
+file written: /scratch/franzihe/input/ERA5/common_grid/ERA5_daily_mean_HadGEM3-GC31-LL_200601_200912.nc
+prsn True
+pr True
+tas True
+iwp True
+lwp True
+twp True
+prsn True
+pr True
+tas True
+iwp True
+lwp True
+twp True
+file written: /scratch/franzihe/input/ERA5/common_grid/ERA5_daily_mean_CNRM-CM6-1_200601_200912.nc
+prsn True
+pr True
+tas True
+iwp True
+lwp True
+twp True
+prsn True
+pr True
+tas True
+iwp True
+lwp True
+twp True
+file written: /scratch/franzihe/input/ERA5/common_grid/ERA5_daily_mean_CNRM-ESM2-1_200601_200912.nc
+prsn True
+pr True
+tas True
+iwp True
+lwp True
+twp True
+prsn True
+pr True
+tas True
+iwp True
+lwp True
+twp True
+file written: /scratch/franzihe/input/ERA5/common_grid/ERA5_daily_mean_IPSL-CM6A-LR_200601_200912.nc
+prsn True
+pr True
+tas True
+iwp True
+lwp True
+twp True
+prsn True
+pr True
+tas True
+iwp True
+lwp True
+twp True
+file written: /scratch/franzihe/input/ERA5/common_grid/ERA5_daily_mean_IPSL-CM5A2-INCA_200601_200912.nc
 </pre></div>
 </div>
 </div>
