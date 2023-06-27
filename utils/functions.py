@@ -1061,7 +1061,7 @@ def to_ERA5_date(ds, model):
     # if ds.time.dtype == 'datetime64[ns]':
     #     print(model,ds.time[0].values)
     if ds.time.dtype == 'object':
-        print(model, ds.time[0].values)
+        # print(model, ds.time[0].values)
         ds['time'] = ds.indexes['time'].to_datetimeindex()
     
    
