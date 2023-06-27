@@ -13,6 +13,7 @@ import cartopy.crs as ccrs
 import cartopy as cy
 import matplotlib.pyplot as plt
 
+
 import xesmf as xe
 from glob import glob
 import pandas as pd
@@ -33,7 +34,10 @@ from scipy.optimize import curve_fit
 
 import functions as fct
 import wget
-from matplotlib.colors import LogNorm
+from matplotlib.colors import LogNorm, LinearSegmentedColormap, BoundaryNorm
+from matplotlib.lines import Line2D
+from matplotlib.patches import Patch
+from sklearn.metrics import r2_score
 from urllib.error import HTTPError
 
 
