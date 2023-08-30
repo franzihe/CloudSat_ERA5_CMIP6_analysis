@@ -168,11 +168,6 @@ const thebe_selector_output = ".output, .cell_output"
 
 
 
-
-
-
-
-
 <li class="toctree-l1"><a class="reference internal" href="../cmip/CMIP6_hr_1985-2014.html">Example with CMIP6 models (100 - 500 km)</a></li>
 
 
@@ -486,6 +481,11 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mimi.uio.no
+</pre></div>
+</div>
+</div>
 </div>
 </section>
 <section id="import-python-packages">
@@ -504,6 +504,11 @@ document.write(`
 <span class="c1"># import packages</span>
 <span class="kn">from</span> <span class="nn">imports</span> <span class="kn">import</span><span class="p">(</span><span class="n">xr</span><span class="p">,</span> <span class="n">intake</span><span class="p">,</span> <span class="n">ccrs</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">plt</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">cm</span><span class="p">,</span> <span class="n">fct</span><span class="p">,</span> <span class="n">np</span><span class="p">,</span> <span class="n">da</span><span class="p">,</span> <span class="n">LogNorm</span><span class="p">,</span> <span class="n">pd</span><span class="p">)</span>
 <span class="n">xr</span><span class="o">.</span><span class="n">set_options</span><span class="p">(</span><span class="n">display_style</span><span class="o">=</span><span class="s1">&#39;html&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7fae10586fe0&gt;
 </pre></div>
 </div>
 </div>
@@ -547,17 +552,17 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">list_models</span> <span class="o">=</span> <span class="p">[</span>
-               <span class="c1"># &#39;ERA5&#39;,</span>
-               <span class="c1"># &#39;MIROC6&#39;, </span>
-               <span class="c1"># &#39;CanESM5&#39;, </span>
-               <span class="c1"># &#39;AWI-ESM-1-1-LR&#39;, </span>
-               <span class="c1"># &#39;MPI-ESM1-2-LR&#39;, </span>
+               <span class="s1">&#39;ERA5&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;MIROC6&#39;</span><span class="p">,</span> 
+               <span class="s1">&#39;CanESM5&#39;</span><span class="p">,</span> 
+               <span class="s1">&#39;AWI-ESM-1-1-LR&#39;</span><span class="p">,</span> 
+               <span class="s1">&#39;MPI-ESM1-2-LR&#39;</span><span class="p">,</span> 
                <span class="s1">&#39;UKESM1-0-LL&#39;</span><span class="p">,</span> 
                <span class="s1">&#39;HadGEM3-GC31-LL&#39;</span><span class="p">,</span>
-               <span class="c1"># &#39;CNRM-CM6-1&#39;,</span>
-               <span class="c1"># &#39;CNRM-ESM2-1&#39;,</span>
-               <span class="c1"># &#39;IPSL-CM6A-LR&#39;,</span>
-               <span class="c1"># &#39;IPSL-CM5A2-INCA&#39;</span>
+               <span class="s1">&#39;CNRM-CM6-1&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;CNRM-ESM2-1&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;IPSL-CM6A-LR&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;IPSL-CM5A2-INCA&#39;</span>
             <span class="p">]</span>
 </pre></div>
 </div>
@@ -686,15 +691,17 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">find_lcc_sf</span><span class="p">(</span><span class="n">ds</span><span class="p">):</span>
     <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span> <span class="o">=</span> <span class="n">calc_days_season</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
     
-    
-    <span class="c1"># 1. find where liquid water &gt;= 0.005 kgm-2 or &gt;= threshold</span>
-    <span class="n">th_lcc</span> <span class="o">=</span> <span class="mf">0.005</span>
-    <span class="n">ds_lcc</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="s1">&#39;lwp&#39;</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">th_lcc</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
     <span class="c1"># find where 2m-temperature &lt;= 0C or &lt;= threshold</span>
     <span class="c1"># This should automatically assume that it is already only snow, but it could include supercooled </span>
     <span class="c1"># rain in the case of total precipitation</span>
     <span class="n">th_2t</span> <span class="o">=</span> <span class="mf">273.15</span>
-    <span class="n">ds_lcc_2t</span> <span class="o">=</span> <span class="n">ds_lcc</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="s1">&#39;tas&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">th_2t</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="n">ds_2t</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="s1">&#39;tas&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">th_2t</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    
+    <span class="c1"># 1. find where liquid water &gt;= 0.005 kgm-2 or &gt;= threshold</span>
+    <span class="n">th_lcc</span> <span class="o">=</span> <span class="mf">0.005</span>
+    <span class="n">ds_lcc_2t</span> <span class="o">=</span> <span class="n">ds_2t</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds_2t</span><span class="p">[</span><span class="s1">&#39;lwp&#39;</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">th_lcc</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="n">ds_lcc</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="s1">&#39;lwp&#39;</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">th_lcc</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    
 
     <span class="c1"># amount of freezing rain</span>
     <span class="n">ds_lcc_2t</span><span class="p">[</span><span class="s1">&#39;prfr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">ds_lcc_2t</span><span class="p">[</span><span class="s1">&#39;pr&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">ds_lcc_2t</span><span class="p">[</span><span class="s1">&#39;prsn&#39;</span><span class="p">])</span>
@@ -718,18 +725,28 @@ document.write(`
     <span class="c1"># assign percent of snowfall days, required in a pixle, which should be included in the statistics</span>
     <span class="n">th_frac</span> <span class="o">=</span> <span class="mf">0.1</span>
     <span class="n">th_days_lcc_2t</span> <span class="o">=</span> <span class="p">(</span><span class="n">ds_lcc_2t</span><span class="p">[</span><span class="s1">&#39;twp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.season&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="n">keep_attrs</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span><span class="o">/</span><span class="n">days_season</span>
+    <span class="n">th_days_lcc</span>    <span class="o">=</span> <span class="p">(</span><span class="n">ds_lcc</span><span class="p">[</span><span class="s1">&#39;twp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.season&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="n">keep_attrs</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span><span class="o">/</span><span class="n">days_season</span>
 
     <span class="n">ds_lcc_2t_season</span> <span class="o">=</span> <span class="n">ds_lcc_2t</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.season&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">ds_lcc_2t_season</span> <span class="o">=</span> <span class="n">ds_lcc_2t_season</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">th_days_lcc_2t</span><span class="o">&gt;=</span><span class="n">th_frac</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 
+    <span class="n">ds_lcc_season</span> <span class="o">=</span> <span class="n">ds_lcc</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.season&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ds_lcc_season</span> <span class="o">=</span> <span class="n">ds_lcc_season</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">th_days_lcc</span> <span class="o">&gt;=</span> <span class="n">th_frac</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    
     <span class="c1"># Now create daily dataset based on seasonal supercooled liquid containing cloud days above th_sf, and th_frac</span>
     <span class="n">_mam</span> <span class="o">=</span> <span class="p">((</span><span class="n">ds_lcc_2t</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">fct</span><span class="o">.</span><span class="n">is_season</span><span class="p">(</span><span class="n">ds_lcc_2t</span><span class="p">[</span><span class="s1">&#39;time.month&#39;</span><span class="p">],</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)))</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">th_days_lcc_2t</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">season</span><span class="o">=</span><span class="s1">&#39;MAM&#39;</span><span class="p">)</span> <span class="o">&gt;=</span><span class="n">th_frac</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;season&#39;</span><span class="p">)</span>
     <span class="n">_jja</span> <span class="o">=</span> <span class="p">((</span><span class="n">ds_lcc_2t</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">fct</span><span class="o">.</span><span class="n">is_season</span><span class="p">(</span><span class="n">ds_lcc_2t</span><span class="p">[</span><span class="s1">&#39;time.month&#39;</span><span class="p">],</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">)))</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">th_days_lcc_2t</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">season</span><span class="o">=</span><span class="s1">&#39;JJA&#39;</span><span class="p">)</span> <span class="o">&gt;=</span><span class="n">th_frac</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;season&#39;</span><span class="p">)</span>
     <span class="n">_son</span> <span class="o">=</span> <span class="p">((</span><span class="n">ds_lcc_2t</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">fct</span><span class="o">.</span><span class="n">is_season</span><span class="p">(</span><span class="n">ds_lcc_2t</span><span class="p">[</span><span class="s1">&#39;time.month&#39;</span><span class="p">],</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">)))</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">th_days_lcc_2t</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">season</span><span class="o">=</span><span class="s1">&#39;SON&#39;</span><span class="p">)</span> <span class="o">&gt;=</span><span class="n">th_frac</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;season&#39;</span><span class="p">)</span>
     <span class="n">_djf</span> <span class="o">=</span> <span class="p">((</span><span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">ds_lcc_2t</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">fct</span><span class="o">.</span><span class="n">is_season</span><span class="p">(</span><span class="n">ds_lcc_2t</span><span class="p">[</span><span class="s1">&#39;time.month&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span> 
                     <span class="n">ds_lcc_2t</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">fct</span><span class="o">.</span><span class="n">is_season</span><span class="p">(</span><span class="n">ds_lcc_2t</span><span class="p">[</span><span class="s1">&#39;time.month&#39;</span><span class="p">],</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">))],</span> <span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">th_days_lcc_2t</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">season</span><span class="o">=</span><span class="s1">&#39;DJF&#39;</span><span class="p">)</span> <span class="o">&gt;=</span><span class="n">th_frac</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;season&#39;</span><span class="p">)</span>
-
     <span class="n">ds_lcc_2t_days</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">objects</span><span class="o">=</span><span class="p">[</span><span class="n">_djf</span><span class="p">,</span> <span class="n">_jja</span><span class="p">,</span> <span class="n">_mam</span><span class="p">,</span> <span class="n">_son</span><span class="p">])</span>
+
+    <span class="n">_mam</span> <span class="o">=</span> <span class="p">((</span><span class="n">ds_lcc</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">fct</span><span class="o">.</span><span class="n">is_season</span><span class="p">(</span><span class="n">ds_lcc</span><span class="p">[</span><span class="s1">&#39;time.month&#39;</span><span class="p">],</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)))</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">th_days_lcc_2t</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">season</span><span class="o">=</span><span class="s1">&#39;MAM&#39;</span><span class="p">)</span> <span class="o">&gt;=</span><span class="n">th_frac</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;season&#39;</span><span class="p">)</span>
+    <span class="n">_jja</span> <span class="o">=</span> <span class="p">((</span><span class="n">ds_lcc</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">fct</span><span class="o">.</span><span class="n">is_season</span><span class="p">(</span><span class="n">ds_lcc</span><span class="p">[</span><span class="s1">&#39;time.month&#39;</span><span class="p">],</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">)))</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">th_days_lcc_2t</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">season</span><span class="o">=</span><span class="s1">&#39;JJA&#39;</span><span class="p">)</span> <span class="o">&gt;=</span><span class="n">th_frac</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;season&#39;</span><span class="p">)</span>
+    <span class="n">_son</span> <span class="o">=</span> <span class="p">((</span><span class="n">ds_lcc</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">fct</span><span class="o">.</span><span class="n">is_season</span><span class="p">(</span><span class="n">ds_lcc</span><span class="p">[</span><span class="s1">&#39;time.month&#39;</span><span class="p">],</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">)))</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">th_days_lcc_2t</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">season</span><span class="o">=</span><span class="s1">&#39;SON&#39;</span><span class="p">)</span> <span class="o">&gt;=</span><span class="n">th_frac</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;season&#39;</span><span class="p">)</span>
+    <span class="n">_djf</span> <span class="o">=</span> <span class="p">((</span><span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">ds_lcc</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">fct</span><span class="o">.</span><span class="n">is_season</span><span class="p">(</span><span class="n">ds_lcc</span><span class="p">[</span><span class="s1">&#39;time.month&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span> 
+                    <span class="n">ds_lcc</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">fct</span><span class="o">.</span><span class="n">is_season</span><span class="p">(</span><span class="n">ds_lcc</span><span class="p">[</span><span class="s1">&#39;time.month&#39;</span><span class="p">],</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">))],</span> <span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">th_days_lcc_2t</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">season</span><span class="o">=</span><span class="s1">&#39;DJF&#39;</span><span class="p">)</span> <span class="o">&gt;=</span><span class="n">th_frac</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;season&#39;</span><span class="p">)</span>
+    <span class="n">ds_lcc_days</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">objects</span><span class="o">=</span><span class="p">[</span><span class="n">_djf</span><span class="p">,</span> <span class="n">_jja</span><span class="p">,</span> <span class="n">_mam</span><span class="p">,</span> <span class="n">_son</span><span class="p">])</span>
 
 
 
@@ -741,13 +758,17 @@ document.write(`
     <span class="c1"># find where snowfall &gt;= 0.01 kg m-2 h-1 or &gt;= threshold in these liquid containing clouds. </span>
     <span class="n">th_sf</span> <span class="o">=</span> <span class="mf">0.01</span>
     <span class="c1"># ds_lcc_2t_sf = ds_lcc_2t_sf.where(ds_lcc_2t_sf[&#39;prsn&#39;] &gt;= th_sf, other=np.nan)</span>
-    <span class="n">ds_lcc_2t_sf</span> <span class="o">=</span> <span class="n">ds_lcc_2t_days</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds_lcc_2t_days</span><span class="p">[</span><span class="s1">&#39;prsn&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">th_sf</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="c1"># ds_lcc_2t_sf = ds_lcc_2t_days.where(ds_lcc_2t_days[&#39;prsn&#39;] &gt;= th_sf, other=np.nan)</span>
+    <span class="n">ds_lcc_2t_sf</span> <span class="o">=</span> <span class="n">ds_lcc_2t</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds_lcc_2t</span><span class="p">[</span><span class="s1">&#39;prsn&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">th_sf</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
     <span class="c1"># applying snowfall days, based on threshold (th_sf). Gives days where snowfall above th_sf and counts days in season and devides </span>
     <span class="c1"># by season days</span>
     <span class="c1"># th_days_sf = (ds_lcc_2t_sf[&#39;twp&#39;].groupby(&#39;time.season&#39;).count(dim=&#39;time&#39;, keep_attrs=False))/days_season</span>
     <span class="n">ds_lcc_2t_sf_season</span> <span class="o">=</span> <span class="n">ds_lcc_2t_sf</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.season&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="c1"># ds_lcc_2t_sf_season = ds_lcc_2t_season.where(th_days_sf&gt;=th_frac, other=np.nan)   # not needed for statistic</span>
     <span class="n">ds_lcc_2t_sf_season</span>
+    
+    <span class="n">ds_lcc_sf</span> <span class="o">=</span> <span class="n">ds_lcc</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds_lcc</span><span class="p">[</span><span class="s1">&#39;prsn&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">th_sf</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="n">ds_lcc_sf_season</span> <span class="o">=</span> <span class="n">ds_lcc_sf</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.season&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     
     
     
@@ -758,26 +779,28 @@ document.write(`
     <span class="c1"># _djf = ((xr.concat([ds_lcc_2t_sf.sel(time=fct.is_season(ds_lcc_2t_sf[&#39;time.month&#39;], 1, 2)), </span>
     <span class="c1">#                 ds_lcc_2t_sf.sel(time=fct.is_season(ds_lcc_2t_sf[&#39;time.month&#39;],12,12))], dim=&#39;time&#39;)).where(th_days_sf.sel(season=&#39;DJF&#39;) &gt;=th_frac)).drop(&#39;season&#39;)</span>
 
-    <span class="n">_mam</span> <span class="o">=</span> <span class="p">((</span><span class="n">ds_lcc_2t_sf</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">fct</span><span class="o">.</span><span class="n">is_season</span><span class="p">(</span><span class="n">ds_lcc_2t_sf</span><span class="p">[</span><span class="s1">&#39;time.month&#39;</span><span class="p">],</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">))))</span><span class="c1">#.drop(&#39;season&#39;)</span>
-    <span class="n">_jja</span> <span class="o">=</span> <span class="p">((</span><span class="n">ds_lcc_2t_sf</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">fct</span><span class="o">.</span><span class="n">is_season</span><span class="p">(</span><span class="n">ds_lcc_2t_sf</span><span class="p">[</span><span class="s1">&#39;time.month&#39;</span><span class="p">],</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">))))</span><span class="c1">#.drop(&#39;season&#39;)</span>
-    <span class="n">_son</span> <span class="o">=</span> <span class="p">((</span><span class="n">ds_lcc_2t_sf</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">fct</span><span class="o">.</span><span class="n">is_season</span><span class="p">(</span><span class="n">ds_lcc_2t_sf</span><span class="p">[</span><span class="s1">&#39;time.month&#39;</span><span class="p">],</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">))))</span><span class="c1">#.drop(&#39;season&#39;)</span>
-    <span class="n">_djf</span> <span class="o">=</span> <span class="p">((</span><span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">ds_lcc_2t_sf</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">fct</span><span class="o">.</span><span class="n">is_season</span><span class="p">(</span><span class="n">ds_lcc_2t_sf</span><span class="p">[</span><span class="s1">&#39;time.month&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span> 
-                    <span class="n">ds_lcc_2t_sf</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">fct</span><span class="o">.</span><span class="n">is_season</span><span class="p">(</span><span class="n">ds_lcc_2t_sf</span><span class="p">[</span><span class="s1">&#39;time.month&#39;</span><span class="p">],</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">))],</span> <span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)))</span><span class="c1">#.drop(&#39;season&#39;)</span>
-
-
-    <span class="n">ds_lcc_2t_sf_days</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">objects</span><span class="o">=</span><span class="p">[</span><span class="n">_djf</span><span class="p">,</span> <span class="n">_jja</span><span class="p">,</span> <span class="n">_mam</span><span class="p">,</span> <span class="n">_son</span><span class="p">])</span>
-    <span class="n">ds_lcc</span><span class="p">,</span> <span class="n">ds_lcc_2t_days</span><span class="p">,</span> <span class="n">ds_lcc_2t_sf_days</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">ds_lcc</span><span class="p">,</span> <span class="n">ds_lcc_2t</span><span class="p">,</span> <span class="n">ds_lcc_2t_days</span><span class="p">,</span> <span class="n">ds_lcc_2t_sf_days</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
+    <span class="c1"># ds_lcc_2t_sf_days = xr.merge(objects=[_djf, _jja, _mam, _son])</span>
+    
+    
+    <span class="c1"># ds_lcc, ds_lcc_2t_days, #ds_lcc_2t_sf_days</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">ds_2t</span><span class="p">,</span> 
+           <span class="n">ds_lcc_2t</span><span class="p">,</span> <span class="n">ds_lcc_2t_days</span><span class="p">,</span> <span class="n">ds_lcc_2t_sf</span><span class="p">,</span>
+           <span class="n">ds_lcc</span><span class="p">,</span>    <span class="n">ds_lcc_days</span><span class="p">,</span> <span class="n">ds_lcc_sf</span><span class="p">,</span> 
+           <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds_lcc</span>      <span class="o">=</span> <span class="p">{}</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds_2t</span>      <span class="o">=</span> <span class="p">{}</span>
 <span class="n">ds_lcc_2t</span>   <span class="o">=</span> <span class="p">{}</span>
 <span class="n">ds_lcc_2t_days</span>  <span class="o">=</span> <span class="p">{}</span> 
-<span class="n">ds_lcc_2t_sf_days</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">ds_lcc_2t_sf</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="n">ds_lcc</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">ds_lcc_days</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">ds_lcc_sf</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">days_season</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">days_month</span>  <span class="o">=</span> <span class="p">{}</span>
 </pre></div>
@@ -788,9 +811,14 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Calculate statistics in ERA5 ...&#39;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">era_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="n">ds_lcc</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_2t</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> \
-        <span class="n">ds_lcc_2t_days</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_2t_sf_days</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> \
+    <span class="n">ds_2t</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_2t</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_2t_days</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_2t_sf</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> \
+        <span class="n">ds_lcc</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_days</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_sf</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> \
             <span class="n">days_season</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">days_month</span><span class="p">[</span><span class="n">model</span><span class="p">]</span> <span class="o">=</span> <span class="n">find_lcc_sf</span><span class="p">(</span><span class="n">era_dict</span><span class="p">[</span><span class="n">model</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculate statistics in ERA5 ...
 </pre></div>
 </div>
 </div>
@@ -800,10 +828,15 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Calculate statistics in CMIP6 ...&#39;</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">cmip_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>        
-    <span class="n">ds_lcc</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_2t</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> \
-            <span class="n">ds_lcc_2t_days</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_2t_sf_days</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> \
+    <span class="n">ds_2t</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_2t</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_2t_days</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_2t_sf</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> \
+        <span class="n">ds_lcc</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_days</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_sf</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> \
                 <span class="n">days_season</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">days_month</span><span class="p">[</span><span class="n">model</span><span class="p">]</span> <span class="o">=</span> <span class="n">find_lcc_sf</span><span class="p">(</span><span class="n">cmip_dict</span><span class="p">[</span><span class="n">model</span><span class="p">])</span>
     
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculate statistics in CMIP6 ...
 </pre></div>
 </div>
 </div>
@@ -865,10 +898,137 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">era_dict</span><span class="p">,</span> <span class="s1">&#39;orig&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
 <span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">cmip_dict</span><span class="p">,</span> <span class="s1">&#39;orig&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
-<span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">ds_lcc</span><span class="p">,</span> <span class="s1">&#39;lcc&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
+<span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">ds_2t</span><span class="p">,</span> <span class="s1">&#39;2t&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
 <span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">ds_lcc_2t</span><span class="p">,</span> <span class="s1">&#39;lcc_2t&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span> <span class="p">)</span>
 <span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">ds_lcc_2t_days</span><span class="p">,</span> <span class="s1">&#39;lcc_2t_days&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
-<span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">ds_lcc_2t_sf_days</span><span class="p">,</span> <span class="s1">&#39;lcc_2t_sf_days&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
+<span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">ds_lcc_2t_sf</span><span class="p">,</span> <span class="s1">&#39;lcc_2t_sf&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
+<span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">ds_lcc</span><span class="p">,</span> <span class="s1">&#39;lcc&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
+<span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">ds_lcc_days</span><span class="p">,</span> <span class="s1">&#39;lcc_days&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
+<span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">ds_lcc_sf</span><span class="p">,</span> <span class="s1">&#39;lcc_sf&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/era_30_orig_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/era_250_orig_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/era_500_orig_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/MIROC6_orig_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/CanESM5_orig_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/AWI-ESM-1-1-LR_orig_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/MPI-ESM1-2-LR_orig_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/UKESM1-0-LL_orig_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/HadGEM3-GC31-LL_orig_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/CNRM-CM6-1_orig_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/CNRM-ESM2-1_orig_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/IPSL-CM6A-LR_orig_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/IPSL-CM5A2-INCA_orig_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/cmip_250_orig_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/cmip_500_orig_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/era_30_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/era_250_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/era_500_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/MIROC6_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/CanESM5_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/AWI-ESM-1-1-LR_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/MPI-ESM1-2-LR_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/UKESM1-0-LL_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/HadGEM3-GC31-LL_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/CNRM-CM6-1_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/CNRM-ESM2-1_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/IPSL-CM6A-LR_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/IPSL-CM5A2-INCA_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/cmip_250_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/cmip_500_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/era_30_lcc_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/era_250_lcc_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/era_500_lcc_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/MIROC6_lcc_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/CanESM5_lcc_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/AWI-ESM-1-1-LR_lcc_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/MPI-ESM1-2-LR_lcc_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/UKESM1-0-LL_lcc_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/HadGEM3-GC31-LL_lcc_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/CNRM-CM6-1_lcc_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/CNRM-ESM2-1_lcc_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/IPSL-CM6A-LR_lcc_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/IPSL-CM5A2-INCA_lcc_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/cmip_250_lcc_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/cmip_500_lcc_2t_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/era_30_lcc_2t_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/era_250_lcc_2t_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/era_500_lcc_2t_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/MIROC6_lcc_2t_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/CanESM5_lcc_2t_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/AWI-ESM-1-1-LR_lcc_2t_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/MPI-ESM1-2-LR_lcc_2t_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/UKESM1-0-LL_lcc_2t_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/HadGEM3-GC31-LL_lcc_2t_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/CNRM-CM6-1_lcc_2t_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/CNRM-ESM2-1_lcc_2t_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/IPSL-CM6A-LR_lcc_2t_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/IPSL-CM5A2-INCA_lcc_2t_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/cmip_250_lcc_2t_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/cmip_500_lcc_2t_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/era_30_lcc_2t_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/era_250_lcc_2t_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/era_500_lcc_2t_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/MIROC6_lcc_2t_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/CanESM5_lcc_2t_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/AWI-ESM-1-1-LR_lcc_2t_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/MPI-ESM1-2-LR_lcc_2t_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/UKESM1-0-LL_lcc_2t_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/HadGEM3-GC31-LL_lcc_2t_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/CNRM-CM6-1_lcc_2t_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/CNRM-ESM2-1_lcc_2t_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/IPSL-CM6A-LR_lcc_2t_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/IPSL-CM5A2-INCA_lcc_2t_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/cmip_250_lcc_2t_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/cmip_500_lcc_2t_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/era_30_lcc_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/era_250_lcc_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/era_500_lcc_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/MIROC6_lcc_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/CanESM5_lcc_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/AWI-ESM-1-1-LR_lcc_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/MPI-ESM1-2-LR_lcc_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/UKESM1-0-LL_lcc_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/HadGEM3-GC31-LL_lcc_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/CNRM-CM6-1_lcc_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/CNRM-ESM2-1_lcc_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/IPSL-CM6A-LR_lcc_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/IPSL-CM5A2-INCA_lcc_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/cmip_250_lcc_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/cmip_500_lcc_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/era_30_lcc_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/era_250_lcc_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/era_500_lcc_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/MIROC6_lcc_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/CanESM5_lcc_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/AWI-ESM-1-1-LR_lcc_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/MPI-ESM1-2-LR_lcc_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/UKESM1-0-LL_lcc_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/HadGEM3-GC31-LL_lcc_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/CNRM-CM6-1_lcc_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/CNRM-ESM2-1_lcc_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/IPSL-CM6A-LR_lcc_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/IPSL-CM5A2-INCA_lcc_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/cmip_250_lcc_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/cmip_500_lcc_days_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/era_30_lcc_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/era_250_lcc_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/era_500_lcc_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/MIROC6_lcc_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/CanESM5_lcc_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/AWI-ESM-1-1-LR_lcc_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/MPI-ESM1-2-LR_lcc_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/UKESM1-0-LL_lcc_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/HadGEM3-GC31-LL_lcc_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/CNRM-CM6-1_lcc_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/CNRM-ESM2-1_lcc_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/IPSL-CM6A-LR_lcc_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/IPSL-CM5A2-INCA_lcc_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/cmip_250_lcc_sf_20070101-20101231.nc
+writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/cmip_500_lcc_sf_20070101-20101231.nc
 </pre></div>
 </div>
 </div>

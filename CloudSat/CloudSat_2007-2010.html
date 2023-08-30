@@ -1,0 +1,1193 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Example with CloudSat &#8212; globalsnow</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'CloudSat/CloudSat_2007-2010';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Welcome to Global Snow project website
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../ERA5/ERA5_1985-2014.html">Example with ERA5 high-resolution (~0.25deg) monthly means</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../CMIP6_ERA5_CloudSat/plt_seasonal_mean.html">Analysis of CMIP6, ERA5, and CloudSat</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../cmip/CMIP6_hr_1985-2014.html">Example with CMIP6 models (100 - 500 km)</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1 has-children"><a class="reference internal" href="../cloudsat.html">Cloudsat</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="get_pressure_grid.html">Example to get CloudSat mean pressure level profile</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="read_2C_snow.html">Regrid CloudSat data to horizontal grid</a></li>
+
+
+
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/franzihe/CloudSat_ERA5_CMIP6_analysis" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/franzihe/CloudSat_ERA5_CMIP6_analysis/issues/new?title=Issue%20on%20page%20%2FCloudSat/CloudSat_2007-2010.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/CloudSat/CloudSat_2007-2010.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Example with CloudSat</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Example with CloudSat</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-a-id-introduction-a">1. Introduction <a id="introduction"></a></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#data-wrangling-a-id-data-wrangling-a">2. Data Wrangling <a id="data_wrangling"></a></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#organize-my-data">Organize my data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-python-packages">Import python packages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#open-era5-variables">Open ERA5 variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#change-attributes-matching-cmip6-data">Change attributes matching CMIP6 data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regrid-to-500km-nominal-resolution">Regrid to 500km nominal resolution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-cloudsat-file">Save CloudSat file</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># export PYTHONPATH=&quot;${PYTHONPATH}:/uio/kant/geo-geofag-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/utils/&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="example-with-cloudsat">
+<h1>Example with CloudSat<a class="headerlink" href="#example-with-cloudsat" title="Permalink to this heading">#</a></h1>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="table-of-contents">
+<h1>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this heading">#</a></h1>
+<ul>
+<li><a href="#introduction">1. Introduction</a></li>
+<li><a href="#data_wrangling">2. Data Wrangling</a></li>
+<li><a href="#exploratory">3. Exploratory Data Analysis</a></li>
+<li><a href="#conclusion">4. Conclusion</a></li>
+<li><a href="#references">5. References</a></li>
+</ul></section>
+<section class="tex2jax_ignore mathjax_ignore" id="introduction-a-id-introduction-a">
+<h1>1. Introduction <a id='introduction'></a><a class="headerlink" href="#introduction-a-id-introduction-a" title="Permalink to this heading">#</a></h1>
+<p>Cloud feedbacks are a major contributor to the spread of climate sensitivity in global climate models (GCMs) (<a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1029/2019GL085782">Zelinka et al. (2020)</a>]). Among the most poorly understood cloud feedbacks is the one associated with the cloud phase, which is expected to be modified with climate change (<a class="reference external" href="https://doi-org.ezproxy.uio.no/10.1038/s41561-020-00649-1">Bjordal et al. (2020)</a>). Cloud phase bias, in addition, has significant implications for the simulation of radiative properties and glacier and ice sheet mass balances in climate models.</p>
+<p>In this context, this work aims to expand our knowledge on how the representation of the cloud phase affects snow formation in GCMs. Better understanding this aspect is necessary to develop climate models further and improve future climate predictions.</p>
+<ul class="simple">
+<li><p>Load ERA5 data previously downloaded locally via <a class="reference external" href="https://github.com/franzihe/download_ERA5">Jupyter Notebook - download ERA5</a></p></li>
+<li><p>find clouds: liquid-only, ice-only, mixed-phase</p></li>
+<li><p>Regridd the ERA5 variables to the same horizontal resolution as high-resolution CMIP6 models with <a class="reference external" href="https://xesmf.readthedocs.io/en/latest/"><code class="docutils literal notranslate"><span class="pre">xesmf</span></code></a></p></li>
+<li><p>Calculate and plot the seasonal mean of the variable</p></li>
+</ul>
+<p><strong>Questions</strong></p>
+<ul class="simple">
+<li><p>How is the cloud phase and snowfall varying between 1985 and 2014?</p></li>
+</ul>
+<blockquote>
+<div><p><strong><em>NOTE:</em></strong> We answer questions related to the comparison of CMIP models to ERA5 in another <a class="reference internal" href="../CMIP6_ERA5_CloudSat/plt_seasonal_mean.html"><span class="doc std std-doc">Jupyter Notebook</span></a>.</p>
+</div></blockquote>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="data-wrangling-a-id-data-wrangling-a">
+<h1>2. Data Wrangling <a id='data_wrangling'></a><a class="headerlink" href="#data-wrangling-a-id-data-wrangling-a" title="Permalink to this heading">#</a></h1>
+<p>This study will compare surface snowfall, ice, and liquid water content from the Coupled Model Intercomparison Project Phase 6 (<a class="reference external" href="https://esgf-node.llnl.gov/projects/cmip6/">CMIP6</a>) climate models (accessed through <a class="reference external" href="https://pangeo.io/">Pangeo</a>) to the CloudSat data from <strong>2007 to 2010</strong>, excluding September 2008 and December 2009 (insufficient CALIOP data and CloudSat battery failure, see McIllhattan et al. 2017). We conduct statistical analysis at the annual and seasonal timescales to determine the biases in cloud phase and precipitation (liquid and solid) in the CMIP6 models and their potential connection between them. The CMIP6 data analysis can be found in the <a class="reference internal" href="../cmip/CMIP6_hr_1985-2014.html"><span class="doc std std-doc">Jupyter Notebook for CMIP6</span></a>.</p>
+<ul class="simple">
+<li><p>Time period: 2007 to 2010</p></li>
+<li><p>horizonal nominal resolution: ~250km</p></li>
+<li><p>time resolution: monthly data</p></li>
+<li><p>Variables:</p></li>
+</ul>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>shortname</p></th>
+<th class="head text-center"><p>Long name</p></th>
+<th class="head text-right"><p>Units</p></th>
+<th class="head text-right"><p>levels</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>n_obs</p></td>
+<td class="text-center"><p>Totoal number of observations (‘satellite profiles’), all-sky</p></td>
+<td class="text-right"><p></p></td>
+<td class="text-right"><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>n_cld</p></td>
+<td class="text-center"><p>Total number of cloudy observations</p></td>
+<td class="text-right"><p></p></td>
+<td class="text-right"><p></p></td>
+</tr>
+<tr class="row-even"><td><p>n_lcc</p></td>
+<td class="text-center"><p>Total number of observations with supercooled liquid cloud (any ‘mixed’ or ‘liquid’ flag within profile)</p></td>
+<td class="text-right"><p></p></td>
+<td class="text-right"><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>lcc_freq</p></td>
+<td class="text-center"><p>n_lcc / n_obs</p></td>
+<td class="text-right"><p></p></td>
+<td class="text-right"><p></p></td>
+</tr>
+<tr class="row-even"><td><p>n_sf_all</p></td>
+<td class="text-center"><p>all profiles with confident snowfall (sf &gt;0)</p></td>
+<td class="text-right"><p></p></td>
+<td class="text-right"><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>n_sf_all_snow</p></td>
+<td class="text-center"><p>all profiles with confident snowfall above 0.01 mm/h</p></td>
+<td class="text-right"><p></p></td>
+<td class="text-right"><p></p></td>
+</tr>
+<tr class="row-even"><td><p>n_sf_lcc</p></td>
+<td class="text-center"><p>all profiles with supercooled liquid cloud and confident snowfall (sf &gt;0)</p></td>
+<td class="text-right"><p></p></td>
+<td class="text-right"><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>n_sf_lcc_snow</p></td>
+<td class="text-center"><p>all profiles with supercooled liquid cloud and confident snowfall above 0.01 mm/h</p></td>
+<td class="text-right"><p></p></td>
+<td class="text-right"><p></p></td>
+</tr>
+<tr class="row-even"><td><p>sf_avg_all</p></td>
+<td class="text-center"><p>average surface snowfall (mm/h) corresponding to n_sf_all</p></td>
+<td class="text-right"><p></p></td>
+<td class="text-right"><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>sf_avg_all_snow</p></td>
+<td class="text-center"><p>average surface snowfall (mm/h) corresponding to n_sf_all_snow</p></td>
+<td class="text-right"><p></p></td>
+<td class="text-right"><p></p></td>
+</tr>
+<tr class="row-even"><td><p>sf_avg_lcc</p></td>
+<td class="text-center"><p>average surface snowfall (mm/h) corresponding to n_sf_lcc</p></td>
+<td class="text-right"><p></p></td>
+<td class="text-right"><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>sf_avg_lcc_snow</p></td>
+<td class="text-center"><p>average surface snowfall (mm/h) corresponding to n_sf_lcc_snow</p></td>
+<td class="text-right"><p></p></td>
+<td class="text-right"><p></p></td>
+</tr>
+<tr class="row-even"><td><p>lcc_sf_freq</p></td>
+<td class="text-center"><p>n_sf_lcc_snow / n_lcc</p></td>
+<td class="text-right"><p></p></td>
+<td class="text-right"><p></p></td>
+</tr>
+</tbody>
+</table>
+<section id="organize-my-data">
+<h2>Organize my data<a class="headerlink" href="#organize-my-data" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Define a prefix for my project (you may need to adjust it for your own usage on your infrastructure).</p>
+<ul>
+<li><p>input folder where all the data used as input to my Jupyter Notebook is stored (and eventually shared)</p></li>
+<li><p>output folder where all the results to keep are stored</p></li>
+<li><p>tool folder where all the tools</p></li>
+</ul>
+</li>
+</ul>
+<p>The CloudSat data is located in the folder <code class="docutils literal notranslate"><span class="pre">/input/cloudsat/</span></code> and have the format <code class="docutils literal notranslate"><span class="pre">cc_sf_lcc_{year}_{month}.nc</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="n">hostname</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">()</span>
+
+<span class="n">abs_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">hostname</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">absolute</span><span class="p">())</span>
+<span class="n">WORKDIR</span> <span class="o">=</span> <span class="n">abs_path</span><span class="p">[:</span><span class="o">-</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">abs_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">abs_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+
+
+<span class="k">if</span> <span class="s2">&quot;mimi&quot;</span> <span class="ow">in</span> <span class="n">hostname</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">hostname</span><span class="p">)</span>
+    <span class="n">DATA_DIR</span> <span class="o">=</span> <span class="s2">&quot;/scratch/franzihe/&quot;</span>
+    <span class="c1"># FIG_DIR = &quot;/uio/kant/geo-geofag-u1/franzihe/Documents/Figures/ERA5/&quot;</span>
+    <span class="n">FIG_DIR</span> <span class="o">=</span> <span class="s2">&quot;/uio/kant/geo-geofag-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/Figures/CloudSat/&quot;</span>
+<span class="k">elif</span> <span class="s2">&quot;glefsekaldt&quot;</span> <span class="ow">in</span> <span class="n">hostname</span><span class="p">:</span> 
+    <span class="n">DATA_DIR</span> <span class="o">=</span> <span class="s2">&quot;/home/franzihe/Data/&quot;</span>
+    <span class="n">FIG_DIR</span> <span class="o">=</span> <span class="s2">&quot;/home/franzihe/Documents/Figures/CloudSat/&quot;</span>
+
+<span class="n">INPUT_DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">)</span>
+<span class="n">OUTPUT_DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">)</span>
+<span class="n">UTILS_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">WORKDIR</span><span class="p">,</span> <span class="s1">&#39;utils&#39;</span><span class="p">)</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">UTILS_DIR</span><span class="p">)</span>
+<span class="c1"># make figure directory</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">FIG_DIR</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mimi.uio.no
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="import-python-packages">
+<h2>Import python packages<a class="headerlink" href="#import-python-packages" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Python</span></code> environment requirements: file <a class="reference download internal" download="" href="../_downloads/06f3f4f78bf14ffb9f9cfdf395203c3c/requirements_globalsnow.txt"><span class="xref download myst">requirements_globalsnow.txt</span></a></p></li>
+<li><p>load <code class="docutils literal notranslate"><span class="pre">python</span></code> packages from <a class="reference download internal" download="" href="../_downloads/5eb7796ec8541cded4dcee2282ad687a/imports.py"><span class="xref download myst">imports.py</span></a></p></li>
+<li><p>load <code class="docutils literal notranslate"><span class="pre">functions</span></code> from <a class="reference download internal" download="" href="../_downloads/3afa0d66b1ce4f3999c315ad3a2e691d/functions.py"><span class="xref download myst">functions.py</span></a></p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># supress warnings</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span> <span class="c1"># don&#39;t output warnings</span>
+
+<span class="c1"># import packages</span>
+<span class="kn">from</span> <span class="nn">imports</span> <span class="kn">import</span><span class="p">(</span><span class="n">xr</span><span class="p">,</span> <span class="n">intake</span><span class="p">,</span> <span class="n">ccrs</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">plt</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">cm</span><span class="p">,</span> <span class="n">fct</span><span class="p">,</span> <span class="n">np</span><span class="p">,</span> <span class="n">da</span><span class="p">,</span> <span class="n">LogNorm</span><span class="p">,</span> <span class="n">pd</span><span class="p">,</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">xe</span><span class="p">)</span>
+<span class="n">xr</span><span class="o">.</span><span class="n">set_options</span><span class="p">(</span><span class="n">display_style</span><span class="o">=</span><span class="s1">&#39;html&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7f5d797d73d0&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># reload imports</span>
+<span class="o">%</span><span class="k">load_ext</span> autoreload
+<span class="o">%</span><span class="k">autoreload</span> 2
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="open-era5-variables">
+<h2>Open ERA5 variables<a class="headerlink" href="#open-era5-variables" title="Permalink to this heading">#</a></h2>
+<p>Get the data requried for the analysis. Beforehand we downloaded the monthly averaged data on single levels and pressure levels via the Climate Data Store (CDS) infrastructure. The github repository <a class="reference external" href="https://github.com/franzihe/download_ERA5">Download ERA5</a> gives examples on how to download the data from the CDS. We use the Jupyter Notebooks <a class="reference external" href="https://github.com/franzihe/download_ERA5/blob/main/download_Amon_single_level.ipynb">download_Amon_single_level</a> and <a class="reference external" href="https://github.com/franzihe/download_ERA5/blob/main/download_Amon_pressure_level.ipynb">download_Amon_pressure_level</a>. Both, download the monthly means for the variables mentioned above between 1985 and 2014.</p>
+<blockquote>
+<div><p><strong><em>NOTE:</em></strong> To download from CDS a user has to have a CDS user account, please create the account <a class="reference external" href="https://cds.climate.copernicus.eu/user/register">here</a>.</p>
+</div></blockquote>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs_in</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INPUT_DATA_DIR</span><span class="p">,</span> <span class="s1">&#39;cloudsat/&#39;</span><span class="p">)</span>
+<span class="n">cmip_in</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INPUT_DATA_DIR</span><span class="p">,</span> <span class="s1">&#39;cmip6_hist/single_model&#39;</span><span class="p">)</span>
+
+<span class="n">cs_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUTPUT_DATA_DIR</span><span class="p">,</span> <span class="s1">&#39;CS_ERA5_CMIP6/&#39;</span><span class="p">)</span>
+<span class="c1"># make output data directory</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">cs_out</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># # needed for regridding ERA5 data to CMIP6 grids</span>
+<span class="c1"># cmip_in = os.path.join(INPUT_DATA_DIR, &#39;cmip6_hist/single_model&#39;)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>At the moment we have downloaded 4 years (2007 - 2010) for CloudSat. We define start and end year to ensure to only extract the 4-year period between 2007 and 2010.</p>
+<p><span class="math notranslate nohighlight">\(\rightarrow\)</span> Define a start and end year</p>
+<p>We will load all available variables into one xarray dataset with <code class="docutils literal notranslate"><span class="pre">xarray.open_mfdataset(file)</span></code> and select the time range <a class="reference external" href="https://xarray.pydata.org/en/stable/user-guide/indexing.html">by name</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># rsync -av --progress login.nird-lmd.sigma2.no:/projects/NS9600K/tcarlsen/18_Global_Snow_Study/output_files/sf_lcc_monthly/ /scratch/franzihe/input/cloudsat/</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">starty</span> <span class="o">=</span> <span class="mi">2007</span>
+<span class="n">endy</span> <span class="o">=</span> <span class="mi">2010</span>
+<span class="n">year_range</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">starty</span><span class="p">,</span> <span class="n">endy</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<span class="c1"># Uncomment the line below if you want to search for files matching the pattern in the directory specified by `cs_in`</span>
+<span class="c1"># cs_file_in = glob(f&#39;{cs_in}/*_cs5_*.nc&#39;)</span>
+<span class="c1"># cs_file_in = sorted(glob(f&#39;{cs_in}/40NS/*_cs5_*.nc&#39;))</span>
+<span class="n">cs_file_in</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c1"># cs_file_in.extend(sorted(glob(f&#39;{cs_in}/sf_lcc_monthly/cc_sf_lcc_2007_01.nc&#39;)))</span>
+<span class="c1"># cs_file_in.extend(sorted(glob(f&#39;{cs_in}/sf_lcc_monthly{input_file}/cc_sf_lcc_2007_01{input_file}.nc&#39;)))</span>
+
+<span class="c1"># ds_cs = xr.open_mfdataset(cs_file_in, )</span>
+<span class="c1"># Uncomment the line below if you want to rename the variable `t2m` to `2t`</span>
+<span class="c1"># ds_cs = ds_cs.rename_vars({&#39;t2m&#39;: &#39;2t&#39;})</span>
+
+<span class="c1"># ds_cs = ds_cs.sel(time=ds_cs.time.dt.year.isin(year_range)).squeeze()</span>
+
+<span class="c1"># ds_cs = ds_cs.assign_coords(lon=(((ds_cs.lon + 180) % 360) - 180)).sortby([&#39;lon&#39;, &#39;time&#39;])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">add_time_dim_and_attributes</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">ds_cs</span><span class="p">):</span>
+    <span class="c1"># add time dimension</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">([</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]))</span>
+            
+    <span class="c1"># #assign attributes to variables</span>
+    <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;n_obs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;n_obs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">assign_attrs</span><span class="p">({</span><span class="s1">&#39;long_name&#39;</span><span class="p">:</span><span class="s1">&#39;Total number of observations (&quot;satellite profiles&quot;), all-sky&#39;</span><span class="p">,</span> <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">})</span>
+    <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;n_cld&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;n_cld&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">assign_attrs</span><span class="p">({</span><span class="s1">&#39;long_name&#39;</span><span class="p">:</span><span class="s1">&#39;Total number of cloudy observations&#39;</span><span class="p">,</span> <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">})</span>
+    <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;n_lcc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;n_lcc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">assign_attrs</span><span class="p">({</span><span class="s1">&#39;long_name&#39;</span><span class="p">:</span><span class="s1">&#39;Total number of observations with supercooled liquid cloud (any &quot;mixed&quot; or &quot;liquid&quot; flag within profile)&#39;</span><span class="p">,</span> <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">})</span>
+    <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;lcc_freq&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;lcc_freq&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">assign_attrs</span><span class="p">({</span><span class="s1">&#39;long_name&#39;</span><span class="p">:</span><span class="s1">&#39;n_lcc / n_obs&#39;</span><span class="p">,</span> <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">})</span>
+    <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;n_sf_all&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;n_sf_all&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">assign_attrs</span><span class="p">({</span><span class="s1">&#39;long_name&#39;</span><span class="p">:</span><span class="s1">&#39;all profiles with confident snowfall (sf &gt;0)&#39;</span><span class="p">,</span> <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">})</span>
+    <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;n_sf_all_snow&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;n_sf_all_snow&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">assign_attrs</span><span class="p">({</span><span class="s1">&#39;long_name&#39;</span><span class="p">:</span><span class="s1">&#39;all profiles with confident snowfall above 0.01 mm/h&#39;</span><span class="p">,</span> <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">})</span>
+    <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;n_sf_lcc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;n_sf_lcc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">assign_attrs</span><span class="p">({</span><span class="s1">&#39;long_name&#39;</span><span class="p">:</span><span class="s1">&#39;all profiles with supercooled liquid cloud and confident snowfall (sf &gt;0)&#39;</span><span class="p">,</span> <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">})</span>
+    <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;n_sf_lcc_snow&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;n_sf_lcc_snow&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">assign_attrs</span><span class="p">({</span><span class="s1">&#39;long_name&#39;</span><span class="p">:</span><span class="s1">&#39;all profiles with supercooled liquid cloud and confident snowfall above 0.01 mm/h&#39;</span><span class="p">,</span> <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">})</span>
+    <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;sf_avg_all&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;sf_avg_all&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">assign_attrs</span><span class="p">({</span><span class="s1">&#39;long_name&#39;</span><span class="p">:</span><span class="s1">&#39;average surface snowfall (mm/h) corresponding to n_sf_all&#39;</span><span class="p">,</span> <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;(mm h-1)&#39;</span><span class="p">})</span>
+    <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;sf_avg_all_snow&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;sf_avg_all_snow&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">assign_attrs</span><span class="p">({</span><span class="s1">&#39;long_name&#39;</span><span class="p">:</span><span class="s1">&#39;average surface snowfall (mm/h) corresponding to n_sf_all_snow&#39;</span><span class="p">,</span> <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;(mm h-1)&#39;</span><span class="p">})</span>
+    <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;sf_avg_lcc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;sf_avg_lcc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">assign_attrs</span><span class="p">({</span><span class="s1">&#39;long_name&#39;</span><span class="p">:</span><span class="s1">&#39;average surface snowfall (mm/h) corresponding to n_sf_lcc&#39;</span><span class="p">,</span> <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;(mm h-1)&#39;</span><span class="p">})</span>
+    <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;sf_avg_lcc_snow&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;sf_avg_lcc_snow&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">assign_attrs</span><span class="p">({</span><span class="s1">&#39;long_name&#39;</span><span class="p">:</span><span class="s1">&#39;average surface snowfall (mm/h) corresponding to n_sf_lcc_snow&#39;</span><span class="p">,</span>
+                                                                <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;(mm h-1)&#39;</span><span class="p">})</span>
+    <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;lcc_sf_freq&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;lcc_sf_freq&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">assign_attrs</span><span class="p">({</span><span class="s1">&#39;long_name&#39;</span><span class="p">:</span><span class="s1">&#39;n_sf_lcc_snow / n_lcc&#39;</span><span class="p">,</span> <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">})</span>
+    
+    <span class="n">ds_cs</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">ds_cs</span><span class="p">,</span> <span class="n">ds</span><span class="p">])</span>
+    
+    <span class="k">return</span><span class="p">(</span><span class="n">ds_cs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds_cs</span>       <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
+<span class="n">ds_cs_orig</span>  <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
+<span class="n">ds_cs_orig_all</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
+<span class="c1"># ds_lcc_2t = xr.Dataset()</span>
+<span class="c1"># ds_orig   = xr.Dataset()</span>
+<span class="c1"># ds_lcc_2t_sf = xr.Dataset()</span>
+<span class="c1"># ds_lcc_2t_days = xr.Dataset()</span>
+<span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">year_range</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">month</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">13</span><span class="p">):</span>
+        <span class="c1"># print(f&#39;{year}-{month}-16&#39;)</span>
+        <span class="n">cs_file_in</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">cs_orig_in</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">cs_orig_all</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">month</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">cs_file_in</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cs_in</span><span class="si">}</span><span class="s1">/sf_lcc_monthly/cc_sf_lcc_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">_0</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">.nc&#39;</span><span class="p">)))</span>
+            <span class="n">cs_orig_in</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cs_in</span><span class="si">}</span><span class="s1">/sf_lcc_monthly_no_T_thres/cc_sf_lcc_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">_0</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">_no_T_thres.nc&#39;</span><span class="p">)))</span>
+            <span class="n">cs_orig_all</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cs_in</span><span class="si">}</span><span class="s1">/sf_lcc_monthly_no_T_thres_all/cc_sf_lcc_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">_0</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">_no_T_thres_all.nc&#39;</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cs_file_in</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cs_in</span><span class="si">}</span><span class="s1">/sf_lcc_monthly/cc_sf_lcc_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">.nc&#39;</span><span class="p">)))</span>
+            <span class="n">cs_orig_in</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cs_in</span><span class="si">}</span><span class="s1">/sf_lcc_monthly_no_T_thres/cc_sf_lcc_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">_no_T_thres.nc&#39;</span><span class="p">)))</span>
+            <span class="n">cs_orig_all</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cs_in</span><span class="si">}</span><span class="s1">/sf_lcc_monthly_no_T_thres_all/cc_sf_lcc_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">_no_T_thres_all.nc&#39;</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cs_file_in</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ds</span>      <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="n">cs_file_in</span><span class="p">,</span> <span class="p">)</span>
+            <span class="n">ds_cs</span>       <span class="o">=</span> <span class="n">add_time_dim_and_attributes</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">ds_cs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cs_orig_in</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ds_orig</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="n">cs_orig_in</span><span class="p">)</span>
+            <span class="n">ds_cs_orig</span>  <span class="o">=</span> <span class="n">add_time_dim_and_attributes</span><span class="p">(</span><span class="n">ds_orig</span><span class="p">,</span> <span class="n">ds_cs_orig</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cs_orig_all</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ds_orig_all</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="n">cs_orig_all</span><span class="p">)</span>
+            <span class="n">ds_cs_orig_all</span> <span class="o">=</span> <span class="n">add_time_dim_and_attributes</span><span class="p">(</span><span class="n">ds_orig_all</span><span class="p">,</span> <span class="n">ds_cs_orig_all</span><span class="p">)</span>
+            
+            
+            <span class="c1"># # add time dimension</span>
+            <span class="c1"># ds = ds.expand_dims(time=pd.to_datetime([f&#39;{year}-{month}-16&#39;]))</span>
+            
+            <span class="c1"># # #assign attributes to variables</span>
+            <span class="c1"># ds[&#39;n_obs&#39;] = ds[&#39;n_obs&#39;].assign_attrs({&#39;long_name&#39;:&#39;Total number of observations (&quot;satellite profiles&quot;), all-sky&#39;, &#39;units&#39;: &#39;&#39;})</span>
+            <span class="c1"># ds[&#39;n_cld&#39;] = ds[&#39;n_cld&#39;].assign_attrs({&#39;long_name&#39;:&#39;Total number of cloudy observations&#39;, &#39;units&#39;: &#39;&#39;})</span>
+            <span class="c1"># ds[&#39;n_lcc&#39;] = ds[&#39;n_lcc&#39;].assign_attrs({&#39;long_name&#39;:&#39;Total number of observations with supercooled liquid cloud (any &quot;mixed&quot; or &quot;liquid&quot; flag within profile)&#39;, &#39;units&#39;: &#39;&#39;})</span>
+            <span class="c1"># ds[&#39;lcc_freq&#39;] = ds[&#39;lcc_freq&#39;].assign_attrs({&#39;long_name&#39;:&#39;n_lcc / n_obs&#39;, &#39;units&#39;: &#39;&#39;})</span>
+            <span class="c1"># ds[&#39;n_sf_all&#39;] = ds[&#39;n_sf_all&#39;].assign_attrs({&#39;long_name&#39;:&#39;all profiles with confident snowfall (sf &gt;0)&#39;, &#39;units&#39;: &#39;&#39;})</span>
+            <span class="c1"># ds[&#39;n_sf_all_snow&#39;] = ds[&#39;n_sf_all_snow&#39;].assign_attrs({&#39;long_name&#39;:&#39;all profiles with confident snowfall above 0.01 mm/h&#39;, &#39;units&#39;: &#39;&#39;})</span>
+            <span class="c1"># ds[&#39;n_sf_lcc&#39;] = ds[&#39;n_sf_lcc&#39;].assign_attrs({&#39;long_name&#39;:&#39;all profiles with supercooled liquid cloud and confident snowfall (sf &gt;0)&#39;, &#39;units&#39;: &#39;&#39;})</span>
+            <span class="c1"># ds[&#39;n_sf_lcc_snow&#39;] = ds[&#39;n_sf_lcc_snow&#39;].assign_attrs({&#39;long_name&#39;:&#39;all profiles with supercooled liquid cloud and confident snowfall above 0.01 mm/h&#39;, &#39;units&#39;: &#39;&#39;})</span>
+            <span class="c1"># ds[&#39;sf_avg_all&#39;] = ds[&#39;sf_avg_all&#39;].assign_attrs({&#39;long_name&#39;:&#39;average surface snowfall (mm/h) corresponding to n_sf_all&#39;, &#39;units&#39;: &#39;(mm h-1)&#39;})</span>
+            <span class="c1"># ds[&#39;sf_avg_all_snow&#39;] = ds[&#39;sf_avg_all_snow&#39;].assign_attrs({&#39;long_name&#39;:&#39;average surface snowfall (mm/h) corresponding to n_sf_all_snow&#39;, &#39;units&#39;: &#39;(mm h-1)&#39;})</span>
+            <span class="c1"># ds[&#39;sf_avg_lcc&#39;] = ds[&#39;sf_avg_lcc&#39;].assign_attrs({&#39;long_name&#39;:&#39;average surface snowfall (mm/h) corresponding to n_sf_lcc&#39;, &#39;units&#39;: &#39;(mm h-1)&#39;})</span>
+            <span class="c1"># ds[&#39;sf_avg_lcc_snow&#39;] = ds[&#39;sf_avg_lcc_snow&#39;].assign_attrs({&#39;long_name&#39;:&#39;average surface snowfall (mm/h) corresponding to n_sf_lcc_snow&#39;,</span>
+            <span class="c1">#                                                                   &#39;units&#39;: &#39;(mm h-1)&#39;})</span>
+            <span class="c1"># ds[&#39;lcc_sf_freq&#39;] = ds[&#39;lcc_sf_freq&#39;].assign_attrs({&#39;long_name&#39;:&#39;n_sf_lcc_snow / n_lcc&#39;, &#39;units&#39;: &#39;&#39;})</span>
+            
+            <span class="c1"># ds_cs = xr.merge([ds_cs, ds])</span>
+            <span class="c1"># </span>
+            
+
+<span class="k">try</span><span class="p">:</span> 
+    <span class="n">ds_cs</span> <span class="o">=</span> <span class="n">ds_cs</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;2008-09&#39;</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;2009-12&#39;</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>  
+    <span class="n">ds_cs_orig</span> <span class="o">=</span> <span class="n">ds_cs_orig</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;2008-09&#39;</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;2009-12&#39;</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span> 
+    <span class="n">ds_cs_orig_all</span> <span class="o">=</span> <span class="n">ds_cs_orig_all</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;2008-09&#39;</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;2009-12&#39;</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;datetime64(&quot;2008-09&quot;) and datetime64(&quot;2009-12&quot;) not found in axis&#39;</span><span class="p">)</span> 
+         
+        
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>datetime64(&quot;2008-09&quot;) and datetime64(&quot;2009-12&quot;) not found in axis
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="change-attributes-matching-cmip6-data">
+<h2>Change attributes matching CMIP6 data<a class="headerlink" href="#change-attributes-matching-cmip6-data" title="Permalink to this heading">#</a></h2>
+<p>We will assign the attributes to the variables to make CMIP6, ERA5, and CloudSat variables comperable.</p>
+<ul class="simple">
+<li><p>[<code class="docutils literal notranslate"><span class="pre">snowfall_rate_sf</span></code>] is in <strong>mm h-1</strong> <span class="math notranslate nohighlight">\(\rightarrow\)</span>  multiply by <strong>1000kg / 1000 m3</strong> to get <strong>kg m-2 h-1</strong> .</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In this optimized version, you define a dictionary conversion_factors that maps each variable ID (var_id) </span>
+<span class="c1"># to its corresponding conversion factor and attributes. The code then iterates over the keys of the dataset </span>
+<span class="c1"># ds_cs and checks if the variable ID exists in the conversion_factors dictionary. If it does, it retrieves </span>
+<span class="c1"># the conversion factor and attributes for that variable and performs the necessary operations.</span>
+
+<span class="n">conversion_factors</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;sf_avg_all&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;factor&#39;</span><span class="p">:</span> <span class="mi">1000</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span> <span class="s1">&#39;attrs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;kg m-2 h-1&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;average surface snowfall corresponding to n_sf_all&#39;</span><span class="p">}},</span>
+    <span class="s1">&#39;sf_avg_all_snow&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;factor&#39;</span><span class="p">:</span> <span class="mi">1000</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span> <span class="s1">&#39;attrs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;kg m-2 h-1&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;average surface snowfall corresponding to n_sf_all_snow&#39;</span><span class="p">}},</span>
+    <span class="s1">&#39;sf_avg_lcc&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;factor&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span> <span class="s1">&#39;attrs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;kg m-2 h-1&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;average surface snowfall corresponding to n_sf_lcc&#39;</span><span class="p">}},</span>
+    <span class="s1">&#39;sf_avg_lcc_snow&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;factor&#39;</span><span class="p">:</span> <span class="mi">1000</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span> <span class="s1">&#39;attrs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;kg m-2 h-1&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span><span class="s1">&#39;average surface snowfall corresponding to n_sf_lcc_snow&#39;</span><span class="p">}},</span>
+<span class="p">}</span>
+
+
+<span class="k">for</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="n">ds_cs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="n">conversion_factors</span><span class="p">:</span>
+        <span class="n">factor</span> <span class="o">=</span> <span class="n">conversion_factors</span><span class="p">[</span><span class="n">var_id</span><span class="p">][</span><span class="s1">&#39;factor&#39;</span><span class="p">]</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="n">conversion_factors</span><span class="p">[</span><span class="n">var_id</span><span class="p">][</span><span class="s1">&#39;attrs&#39;</span><span class="p">]</span>
+
+        <span class="n">ds_cs</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_cs</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">*</span> <span class="n">factor</span>
+        <span class="n">ds_cs</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">attrs</span>
+        <span class="n">ds_cs</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_cs</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds_cs</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        
+        <span class="n">ds_cs_orig</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_cs_orig</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">*</span> <span class="n">factor</span>
+        <span class="n">ds_cs_orig</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">attrs</span>
+        <span class="n">ds_cs_orig</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_cs_orig</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds_cs_orig</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        
+        <span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">*</span> <span class="n">factor</span>
+        <span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">attrs</span>
+        <span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="n">ds_cs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">var_id</span><span class="p">,</span> <span class="n">ds_cs</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">],</span> <span class="n">ds_cs_orig</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
+        
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>lcc_freq  
+n_obs  
+n_cld  
+n_lcc  
+n_sf_all  
+n_sf_all_snow  
+n_sf_lcc  
+n_sf_lcc_snow  
+lcc_sf_freq  
+sf_avg_all kg m-2 h-1 kg m-2 h-1
+sf_avg_all_snow kg m-2 h-1 kg m-2 h-1
+sf_avg_lcc kg m-2 h-1 kg m-2 h-1
+sf_avg_lcc_snow kg m-2 h-1 kg m-2 h-1
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># from cartopy.util import add_cyclic_point</span>
+
+<span class="c1"># ds_new = xr.Dataset()</span>
+<span class="c1"># for var_id in ds_cs.keys():</span>
+<span class="c1">#         print(var_id, )</span>
+<span class="c1">#         data = ds_cs[var_id]</span>
+<span class="c1">#         lon = ds_cs[var_id].coords[&#39;lon&#39;]</span>
+<span class="c1">#         lon_idx = data.dims.index(&#39;lon&#39;)</span>
+<span class="c1">#         wrap_data, wrap_lon = add_cyclic_point(data, coord=lon, axis=lon_idx)</span>
+        
+<span class="c1">#         ds_new[var_id] = xr.DataArray(data = wrap_data, coords=dict(time=ds_cs[&#39;time&#39;],</span>
+<span class="c1">#                                            lat=ds_cs[&#39;lat&#39;],</span>
+<span class="c1">#                                            lon=np.append(ds_cs.lon.values, ds_cs.lon[0]*(-1), )))</span>
+<span class="c1">#         ds_new[var_id].attrs = ds_cs[var_id].attrs</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="regrid-to-500km-nominal-resolution">
+<h2>Regrid to 500km nominal resolution<a class="headerlink" href="#regrid-to-500km-nominal-resolution" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="s1">&#39;IPSL-CM5A2-INCA&#39;</span>
+<span class="n">variable_id</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;areacella&#39;</span><span class="p">]</span>
+<span class="n">cmip_file_in</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cmip_in</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">variable_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">_fx_*</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">*.nc&#39;</span><span class="p">)</span>
+
+<span class="n">ds_cmip</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">cmip_file_in</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">)</span><span class="c1">#drop_variables=variable_id[0])</span>
+
+<span class="c1"># Shift longitude to be from -180 to 180</span>
+<span class="n">ds_cmip</span> <span class="o">=</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">lon</span><span class="o">=</span><span class="p">(((</span><span class="n">ds_cmip</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span><span class="p">)</span> <span class="o">-</span> <span class="mi">180</span><span class="p">))</span><span class="o">.</span><span class="n">sortby</span><span class="p">(</span><span class="s1">&#39;lon&#39;</span><span class="p">)</span>
+
+<span class="n">cs_in_grid</span>      <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">regrid_data</span><span class="p">(</span><span class="n">ds_cs</span><span class="p">,</span> <span class="n">ds_cmip</span><span class="p">)</span>
+<span class="n">cs_in_grid_orig</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">regrid_data</span><span class="p">(</span><span class="n">ds_cs_orig</span><span class="p">,</span> <span class="n">ds_cmip</span><span class="p">)</span>
+<span class="n">cs_in_grid_orig_all</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">regrid_data</span><span class="p">(</span><span class="n">ds_cs_orig_all</span><span class="p">,</span> <span class="n">ds_cmip</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>lcc_freq True
+n_obs True
+n_cld True
+n_lcc True
+n_sf_all True
+n_sf_all_snow True
+n_sf_lcc True
+n_sf_lcc_snow True
+lcc_sf_freq True
+sf_avg_all True
+sf_avg_all_snow True
+sf_avg_lcc True
+sf_avg_lcc_snow True
+lcc_freq True
+n_obs True
+n_cld True
+n_lcc True
+n_sf_all True
+n_sf_all_snow True
+n_sf_lcc True
+n_sf_lcc_snow True
+lcc_sf_freq True
+sf_avg_all True
+sf_avg_all_snow True
+sf_avg_lcc True
+sf_avg_lcc_snow True
+lcc_freq True
+n_obs True
+n_cld True
+n_lcc True
+n_sf_all True
+n_sf_all_snow True
+n_sf_lcc True
+n_sf_lcc_snow True
+lcc_sf_freq True
+sf_avg_all True
+sf_avg_all_snow True
+sf_avg_lcc True
+sf_avg_lcc_snow True
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="save-cloudsat-file">
+<h2>Save CloudSat file<a class="headerlink" href="#save-cloudsat-file" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="s1">&#39;IPSL-CM6A-LR&#39;</span>
+<span class="n">variable_id</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;areacella&#39;</span><span class="p">]</span>
+<span class="n">cmip_file_in</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cmip_in</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">variable_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">_fx_*</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">*.nc&#39;</span><span class="p">)</span>
+
+<span class="n">ds_cmip</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="n">cmip_file_in</span><span class="p">)</span>
+
+<span class="c1"># Shift longitude to be from -180 to 180</span>
+<span class="n">ds_cmip</span> <span class="o">=</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">lon</span><span class="o">=</span><span class="p">(((</span><span class="n">ds_cmip</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span><span class="p">)</span> <span class="o">-</span> <span class="mi">180</span><span class="p">))</span><span class="o">.</span><span class="n">sortby</span><span class="p">(</span><span class="s1">&#39;lon&#39;</span><span class="p">)</span>
+<span class="n">SH</span> <span class="o">=</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">))</span>
+<span class="n">NH</span> <span class="o">=</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span>
+<span class="n">ds_cmip</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">SH</span><span class="p">,</span> <span class="n">NH</span><span class="p">],</span> <span class="s1">&#39;lat&#39;</span><span class="p">)</span>
+
+<span class="n">SH</span> <span class="o">=</span> <span class="n">ds_cs</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">))</span>
+<span class="n">NH</span> <span class="o">=</span> <span class="n">ds_cs</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span>     
+<span class="n">ds_cs</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">SH</span><span class="p">,</span> <span class="n">NH</span><span class="p">],</span> <span class="s1">&#39;lat&#39;</span><span class="p">)</span>
+
+<span class="n">SH</span> <span class="o">=</span> <span class="n">ds_cs_orig</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">))</span>
+<span class="n">NH</span> <span class="o">=</span> <span class="n">ds_cs_orig</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span>     
+<span class="n">ds_cs_orig</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">SH</span><span class="p">,</span> <span class="n">NH</span><span class="p">],</span> <span class="s1">&#39;lat&#39;</span><span class="p">)</span>
+
+<span class="n">SH</span> <span class="o">=</span> <span class="n">ds_cs_orig_all</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">))</span>
+<span class="n">NH</span> <span class="o">=</span> <span class="n">ds_cs_orig_all</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span>
+<span class="n">ds_cs_orig_all</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">SH</span><span class="p">,</span> <span class="n">NH</span><span class="p">],</span> <span class="s1">&#39;lat&#39;</span><span class="p">)</span>
+
+<span class="n">ds_dict</span><span class="o">=</span> <span class="p">{</span><span class="s1">&#39;orig&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="s1">&#39;n_lcc&#39;</span><span class="p">],</span> <span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="s1">&#39;n_cld&#39;</span><span class="p">],</span> <span class="n">ds_cs_orig</span><span class="p">[</span><span class="s1">&#39;n_obs&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
+          <span class="s1">&#39;lcc_sf&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">ds_cs_orig</span><span class="p">[</span><span class="s1">&#39;n_sf_lcc_snow&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
+        <span class="c1">#   &#39;orig&#39;: xr.merge([ds_cs_orig[&#39;n_lcc&#39;], ds_cs_orig[&#39;n_cld&#39;], ds_cs_orig[&#39;n_obs&#39;], ds_cmip]),</span>
+        <span class="c1">#   &#39;lcc_sf&#39;: xr.merge([ds_cs_orig[&#39;n_sf_lcc_snow&#39;], ds_cmip]),</span>
+          <span class="s1">&#39;lcc_2t&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">ds_cs</span><span class="p">[</span><span class="s1">&#39;n_lcc&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
+          <span class="s1">&#39;2t&#39;</span> <span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">ds_cs</span><span class="p">[</span><span class="s1">&#39;n_cld&#39;</span><span class="p">],</span> <span class="n">ds_cs</span><span class="p">[</span><span class="s1">&#39;n_obs&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
+          <span class="s1">&#39;lcc_2t_sf&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">ds_cs</span><span class="p">[</span><span class="s1">&#39;n_sf_lcc_snow&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
+          <span class="s1">&#39;lcc_2t_days&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">ds_cs</span><span class="p">[</span><span class="s1">&#39;sf_avg_lcc_snow&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">])}</span>
+
+<span class="n">starty</span> <span class="o">=</span> <span class="mi">2007</span><span class="p">;</span> <span class="n">endy</span> <span class="o">=</span> <span class="mi">2010</span>
+<span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">stats</span><span class="p">,</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">ds_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="c1"># print(stats, dataset)</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;cloudsat_250_</span><span class="si">{</span><span class="n">stats</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">starty</span><span class="si">}</span><span class="s1">01_</span><span class="si">{</span><span class="n">endy</span><span class="si">}</span><span class="s1">12.nc&#39;</span>
+    <span class="n">cs_file_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cs_out</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">stats</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">cs_file_out</span><span class="p">):</span>
+        <span class="n">dataset</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">cs_file_out</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;file written: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cs_file_out</span><span class="p">))</span>
+            <span class="c1">#     print(f&#39;{cs_file_out} is downloaded&#39;)</span>
+            <span class="c1">#     counter += 1</span>
+            <span class="c1">#     print(f&#39;Have regridded in total: {counter} files&#39;)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">dataset</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">cs_file_out</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;file written: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cs_file_out</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>file written: /scratch/franzihe/output/CS_ERA5_CMIP6/orig/cloudsat_250_orig_200701_201012.nc
+file written: /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/cloudsat_250_lcc_sf_200701_201012.nc
+file written: /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/cloudsat_250_lcc_2t_200701_201012.nc
+file written: /scratch/franzihe/output/CS_ERA5_CMIP6/2t/cloudsat_250_2t_200701_201012.nc
+file written: /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/cloudsat_250_lcc_2t_sf_200701_201012.nc
+file written: /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/cloudsat_250_lcc_2t_days_200701_201012.nc
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="s1">&#39;IPSL-CM5A2-INCA&#39;</span>
+<span class="n">variable_id</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;areacella&#39;</span><span class="p">]</span>
+<span class="n">cmip_file_in</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cmip_in</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">variable_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">_fx_*</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">*.nc&#39;</span><span class="p">)</span>
+
+<span class="n">ds_cmip</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="n">cmip_file_in</span><span class="p">)</span>
+
+<span class="n">ds_cmip</span> <span class="o">=</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">lon</span><span class="o">=</span><span class="p">(((</span><span class="n">ds_cmip</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span><span class="p">)</span> <span class="o">-</span> <span class="mi">180</span><span class="p">))</span><span class="o">.</span><span class="n">sortby</span><span class="p">(</span><span class="s1">&#39;lon&#39;</span><span class="p">)</span>
+
+
+<span class="n">SH</span> <span class="o">=</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">))</span>
+<span class="n">NH</span> <span class="o">=</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span>
+<span class="n">ds_cmip</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">SH</span><span class="p">,</span> <span class="n">NH</span><span class="p">],</span> <span class="s1">&#39;lat&#39;</span><span class="p">)</span>
+
+<span class="n">SH</span> <span class="o">=</span> <span class="n">cs_in_grid</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">))</span>
+<span class="n">NH</span> <span class="o">=</span> <span class="n">cs_in_grid</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span>
+<span class="n">cs_in_grid</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">SH</span><span class="p">,</span> <span class="n">NH</span><span class="p">],</span> <span class="s1">&#39;lat&#39;</span><span class="p">)</span>
+
+<span class="n">SH</span> <span class="o">=</span> <span class="n">cs_in_grid_orig</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">))</span>
+<span class="n">NH</span> <span class="o">=</span> <span class="n">cs_in_grid_orig</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span>
+<span class="n">cs_in_grid_orig</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">SH</span><span class="p">,</span> <span class="n">NH</span><span class="p">],</span> <span class="s1">&#39;lat&#39;</span><span class="p">)</span>
+
+<span class="n">SH</span> <span class="o">=</span> <span class="n">cs_in_grid_orig_all</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">))</span>
+<span class="n">NH</span> <span class="o">=</span> <span class="n">cs_in_grid_orig_all</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span>
+<span class="n">cs_in_grid_orig_all</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">SH</span><span class="p">,</span> <span class="n">NH</span><span class="p">],</span> <span class="s1">&#39;lat&#39;</span><span class="p">)</span>
+
+<span class="n">ds_dict</span><span class="o">=</span> <span class="p">{</span><span class="s1">&#39;orig&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">cs_in_grid_orig_all</span><span class="p">[</span><span class="s1">&#39;n_lcc&#39;</span><span class="p">],</span> <span class="n">cs_in_grid_orig_all</span><span class="p">[</span><span class="s1">&#39;n_cld&#39;</span><span class="p">],</span> <span class="n">cs_in_grid_orig</span><span class="p">[</span><span class="s1">&#39;n_obs&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
+          <span class="s1">&#39;lcc_sf&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">cs_in_grid_orig</span><span class="p">[</span><span class="s1">&#39;n_sf_lcc_snow&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
+        <span class="c1">#   &#39;orig&#39;: xr.merge([cs_in_grid_orig[&#39;n_lcc&#39;], cs_in_grid_orig[&#39;n_cld&#39;], cs_in_grid_orig[&#39;n_obs&#39;], ds_cmip]),</span>
+        <span class="c1">#   &#39;lcc_sf&#39;: xr.merge([cs_in_grid_orig[&#39;n_sf_lcc_snow&#39;], ds_cmip]),</span>
+          <span class="s1">&#39;lcc_2t&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">cs_in_grid</span><span class="p">[</span><span class="s1">&#39;n_lcc&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
+          <span class="s1">&#39;2t&#39;</span> <span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">cs_in_grid</span><span class="p">[</span><span class="s1">&#39;n_cld&#39;</span><span class="p">],</span> <span class="n">cs_in_grid</span><span class="p">[</span><span class="s1">&#39;n_obs&#39;</span><span class="p">],</span><span class="n">ds_cmip</span><span class="p">]),</span>
+          <span class="s1">&#39;lcc_2t_sf&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">cs_in_grid</span><span class="p">[</span><span class="s1">&#39;n_sf_lcc_snow&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
+          <span class="s1">&#39;lcc_2t_days&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">cs_in_grid</span><span class="p">[</span><span class="s1">&#39;sf_avg_lcc_snow&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">])}</span>
+
+<span class="n">starty</span> <span class="o">=</span> <span class="mi">2007</span><span class="p">;</span> <span class="n">endy</span> <span class="o">=</span> <span class="mi">2010</span>
+<span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">stats</span><span class="p">,</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">ds_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="c1"># print(stats, dataset)</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;cloudsat_500_</span><span class="si">{</span><span class="n">stats</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">starty</span><span class="si">}</span><span class="s1">01_</span><span class="si">{</span><span class="n">endy</span><span class="si">}</span><span class="s1">12.nc&#39;</span>
+    <span class="n">cs_file_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cs_out</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">stats</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">cs_file_out</span><span class="p">):</span>
+        <span class="n">dataset</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">cs_file_out</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;file written: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cs_file_out</span><span class="p">))</span>
+            <span class="c1">#     print(f&#39;{cs_file_out} is downloaded&#39;)</span>
+            <span class="c1">#     counter += 1</span>
+            <span class="c1">#     print(f&#39;Have regridded in total: {counter} files&#39;)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">dataset</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">cs_file_out</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;file written: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cs_file_out</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>file written: /scratch/franzihe/output/CS_ERA5_CMIP6/orig/cloudsat_500_orig_200701_201012.nc
+file written: /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/cloudsat_500_lcc_sf_200701_201012.nc
+file written: /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/cloudsat_500_lcc_2t_200701_201012.nc
+file written: /scratch/franzihe/output/CS_ERA5_CMIP6/2t/cloudsat_500_2t_200701_201012.nc
+file written: /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/cloudsat_500_lcc_2t_sf_200701_201012.nc
+file written: /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/cloudsat_500_lcc_2t_days_200701_201012.nc
+</pre></div>
+</div>
+</div>
+</div>
+<img src="https://drive.google.com/uc?id=1zb0LHvipx8JOXLLrCxzYToJM7eNK4eaw"  height="100" />
+<img src="https://reliance.rohub.org/static/media/Reliance-logo.433dc2e9.png"  height="100" />
+<img src="https://www.uio.no/vrtx/decorating/resources/dist/src2/images/footer/uio-logo-en.svg"  height="100" />
+<img src="https://erc.europa.eu/sites/default/files/logo_0.png"  height="100" />
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./CloudSat"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Example with CloudSat</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-a-id-introduction-a">1. Introduction <a id="introduction"></a></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#data-wrangling-a-id-data-wrangling-a">2. Data Wrangling <a id="data_wrangling"></a></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#organize-my-data">Organize my data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-python-packages">Import python packages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#open-era5-variables">Open ERA5 variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#change-attributes-matching-cmip6-data">Change attributes matching CMIP6 data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regrid-to-500km-nominal-resolution">Regrid to 500km nominal resolution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-cloudsat-file">Save CloudSat file</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Franziska Hellmuth
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
