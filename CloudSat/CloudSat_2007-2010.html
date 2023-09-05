@@ -600,7 +600,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7f5d797d73d0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7f1430365e40&gt;
 </pre></div>
 </div>
 </div>
@@ -664,7 +664,7 @@ document.write(`
 <span class="c1"># Uncomment the line below if you want to search for files matching the pattern in the directory specified by `cs_in`</span>
 <span class="c1"># cs_file_in = glob(f&#39;{cs_in}/*_cs5_*.nc&#39;)</span>
 <span class="c1"># cs_file_in = sorted(glob(f&#39;{cs_in}/40NS/*_cs5_*.nc&#39;))</span>
-<span class="n">cs_file_in</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c1"># cs_file_in = []</span>
 <span class="c1"># cs_file_in.extend(sorted(glob(f&#39;{cs_in}/sf_lcc_monthly/cc_sf_lcc_2007_01.nc&#39;)))</span>
 <span class="c1"># cs_file_in.extend(sorted(glob(f&#39;{cs_in}/sf_lcc_monthly{input_file}/cc_sf_lcc_2007_01{input_file}.nc&#39;)))</span>
 
@@ -681,7 +681,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">add_time_dim_and_attributes</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">ds_cs</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">add_time_dim_and_attributes</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">ds_cs</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">):</span>
     <span class="c1"># add time dimension</span>
     <span class="n">ds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">([</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]))</span>
             
@@ -710,64 +710,48 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds_cs</span>       <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
-<span class="n">ds_cs_orig</span>  <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ds_cs       = xr.Dataset()</span>
+<span class="c1"># ds_cs_orig  = xr.Dataset()</span>
+<span class="n">ds_cs_all</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
 <span class="n">ds_cs_orig_all</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
-<span class="c1"># ds_lcc_2t = xr.Dataset()</span>
-<span class="c1"># ds_orig   = xr.Dataset()</span>
-<span class="c1"># ds_lcc_2t_sf = xr.Dataset()</span>
-<span class="c1"># ds_lcc_2t_days = xr.Dataset()</span>
+
+
 <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">year_range</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">month</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">13</span><span class="p">):</span>
         <span class="c1"># print(f&#39;{year}-{month}-16&#39;)</span>
-        <span class="n">cs_file_in</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">cs_orig_in</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># cs_file_in = []</span>
+        <span class="c1"># cs_orig_in = []</span>
+        <span class="n">cs_file_in_all</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">cs_orig_all</span> <span class="o">=</span> <span class="p">[]</span>
+        
         <span class="k">if</span> <span class="n">month</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
-            <span class="n">cs_file_in</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cs_in</span><span class="si">}</span><span class="s1">/sf_lcc_monthly/cc_sf_lcc_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">_0</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">.nc&#39;</span><span class="p">)))</span>
-            <span class="n">cs_orig_in</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cs_in</span><span class="si">}</span><span class="s1">/sf_lcc_monthly_no_T_thres/cc_sf_lcc_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">_0</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">_no_T_thres.nc&#39;</span><span class="p">)))</span>
+            <span class="c1"># cs_file_in.extend(sorted(glob(f&#39;{cs_in}/sf_lcc_monthly/cc_sf_lcc_{year}_0{month}.nc&#39;)))</span>
+            <span class="c1"># cs_orig_in.extend(sorted(glob(f&#39;{cs_in}/sf_lcc_monthly_no_T_thres/cc_sf_lcc_{year}_0{month}_no_T_thres.nc&#39;)))</span>
+            <span class="n">cs_file_in_all</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cs_in</span><span class="si">}</span><span class="s1">/sf_lcc_monthly_T_thres_all/cc_sf_lcc_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">_0</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">_T_thres_all.nc&#39;</span><span class="p">)))</span>
             <span class="n">cs_orig_all</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cs_in</span><span class="si">}</span><span class="s1">/sf_lcc_monthly_no_T_thres_all/cc_sf_lcc_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">_0</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">_no_T_thres_all.nc&#39;</span><span class="p">)))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">cs_file_in</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cs_in</span><span class="si">}</span><span class="s1">/sf_lcc_monthly/cc_sf_lcc_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">.nc&#39;</span><span class="p">)))</span>
-            <span class="n">cs_orig_in</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cs_in</span><span class="si">}</span><span class="s1">/sf_lcc_monthly_no_T_thres/cc_sf_lcc_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">_no_T_thres.nc&#39;</span><span class="p">)))</span>
+            <span class="c1"># cs_file_in.extend(sorted(glob(f&#39;{cs_in}/sf_lcc_monthly/cc_sf_lcc_{year}_{month}.nc&#39;)))</span>
+            <span class="c1"># cs_orig_in.extend(sorted(glob(f&#39;{cs_in}/sf_lcc_monthly_no_T_thres/cc_sf_lcc_{year}_{month}_no_T_thres.nc&#39;)))</span>
+            <span class="n">cs_file_in_all</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cs_in</span><span class="si">}</span><span class="s1">/sf_lcc_monthly_T_thres_all/cc_sf_lcc_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">_T_thres_all.nc&#39;</span><span class="p">)))</span>
             <span class="n">cs_orig_all</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cs_in</span><span class="si">}</span><span class="s1">/sf_lcc_monthly_no_T_thres_all/cc_sf_lcc_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">_no_T_thres_all.nc&#39;</span><span class="p">)))</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cs_file_in</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">ds</span>      <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="n">cs_file_in</span><span class="p">,</span> <span class="p">)</span>
-            <span class="n">ds_cs</span>       <span class="o">=</span> <span class="n">add_time_dim_and_attributes</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">ds_cs</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cs_orig_in</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">ds_orig</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="n">cs_orig_in</span><span class="p">)</span>
-            <span class="n">ds_cs_orig</span>  <span class="o">=</span> <span class="n">add_time_dim_and_attributes</span><span class="p">(</span><span class="n">ds_orig</span><span class="p">,</span> <span class="n">ds_cs_orig</span><span class="p">)</span>
+        <span class="c1"># if len(cs_file_in) != 0:</span>
+        <span class="c1">#     ds      = xr.open_mfdataset(cs_file_in, )</span>
+        <span class="c1">#     ds_cs       = add_time_dim_and_attributes(ds, ds_cs)</span>
+        <span class="c1"># if len(cs_orig_in) != 0:</span>
+        <span class="c1">#     ds_orig = xr.open_mfdataset(cs_orig_in)</span>
+        <span class="c1">#     ds_cs_orig  = add_time_dim_and_attributes(ds_orig, ds_cs_orig)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cs_file_in_all</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ds_all</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="n">cs_file_in_all</span><span class="p">)</span>
+            <span class="n">ds_cs_all</span> <span class="o">=</span> <span class="n">add_time_dim_and_attributes</span><span class="p">(</span><span class="n">ds_all</span><span class="p">,</span> <span class="n">ds_cs_all</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cs_orig_all</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">ds_orig_all</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="n">cs_orig_all</span><span class="p">)</span>
-            <span class="n">ds_cs_orig_all</span> <span class="o">=</span> <span class="n">add_time_dim_and_attributes</span><span class="p">(</span><span class="n">ds_orig_all</span><span class="p">,</span> <span class="n">ds_cs_orig_all</span><span class="p">)</span>
-            
-            
-            <span class="c1"># # add time dimension</span>
-            <span class="c1"># ds = ds.expand_dims(time=pd.to_datetime([f&#39;{year}-{month}-16&#39;]))</span>
-            
-            <span class="c1"># # #assign attributes to variables</span>
-            <span class="c1"># ds[&#39;n_obs&#39;] = ds[&#39;n_obs&#39;].assign_attrs({&#39;long_name&#39;:&#39;Total number of observations (&quot;satellite profiles&quot;), all-sky&#39;, &#39;units&#39;: &#39;&#39;})</span>
-            <span class="c1"># ds[&#39;n_cld&#39;] = ds[&#39;n_cld&#39;].assign_attrs({&#39;long_name&#39;:&#39;Total number of cloudy observations&#39;, &#39;units&#39;: &#39;&#39;})</span>
-            <span class="c1"># ds[&#39;n_lcc&#39;] = ds[&#39;n_lcc&#39;].assign_attrs({&#39;long_name&#39;:&#39;Total number of observations with supercooled liquid cloud (any &quot;mixed&quot; or &quot;liquid&quot; flag within profile)&#39;, &#39;units&#39;: &#39;&#39;})</span>
-            <span class="c1"># ds[&#39;lcc_freq&#39;] = ds[&#39;lcc_freq&#39;].assign_attrs({&#39;long_name&#39;:&#39;n_lcc / n_obs&#39;, &#39;units&#39;: &#39;&#39;})</span>
-            <span class="c1"># ds[&#39;n_sf_all&#39;] = ds[&#39;n_sf_all&#39;].assign_attrs({&#39;long_name&#39;:&#39;all profiles with confident snowfall (sf &gt;0)&#39;, &#39;units&#39;: &#39;&#39;})</span>
-            <span class="c1"># ds[&#39;n_sf_all_snow&#39;] = ds[&#39;n_sf_all_snow&#39;].assign_attrs({&#39;long_name&#39;:&#39;all profiles with confident snowfall above 0.01 mm/h&#39;, &#39;units&#39;: &#39;&#39;})</span>
-            <span class="c1"># ds[&#39;n_sf_lcc&#39;] = ds[&#39;n_sf_lcc&#39;].assign_attrs({&#39;long_name&#39;:&#39;all profiles with supercooled liquid cloud and confident snowfall (sf &gt;0)&#39;, &#39;units&#39;: &#39;&#39;})</span>
-            <span class="c1"># ds[&#39;n_sf_lcc_snow&#39;] = ds[&#39;n_sf_lcc_snow&#39;].assign_attrs({&#39;long_name&#39;:&#39;all profiles with supercooled liquid cloud and confident snowfall above 0.01 mm/h&#39;, &#39;units&#39;: &#39;&#39;})</span>
-            <span class="c1"># ds[&#39;sf_avg_all&#39;] = ds[&#39;sf_avg_all&#39;].assign_attrs({&#39;long_name&#39;:&#39;average surface snowfall (mm/h) corresponding to n_sf_all&#39;, &#39;units&#39;: &#39;(mm h-1)&#39;})</span>
-            <span class="c1"># ds[&#39;sf_avg_all_snow&#39;] = ds[&#39;sf_avg_all_snow&#39;].assign_attrs({&#39;long_name&#39;:&#39;average surface snowfall (mm/h) corresponding to n_sf_all_snow&#39;, &#39;units&#39;: &#39;(mm h-1)&#39;})</span>
-            <span class="c1"># ds[&#39;sf_avg_lcc&#39;] = ds[&#39;sf_avg_lcc&#39;].assign_attrs({&#39;long_name&#39;:&#39;average surface snowfall (mm/h) corresponding to n_sf_lcc&#39;, &#39;units&#39;: &#39;(mm h-1)&#39;})</span>
-            <span class="c1"># ds[&#39;sf_avg_lcc_snow&#39;] = ds[&#39;sf_avg_lcc_snow&#39;].assign_attrs({&#39;long_name&#39;:&#39;average surface snowfall (mm/h) corresponding to n_sf_lcc_snow&#39;,</span>
-            <span class="c1">#                                                                   &#39;units&#39;: &#39;(mm h-1)&#39;})</span>
-            <span class="c1"># ds[&#39;lcc_sf_freq&#39;] = ds[&#39;lcc_sf_freq&#39;].assign_attrs({&#39;long_name&#39;:&#39;n_sf_lcc_snow / n_lcc&#39;, &#39;units&#39;: &#39;&#39;})</span>
-            
-            <span class="c1"># ds_cs = xr.merge([ds_cs, ds])</span>
-            <span class="c1"># </span>
+            <span class="n">ds_cs_orig_all</span> <span class="o">=</span> <span class="n">add_time_dim_and_attributes</span><span class="p">(</span><span class="n">ds_orig_all</span><span class="p">,</span> <span class="n">ds_cs_orig_all</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">)</span>
             
 
 <span class="k">try</span><span class="p">:</span> 
-    <span class="n">ds_cs</span> <span class="o">=</span> <span class="n">ds_cs</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;2008-09&#39;</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;2009-12&#39;</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>  
-    <span class="n">ds_cs_orig</span> <span class="o">=</span> <span class="n">ds_cs_orig</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;2008-09&#39;</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;2009-12&#39;</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span> 
+    <span class="c1"># ds_cs = ds_cs.drop([np.datetime64(&#39;2008-09&#39;), np.datetime64(&#39;2009-12&#39;)], dim=&#39;time&#39;)  </span>
+    <span class="c1"># ds_cs_orig = ds_cs_orig.drop([np.datetime64(&#39;2008-09&#39;), np.datetime64(&#39;2009-12&#39;)], dim=&#39;time&#39;) </span>
+    <span class="n">ds_cs_all</span> <span class="o">=</span> <span class="n">ds_cs_all</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;2008-09&#39;</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;2009-12&#39;</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span> 
     <span class="n">ds_cs_orig_all</span> <span class="o">=</span> <span class="n">ds_cs_orig_all</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;2008-09&#39;</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;2009-12&#39;</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
 <span class="k">except</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;datetime64(&quot;2008-09&quot;) and datetime64(&quot;2009-12&quot;) not found in axis&#39;</span><span class="p">)</span> 
@@ -797,38 +781,41 @@ document.write(`
 <span class="c1"># the conversion factor and attributes for that variable and performs the necessary operations.</span>
 
 <span class="n">conversion_factors</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;sf_avg_all&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;factor&#39;</span><span class="p">:</span> <span class="mi">1000</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span> <span class="s1">&#39;attrs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;kg m-2 h-1&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;average surface snowfall corresponding to n_sf_all&#39;</span><span class="p">}},</span>
-    <span class="s1">&#39;sf_avg_all_snow&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;factor&#39;</span><span class="p">:</span> <span class="mi">1000</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span> <span class="s1">&#39;attrs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;kg m-2 h-1&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;average surface snowfall corresponding to n_sf_all_snow&#39;</span><span class="p">}},</span>
-    <span class="s1">&#39;sf_avg_lcc&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;factor&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span> <span class="s1">&#39;attrs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;kg m-2 h-1&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;average surface snowfall corresponding to n_sf_lcc&#39;</span><span class="p">}},</span>
-    <span class="s1">&#39;sf_avg_lcc_snow&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;factor&#39;</span><span class="p">:</span> <span class="mi">1000</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span> <span class="s1">&#39;attrs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;kg m-2 h-1&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span><span class="s1">&#39;average surface snowfall corresponding to n_sf_lcc_snow&#39;</span><span class="p">}},</span>
+    <span class="s1">&#39;sf_avg_all&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;factor&#39;</span><span class="p">:</span> <span class="mf">1000.</span><span class="o">/</span><span class="mf">1000.</span><span class="p">,</span> <span class="s1">&#39;attrs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;kg m-2 h-1&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;average surface snowfall corresponding to n_sf_all&#39;</span><span class="p">}},</span>
+    <span class="s1">&#39;sf_avg_all_snow&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;factor&#39;</span><span class="p">:</span> <span class="mf">1000.</span><span class="o">/</span><span class="mf">1000.</span><span class="p">,</span> <span class="s1">&#39;attrs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;kg m-2 h-1&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;average surface snowfall corresponding to n_sf_all_snow&#39;</span><span class="p">}},</span>
+    <span class="s1">&#39;sf_avg_lcc&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;factor&#39;</span><span class="p">:</span> <span class="mf">1000.</span><span class="o">/</span><span class="mf">1000.</span><span class="p">,</span> <span class="s1">&#39;attrs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;kg m-2 h-1&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;average surface snowfall corresponding to n_sf_lcc&#39;</span><span class="p">}},</span>
+    <span class="s1">&#39;sf_avg_lcc_snow&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;factor&#39;</span><span class="p">:</span> <span class="mf">1000.</span><span class="o">/</span><span class="mf">1000.</span><span class="p">,</span> <span class="s1">&#39;attrs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;kg m-2 h-1&#39;</span><span class="p">,</span> <span class="s1">&#39;long_name&#39;</span><span class="p">:</span><span class="s1">&#39;average surface snowfall corresponding to n_sf_lcc_snow&#39;</span><span class="p">}},</span>
 <span class="p">}</span>
 
 
-<span class="k">for</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="n">ds_cs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+<span class="k">for</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="n">ds_cs_all</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="n">conversion_factors</span><span class="p">:</span>
         <span class="n">factor</span> <span class="o">=</span> <span class="n">conversion_factors</span><span class="p">[</span><span class="n">var_id</span><span class="p">][</span><span class="s1">&#39;factor&#39;</span><span class="p">]</span>
         <span class="n">attrs</span> <span class="o">=</span> <span class="n">conversion_factors</span><span class="p">[</span><span class="n">var_id</span><span class="p">][</span><span class="s1">&#39;attrs&#39;</span><span class="p">]</span>
 
-        <span class="n">ds_cs</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_cs</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">*</span> <span class="n">factor</span>
-        <span class="n">ds_cs</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">attrs</span>
-        <span class="n">ds_cs</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_cs</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds_cs</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        <span class="c1"># ds_cs[var_id] = ds_cs[var_id] * factor</span>
+        <span class="c1"># ds_cs[var_id].attrs = attrs</span>
+        <span class="c1"># ds_cs[var_id] = ds_cs[var_id].where(ds_cs[var_id] &gt;= 0., other=np.nan)</span>
         
-        <span class="n">ds_cs_orig</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_cs_orig</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">*</span> <span class="n">factor</span>
-        <span class="n">ds_cs_orig</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">attrs</span>
-        <span class="n">ds_cs_orig</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_cs_orig</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds_cs_orig</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        <span class="c1"># ds_cs_orig[var_id] = ds_cs_orig[var_id] * factor</span>
+        <span class="c1"># ds_cs_orig[var_id].attrs = attrs</span>
+        <span class="c1"># ds_cs_orig[var_id] = ds_cs_orig[var_id].where(ds_cs_orig[var_id] &gt;= 0., other=np.nan)</span>
+        
+        <span class="n">ds_cs_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_cs_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">*</span> <span class="n">factor</span>
+        <span class="n">ds_cs_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">attrs</span>
+        <span class="n">ds_cs_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">ds_cs_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds_cs_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">())</span>
         
         <span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">*</span> <span class="n">factor</span>
         <span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">attrs</span>
-        <span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        <span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="n">ds_cs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">var_id</span><span class="p">,</span> <span class="n">ds_cs</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">],</span> <span class="n">ds_cs_orig</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
-        
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="n">ds_cs_all</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">var_id</span><span class="p">,</span> <span class="n">ds_cs_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">],</span> <span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -850,26 +837,6 @@ sf_avg_lcc_snow kg m-2 h-1 kg m-2 h-1
 </div>
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># from cartopy.util import add_cyclic_point</span>
-
-<span class="c1"># ds_new = xr.Dataset()</span>
-<span class="c1"># for var_id in ds_cs.keys():</span>
-<span class="c1">#         print(var_id, )</span>
-<span class="c1">#         data = ds_cs[var_id]</span>
-<span class="c1">#         lon = ds_cs[var_id].coords[&#39;lon&#39;]</span>
-<span class="c1">#         lon_idx = data.dims.index(&#39;lon&#39;)</span>
-<span class="c1">#         wrap_data, wrap_lon = add_cyclic_point(data, coord=lon, axis=lon_idx)</span>
-        
-<span class="c1">#         ds_new[var_id] = xr.DataArray(data = wrap_data, coords=dict(time=ds_cs[&#39;time&#39;],</span>
-<span class="c1">#                                            lat=ds_cs[&#39;lat&#39;],</span>
-<span class="c1">#                                            lon=np.append(ds_cs.lon.values, ds_cs.lon[0]*(-1), )))</span>
-<span class="c1">#         ds_new[var_id].attrs = ds_cs[var_id].attrs</span>
-</pre></div>
-</div>
-</div>
-</div>
 </section>
 <section id="regrid-to-500km-nominal-resolution">
 <h2>Regrid to 500km nominal resolution<a class="headerlink" href="#regrid-to-500km-nominal-resolution" title="Permalink to this heading">#</a></h2>
@@ -884,27 +851,15 @@ sf_avg_lcc_snow kg m-2 h-1 kg m-2 h-1
 <span class="c1"># Shift longitude to be from -180 to 180</span>
 <span class="n">ds_cmip</span> <span class="o">=</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">lon</span><span class="o">=</span><span class="p">(((</span><span class="n">ds_cmip</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span><span class="p">)</span> <span class="o">-</span> <span class="mi">180</span><span class="p">))</span><span class="o">.</span><span class="n">sortby</span><span class="p">(</span><span class="s1">&#39;lon&#39;</span><span class="p">)</span>
 
-<span class="n">cs_in_grid</span>      <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">regrid_data</span><span class="p">(</span><span class="n">ds_cs</span><span class="p">,</span> <span class="n">ds_cmip</span><span class="p">)</span>
-<span class="n">cs_in_grid_orig</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">regrid_data</span><span class="p">(</span><span class="n">ds_cs_orig</span><span class="p">,</span> <span class="n">ds_cmip</span><span class="p">)</span>
+<span class="c1"># cs_in_grid      = fct.regrid_data(ds_cs, ds_cmip)</span>
+<span class="c1"># cs_in_grid_orig = fct.regrid_data(ds_cs_orig, ds_cmip)</span>
+<span class="n">cs_in_grid_all</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">regrid_data</span><span class="p">(</span><span class="n">ds_cs_all</span><span class="p">,</span> <span class="n">ds_cmip</span><span class="p">)</span>
 <span class="n">cs_in_grid_orig_all</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">regrid_data</span><span class="p">(</span><span class="n">ds_cs_orig_all</span><span class="p">,</span> <span class="n">ds_cmip</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>lcc_freq True
-n_obs True
-n_cld True
-n_lcc True
-n_sf_all True
-n_sf_all_snow True
-n_sf_lcc True
-n_sf_lcc_snow True
-lcc_sf_freq True
-sf_avg_all True
-sf_avg_all_snow True
-sf_avg_lcc True
-sf_avg_lcc_snow True
-lcc_freq True
 n_obs True
 n_cld True
 n_lcc True
@@ -951,26 +906,29 @@ sf_avg_lcc_snow True
 <span class="n">NH</span> <span class="o">=</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span>
 <span class="n">ds_cmip</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">SH</span><span class="p">,</span> <span class="n">NH</span><span class="p">],</span> <span class="s1">&#39;lat&#39;</span><span class="p">)</span>
 
-<span class="n">SH</span> <span class="o">=</span> <span class="n">ds_cs</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">))</span>
-<span class="n">NH</span> <span class="o">=</span> <span class="n">ds_cs</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span>     
-<span class="n">ds_cs</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">SH</span><span class="p">,</span> <span class="n">NH</span><span class="p">],</span> <span class="s1">&#39;lat&#39;</span><span class="p">)</span>
+<span class="c1"># SH = ds_cs.sel(lat=slice(-90,-45))</span>
+<span class="c1"># NH = ds_cs.sel(lat=slice(45,90))     </span>
+<span class="c1"># ds_cs = xr.concat([SH, NH], &#39;lat&#39;)</span>
 
-<span class="n">SH</span> <span class="o">=</span> <span class="n">ds_cs_orig</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">))</span>
-<span class="n">NH</span> <span class="o">=</span> <span class="n">ds_cs_orig</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span>     
-<span class="n">ds_cs_orig</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">SH</span><span class="p">,</span> <span class="n">NH</span><span class="p">],</span> <span class="s1">&#39;lat&#39;</span><span class="p">)</span>
+<span class="c1"># SH = ds_cs_orig.sel(lat=slice(-90,-45))</span>
+<span class="c1"># NH = ds_cs_orig.sel(lat=slice(45,90))     </span>
+<span class="c1"># ds_cs_orig = xr.concat([SH, NH], &#39;lat&#39;)</span>
+<span class="n">SH</span> <span class="o">=</span> <span class="n">ds_cs_all</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">))</span>
+<span class="n">NH</span> <span class="o">=</span> <span class="n">ds_cs_all</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span>     
+<span class="n">ds_cs_all</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">SH</span><span class="p">,</span> <span class="n">NH</span><span class="p">],</span> <span class="s1">&#39;lat&#39;</span><span class="p">)</span>
 
 <span class="n">SH</span> <span class="o">=</span> <span class="n">ds_cs_orig_all</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">))</span>
 <span class="n">NH</span> <span class="o">=</span> <span class="n">ds_cs_orig_all</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span>
 <span class="n">ds_cs_orig_all</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">SH</span><span class="p">,</span> <span class="n">NH</span><span class="p">],</span> <span class="s1">&#39;lat&#39;</span><span class="p">)</span>
 
-<span class="n">ds_dict</span><span class="o">=</span> <span class="p">{</span><span class="s1">&#39;orig&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="s1">&#39;n_lcc&#39;</span><span class="p">],</span> <span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="s1">&#39;n_cld&#39;</span><span class="p">],</span> <span class="n">ds_cs_orig</span><span class="p">[</span><span class="s1">&#39;n_obs&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
-          <span class="s1">&#39;lcc_sf&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">ds_cs_orig</span><span class="p">[</span><span class="s1">&#39;n_sf_lcc_snow&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
+<span class="n">ds_dict</span><span class="o">=</span> <span class="p">{</span><span class="s1">&#39;orig&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="s1">&#39;n_lcc&#39;</span><span class="p">],</span> <span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="s1">&#39;n_cld&#39;</span><span class="p">],</span> <span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="s1">&#39;n_obs&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
+          <span class="s1">&#39;lcc_sf&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="s1">&#39;n_sf_lcc_snow&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
         <span class="c1">#   &#39;orig&#39;: xr.merge([ds_cs_orig[&#39;n_lcc&#39;], ds_cs_orig[&#39;n_cld&#39;], ds_cs_orig[&#39;n_obs&#39;], ds_cmip]),</span>
         <span class="c1">#   &#39;lcc_sf&#39;: xr.merge([ds_cs_orig[&#39;n_sf_lcc_snow&#39;], ds_cmip]),</span>
-          <span class="s1">&#39;lcc_2t&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">ds_cs</span><span class="p">[</span><span class="s1">&#39;n_lcc&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
-          <span class="s1">&#39;2t&#39;</span> <span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">ds_cs</span><span class="p">[</span><span class="s1">&#39;n_cld&#39;</span><span class="p">],</span> <span class="n">ds_cs</span><span class="p">[</span><span class="s1">&#39;n_obs&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
-          <span class="s1">&#39;lcc_2t_sf&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">ds_cs</span><span class="p">[</span><span class="s1">&#39;n_sf_lcc_snow&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
-          <span class="s1">&#39;lcc_2t_days&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">ds_cs</span><span class="p">[</span><span class="s1">&#39;sf_avg_lcc_snow&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">])}</span>
+          <span class="s1">&#39;lcc_2t&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">ds_cs_all</span><span class="p">[</span><span class="s1">&#39;n_lcc&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
+          <span class="s1">&#39;2t&#39;</span> <span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">ds_cs_all</span><span class="p">[</span><span class="s1">&#39;n_cld&#39;</span><span class="p">],</span> <span class="n">ds_cs_all</span><span class="p">[</span><span class="s1">&#39;n_obs&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
+          <span class="s1">&#39;lcc_2t_sf&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">ds_cs_all</span><span class="p">[</span><span class="s1">&#39;n_sf_lcc_snow&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
+          <span class="s1">&#39;lcc_2t_days&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">ds_cs_all</span><span class="p">[</span><span class="s1">&#39;sf_avg_lcc_snow&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">])}</span>
 
 <span class="n">starty</span> <span class="o">=</span> <span class="mi">2007</span><span class="p">;</span> <span class="n">endy</span> <span class="o">=</span> <span class="mi">2010</span>
 <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1017,26 +975,30 @@ file written: /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/cloudsat_250_lc
 <span class="n">NH</span> <span class="o">=</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span>
 <span class="n">ds_cmip</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">SH</span><span class="p">,</span> <span class="n">NH</span><span class="p">],</span> <span class="s1">&#39;lat&#39;</span><span class="p">)</span>
 
-<span class="n">SH</span> <span class="o">=</span> <span class="n">cs_in_grid</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">))</span>
-<span class="n">NH</span> <span class="o">=</span> <span class="n">cs_in_grid</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span>
-<span class="n">cs_in_grid</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">SH</span><span class="p">,</span> <span class="n">NH</span><span class="p">],</span> <span class="s1">&#39;lat&#39;</span><span class="p">)</span>
+<span class="c1"># SH = cs_in_grid.sel(lat=slice(-90,-45))</span>
+<span class="c1"># NH = cs_in_grid.sel(lat=slice(45,90))</span>
+<span class="c1"># cs_in_grid = xr.concat([SH, NH], &#39;lat&#39;)</span>
 
-<span class="n">SH</span> <span class="o">=</span> <span class="n">cs_in_grid_orig</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">))</span>
-<span class="n">NH</span> <span class="o">=</span> <span class="n">cs_in_grid_orig</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span>
-<span class="n">cs_in_grid_orig</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">SH</span><span class="p">,</span> <span class="n">NH</span><span class="p">],</span> <span class="s1">&#39;lat&#39;</span><span class="p">)</span>
+<span class="c1"># SH = cs_in_grid_orig.sel(lat=slice(-90,-45))</span>
+<span class="c1"># NH = cs_in_grid_orig.sel(lat=slice(45,90))</span>
+<span class="c1"># cs_in_grid_orig = xr.concat([SH, NH], &#39;lat&#39;)</span>
+
+<span class="n">SH</span> <span class="o">=</span> <span class="n">cs_in_grid_all</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">))</span>
+<span class="n">NH</span> <span class="o">=</span> <span class="n">cs_in_grid_all</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span>
+<span class="n">cs_in_grid_all</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">SH</span><span class="p">,</span> <span class="n">NH</span><span class="p">],</span> <span class="s1">&#39;lat&#39;</span><span class="p">)</span>
 
 <span class="n">SH</span> <span class="o">=</span> <span class="n">cs_in_grid_orig_all</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">))</span>
 <span class="n">NH</span> <span class="o">=</span> <span class="n">cs_in_grid_orig_all</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span>
 <span class="n">cs_in_grid_orig_all</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">SH</span><span class="p">,</span> <span class="n">NH</span><span class="p">],</span> <span class="s1">&#39;lat&#39;</span><span class="p">)</span>
 
-<span class="n">ds_dict</span><span class="o">=</span> <span class="p">{</span><span class="s1">&#39;orig&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">cs_in_grid_orig_all</span><span class="p">[</span><span class="s1">&#39;n_lcc&#39;</span><span class="p">],</span> <span class="n">cs_in_grid_orig_all</span><span class="p">[</span><span class="s1">&#39;n_cld&#39;</span><span class="p">],</span> <span class="n">cs_in_grid_orig</span><span class="p">[</span><span class="s1">&#39;n_obs&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
-          <span class="s1">&#39;lcc_sf&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">cs_in_grid_orig</span><span class="p">[</span><span class="s1">&#39;n_sf_lcc_snow&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
+<span class="n">ds_dict</span><span class="o">=</span> <span class="p">{</span><span class="s1">&#39;orig&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">cs_in_grid_orig_all</span><span class="p">[</span><span class="s1">&#39;n_lcc&#39;</span><span class="p">],</span> <span class="n">cs_in_grid_orig_all</span><span class="p">[</span><span class="s1">&#39;n_cld&#39;</span><span class="p">],</span> <span class="n">cs_in_grid_orig_all</span><span class="p">[</span><span class="s1">&#39;n_obs&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
+          <span class="s1">&#39;lcc_sf&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">cs_in_grid_orig_all</span><span class="p">[</span><span class="s1">&#39;n_sf_lcc_snow&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
         <span class="c1">#   &#39;orig&#39;: xr.merge([cs_in_grid_orig[&#39;n_lcc&#39;], cs_in_grid_orig[&#39;n_cld&#39;], cs_in_grid_orig[&#39;n_obs&#39;], ds_cmip]),</span>
         <span class="c1">#   &#39;lcc_sf&#39;: xr.merge([cs_in_grid_orig[&#39;n_sf_lcc_snow&#39;], ds_cmip]),</span>
-          <span class="s1">&#39;lcc_2t&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">cs_in_grid</span><span class="p">[</span><span class="s1">&#39;n_lcc&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
-          <span class="s1">&#39;2t&#39;</span> <span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">cs_in_grid</span><span class="p">[</span><span class="s1">&#39;n_cld&#39;</span><span class="p">],</span> <span class="n">cs_in_grid</span><span class="p">[</span><span class="s1">&#39;n_obs&#39;</span><span class="p">],</span><span class="n">ds_cmip</span><span class="p">]),</span>
-          <span class="s1">&#39;lcc_2t_sf&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">cs_in_grid</span><span class="p">[</span><span class="s1">&#39;n_sf_lcc_snow&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
-          <span class="s1">&#39;lcc_2t_days&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">cs_in_grid</span><span class="p">[</span><span class="s1">&#39;sf_avg_lcc_snow&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">])}</span>
+          <span class="s1">&#39;lcc_2t&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">cs_in_grid_all</span><span class="p">[</span><span class="s1">&#39;n_lcc&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
+          <span class="s1">&#39;2t&#39;</span> <span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">cs_in_grid_all</span><span class="p">[</span><span class="s1">&#39;n_cld&#39;</span><span class="p">],</span> <span class="n">cs_in_grid_all</span><span class="p">[</span><span class="s1">&#39;n_obs&#39;</span><span class="p">],</span><span class="n">ds_cmip</span><span class="p">]),</span>
+          <span class="s1">&#39;lcc_2t_sf&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">cs_in_grid_all</span><span class="p">[</span><span class="s1">&#39;n_sf_lcc_snow&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">]),</span>
+          <span class="s1">&#39;lcc_2t_days&#39;</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">cs_in_grid_all</span><span class="p">[</span><span class="s1">&#39;sf_avg_lcc_snow&#39;</span><span class="p">],</span> <span class="n">ds_cmip</span><span class="p">])}</span>
 
 <span class="n">starty</span> <span class="o">=</span> <span class="mi">2007</span><span class="p">;</span> <span class="n">endy</span> <span class="o">=</span> <span class="mi">2010</span>
 <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>

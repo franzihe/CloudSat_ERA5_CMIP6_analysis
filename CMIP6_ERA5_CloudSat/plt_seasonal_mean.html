@@ -500,11 +500,10 @@ document.write(`
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span> <span class="c1"># don&#39;t output warnings</span>
 
 <span class="c1"># import packages</span>
-<span class="kn">from</span> <span class="nn">imports</span> <span class="kn">import</span><span class="p">(</span><span class="n">xr</span><span class="p">,</span> <span class="n">ccrs</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">plt</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">cm</span><span class="p">,</span> <span class="n">fct</span><span class="p">,</span> <span class="n">np</span><span class="p">,</span> <span class="n">pd</span><span class="p">,</span> <span class="p">)</span>
+<span class="kn">from</span> <span class="nn">imports</span> <span class="kn">import</span><span class="p">(</span><span class="n">xr</span><span class="p">,</span> <span class="n">ccrs</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">plt</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">cm</span><span class="p">,</span> <span class="n">fct</span><span class="p">,</span> <span class="n">np</span><span class="p">,</span> <span class="n">pd</span><span class="p">,</span> <span class="n">add_cyclic_point</span><span class="p">)</span>
 <span class="c1"># from matplotlib.lines import Line2D</span>
 <span class="c1"># from matplotlib.patches import Patch</span>
 <span class="c1"># from sklearn.metrics import r2_score</span>
-<span class="kn">from</span> <span class="nn">cartopy.util</span> <span class="kn">import</span> <span class="n">add_cyclic_point</span>
 
 
 <span class="n">xr</span><span class="o">.</span><span class="n">set_options</span><span class="p">(</span><span class="n">display_style</span><span class="o">=</span><span class="s1">&#39;html&#39;</span><span class="p">)</span>
@@ -512,7 +511,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7f95afd791b0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7f7cf6317430&gt;
 </pre></div>
 </div>
 </div>
@@ -668,88 +667,125 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plt_var_spatial_month</span><span class="p">(</span><span class="n">da</span><span class="p">):</span>
-    <span class="n">f</span><span class="p">,</span> <span class="n">axsm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">NorthPolarStereo</span><span class="p">(</span><span class="n">central_longitude</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">globe</span><span class="o">=</span><span class="kc">None</span><span class="p">),},</span> <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">coast</span> <span class="o">=</span> <span class="n">cy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span><span class="n">category</span><span class="o">=</span><span class="s1">&#39;physical&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;110m&#39;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;coastline&#39;</span><span class="p">)</span>
-
-    <span class="n">axsm</span><span class="o">.</span><span class="n">set_extent</span><span class="p">([</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">45</span><span class="p">],</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
-    <span class="n">axsm</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">coast</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-    <span class="n">gl</span> <span class="o">=</span> <span class="n">axsm</span><span class="o">.</span><span class="n">gridlines</span><span class="p">(</span><span class="n">draw_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">gl</span><span class="o">.</span><span class="n">top_labels</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">gl</span><span class="o">.</span><span class="n">right_labels</span> <span class="o">=</span> <span class="kc">False</span>
-
-    <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">hawaii_r</span>
-    <span class="n">axsm</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="mf">0.07</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span> <span class="n">rotation_mode</span><span class="o">=</span><span class="s1">&#39;anchor&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">axsm</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
-    <span class="n">da</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.month&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axsm</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;lcc_2t_days&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;cmip_250&#39;</span> <span class="ow">or</span> <span class="n">model</span><span class="o">==</span> <span class="s1">&#39;cmip_500&#39;</span><span class="p">:</span>
-        <span class="n">plt_var_spatial_month</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="s1">&#39;lcc_2t_days&#39;</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="s1">&#39;lwp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">plt_var_spatial_month</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="s1">&#39;lcc_2t_days&#39;</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="s1">&#39;lwp&#39;</span><span class="p">])</span>
-        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="k">continue</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>cloudsat_250
-cloudsat_500
-era_30
-era_250
-era_500
-cmip_250
-cmip_500
-MIROC6
-CanESM5
-AWI-ESM-1-1-LR
-MPI-ESM1-2-LR
-UKESM1-0-LL
-HadGEM3-GC31-LL
-CNRM-CM6-1
-CNRM-ESM2-1
-IPSL-CM6A-LR
-IPSL-CM5A2-INCA
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0, 1])
 </pre></div>
 </div>
-<img alt="../_images/501ccd1accecf2705d12a0a863df26c400902e079470657cdf1389ea34e8e448.png" src="../_images/501ccd1accecf2705d12a0a863df26c400902e079470657cdf1389ea34e8e448.png" />
-<img alt="../_images/c0c38de9759f262caf660bbe1c04537668c4dd2c18f54ecaab0ef870413b93f5.png" src="../_images/c0c38de9759f262caf660bbe1c04537668c4dd2c18f54ecaab0ef870413b93f5.png" />
-<img alt="../_images/f0847a44d75747af9af2dc76ecf425337035f19c9ac6d2665bb7c42f892ac58e.png" src="../_images/f0847a44d75747af9af2dc76ecf425337035f19c9ac6d2665bb7c42f892ac58e.png" />
-<img alt="../_images/aaddb7f16e1fb785b421e61979982951e9c6d860809327a45bf7e35066f18ab5.png" src="../_images/aaddb7f16e1fb785b421e61979982951e9c6d860809327a45bf7e35066f18ab5.png" />
-<img alt="../_images/c13f86fb81628ebcddca91a35f6b57bf5d77cb4100261c06974776663bb6d77c.png" src="../_images/c13f86fb81628ebcddca91a35f6b57bf5d77cb4100261c06974776663bb6d77c.png" />
-<img alt="../_images/b8d0678547fd6ae56276f76691df46739939904a4054c1af6e9e10fdd2786440.png" src="../_images/b8d0678547fd6ae56276f76691df46739939904a4054c1af6e9e10fdd2786440.png" />
-<img alt="../_images/2bb16d3c2a39cc8f957bc83a04cad76e375fe00517f58db613b2e611c5cf4305.png" src="../_images/2bb16d3c2a39cc8f957bc83a04cad76e375fe00517f58db613b2e611c5cf4305.png" />
-<img alt="../_images/c748ae2ef0b6248ef1b0a7e1a3cf8b7d8deab692a63d7b091638c2cb6a220b46.png" src="../_images/c748ae2ef0b6248ef1b0a7e1a3cf8b7d8deab692a63d7b091638c2cb6a220b46.png" />
-<img alt="../_images/3f63e3e395132c48800627d52bd244185e77813bc912f723c4abc2e5ef2dc43d.png" src="../_images/3f63e3e395132c48800627d52bd244185e77813bc912f723c4abc2e5ef2dc43d.png" />
-<img alt="../_images/b18b6ab792652611e39f6101459a8da65b4dac304511592109331088ba73742c.png" src="../_images/b18b6ab792652611e39f6101459a8da65b4dac304511592109331088ba73742c.png" />
-<img alt="../_images/c36d0a5a8d1e16751d6d7e61b830ef3399e8c6c3a6c5b11ca081b7a1a0ae521c.png" src="../_images/c36d0a5a8d1e16751d6d7e61b830ef3399e8c6c3a6c5b11ca081b7a1a0ae521c.png" />
-<img alt="../_images/c557ff60dc5c90738c2dfa7667aaf641c183f31dfd0fabfc89fb7bf3bbfda6d3.png" src="../_images/c557ff60dc5c90738c2dfa7667aaf641c183f31dfd0fabfc89fb7bf3bbfda6d3.png" />
-<img alt="../_images/47b20c3fed3d7bcdf8170ac63d674dd1f5dd4718799b28d0f929e7fdba90762b.png" src="../_images/47b20c3fed3d7bcdf8170ac63d674dd1f5dd4718799b28d0f929e7fdba90762b.png" />
-<img alt="../_images/cda0add82f3f3af8ecb719fecd981ae846d88bb105db89e5c7a3f610a98c139b.png" src="../_images/cda0add82f3f3af8ecb719fecd981ae846d88bb105db89e5c7a3f610a98c139b.png" />
-<img alt="../_images/30615b5caed68ff3b4e310a7a8b44421ca98fd2289b196b8df994cdbc5fc4d34.png" src="../_images/30615b5caed68ff3b4e310a7a8b44421ca98fd2289b196b8df994cdbc5fc4d34.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plt_var_spatial_month</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="n">da2</span><span class="p">):</span>
+    <span class="n">f</span><span class="p">,</span> <span class="n">axsm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">NorthPolarStereo</span><span class="p">(</span><span class="n">central_longitude</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">globe</span><span class="o">=</span><span class="kc">None</span><span class="p">),},</span> <span class="c1">#figsize=[3, 6], </span>
+                           <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">coast</span> <span class="o">=</span> <span class="n">cy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span><span class="n">category</span><span class="o">=</span><span class="s1">&#39;physical&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;110m&#39;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;coastline&#39;</span><span class="p">)</span>
+
+    
+
+    <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">hawaii_r</span>
+    <span class="n">axsm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="mf">0.07</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span> <span class="n">rotation_mode</span><span class="o">=</span><span class="s1">&#39;anchor&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">axsm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axsm</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),[</span><span class="n">da</span><span class="p">,</span> <span class="n">da2</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">levels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.225</span><span class="p">,</span><span class="mf">0.025</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">levels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="n">val</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.month&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">levels</span><span class="p">)</span>
+        
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_extent</span><span class="p">([</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">45</span><span class="p">],</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">coast</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">gl</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">gridlines</span><span class="p">(</span><span class="n">draw_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">gl</span><span class="o">.</span><span class="n">top_labels</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">gl</span><span class="o">.</span><span class="n">right_labels</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for model in ds[&#39;lcc_2t_days&#39;].keys():</span>
+<span class="c1">#     if model == &#39;cmip_250&#39; or model == &#39;cmip_500&#39;:</span>
+<span class="c1">#         print(model, &#39;lwp:&#39;, (ds[&#39;lcc_2t_days&#39;][model][&#39;lwp&#39;].sel(lat=slice(45,90)).groupby(&#39;time.month&#39;).mean((&#39;time&#39;, &#39;model&#39;), skipna=True)).max().values.round(2),&#39;prsn:&#39;, (ds[&#39;lcc_2t_days&#39;][model][&#39;prsn&#39;].sel(lat=slice(45,90)).groupby(&#39;time.month&#39;).mean((&#39;time&#39;, &#39;model&#39;), skipna=True)).max().values.round(2))</span>
+<span class="c1">#     else:</span>
+<span class="c1">#         try:</span>
+<span class="c1">#             print(model, &#39;lwp:&#39;, (ds[&#39;lcc_2t_days&#39;][model][&#39;lwp&#39;].sel(lat=slice(45,90)).groupby(&#39;time.month&#39;).mean(&#39;time&#39;, skipna=True)).max().values.round(2), &#39;prsn:&#39;, (ds[&#39;lcc_2t_days&#39;][model][&#39;prsn&#39;].sel(lat=slice(45,90)).groupby(&#39;time.month&#39;).mean(&#39;time&#39;, skipna=True)).max().values.round(2) )</span>
+<span class="c1">#         except KeyError:</span>
+<span class="c1">#             continue</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>era_30 lwp: 0.83 prsn: 3.32
+era_250 lwp: 0.42 prsn: 0.72
+era_500 lwp: 0.31 prsn: 0.55
+cmip_250 lwp: 4.66 prsn: 0.98
+cmip_500 lwp: 5.68 prsn: 0.54
+MIROC6 lwp: 1.91 prsn: 2.11
+CanESM5 lwp: 0.73 prsn: 0.78
+AWI-ESM-1-1-LR lwp: 0.49 prsn: 0.96
+MPI-ESM1-2-LR lwp: 0.45 prsn: 0.76
+UKESM1-0-LL lwp: 0.31 prsn: 1.07
+HadGEM3-GC31-LL lwp: 0.32 prsn: 1.06
+CNRM-CM6-1 lwp: 13.56 prsn: 1.06
+CNRM-ESM2-1 lwp: 16.24 prsn: 0.99
+IPSL-CM6A-LR lwp: 0.78 prsn: 1.03
+IPSL-CM5A2-INCA lwp: 0.27 prsn: 0.95
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for model in ds[&#39;lcc_2t_days&#39;].keys():</span>
+<span class="c1">#     # print(model)</span>
+<span class="c1">#     if model == &#39;cmip_250&#39; or model== &#39;cmip_500&#39;:</span>
+<span class="c1">#         plt_var_spatial_month(ds[&#39;lcc_2t_days&#39;][model][&#39;lwp&#39;].mean(&#39;model&#39;, skipna=True),</span>
+<span class="c1">#                               ds[&#39;lcc_2t_days&#39;][model][&#39;prsn&#39;].mean(&#39;model&#39;, skipna=True))</span>
+<span class="c1">#     else:</span>
+<span class="c1">#         try:</span>
+<span class="c1">#             plt_var_spatial_month(ds[&#39;lcc_2t_days&#39;][model][&#39;lwp&#39;], ds[&#39;lcc_2t_days&#39;][model][&#39;prsn&#39;])</span>
+<span class="c1">#         except KeyError:</span>
+<span class="c1">#             continue</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/5efbe36a2a3490b18b1c54655880442281cf3b48f950ee84c98accf0161f5f87.png" src="../_images/5efbe36a2a3490b18b1c54655880442281cf3b48f950ee84c98accf0161f5f87.png" />
+<img alt="../_images/ca83e8bdf05d613f1af7fdeed06b98c9762e95f624064a70445062cc5790a95a.png" src="../_images/ca83e8bdf05d613f1af7fdeed06b98c9762e95f624064a70445062cc5790a95a.png" />
+<img alt="../_images/eefd2ce2babb64277476cc7e79021ceddb09ce7a03abcef03645cb1cf1eb56e5.png" src="../_images/eefd2ce2babb64277476cc7e79021ceddb09ce7a03abcef03645cb1cf1eb56e5.png" />
+<img alt="../_images/6cc5c38c7f8115210661afeb994ec7dfb49ca4e6e40d64678e2cbb1317a45758.png" src="../_images/6cc5c38c7f8115210661afeb994ec7dfb49ca4e6e40d64678e2cbb1317a45758.png" />
+<img alt="../_images/d3f6909451b9fd5133645f167f6929de27754b7e47c25541559ad0029d35ad04.png" src="../_images/d3f6909451b9fd5133645f167f6929de27754b7e47c25541559ad0029d35ad04.png" />
+<img alt="../_images/1ceb5c9341f645179ff1a2858b604e2305dd1dee08f2a1ddb97327a6691fdff0.png" src="../_images/1ceb5c9341f645179ff1a2858b604e2305dd1dee08f2a1ddb97327a6691fdff0.png" />
+<img alt="../_images/7a49c4bfee219f3a626e5009537689e369cd9b7dd3ba9bbbd6d144949c666333.png" src="../_images/7a49c4bfee219f3a626e5009537689e369cd9b7dd3ba9bbbd6d144949c666333.png" />
+<img alt="../_images/f41e41aadac5115a9d59dddc50f849303cf5df43fe518efb42823383f887817f.png" src="../_images/f41e41aadac5115a9d59dddc50f849303cf5df43fe518efb42823383f887817f.png" />
+<img alt="../_images/1a435a42407aac18dbb0fbf7e858575f40705f693a802b8cc59db3142c520a41.png" src="../_images/1a435a42407aac18dbb0fbf7e858575f40705f693a802b8cc59db3142c520a41.png" />
+<img alt="../_images/2eb202dd214dc96868ae8090a2757303f142c993fb8a09de93904a2019e6bd2d.png" src="../_images/2eb202dd214dc96868ae8090a2757303f142c993fb8a09de93904a2019e6bd2d.png" />
+<img alt="../_images/98e0201ef9174c41d5f531a2fb2f8411fa9ca15a03a62a4e70b1398ce2843240.png" src="../_images/98e0201ef9174c41d5f531a2fb2f8411fa9ca15a03a62a4e70b1398ce2843240.png" />
+<img alt="../_images/6814105094e214944eea151a513128ca9f2dda3a9545abc9eb17a9396e6df2a7.png" src="../_images/6814105094e214944eea151a513128ca9f2dda3a9545abc9eb17a9396e6df2a7.png" />
+<img alt="../_images/9ab3c17cf80250a46d23b669ca3db1394f4f107ebc9ae5cd85d004a8f9b98dfe.png" src="../_images/9ab3c17cf80250a46d23b669ca3db1394f4f107ebc9ae5cd85d004a8f9b98dfe.png" />
+<img alt="../_images/966a9d550d3f8606961d5e68dbe6edd2393b058f38fcb3b7e9fd1a01baeb2819.png" src="../_images/966a9d550d3f8606961d5e68dbe6edd2393b058f38fcb3b7e9fd1a01baeb2819.png" />
+<img alt="../_images/185cca647a45541daa73c561f3bf49ccbb25f01d9e4fcc6e75f88b7b5bfdbb9c.png" src="../_images/185cca647a45541daa73c561f3bf49ccbb25f01d9e4fcc6e75f88b7b5bfdbb9c.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dict_label</span> <span class="o">=</span> <span class="p">{</span>
      <span class="c1"># &#39;lcc_wo_snow&#39;: {&#39;cb_label&#39;:&#39;FsLCC (%)&#39;, &#39;levels&#39;:np.arange(0,110,10), &#39;vmin&#39;: 0, &#39;vmax&#39;:100, &#39;diff_levels&#39;:np.arange(-30,35,5), &#39;diff_vmin&#39;:-30, &#39;diff_vmax&#39;:30},</span>
 <span class="c1">#      &#39;lcc_w_snow&#39;:  {&#39;cb_label&#39;:&#39;FoS in sLCCs (%)&#39;, &#39;levels&#39;:np.arange(0,110,10), &#39;vmin&#39;: 0, &#39;vmax&#39;:100, &#39;diff_levels&#39;:np.arange(-60,65,5), &#39;diff_vmin&#39;:-60, &#39;diff_vmax&#39;:60},</span>
 <span class="c1">#      &#39;sf_eff&#39;:      {&#39;cb_label&#39;:&#39;SE in sLCCs (h$^{-1}$)&#39;, &#39;levels&#39;:np.arange(0,5.5,.5), &#39;vmin&#39;:0, &#39;vmax&#39;:5, &#39;diff_levels&#39;:np.arange(-1.2,1.4,.2), &#39;diff_vmin&#39;:-1.2, &#39;diff_vmax&#39;:1.2}#&#39;Relative snowfall efficiency (h$^{-1}$)&#39;</span>
      
      <span class="s1">&#39;FLCC&#39;</span> <span class="p">:</span> <span class="p">{</span><span class="s1">&#39;cb_label&#39;</span><span class="p">:</span><span class="s1">&#39;FLCC (%)&#39;</span><span class="p">,</span>             <span class="s1">&#39;levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">105.</span><span class="p">,</span><span class="mf">5.</span><span class="p">),</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="mf">100.</span><span class="p">,</span>   <span class="s1">&#39;diff_levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>   <span class="s1">&#39;diff_vmin&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;diff_vmax&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">},</span>
      <span class="s1">&#39;FsLCC&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;cb_label&#39;</span><span class="p">:</span><span class="s1">&#39;FsLCC (%)&#39;</span><span class="p">,</span>            <span class="s1">&#39;levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">105.</span><span class="p">,</span><span class="mf">5.</span><span class="p">),</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>   <span class="s1">&#39;diff_levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>   <span class="s1">&#39;diff_vmin&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;diff_vmax&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">},</span>
-     <span class="s1">&#39;FoP&#39;</span>  <span class="p">:</span> <span class="p">{</span><span class="s1">&#39;cb_label&#39;</span><span class="p">:</span><span class="s1">&#39;FoP in LCCs (%)&#39;</span><span class="p">,</span>      <span class="s1">&#39;levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">105.</span><span class="p">,</span><span class="mf">5.</span><span class="p">),</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>   <span class="s1">&#39;diff_levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>   <span class="s1">&#39;diff_vmin&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;diff_vmax&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">},</span>
+     <span class="c1"># &#39;FoP&#39;  : {&#39;cb_label&#39;:&#39;FoP in LCCs (%)&#39;,      &#39;levels&#39;:np.arange(0,105.,5.), &#39;vmin&#39;:0, &#39;vmax&#39;: 100,   &#39;diff_levels&#39;:np.arange(-100,110,10),   &#39;diff_vmin&#39;:-100, &#39;diff_vmax&#39;:100},</span>
      <span class="s1">&#39;FoS&#39;</span>  <span class="p">:</span> <span class="p">{</span><span class="s1">&#39;cb_label&#39;</span><span class="p">:</span><span class="s1">&#39;FoS in sLCCs (%)&#39;</span><span class="p">,</span>     <span class="s1">&#39;levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">105.</span><span class="p">,</span><span class="mf">5.</span><span class="p">),</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>   <span class="s1">&#39;diff_levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>   <span class="s1">&#39;diff_vmin&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;diff_vmax&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">},</span>
      <span class="s1">&#39;sf_eff&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;cb_label&#39;</span><span class="p">:</span><span class="s1">&#39;SE in sLCCs (h$^{-1}$)&#39;</span><span class="p">,</span><span class="s1">&#39;levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">5.5</span><span class="p">,</span><span class="mf">.5</span><span class="p">),</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>   <span class="s1">&#39;diff_levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">1.2</span><span class="p">,</span><span class="mf">1.4</span><span class="p">,</span><span class="mf">.2</span><span class="p">),</span>   <span class="s1">&#39;diff_vmin&#39;</span><span class="p">:</span><span class="o">-</span><span class="mf">1.2</span><span class="p">,</span> <span class="s1">&#39;diff_vmax&#39;</span><span class="p">:</span><span class="mf">1.2</span><span class="p">},</span>
-     <span class="s1">&#39;pr_eff&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;cb_label&#39;</span><span class="p">:</span><span class="s1">&#39;PE in sLCCs (h$^{-1}$)&#39;</span><span class="p">,</span> <span class="s1">&#39;levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">550.</span><span class="p">,</span><span class="mf">50.</span><span class="p">),</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span><span class="mi">500</span><span class="p">,</span>   <span class="s1">&#39;diff_levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span><span class="mi">140</span><span class="p">,</span><span class="mi">20</span><span class="p">),</span>   <span class="s1">&#39;diff_vmin&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span> <span class="s1">&#39;diff_vmax&#39;</span><span class="p">:</span><span class="mi">120</span><span class="p">},</span>
-     <span class="s1">&#39;FLCC-FsLCC&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;cb_label&#39;</span><span class="p">:</span><span class="s1">&#39;(%)&#39;</span><span class="p">,</span>  <span class="s1">&#39;levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">105.</span><span class="p">,</span><span class="mf">5.</span><span class="p">),</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>   <span class="s1">&#39;diff_levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>   <span class="s1">&#39;diff_vmin&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;diff_vmax&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">}}</span>
+     <span class="c1"># &#39;pr_eff&#39;: {&#39;cb_label&#39;:&#39;PE in sLCCs (h$^{-1}$)&#39;, &#39;levels&#39;:np.arange(0,550.,50.), &#39;vmin&#39;:0, &#39;vmax&#39;:500,   &#39;diff_levels&#39;:np.arange(-120,140,20),   &#39;diff_vmin&#39;:-120, &#39;diff_vmax&#39;:120},</span>
+     <span class="s1">&#39;FLCC-FsLCC&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;cb_label&#39;</span><span class="p">:</span><span class="s1">&#39;FLCC-FsLCC (%)&#39;</span><span class="p">,</span>  <span class="s1">&#39;levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">105.</span><span class="p">,</span><span class="mf">5.</span><span class="p">),</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>   <span class="s1">&#39;diff_levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>   <span class="s1">&#39;diff_vmin&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;diff_vmax&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">}}</span>
 </pre></div>
 </div>
 </div>
@@ -765,7 +801,7 @@ IPSL-CM5A2-INCA
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">dict_label</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
     <span class="n">ratios</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">get_only_valid_values</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="s1">&#39;250&#39;</span><span class="p">,</span> <span class="n">var_name</span><span class="p">)</span>
     <span class="n">ratios</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">get_only_valid_values</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="s1">&#39;500&#39;</span><span class="p">,</span> <span class="n">var_name</span><span class="p">)</span>
     
@@ -790,77 +826,77 @@ IPSL-CM5A2-INCA
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">dict_label</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">var_name</span> <span class="o">==</span> <span class="s1">&#39;FLCC-FsLCC&#39;</span><span class="p">:</span>
         <span class="k">continue</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">fct</span><span class="o">.</span><span class="n">plt_spatial_season_var</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">hemisphere</span><span class="p">,</span> <span class="n">FIG_DIR</span><span class="p">,</span> <span class="mi">45</span><span class="p">)</span>
-        <span class="n">fct</span><span class="o">.</span><span class="n">plt_spatial_season_var</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">hemisphere</span><span class="p">,</span> <span class="n">FIG_DIR_mci</span><span class="p">,</span> <span class="mi">66</span><span class="p">)</span>
+        <span class="n">fct</span><span class="o">.</span><span class="n">plt_spatial_season_var</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">,</span> <span class="n">FIG_DIR</span><span class="p">,</span> <span class="mi">45</span><span class="p">)</span>
+        <span class="n">fct</span><span class="o">.</span><span class="n">plt_spatial_season_var</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">,</span> <span class="n">FIG_DIR_mci</span><span class="p">,</span> <span class="mi">66</span><span class="p">)</span>
+        
+        <span class="c1"># plot monthly model variation</span>
+        <span class="n">fct</span><span class="o">.</span><span class="n">plt_monthly_model_variation</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">],</span><span class="n">FIG_DIR</span><span class="p">)</span>
+        <span class="n">fct</span><span class="o">.</span><span class="n">plt_monthly_model_variation</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">],</span><span class="n">FIG_DIR_mci</span><span class="p">)</span>
+        
+        
         
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/31772231227bd8f84317b61fb9754abfcbb6a831ca8f05d797c39002809256e0.png" src="../_images/31772231227bd8f84317b61fb9754abfcbb6a831ca8f05d797c39002809256e0.png" />
-<img alt="../_images/fb11e8df574451e34323c40c90cbc2e94d2e8b1d57f3346bf769eff0137b054c.png" src="../_images/fb11e8df574451e34323c40c90cbc2e94d2e8b1d57f3346bf769eff0137b054c.png" />
-<img alt="../_images/e8a2bf15b7573e0ab01e68914699f25430e9e8cd5f1ac93bc1de0bc5d0714887.png" src="../_images/e8a2bf15b7573e0ab01e68914699f25430e9e8cd5f1ac93bc1de0bc5d0714887.png" />
-<img alt="../_images/fcf66fa07b2f3ded0519d2b78382cb9f3578d077dbc20de1dea4c0f42785cabc.png" src="../_images/fcf66fa07b2f3ded0519d2b78382cb9f3578d077dbc20de1dea4c0f42785cabc.png" />
-<img alt="../_images/3f981f8fb42afdbb58da11e2b3b712ced618d8236c36adf11ccf92bf4d509c20.png" src="../_images/3f981f8fb42afdbb58da11e2b3b712ced618d8236c36adf11ccf92bf4d509c20.png" />
-<img alt="../_images/d3cf32f3b1fa9a5e0b6279d1158b7ca86efa7dcbd7d25c98ce7601192b47ab48.png" src="../_images/d3cf32f3b1fa9a5e0b6279d1158b7ca86efa7dcbd7d25c98ce7601192b47ab48.png" />
-<img alt="../_images/294acd42f769c2c56799c9432475f20e1a39de5b01d355a60fdc21f8b6562c3a.png" src="../_images/294acd42f769c2c56799c9432475f20e1a39de5b01d355a60fdc21f8b6562c3a.png" />
-<img alt="../_images/719ade3ff57408b48d6491ae46bb3717c78c601d1a99f3859586ca881697cd6b.png" src="../_images/719ade3ff57408b48d6491ae46bb3717c78c601d1a99f3859586ca881697cd6b.png" />
-<img alt="../_images/4febd6c4b91405f74f963931fe67898673a330637b41f6ae04b92328b5584427.png" src="../_images/4febd6c4b91405f74f963931fe67898673a330637b41f6ae04b92328b5584427.png" />
-<img alt="../_images/886baa27a9410b17591493f1f05fd9ea611afae806079935c5833ff03b47fbc2.png" src="../_images/886baa27a9410b17591493f1f05fd9ea611afae806079935c5833ff03b47fbc2.png" />
-<img alt="../_images/09ad098c55c6fa00237ad7de47a0866fd44a679fb869bef235dc6777bd303240.png" src="../_images/09ad098c55c6fa00237ad7de47a0866fd44a679fb869bef235dc6777bd303240.png" />
-<img alt="../_images/070c85eb19ea03e85682fa4d9af7db77ff9121466eb794dfc8a7fc6cd79fc42f.png" src="../_images/070c85eb19ea03e85682fa4d9af7db77ff9121466eb794dfc8a7fc6cd79fc42f.png" />
-<img alt="../_images/1ef87887d4db0de423bca63b83c3740a1349ebfc2adcc3644122d7581c7bd75a.png" src="../_images/1ef87887d4db0de423bca63b83c3740a1349ebfc2adcc3644122d7581c7bd75a.png" />
-<img alt="../_images/5e338d47cc55fbccac073f3badbe16fe2ead7f4b760fc887e403499d70cf5e68.png" src="../_images/5e338d47cc55fbccac073f3badbe16fe2ead7f4b760fc887e403499d70cf5e68.png" />
-<img alt="../_images/f502a12a08cf6735a6aa3f29f660ad77f577153a4b719a5a9d6f946f81df14dd.png" src="../_images/f502a12a08cf6735a6aa3f29f660ad77f577153a4b719a5a9d6f946f81df14dd.png" />
-<img alt="../_images/c25bc9bf198c3f87d6983dfa4c7659c024a3da3b3beae43611aa0ff64029b04b.png" src="../_images/c25bc9bf198c3f87d6983dfa4c7659c024a3da3b3beae43611aa0ff64029b04b.png" />
-<img alt="../_images/c015058ebfca0e2b10b2ace0f3af002628b7e0b39f8dd841a7e2f2c4cbf7e9dd.png" src="../_images/c015058ebfca0e2b10b2ace0f3af002628b7e0b39f8dd841a7e2f2c4cbf7e9dd.png" />
-<img alt="../_images/64a141ecfc721ec1daaeb4c2f4f6438bf816a80fc763a7d4506ca12e92b5c2be.png" src="../_images/64a141ecfc721ec1daaeb4c2f4f6438bf816a80fc763a7d4506ca12e92b5c2be.png" />
-<img alt="../_images/c9e2734ed86071f3b9c91c482e08fe763ff5903df8ae79fcb0bb5fd0265685a8.png" src="../_images/c9e2734ed86071f3b9c91c482e08fe763ff5903df8ae79fcb0bb5fd0265685a8.png" />
-<img alt="../_images/512a88d5543b04e339f5030370d2047c077ff20dbb4584c0dc913fe0be9dcfb8.png" src="../_images/512a88d5543b04e339f5030370d2047c077ff20dbb4584c0dc913fe0be9dcfb8.png" />
-<img alt="../_images/90b4d49aaf80da5ec521381a71045fb84033217e81fb32e52b358edaf8d59a09.png" src="../_images/90b4d49aaf80da5ec521381a71045fb84033217e81fb32e52b358edaf8d59a09.png" />
-<img alt="../_images/08af124a62a3c8dfc567dfc11fbea452062a99de25735c6eaf7e2860d035c194.png" src="../_images/08af124a62a3c8dfc567dfc11fbea452062a99de25735c6eaf7e2860d035c194.png" />
-<img alt="../_images/4dcdf853654e1fc7c6cd95de772d4a26a714793d0263c22fa12c1fa066c564d7.png" src="../_images/4dcdf853654e1fc7c6cd95de772d4a26a714793d0263c22fa12c1fa066c564d7.png" />
-<img alt="../_images/0408c630f4a11be988b64c5ef835c2e7c1e20d281befae9f8fecba1f2a76285e.png" src="../_images/0408c630f4a11be988b64c5ef835c2e7c1e20d281befae9f8fecba1f2a76285e.png" />
-<img alt="../_images/c72c24045cd9f4e529540625f79d8079a77b0c5576778e247c03acaddfa4f0c3.png" src="../_images/c72c24045cd9f4e529540625f79d8079a77b0c5576778e247c03acaddfa4f0c3.png" />
-<img alt="../_images/055196f8f18faf11d1d671467465ae28f68adc8c3c5c0d5d887a184c56cc4874.png" src="../_images/055196f8f18faf11d1d671467465ae28f68adc8c3c5c0d5d887a184c56cc4874.png" />
-<img alt="../_images/3b5310e87d06e11b492008eaa3683b9878b243ea77a67df648a66a9f79fbf138.png" src="../_images/3b5310e87d06e11b492008eaa3683b9878b243ea77a67df648a66a9f79fbf138.png" />
-<img alt="../_images/a1a30d27308220b10d43ab7dd9109cc3bcb524d3396ca3d33b63cb0558ae93f6.png" src="../_images/a1a30d27308220b10d43ab7dd9109cc3bcb524d3396ca3d33b63cb0558ae93f6.png" />
-<img alt="../_images/8fff71e40b05b23640a37e964e993447f542b968e9b0cf0e759177952084c0e8.png" src="../_images/8fff71e40b05b23640a37e964e993447f542b968e9b0cf0e759177952084c0e8.png" />
-<img alt="../_images/0ca65cc050b071e57ec3ce0d7b5a967fa4802fad9f1b4187a4e474b0c703905c.png" src="../_images/0ca65cc050b071e57ec3ce0d7b5a967fa4802fad9f1b4187a4e474b0c703905c.png" />
-<img alt="../_images/7cfbfe548c25f463f32ce2c3480f34d7ffe7e638dae7d43a7c2b87b32d4976ee.png" src="../_images/7cfbfe548c25f463f32ce2c3480f34d7ffe7e638dae7d43a7c2b87b32d4976ee.png" />
-<img alt="../_images/00177797b93e30e6bc7fbddb523010a7e474a17eeb4edbc6ee243e0c5c24e1df.png" src="../_images/00177797b93e30e6bc7fbddb523010a7e474a17eeb4edbc6ee243e0c5c24e1df.png" />
+<img alt="../_images/899e08b262b9c80e2e8e7435d7cc224bae7c45f8bc2ba280d99a5b59e5141fe7.png" src="../_images/899e08b262b9c80e2e8e7435d7cc224bae7c45f8bc2ba280d99a5b59e5141fe7.png" />
+<img alt="../_images/8d4a695a24bf3db08f40f41f318d5fbf1eef76462813981d9533036e43ea4bc2.png" src="../_images/8d4a695a24bf3db08f40f41f318d5fbf1eef76462813981d9533036e43ea4bc2.png" />
+<img alt="../_images/01c64ef758bb888e16442ca1bb1e37c121ff875fbaae01f073ecc2af89c76976.png" src="../_images/01c64ef758bb888e16442ca1bb1e37c121ff875fbaae01f073ecc2af89c76976.png" />
+<img alt="../_images/613e28032daf578d635902b810049a3f42ec2f3613ab54f5632a64db54af4f09.png" src="../_images/613e28032daf578d635902b810049a3f42ec2f3613ab54f5632a64db54af4f09.png" />
+<img alt="../_images/d89a40079b420abdd64756495dc4626ade9fd4ed64484407479da7ad1b4448e4.png" src="../_images/d89a40079b420abdd64756495dc4626ade9fd4ed64484407479da7ad1b4448e4.png" />
+<img alt="../_images/ad97f6254bd042f10a2ee5acc3ea76f5fc101e21e071979e3cdee07cb8cf2492.png" src="../_images/ad97f6254bd042f10a2ee5acc3ea76f5fc101e21e071979e3cdee07cb8cf2492.png" />
+<img alt="../_images/befb14fed37bd6b811c45b5796f53c5827a9dfca8c783ed94d3f03cf55d8d2f6.png" src="../_images/befb14fed37bd6b811c45b5796f53c5827a9dfca8c783ed94d3f03cf55d8d2f6.png" />
+<img alt="../_images/62c37fd8032b5af34c6550fb61e2d76ebb4a6bc59001b10ce095c280ef8c2741.png" src="../_images/62c37fd8032b5af34c6550fb61e2d76ebb4a6bc59001b10ce095c280ef8c2741.png" />
+<img alt="../_images/6a68afe29637b818ba733be967c07e42e3ddfa9b371b8913f73a192fb1a92424.png" src="../_images/6a68afe29637b818ba733be967c07e42e3ddfa9b371b8913f73a192fb1a92424.png" />
+<img alt="../_images/5a143e491e7da863b5b1b4f08d1948af2a74c7c6f0a8b23d0f98728b99a91d8c.png" src="../_images/5a143e491e7da863b5b1b4f08d1948af2a74c7c6f0a8b23d0f98728b99a91d8c.png" />
+<img alt="../_images/1a2eaaeff088811ed44af760b0762b18c56ab2e4c5b6f28b2707000fb546cf63.png" src="../_images/1a2eaaeff088811ed44af760b0762b18c56ab2e4c5b6f28b2707000fb546cf63.png" />
+<img alt="../_images/433df3ddf83bc83110360cfdff3bf595dc7c965d676cba7689b27c9ad57b82df.png" src="../_images/433df3ddf83bc83110360cfdff3bf595dc7c965d676cba7689b27c9ad57b82df.png" />
+<img alt="../_images/28717eee7606e78d79ce3065dbd47ea351bc251937e298fdc63f4634f3288d7f.png" src="../_images/28717eee7606e78d79ce3065dbd47ea351bc251937e298fdc63f4634f3288d7f.png" />
+<img alt="../_images/58c06c91879f40f1224f7bc5db0532d329e6d0c715a3f7b946227477697423eb.png" src="../_images/58c06c91879f40f1224f7bc5db0532d329e6d0c715a3f7b946227477697423eb.png" />
+<img alt="../_images/bdec20328f449420fd680b0712dd2f0bd8db0c6e8daa832be111f7ffcf85074d.png" src="../_images/bdec20328f449420fd680b0712dd2f0bd8db0c6e8daa832be111f7ffcf85074d.png" />
+<img alt="../_images/67f7d632a38a4b44b510f633a55b17dcdd5444e648b3973c928b0e5d40dd3a0b.png" src="../_images/67f7d632a38a4b44b510f633a55b17dcdd5444e648b3973c928b0e5d40dd3a0b.png" />
+<img alt="../_images/13140b6f24dbb85025600d561e8492ed2397b92a23e35056c8e357bc46bf4f82.png" src="../_images/13140b6f24dbb85025600d561e8492ed2397b92a23e35056c8e357bc46bf4f82.png" />
+<img alt="../_images/934c7a705eacc3ee68ed5666e3fdbdb3c604f3a18576e7a13335666d905be1a0.png" src="../_images/934c7a705eacc3ee68ed5666e3fdbdb3c604f3a18576e7a13335666d905be1a0.png" />
+<img alt="../_images/409bdf8ef82dd5ae80ca34531d83e501eb72fae5ad3deb1ac5f6d912aace4f56.png" src="../_images/409bdf8ef82dd5ae80ca34531d83e501eb72fae5ad3deb1ac5f6d912aace4f56.png" />
+<img alt="../_images/c0345ae8702596f6ae0330196cac78de854a4afed441bcc7f17ad3c6d1fb4bce.png" src="../_images/c0345ae8702596f6ae0330196cac78de854a4afed441bcc7f17ad3c6d1fb4bce.png" />
+<img alt="../_images/71da49aea4e48876eb610f42eef5f0e73a703c18961299d838cc7d24e1cd7c6d.png" src="../_images/71da49aea4e48876eb610f42eef5f0e73a703c18961299d838cc7d24e1cd7c6d.png" />
+<img alt="../_images/cc3596d338d1bbd2af1dbf45e90623ce7bc0499cc09af1d978d9ffaa85cd86d7.png" src="../_images/cc3596d338d1bbd2af1dbf45e90623ce7bc0499cc09af1d978d9ffaa85cd86d7.png" />
+<img alt="../_images/e3dff83e57d76deda056b13c7599351e6cfc411c09b1b54d610cf30029ebbd7c.png" src="../_images/e3dff83e57d76deda056b13c7599351e6cfc411c09b1b54d610cf30029ebbd7c.png" />
+<img alt="../_images/d0d5177aa53c3818611b3e96a978f08f4bc4762e6339bedd60853732e1d21180.png" src="../_images/d0d5177aa53c3818611b3e96a978f08f4bc4762e6339bedd60853732e1d21180.png" />
+<img alt="../_images/17e6ef225567648d3606b8088ae91a802dc031ee718a2cfd088dbe1831a39bee.png" src="../_images/17e6ef225567648d3606b8088ae91a802dc031ee718a2cfd088dbe1831a39bee.png" />
+<img alt="../_images/ec0fd3f0ba6debf274c0ae8837e497e55a78aa105f617563b80e745306a8fc5d.png" src="../_images/ec0fd3f0ba6debf274c0ae8837e497e55a78aa105f617563b80e745306a8fc5d.png" />
+<img alt="../_images/1ade6e4cd15e345b554ee83d60be6661161cb4cf050edded091b5ba88cd5ef1b.png" src="../_images/1ade6e4cd15e345b554ee83d60be6661161cb4cf050edded091b5ba88cd5ef1b.png" />
+<img alt="../_images/57f65a535c1376b0b37c4ce1b14cc2a296859b0c670846b34e545d01ca2a7029.png" src="../_images/57f65a535c1376b0b37c4ce1b14cc2a296859b0c670846b34e545d01ca2a7029.png" />
+<img alt="../_images/9c097cd00e58ebc4eb7b99adfc2e8df381c970ad871208553dda1e69bb8ee1bb.png" src="../_images/9c097cd00e58ebc4eb7b99adfc2e8df381c970ad871208553dda1e69bb8ee1bb.png" />
+<img alt="../_images/72467c7f88d9fa9e76bfed59304dc8bd075b3ee50f77bd82db2e58f6f3804a3c.png" src="../_images/72467c7f88d9fa9e76bfed59304dc8bd075b3ee50f77bd82db2e58f6f3804a3c.png" />
 <img alt="../_images/48836030d1310f01ea47b9decb4f034c52ede4015d58090c4a05671196393e39.png" src="../_images/48836030d1310f01ea47b9decb4f034c52ede4015d58090c4a05671196393e39.png" />
 <img alt="../_images/b6795526f13c4e27fd2274f9dc4b7b62d9566e30b081358f813bcb26a6b2bbfc.png" src="../_images/b6795526f13c4e27fd2274f9dc4b7b62d9566e30b081358f813bcb26a6b2bbfc.png" />
-<img alt="../_images/1925489fe55826b8983c9b8045c45f85722cd3cf856033b2be4c3728df1152c8.png" src="../_images/1925489fe55826b8983c9b8045c45f85722cd3cf856033b2be4c3728df1152c8.png" />
-<img alt="../_images/d8d526e8afb6df306a7bc415d5e385ec1bb34685bd6f2a3b47e5d83fd8a9dad7.png" src="../_images/d8d526e8afb6df306a7bc415d5e385ec1bb34685bd6f2a3b47e5d83fd8a9dad7.png" />
 <img alt="../_images/d9363d925cd119ad5653daf2fe8ed2a5f00a3207b6e64de27b5ded8764060be7.png" src="../_images/d9363d925cd119ad5653daf2fe8ed2a5f00a3207b6e64de27b5ded8764060be7.png" />
 <img alt="../_images/d8e9f417916b585808f779ec5fd27e23394e1f9593eb170d939e59f9f6ae5c73.png" src="../_images/d8e9f417916b585808f779ec5fd27e23394e1f9593eb170d939e59f9f6ae5c73.png" />
+<img alt="../_images/1925489fe55826b8983c9b8045c45f85722cd3cf856033b2be4c3728df1152c8.png" src="../_images/1925489fe55826b8983c9b8045c45f85722cd3cf856033b2be4c3728df1152c8.png" />
+<img alt="../_images/d8d526e8afb6df306a7bc415d5e385ec1bb34685bd6f2a3b47e5d83fd8a9dad7.png" src="../_images/d8d526e8afb6df306a7bc415d5e385ec1bb34685bd6f2a3b47e5d83fd8a9dad7.png" />
 <img alt="../_images/d351e6bbef5b9b447576cafc2c9d427d29d2aed2041b1f7e6b3dfe69f3bbf6c7.png" src="../_images/d351e6bbef5b9b447576cafc2c9d427d29d2aed2041b1f7e6b3dfe69f3bbf6c7.png" />
 <img alt="../_images/79b4478abe9642ff9d10f951fc4d7c88f68e854429b8abca414e402947b144af.png" src="../_images/79b4478abe9642ff9d10f951fc4d7c88f68e854429b8abca414e402947b144af.png" />
-<img alt="../_images/44f6d2cf6e450c80d66359c94acdb148966076bd11f79b3c68837f455ddd25da.png" src="../_images/44f6d2cf6e450c80d66359c94acdb148966076bd11f79b3c68837f455ddd25da.png" />
-<img alt="../_images/424ab32a8994c6b511a9bb4184366b936359dfa7691a96743f47006f08fe472d.png" src="../_images/424ab32a8994c6b511a9bb4184366b936359dfa7691a96743f47006f08fe472d.png" />
-<img alt="../_images/006eda3305bb051885f9e6ef972f0233236a30148946443ecc68fe185c23702b.png" src="../_images/006eda3305bb051885f9e6ef972f0233236a30148946443ecc68fe185c23702b.png" />
-<img alt="../_images/ddfd75365019151855ee5737cefc70a30d67890b154e640346a63f5b3854d567.png" src="../_images/ddfd75365019151855ee5737cefc70a30d67890b154e640346a63f5b3854d567.png" />
-<img alt="../_images/c527edfcd6045f4ac0c774e5905f84238732dca417f4c85a27d41937d998cda6.png" src="../_images/c527edfcd6045f4ac0c774e5905f84238732dca417f4c85a27d41937d998cda6.png" />
-<img alt="../_images/d1a6a120da867e8d42ecef6e1c4cfce86dc22d292e361a81ba8a027b7952fb8c.png" src="../_images/d1a6a120da867e8d42ecef6e1c4cfce86dc22d292e361a81ba8a027b7952fb8c.png" />
-<img alt="../_images/141035926b5df7dd04fc1eddf5348248ec4a83abafa6f82d0984fec4e028d35a.png" src="../_images/141035926b5df7dd04fc1eddf5348248ec4a83abafa6f82d0984fec4e028d35a.png" />
-<img alt="../_images/abfe95da7a2be64ccf386ed9cf62e44c81de08626299887b391336e452f57368.png" src="../_images/abfe95da7a2be64ccf386ed9cf62e44c81de08626299887b391336e452f57368.png" />
+<img alt="../_images/621f27c7371ef62f2ba03f97c0352a2351e8417ae66a0a496c3e9e34a34f0f8a.png" src="../_images/621f27c7371ef62f2ba03f97c0352a2351e8417ae66a0a496c3e9e34a34f0f8a.png" />
+<img alt="../_images/d4e4669ff2ddb857cce6d705ffee85084ae79ff38c07b9a4abc64e8cf93bcdf6.png" src="../_images/d4e4669ff2ddb857cce6d705ffee85084ae79ff38c07b9a4abc64e8cf93bcdf6.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fct</span><span class="o">.</span><span class="n">plt_spatial_season_FLCC_FsLCC</span><span class="p">(</span><span class="n">ratios</span><span class="p">[</span><span class="s1">&#39;cloudsat_500&#39;</span><span class="p">],</span> <span class="n">FIG_DIR</span><span class="p">,</span> <span class="mi">45</span><span class="p">)</span>
-<span class="n">fct</span><span class="o">.</span><span class="n">plt_spatial_season_FLCC_FsLCC</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">[</span><span class="s1">&#39;cloudsat_500&#39;</span><span class="p">],</span> <span class="n">FIG_DIR_mci</span><span class="p">,</span> <span class="mi">66</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fct</span><span class="o">.</span><span class="n">plt_spatial_season_FLCC_FsLCC</span><span class="p">(</span><span class="n">ratios</span><span class="p">[</span><span class="s1">&#39;cloudsat_500&#39;</span><span class="p">],</span> <span class="n">dict_label</span><span class="p">,</span> <span class="n">FIG_DIR</span><span class="p">,</span> <span class="mi">45</span><span class="p">)</span>
+<span class="n">fct</span><span class="o">.</span><span class="n">plt_spatial_season_FLCC_FsLCC</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">[</span><span class="s1">&#39;cloudsat_500&#39;</span><span class="p">],</span> <span class="n">dict_label</span><span class="p">,</span> <span class="n">FIG_DIR_mci</span><span class="p">,</span> <span class="mi">66</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/bc59617d09a8d5c5a082533dbbf6c98d39f92c1abf34f186e0ce6c6f7f28b015.png" src="../_images/bc59617d09a8d5c5a082533dbbf6c98d39f92c1abf34f186e0ce6c6f7f28b015.png" />
-<img alt="../_images/a9994a8b197257e73892dd925477c9db67b3102b4082fd63ff891c9ef22711d3.png" src="../_images/a9994a8b197257e73892dd925477c9db67b3102b4082fd63ff891c9ef22711d3.png" />
+<img alt="../_images/ba1e965ad95184d2f475a1efd1b768495184b9787cee21d1cc71436c3c891eb7.png" src="../_images/ba1e965ad95184d2f475a1efd1b768495184b9787cee21d1cc71436c3c891eb7.png" />
+<img alt="../_images/d09b26d854210bc82fc76d69c5204d8a84b8a6a901c1292565f17a588a0c9023.png" src="../_images/d09b26d854210bc82fc76d69c5204d8a84b8a6a901c1292565f17a588a0c9023.png" />
+<img alt="../_images/7f533f7ca7011777340251e136bbe545cf93e80d2d258170b0c91174c9c8335f.png" src="../_images/7f533f7ca7011777340251e136bbe545cf93e80d2d258170b0c91174c9c8335f.png" />
+<img alt="../_images/e8f9c775a978b6b47f2fe131f03fb00a180b6ddf488272617b4a298e9a35a009.png" src="../_images/e8f9c775a978b6b47f2fe131f03fb00a180b6ddf488272617b4a298e9a35a009.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -879,7 +915,7 @@ IPSL-CM5A2-INCA
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_NH</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 <span class="n">df_SH</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 <span class="n">df</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+<span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">dict_label</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">R2_var_NH</span><span class="p">,</span> <span class="n">d_var_NH</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">R2_var_SH</span><span class="p">,</span> <span class="n">d_var_SH</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">calc_scatter_obs_model</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="n">var_name</span><span class="p">)</span>
     <span class="n">df_NH</span><span class="p">[</span><span class="n">var_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">model</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">R2_var_NH</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">R2_var_NH</span><span class="o">.</span><span class="n">keys</span><span class="p">()},</span> <span class="n">index</span><span class="o">=</span><span class="n">ratios</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">season</span><span class="o">.</span><span class="n">values</span><span class="p">))</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
     <span class="n">df_SH</span><span class="p">[</span><span class="n">var_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">model</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">R2_var_SH</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">R2_var_SH</span><span class="o">.</span><span class="n">keys</span><span class="p">()},</span> <span class="n">index</span><span class="o">=</span><span class="n">ratios</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">season</span><span class="o">.</span><span class="n">values</span><span class="p">))</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
@@ -887,7 +923,7 @@ IPSL-CM5A2-INCA
 <span class="n">df_NH_mci</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 <span class="n">df_SH_mci</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 <span class="n">df_mci</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+<span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">dict_label</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">R2_var_NH_mci</span><span class="p">,</span> <span class="n">d_var_NH_mci</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">R2_var_SH_mci</span><span class="p">,</span> <span class="n">d_var_SH_mci</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">calc_scatter_obs_model</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">,</span> <span class="n">var_name</span><span class="p">)</span>
     <span class="n">df_NH_mci</span><span class="p">[</span><span class="n">var_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">model</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">R2_var_NH_mci</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">R2_var_NH_mci</span><span class="o">.</span><span class="n">keys</span><span class="p">()},</span> <span class="n">index</span><span class="o">=</span><span class="n">ratios_mci</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">season</span><span class="o">.</span><span class="n">values</span><span class="p">))</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
     <span class="n">df_SH_mci</span><span class="p">[</span><span class="n">var_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">model</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">R2_var_SH_mci</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">R2_var_SH_mci</span><span class="o">.</span><span class="n">keys</span><span class="p">()},</span> <span class="n">index</span><span class="o">=</span><span class="n">ratios_mci</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">season</span><span class="o">.</span><span class="n">values</span><span class="p">))</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
@@ -898,8 +934,8 @@ IPSL-CM5A2-INCA
     <span class="n">df_NH</span><span class="p">[</span><span class="s1">&#39;sf_eff&#39;</span><span class="p">][</span><span class="n">season</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;ERA5&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
     <span class="n">df_SH</span><span class="p">[</span><span class="s1">&#39;sf_eff&#39;</span><span class="p">][</span><span class="n">season</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;ERA5&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
     
-    <span class="n">df_NH</span><span class="p">[</span><span class="s1">&#39;pr_eff&#39;</span><span class="p">][</span><span class="n">season</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;ERA5&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">df_SH</span><span class="p">[</span><span class="s1">&#39;pr_eff&#39;</span><span class="p">][</span><span class="n">season</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;ERA5&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="c1"># df_NH[&#39;pr_eff&#39;][season].loc[&#39;ERA5&#39;] = np.nan</span>
+    <span class="c1"># df_SH[&#39;pr_eff&#39;][season].loc[&#39;ERA5&#39;] = np.nan</span>
     
     
     
@@ -907,8 +943,8 @@ IPSL-CM5A2-INCA
     <span class="n">df_NH_mci</span><span class="p">[</span><span class="s1">&#39;sf_eff&#39;</span><span class="p">][</span><span class="n">season</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;ERA5&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
     <span class="n">df_SH_mci</span><span class="p">[</span><span class="s1">&#39;sf_eff&#39;</span><span class="p">][</span><span class="n">season</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;ERA5&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
     
-    <span class="n">df_NH_mci</span><span class="p">[</span><span class="s1">&#39;pr_eff&#39;</span><span class="p">][</span><span class="n">season</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;ERA5&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">df_SH_mci</span><span class="p">[</span><span class="s1">&#39;pr_eff&#39;</span><span class="p">][</span><span class="n">season</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;ERA5&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="c1"># df_NH_mci[&#39;pr_eff&#39;][season].loc[&#39;ERA5&#39;] = np.nan</span>
+    <span class="c1"># df_SH_mci[&#39;pr_eff&#39;][season].loc[&#39;ERA5&#39;] = np.nan</span>
     
 </pre></div>
 </div>
@@ -916,50 +952,66 @@ IPSL-CM5A2-INCA
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fct</span><span class="o">.</span><span class="n">plt_R2_heatmap_season</span><span class="p">(</span><span class="n">df_NH</span><span class="p">,</span> <span class="n">df_SH</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span><span class="n">FIG_DIR</span><span class="p">)</span>
-<span class="n">fct</span><span class="o">.</span><span class="n">plt_R2_heatmap_season</span><span class="p">(</span><span class="n">df_NH_mci</span><span class="p">,</span> <span class="n">df_SH_mci</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span><span class="n">FIG_DIR_mci</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for var_name in d.keys():</span>
-<span class="c1">#     fct.plt_spatial_season_all_models(ratios, var_name,FIG_DIR, 45)</span>
-<span class="c1">#     fct.plt_spatial_season_all_models(ratios_mci, var_name, FIG_DIR_mci, 66)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fct</span><span class="o">.</span><span class="n">plt_R2_heatmap_season</span><span class="p">(</span><span class="n">df_NH</span><span class="p">,</span> <span class="n">df_SH</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">,</span><span class="n">FIG_DIR</span><span class="p">)</span>
+<span class="n">fct</span><span class="o">.</span><span class="n">plt_R2_heatmap_season</span><span class="p">(</span><span class="n">df_NH_mci</span><span class="p">,</span> <span class="n">df_SH_mci</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">,</span><span class="n">FIG_DIR_mci</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/e066ffc5e9a705935bf987603898dab207ab5d45607732a26967c1a315fe8ec6.png" src="../_images/e066ffc5e9a705935bf987603898dab207ab5d45607732a26967c1a315fe8ec6.png" />
-<img alt="../_images/d2d33e51cc1af476d79598f013e613b25b442354118b36c60cac9f63e7b2f8fd.png" src="../_images/d2d33e51cc1af476d79598f013e613b25b442354118b36c60cac9f63e7b2f8fd.png" />
-<img alt="../_images/75a692759e06d3277c9553768bbdc5513cb1fd440e0810ddc7fd5acf701aeee9.png" src="../_images/75a692759e06d3277c9553768bbdc5513cb1fd440e0810ddc7fd5acf701aeee9.png" />
-<img alt="../_images/9124b00b84ff259e8d6e832398deba99d7db3fe7e491382ab2d4932d5e239829.png" src="../_images/9124b00b84ff259e8d6e832398deba99d7db3fe7e491382ab2d4932d5e239829.png" />
-<img alt="../_images/9eaa82f3f0f73450bb8f41f3bb0661822bc91620079c0d3eb9445325259a5197.png" src="../_images/9eaa82f3f0f73450bb8f41f3bb0661822bc91620079c0d3eb9445325259a5197.png" />
-<img alt="../_images/9f96353aa7ac6ec3704f34c6c87ee2962cab471d90b16421c77e95fe8c8ced0f.png" src="../_images/9f96353aa7ac6ec3704f34c6c87ee2962cab471d90b16421c77e95fe8c8ced0f.png" />
-<img alt="../_images/791cc8d029b99f28c26df857b84fa2aa636c49f73cfb4a0e88470c6f724d281c.png" src="../_images/791cc8d029b99f28c26df857b84fa2aa636c49f73cfb4a0e88470c6f724d281c.png" />
-<img alt="../_images/e0f3aa0a2c6440ccfc8d40f1dd8fcd37e9c564a276d161341394a3038511cd84.png" src="../_images/e0f3aa0a2c6440ccfc8d40f1dd8fcd37e9c564a276d161341394a3038511cd84.png" />
-<img alt="../_images/230f182a7cf583fb5bd4da283252a7d6164ba338bb5201c82c53516595ce8b48.png" src="../_images/230f182a7cf583fb5bd4da283252a7d6164ba338bb5201c82c53516595ce8b48.png" />
-<img alt="../_images/da0e4ac17c46cb1e4614017a8e2e3e678524343a67bb8ec65a0938ef61825e89.png" src="../_images/da0e4ac17c46cb1e4614017a8e2e3e678524343a67bb8ec65a0938ef61825e89.png" />
-<img alt="../_images/c8d48a9bb85b650d5b9b92d5144adb55085d13a9fb91d0eac516c76b12547c96.png" src="../_images/c8d48a9bb85b650d5b9b92d5144adb55085d13a9fb91d0eac516c76b12547c96.png" />
-<img alt="../_images/7f6be96250c0ef6f77481421e589e2f032904cced4aed168816c796edac9ba7f.png" src="../_images/7f6be96250c0ef6f77481421e589e2f032904cced4aed168816c796edac9ba7f.png" />
-<img alt="../_images/1fab8705b7fe0edf747a437e29e97451a93b337dee2ee38d18916d755ae167f1.png" src="../_images/1fab8705b7fe0edf747a437e29e97451a93b337dee2ee38d18916d755ae167f1.png" />
-<img alt="../_images/fd9c85ea8bef287c9c6afb811a2732622f9c6e27e0a9be4f346bab2e908cdb50.png" src="../_images/fd9c85ea8bef287c9c6afb811a2732622f9c6e27e0a9be4f346bab2e908cdb50.png" />
-<img alt="../_images/e847ade3a31cefc813fa5b26eab65906839c2f1605190c7d73353b684c617580.png" src="../_images/e847ade3a31cefc813fa5b26eab65906839c2f1605190c7d73353b684c617580.png" />
-<img alt="../_images/bc9dd74f26e62e7a93da0cafd416fb515dfc348120684d3e6121276b8a3f8c13.png" src="../_images/bc9dd74f26e62e7a93da0cafd416fb515dfc348120684d3e6121276b8a3f8c13.png" />
-<img alt="../_images/96dbd1bc44ecc409ab280fb3bc5b2554fa854b59988ee23ed6c169660c6808ea.png" src="../_images/96dbd1bc44ecc409ab280fb3bc5b2554fa854b59988ee23ed6c169660c6808ea.png" />
-<img alt="../_images/c6264373112f2cdb61beda50339c5fd7c2df96a2136bfe061926eed50f326be5.png" src="../_images/c6264373112f2cdb61beda50339c5fd7c2df96a2136bfe061926eed50f326be5.png" />
-<img alt="../_images/44d5c876929204a4dbc968047195187b1e42647b71531798dd284846e522922c.png" src="../_images/44d5c876929204a4dbc968047195187b1e42647b71531798dd284846e522922c.png" />
-<img alt="../_images/94e543f73b69d1b3b78223553eb37dcdcb721dda3471c9019bc98cbb1f3cd64f.png" src="../_images/94e543f73b69d1b3b78223553eb37dcdcb721dda3471c9019bc98cbb1f3cd64f.png" />
+<img alt="../_images/9d6371058a2076fe53767f0636ae8ad7f85e5473e30be58947f181c106d5e538.png" src="../_images/9d6371058a2076fe53767f0636ae8ad7f85e5473e30be58947f181c106d5e538.png" />
+<img alt="../_images/d34906e80200c876a8ca4b4109716750247dfee61a0c8335b352e38df81db5a5.png" src="../_images/d34906e80200c876a8ca4b4109716750247dfee61a0c8335b352e38df81db5a5.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="n">fct</span><span class="o">.</span><span class="n">plt_scatter_obs_model</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="n">var_name</span><span class="p">],</span> <span class="n">FIG_DIR</span><span class="p">)</span>
-    <span class="n">fct</span><span class="o">.</span><span class="n">plt_scatter_obs_model</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="n">var_name</span><span class="p">],</span> <span class="n">FIG_DIR_mci</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for var_name in dict_label.keys():</span>
+    <span class="c1"># fct.plt_spatial_season_all_models(ratios, var_name,dict_label,FIG_DIR, 45)</span>
+    <span class="c1"># fct.plt_spatial_season_all_models(ratios_mci, var_name, dict_label,FIG_DIR_mci, 66)</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/d48aeb7047c3305a0e21cf16c32df28099f16fcc2c205aed1f219ebf074ef099.png" src="../_images/d48aeb7047c3305a0e21cf16c32df28099f16fcc2c205aed1f219ebf074ef099.png" />
+<img alt="../_images/4e606feeea124fa7da7cacee1d32775ea2ef987cb7e1269a36cf17326ad93253.png" src="../_images/4e606feeea124fa7da7cacee1d32775ea2ef987cb7e1269a36cf17326ad93253.png" />
+<img alt="../_images/6e469f31a5b4f066eb0bf76b2322a2847991413ca9635c7ce00bb4bfcc97511b.png" src="../_images/6e469f31a5b4f066eb0bf76b2322a2847991413ca9635c7ce00bb4bfcc97511b.png" />
+<img alt="../_images/b95efbe0145f3635e398e996eff9e51593410c24a0ad953468d2718a11162e45.png" src="../_images/b95efbe0145f3635e398e996eff9e51593410c24a0ad953468d2718a11162e45.png" />
+<img alt="../_images/12ccdc154e8ad5ea6d87bbcdc54cb14dd5ed17e9f4482da2eb9afa10f42664c8.png" src="../_images/12ccdc154e8ad5ea6d87bbcdc54cb14dd5ed17e9f4482da2eb9afa10f42664c8.png" />
+<img alt="../_images/8b0fac37558de948ace81a2ff2ca1db68442f18fbbde5b476d34894300a93d52.png" src="../_images/8b0fac37558de948ace81a2ff2ca1db68442f18fbbde5b476d34894300a93d52.png" />
+<img alt="../_images/19e104a23bc3cc2cc9d75022aac7a370a7845e5409973c57fd861092f37881e0.png" src="../_images/19e104a23bc3cc2cc9d75022aac7a370a7845e5409973c57fd861092f37881e0.png" />
+<img alt="../_images/073e8806c827787c3c940865bbac2c35d4b56bea3390a64b1673f95d0cbb2cbd.png" src="../_images/073e8806c827787c3c940865bbac2c35d4b56bea3390a64b1673f95d0cbb2cbd.png" />
+<img alt="../_images/3e051631dd054d0facaacbef085602b66c70f6d1b01a56ede9f089df3ed7be85.png" src="../_images/3e051631dd054d0facaacbef085602b66c70f6d1b01a56ede9f089df3ed7be85.png" />
+<img alt="../_images/e01ee86fda22d6208010ba692af7b7283ac8d270a07f0b48a0b14fa51dccafbe.png" src="../_images/e01ee86fda22d6208010ba692af7b7283ac8d270a07f0b48a0b14fa51dccafbe.png" />
+<img alt="../_images/679e00f5863087eb19e536347d862de07b8e87fd0ccad00c3de1f7f2bd82e2eb.png" src="../_images/679e00f5863087eb19e536347d862de07b8e87fd0ccad00c3de1f7f2bd82e2eb.png" />
+<img alt="../_images/fff8ae85fd9f67e812a18ae70e564ccc6fc52c367d2045a02fa16f55f197fb95.png" src="../_images/fff8ae85fd9f67e812a18ae70e564ccc6fc52c367d2045a02fa16f55f197fb95.png" />
+<img alt="../_images/d52c186186cd53b7c9172fbf4030c53727ed1c80e69f8451a35691999298b7aa.png" src="../_images/d52c186186cd53b7c9172fbf4030c53727ed1c80e69f8451a35691999298b7aa.png" />
+<img alt="../_images/2a597ccab91e46064a9260d949cfa34bb457ed2901760247026b9650c897511c.png" src="../_images/2a597ccab91e46064a9260d949cfa34bb457ed2901760247026b9650c897511c.png" />
+<img alt="../_images/330dab5128e13c5e944918825000dd01a1b833219e7515b741e8ddba1bf5222c.png" src="../_images/330dab5128e13c5e944918825000dd01a1b833219e7515b741e8ddba1bf5222c.png" />
+<img alt="../_images/c7a304f243aa8a407df8fad6730538e0823ef2c52e829e8b53488eee5565e43b.png" src="../_images/c7a304f243aa8a407df8fad6730538e0823ef2c52e829e8b53488eee5565e43b.png" />
+<img alt="../_images/9f686cc4d9ccfb013f54842c30cced2ed7a2155303bc408d2146eb2d46ba5d93.png" src="../_images/9f686cc4d9ccfb013f54842c30cced2ed7a2155303bc408d2146eb2d46ba5d93.png" />
+<img alt="../_images/081a3f2b51a7fa9e4dbfcfa39d115fbf4a5ff3a4b57a31c2ec83b56a126a1c66.png" src="../_images/081a3f2b51a7fa9e4dbfcfa39d115fbf4a5ff3a4b57a31c2ec83b56a126a1c66.png" />
+<img alt="../_images/030f93f062c65044d9d7f66350a049310057220e2b750769c7ef866063fd48c0.png" src="../_images/030f93f062c65044d9d7f66350a049310057220e2b750769c7ef866063fd48c0.png" />
+<img alt="../_images/451eb878fe7077b943354cbca3eb4e7228cffa9c2eac0cf871cf42ca79ce6f6c.png" src="../_images/451eb878fe7077b943354cbca3eb4e7228cffa9c2eac0cf871cf42ca79ce6f6c.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">dict_label</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="n">fct</span><span class="o">.</span><span class="n">plt_scatter_obs_model</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">],</span> <span class="n">FIG_DIR</span><span class="p">)</span>
+    <span class="n">fct</span><span class="o">.</span><span class="n">plt_scatter_obs_model</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">],</span> <span class="n">FIG_DIR_mci</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/c6627958ce4b863f1209057be200a6f5a59360c07b9d5edf752f781ad54ba2a2.png" src="../_images/c6627958ce4b863f1209057be200a6f5a59360c07b9d5edf752f781ad54ba2a2.png" />
+<img alt="../_images/907bdf85bccafcb5170bc592ee1d397b61eb0d099a759db6a4a1abb5e8b09bb7.png" src="../_images/907bdf85bccafcb5170bc592ee1d397b61eb0d099a759db6a4a1abb5e8b09bb7.png" />
+<img alt="../_images/0d654215e64517be2b6f3705af44d3b0de557bd903032c77ea49f1aea0e8b9cf.png" src="../_images/0d654215e64517be2b6f3705af44d3b0de557bd903032c77ea49f1aea0e8b9cf.png" />
+<img alt="../_images/b51bd3a5ea15951a9e97c234265a17dbe2ab86d330237f623a770e4b4cc119b3.png" src="../_images/b51bd3a5ea15951a9e97c234265a17dbe2ab86d330237f623a770e4b4cc119b3.png" />
+<img alt="../_images/7434a0caa90b0fcdad1463f61638ff09945941f6a8691d5609e19ff968e80dc5.png" src="../_images/7434a0caa90b0fcdad1463f61638ff09945941f6a8691d5609e19ff968e80dc5.png" />
+<img alt="../_images/d6ae999349fd3219bc5c5880fabcd9cdf7d62db124fbd816befac38950069ce1.png" src="../_images/d6ae999349fd3219bc5c5880fabcd9cdf7d62db124fbd816befac38950069ce1.png" />
+<img alt="../_images/fcfb50bde3ea39626ac881186fa995be1297e4164a0bfc9f13c8b4a05c40511c.png" src="../_images/fcfb50bde3ea39626ac881186fa995be1297e4164a0bfc9f13c8b4a05c40511c.png" />
+<img alt="../_images/3a8c33e9f0b350b183afeec7314b1e6e34043d6e5cee7d6f9179914f090d098a.png" src="../_images/3a8c33e9f0b350b183afeec7314b1e6e34043d6e5cee7d6f9179914f090d098a.png" />
+<img alt="../_images/947ee8647362e21cf281be094d12f1e3e0a1ad1641f935cae816e6fd5717eab1.png" src="../_images/947ee8647362e21cf281be094d12f1e3e0a1ad1641f935cae816e6fd5717eab1.png" />
+<img alt="../_images/1e8472c30813a78c8556420bd62b8adf4a2730ad1d19ed595889f0e4fd68d913.png" src="../_images/1e8472c30813a78c8556420bd62b8adf4a2730ad1d19ed595889f0e4fd68d913.png" />
 </div>
 </div>
 </section>

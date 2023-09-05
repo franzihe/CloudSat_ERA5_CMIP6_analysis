@@ -1053,8 +1053,8 @@ def plt_annual_cycle(NH_mean, SH_mean, NH_std, SH_std, y_label,plt_title):
 
     axs[0].set_ylabel(y_label)
     axs[1].set_ylabel('')
-    axs[0].set(title ='Arctic')
-    axs[1].set(title ='Antarctic')
+    axs[0].set(title ='Northern Hemisphere')
+    axs[1].set(title ='Southern Hemisphere')
 
 
     f.suptitle(plt_title, fontweight="bold");
@@ -1260,10 +1260,10 @@ def get_ratios_dict(list_models, ds,seasons):
                                         stats = 'sum',  
                                         out_var = 'FsLCC', 
                                         seasons=seasons), #out_var = 'lcc_wo_snow', weights = ds['2t'][model]['areacella']),
-                get_ratios_season_month(var1 = ds['lcc_sf'][model]['n_sf_lcc_snow'], var2 = ds['orig'][model]['n_lcc'], 
-                                        stats = 'sum', 
-                                        out_var = 'FoP', 
-                                        seasons=seasons),
+                # get_ratios_season_month(var1 = ds['lcc_sf'][model]['n_sf_lcc_snow'], var2 = ds['orig'][model]['n_lcc'], 
+                #                         stats = 'sum', 
+                #                         out_var = 'FoP', 
+                #                         seasons=seasons),
                 get_ratios_season_month(var1 = ds['lcc_2t_sf'][model]['n_sf_lcc_snow'], var2 = ds['lcc_2t'][model]['n_lcc'], 
                                         stats='sum', 
                                         out_var = 'FoS', 
@@ -1272,10 +1272,10 @@ def get_ratios_dict(list_models, ds,seasons):
                                         stats = 'mean', 
                                         out_var = 'sf_eff', 
                                         seasons=seasons),
-                get_ratios_season_month(var1 = ds['lcc_2t_days'][model]['sf_avg_lcc_snow'], var2 = ds['lcc_2t_days'][model]['lwp'], 
-                                        stats = 'mean', 
-                                        out_var = 'pr_eff', 
-                                        seasons=seasons),
+                # get_ratios_season_month(var1 = ds['lcc_2t_days'][model]['sf_avg_lcc_snow'], var2 = ds['lcc_2t_days'][model]['lwp'], 
+                #                         stats = 'mean', 
+                #                         out_var = 'pr_eff', 
+                #                         seasons=seasons),
                 get_ratios_season_month(var1 = ds['orig'][model]['n_lcc']-ds['lcc_2t'][model]['n_lcc'],
                                         var2 = ds['orig'][model]['n_obs'], 
                                         stats = 'sum', 
@@ -1296,11 +1296,11 @@ def get_ratios_dict(list_models, ds,seasons):
                                         stats='count', 
                                         out_var='FsLCC', 
                                         seasons=seasons),#out_var='lcc_wo_snow', weights=ds['2t'][model]['areacella']), # sLCC frequency compared to all observations when T<0C
-                get_ratios_season_month(var1=ds['lcc'][model]['pr'].where(ds['lcc'][model]['pr']>=0.01, other=np.nan), 
-                                        var2=ds['orig'][model]['tas'], 
-                                        stats='count', 
-                                        out_var='FoP', 
-                                        seasons=seasons),
+                # get_ratios_season_month(var1=ds['lcc'][model]['pr'].where(ds['lcc'][model]['pr']>=0.01, other=np.nan), 
+                #                         var2=ds['orig'][model]['tas'], 
+                #                         stats='count', 
+                #                         out_var='FoP', 
+                #                         seasons=seasons),
                 get_ratios_season_month(var1=ds['lcc_2t_sf'][model]['prsn'], var2=ds['lcc_2t'][model]['lwp'], 
                                         stats='count', 
                                         out_var='FoS', 
@@ -1309,10 +1309,10 @@ def get_ratios_dict(list_models, ds,seasons):
                                         stats='mean', 
                                         out_var='sf_eff', 
                                         seasons=seasons),      # relative snowfall (precipitation) efficency
-                get_ratios_season_month(var1=ds['lcc_2t_days'][model]['pr'], var2=ds['lcc_2t_days'][model]['lwp'], 
-                                        stats='mean', 
-                                        out_var='pr_eff', 
-                                        seasons=seasons),      # relative snowfall (precipitation) efficency
+                # get_ratios_season_month(var1=ds['lcc_2t_days'][model]['pr'], var2=ds['lcc_2t_days'][model]['lwp'], 
+                #                         stats='mean', 
+                #                         out_var='pr_eff', 
+                #                         seasons=seasons),      # relative snowfall (precipitation) efficency
                 get_ratios_season_month(var1=ds['lcc'][model]['lwp']-ds['lcc_2t'][model]['lwp'],
                                         var2=ds['orig'][model]['tas'],
                                         stats='count',
@@ -1486,7 +1486,7 @@ def plt_monthly_model_variation(ds_dict, var_name, dict_label,fig_dir):
             
           
             
-        ax[i].set_title('Arctic' if hemisphere == 'NH' else 'Antarctic')   
+        ax[i].set_title('Northern Hemisphere' if hemisphere == 'NH' else 'Southern Hemisphere')   
         ax[i].text(0.05, 0.95, f'{fig_label[i]}', fontweight='bold', horizontalalignment='left', verticalalignment='top', transform=ax[i].transAxes)
         ax[i].set_xticks(np.arange(1,14)) 
         ax[i].set_xlim([0, 13.5])
@@ -1683,7 +1683,7 @@ def plt_R2_heatmap_season(df_NH, df_SH, dict_label, fig_dir):
 
     for ax, var_name, k in zip(axsm.flatten()[::2],dict_label.keys(), fig_label[::2]): 
         im = ax.imshow(df_NH[var_name], cmap=cmap, norm=norm)
-        ax.set_title(f'{k} Arctic', )#fontsize=10.)
+        ax.set_title(f'{k} NH', )#fontsize=10.)
         
         if k == 'a)':
             ax.set(yticks=range(len(df_NH[var_name].index)), yticklabels=df_NH[var_name].index)
@@ -1691,7 +1691,7 @@ def plt_R2_heatmap_season(df_NH, df_SH, dict_label, fig_dir):
             x_position = 0.75  
         elif var_name == 'FsLCC':
             x_position = 0.75
-        elif var_name == 'FoP' or var_name == 'FoS' or var_name == 'sf_eff' or var_name == 'pr_eff':
+        elif var_name == 'FoP' or var_name == 'FoS' or var_name == 'sf_eff' or var_name == 'pr_eff' or var_name == 'FLCC-FsLCC':
             x_position = 0.55
         
         plt.figtext(x_position,-0.11, dict_label[var_name]['cb_label'], fontweight='bold', horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
@@ -1702,7 +1702,7 @@ def plt_R2_heatmap_season(df_NH, df_SH, dict_label, fig_dir):
         ax.set(xticks=range(len(df_NH[var_name].columns)), xticklabels=df_NH[var_name].columns,)
     for ax, var_name, label, k in zip(axsm.flatten()[1::2],dict_label.keys(), dict_label.values(), fig_label[1::2]):     
         im = ax.imshow(df_SH[var_name], cmap=cmap, norm=norm)
-        ax.set_title(f'{k} Antarctic')
+        ax.set_title(f'{k} SH')
         ax.set(xticks=range(len(df_SH[var_name].columns)), xticklabels=df_SH[var_name].columns,)
 
     # add space for colour bar
@@ -1710,7 +1710,7 @@ def plt_R2_heatmap_season(df_NH, df_SH, dict_label, fig_dir):
     cbar_ax = f.add_axes([1.01, 0.15, 0.0125, 0.7])
     
     f.colorbar(im, cax=cbar_ax, cmap=cmap, norm=norm,
-        spacing='proportional', ticks=bounds, boundaries=bounds, label=f'r$^2$-values',shrink=0.5)
+        spacing='proportional', ticks=bounds, boundaries=bounds, label=f'R$^2$-values',shrink=0.5)
 
     
 
@@ -1888,11 +1888,13 @@ def plot_spatial_season(difference, val1, val2, val3, val1_mean, val2_mean, val3
             if difference != None and i == 0:
                 if var_name == 'sf_eff' or var_name == 'pr_eff':
                     cbaxes = f.add_axes([0.92, 0.4, 0.0125, 0.45])
+                    cb_label = dict_label['cb_label']
                 elif var_name == 'FLCC-FsLCC':
                     cbaxes = f.add_axes([1.0, 0.4, 0.0125, 0.45])
+                    cb_label = 'Fraction (%)'
                 else:
                     cbaxes = f.add_axes([0.92, 0.65, 0.0125, 0.225])
-                cb_label = dict_label['cb_label']
+                    cb_label = dict_label['cb_label']
                 plt.colorbar(cf, cax=cbaxes, shrink=0.5,extend=None, orientation='vertical', label=cb_label)
             if difference != None and i == 2:
                 if var_name == 'sf_eff' or var_name == 'sf_eff':
@@ -1928,7 +1930,7 @@ def plot_spatial_season(difference, val1, val2, val3, val1_mean, val2_mean, val3
     plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=False)
 
 
-def plt_spatial_season_var(ds, var_name, fig_dir, lat_extent):
+def plt_spatial_season_var(ds, var_name, dict_label, fig_dir, lat_extent):
     for hemisphere in ['NH', 'SH']:
         val1= ds['cloudsat_500'][var_name + '_season']
         val1_mean= ds['cloudsat_500'][var_name + '_season_mean']
@@ -1940,12 +1942,12 @@ def plt_spatial_season_var(ds, var_name, fig_dir, lat_extent):
         val3_mean = ds['cmip_500'][var_name + '' +'_season_mean']  
         
         plot_spatial_season('yes', val1, val2, val3, val1_mean, val2_mean, val3_mean,
-                        hemisphere, ds, var_name, d[var_name], fig_dir, lat_extent)  
+                        hemisphere, ds, var_name, dict_label[var_name], fig_dir, lat_extent)  
         plot_spatial_season(None, val1, val2, val3, val1_mean, val2_mean, val3_mean,
-                        hemisphere, ds, var_name, d[var_name], fig_dir, lat_extent) 
+                        hemisphere, ds, var_name, dict_label[var_name], fig_dir, lat_extent) 
 
 
-def plt_spatial_season_FLCC_FsLCC(ds, fig_dir, lat_extent):
+def plt_spatial_season_FLCC_FsLCC(ds, dict_label, fig_dir, lat_extent):
     for hemisphere in ['NH', 'SH']:
         val1= ds['FLCC' + '_season']
         val1_mean= ds['FLCC' + '_season_mean']
@@ -1957,7 +1959,7 @@ def plt_spatial_season_FLCC_FsLCC(ds, fig_dir, lat_extent):
         val3_mean = ds['FLCC-FsLCC' + '' +'_season_mean']
             
         plot_spatial_season('yes', val1, val2, val3, val1_mean, val2_mean, val3_mean,
-                        hemisphere, ds, 'FLCC-FsLCC', d['FLCC-FsLCC'], fig_dir, lat_extent)
+                        hemisphere, ds, 'FLCC-FsLCC', dict_label['FLCC-FsLCC'], fig_dir, lat_extent)
     
 
     
@@ -2073,7 +2075,7 @@ def plot_spatial_season_model(val1, val2, val3, val1_mean, val2_mean, val3_mean,
     plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=False)
 
 
-def plt_spatial_season_all_models(ds, var_name, fig_dir, lat_extent):
+def plt_spatial_season_all_models(ds, var_name, dict_label, fig_dir, lat_extent):
     
     for model in ds['cmip_500']['model'].values:
         if model == 'CanESM5' or model == 'IPSL-CM5A2-INCA':
@@ -2095,4 +2097,4 @@ def plt_spatial_season_all_models(ds, var_name, fig_dir, lat_extent):
         val3_mean = val1_mean-val2_mean
         for hemisphere in ['NH', 'SH']:
             plot_spatial_season_model(val1, val2, val3, val1_mean, val2_mean, val3_mean,
-                                    hemisphere, var_name, d[var_name], fig_dir, lat_extent, model, res)
+                                    hemisphere, var_name, dict_label[var_name], fig_dir, lat_extent, model, res)
