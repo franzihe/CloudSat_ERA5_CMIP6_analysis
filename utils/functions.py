@@ -17,6 +17,11 @@ from imports import (
     Line2D,
     r2_score,
     LinearSegmentedColormap, 
+    Normalize,
+    FuncFormatter,
+    FormatStrFormatter,
+    Rectangle
+    
 )
 
 import warnings
@@ -25,6 +30,17 @@ import warnings
 fig_label = ['a)', 'b)', 'c)', 'd)', 'e)', 'f)', 'g)', 'h)', 'i)', 'j)', 'k)', 'l)', 'm)', 'n)', 'o)', 'p)', 'q)', 'r)', 's)', 't)', 'u)', 'v)', 'w)', 'x)', 'y)', 'z)',
              'aa)', 'bb)', 'cc)', 'dd)', 'ee)', 'ff)', 'gg)', 'hh)', 'ii)', 'jj)', 'kk)', 'll)', 'mm)', 'nn)', 'oo)', 'pp)', 'qq)', 'rr)', 'ss)', 'tt)', 'uu)', 'vv)', 'ww)', 'xx)', 'yy)', 'zz)']
 
+class MidpointNormalize(Normalize):
+    def __init__(self, vmin, vmax, midpoint=0, clip=False):
+        self.midpoint = midpoint
+        Normalize.__init__(self, vmin, vmax, clip)
+
+    def __call__(self, value, clip=None):
+        normalized_min = max(0, 1 / 2 * (1 - abs((self.midpoint - self.vmin) / (self.midpoint - self.vmax))))
+        normalized_max = min(1, 1 / 2 * (1 + abs((self.vmax - self.midpoint) / (self.midpoint - self.vmin))))
+        normalized_mid = 0.5
+        x, y = [self.vmin, self.midpoint, self.vmax], [normalized_min, normalized_mid, normalized_max]
+        return np.ma.masked_array(np.interp(value, x, y))
 
 
 def rename_coords_lon_lat(ds):
@@ -1096,6 +1112,15 @@ def to_ERA5_date(ds, model):
 def is_season(month, lower_val, upper_val):
     return (month>=lower_val) & (month <= upper_val)
 
+def calculate_interannual_stats(dataset, var_name):
+    _data = xr.concat([dataset[var_name + '_month_years_mean'],
+                       dataset[var_name + '_year_years_mean'].assign_coords(coords={'month': 13})], dim='month')
+    quantiles = _data.quantile([0.25, 0.5, 0.75], dim='year', skipna=True, keep_attrs=False)
+    iqr = quantiles.sel(quantile=0.75) - quantiles.sel(quantile=0.25)
+    max_val = (quantiles.sel(quantile=0.75) + 1.5 * iqr).assign_coords({'quantile': 'max'})
+    min_val = (quantiles.sel(quantile=0.25) - 1.5 * iqr).assign_coords({'quantile': 'min'})
+    return xr.concat([max_val, quantiles, min_val], dim='quantile')
+
 #### functions for plt_seasonal_mean.py
 def calculate_stats(data, weights, lat_slice):
         weighted_data = data.sel(lat=lat_slice).weighted(weights)
@@ -1105,8 +1130,8 @@ def calculate_stats(data, weights, lat_slice):
                 
                 quantiles = weighted_data.quantile([0.25, 0.5, 0.75], dim=('lat', 'lon'), skipna=True, keep_attrs=False)
                 iqr = quantiles.sel(quantile=0.75) - quantiles.sel(quantile=0.25)
-                max_val = (quantiles.sel(quantile=0.75) + 1.5 * iqr).assign_coords({'quantile': 'min'})
-                min_val = (quantiles.sel(quantile=0.25) - 1.5 * iqr).assign_coords({'quantile': 'max'})
+                max_val = (quantiles.sel(quantile=0.75) + 1.5 * iqr).assign_coords({'quantile': 'max'})
+                min_val = (quantiles.sel(quantile=0.25) - 1.5 * iqr).assign_coords({'quantile': 'min'})
                 stats = xr.concat([max_val, quantiles, min_val], dim='quantile')
                 
         else:
@@ -1132,120 +1157,154 @@ def weighted_average(data, weights):
 def get_ratios_season_month(var1, var2, stats, out_var,seasons ):
     
     ratios = xr.Dataset()
+    years = [2007, 2008, 2009, 2010]
+    months = np.arange(1, 13)
     
-    # if var3 == None:
-    #     var3 = xr.DataArray()
-    
+    season_mapping = {
+        'normal': {'JJA': (6, 7, 8), 'MAM': (3, 4, 5), 'SON': (9, 10, 11)},
+        'alternative': {'MJJ': (5, 6, 7), 'FMA': (2, 3, 4), 'ASO': (8, 9, 10)}
+        }
+
+    selected_seasons = season_mapping[seasons]
+    fseason = {season: var1.sel(time=is_season(var1['time.month'], months[0], months[2])) for season, months in selected_seasons.items()}
     if seasons == 'normal':
-        fseason = var1.groupby('time.season')
-        
+        fseason['DJF'] = xr.concat([var1.sel(time=is_season(var1['time.month'], 12, 12)),
+                                    var1.sel(time=is_season(var1['time.month'], 1, 2))], dim='time')
     else:
-        fseason = {'NDJ':xr.concat([var1.sel(time=is_season(var1['time.month'], 11,12)),
-                                var1.sel(time=is_season(var1['time.month'], 1,1))], dim='time'),
-               'MJJ':var1.sel(time=is_season(var1['time.month'], 5,7)),
-               'FMA':var1.sel(time=is_season(var1['time.month'], 2,4)), 
-               'ASO':var1.sel(time=is_season(var1['time.month'], 8,10))}  
-        
-    fmonth = var1.groupby('time.month')  
+        fseason['NDJ'] = xr.concat([var1.sel(time=is_season(var1['time.month'], 11, 12)),
+                                    var1.sel(time=is_season(var1['time.month'], 1, 1))], dim='time')
     
+    myKeys = list(fseason.keys())
+    myKeys.sort()
+    sorted_dict = {i: fseason[i] for i in myKeys}
+    fseason = xr.concat(list(sorted_dict.values()), pd.Index(list(sorted_dict.keys()), name='season'))
+        
+    # fmonth = var1.groupby('time.month')  
+    fmonth = xr.concat([var1.sel(time=is_season(var1['time.month'], m, m)) for m in months], pd.Index(months, name='month'))
     
     if 'time' in var2.dims:
+        
+            # nseason = var2.groupby('time.season')
+        nseason = {season: var2.sel(time=is_season(var2['time.month'], months[0], months[2])) for season, months in selected_seasons.items()}
         if seasons == 'normal':
-            nseason = var2.groupby('time.season')
+            nseason['DJF'] = xr.concat([var2.sel(time=is_season(var1['time.month'], 12, 12)),
+                                        var2.sel(time=is_season(var1['time.month'], 1, 2))], dim='time')   
         else:
-            nseason = {'NDJ':xr.concat([var2.sel(time=is_season(var2['time.month'], 11, 12)),
-                                    var2.sel(time=is_season(var2['time.month'], 1, 1))], dim='time'),
-                   'MJJ':var2.sel(time=is_season(var2['time.month'], 5, 7)),
-                   'FMA':var2.sel(time=is_season(var2['time.month'], 2, 4)),
-                   'ASO':var2.sel(time=is_season(var2['time.month'], 8, 10))}
-        nmonth = var2.groupby('time.month')
+            nseason['NDJ'] = xr.concat([var2.sel(time=is_season(var1['time.month'], 11, 12)),
+                                        var2.sel(time=is_season(var1['time.month'], 1, 1))], dim='time') 
+        myKeys = list(nseason.keys())
+        myKeys.sort()
+        sorted_dict = {i: nseason[i] for i in myKeys}
+        nseason = xr.concat(list(sorted_dict.values()), pd.Index(list(sorted_dict.keys()), name='season'))
+        # nmonth = var2.groupby('time.month')
+        nmonth = xr.concat([var2.sel(time=is_season(var1['time.month'], m, m)) for m in months], pd.Index(months, name='month'))
 
     if stats == 'count':
-        # # per season
-        # if 'season' in var2.dims:
-        #     ratios[out_var+'_season'] = fseason.count(dim='time', keep_attrs=False) / var2
-        
-        if 'time' in var2.dims:
-            if seasons == 'normal':
-                ratios[out_var+'_season'] = fseason.count(dim='time', keep_attrs=False) / nseason.count(dim='time', keep_attrs=False)
-            else:
-                ratios[out_var+'_season'] = xr.concat([fseason['NDJ'].count(dim='time', keep_attrs=False) / nseason['NDJ'].count(dim='time', keep_attrs=False),
-                                                   fseason['MJJ'].count(dim='time', keep_attrs=False) / nseason['MJJ'].count(dim='time', keep_attrs=False),
-                                                   fseason['FMA'].count(dim='time', keep_attrs=False) / nseason['FMA'].count(dim='time', keep_attrs=False),
-                                                   fseason['ASO'].count(dim='time', keep_attrs=False) / nseason['ASO'].count(dim='time', keep_attrs=False)], 
-                                                  dim='season')
-                ratios[out_var+'_season'] = ratios[out_var+'_season'].assign_coords({'season':['NDJ', 'MJJ', 'FMA', 'ASO']})
-                
-            ratios[out_var+'_month'] = fmonth.count(dim='time', keep_attrs=False) / nmonth.count(dim='time', keep_attrs=False)
-            # all years
-            ratios[out_var+'_year'] = var1.count(dim='time', keep_attrs=False) / var2.count(dim='time', keep_attrs=False)
-        
-            
+        # per season
+        fseason_year = xr.concat([fseason.sel(time=fseason.time.dt.year.isin(year)).squeeze().count(dim='time', keep_attrs=False) for year in years],
+                                 pd.Index(years, name='year'))
+        nseason_year = xr.concat([nseason.sel(time=nseason.time.dt.year.isin(year)).squeeze().count(dim='time', keep_attrs=False) for year in years],
+                                 pd.Index(years, name='year'))
+
+        ratios[out_var+'_season'] = np.true_divide(fseason.count(dim='time', keep_attrs=False), nseason.count(dim='time', keep_attrs=False))
+        ratios[out_var+'_season_years'] = np.true_divide(fseason_year, nseason_year)
+    
+
         # per month
-        # if 'month' in var3.dims:
-        #     ratios[out_var+'_month'] = fmonth.count(dim='time', keep_attrs=False) / var3
-        # elif 'time' in var3.dims:
-        #     # all years
+        fmonth_year = xr.concat([fmonth.sel(time=fmonth.time.dt.year.isin(year)).squeeze().count(dim='time', keep_attrs=False) for year in years], 
+                                pd.Index(years, name='year'))
+        nmonth_year = xr.concat([nmonth.sel(time=nmonth.time.dt.year.isin(year)).squeeze().count(dim='time', keep_attrs=False) for year in years], 
+                                pd.Index(years, name='year'))
+
+        ratios[out_var+'_month'] = np.true_divide(fmonth.count(dim='time', keep_attrs=False), nmonth.count(dim='time', keep_attrs=False))
+        ratios[out_var+'_month_years'] = np.true_divide(fmonth_year, nmonth_year)
+                
+        # all years
+        ratios[out_var+'_year'] = np.true_divide(var1.count(dim='time', keep_attrs=False), var2.count(dim='time', keep_attrs=False))
+        ratios[out_var+'_year_years'] = np.true_divide(var1.groupby('time.year').count(dim='time', keep_attrs=False), 
+                                                       var2.groupby('time.year').count(dim='time', keep_attrs=False))
         #     ratios[out_var+'_year'] = var1.count(dim='time', keep_attrs=False) / var3.count(dim='time', keep_attrs=False)
     
     elif stats == 'sum':
         # per season
-        if seasons == 'normal':
-            ratios[out_var +'_season'] = (fseason.sum(dim='time', skipna=True, keep_attrs=False)) / nseason.sum(dim='time', skipna=True, keep_attrs=False)    
-        else:
-            ratios[out_var +'_season'] = xr.concat([fseason['NDJ'].sum(dim='time', skipna=True, keep_attrs=False) / nseason['NDJ'].sum(dim='time', skipna=True, keep_attrs=False),
-                                                          fseason['MJJ'].sum(dim='time', skipna=True, keep_attrs=False) / nseason['MJJ'].sum(dim='time', skipna=True, keep_attrs=False),
-                                                          fseason['FMA'].sum(dim='time', skipna=True, keep_attrs=False) / nseason['FMA'].sum(dim='time', skipna=True, keep_attrs=False),
-                                                          fseason['ASO'].sum(dim='time', skipna=True, keep_attrs=False) / nseason['ASO'].sum(dim='time', skipna=True, keep_attrs=False),],
-                                                  dim='season',)
-            ratios[out_var+'_season'] = ratios[out_var+'_season'].assign_coords({'season':['NDJ', 'MJJ', 'FMA', 'ASO']})
+        fseason_year = xr.concat([fseason.sel(time=fseason.time.dt.year.isin(year)).squeeze().sum(dim='time', skipna=True, keep_attrs=False) for year in years],
+                                 pd.Index(years, name='year'))
+        nseason_year = xr.concat([nseason.sel(time=nseason.time.dt.year.isin(year)).squeeze().sum(dim='time', skipna=True, keep_attrs=False) for year in years],
+                                 pd.Index(years, name='year'))
+        
+        ratios[out_var +'_season'] = np.true_divide(fseason.sum(dim='time', skipna=True, keep_attrs=False), nseason.sum(dim='time', skipna=True, keep_attrs=False))
+        ratios[out_var+'_season_years'] = np.true_divide(fseason_year, nseason_year)
+        
         # per month
-        ratios[out_var +'_month']  = (fmonth.sum(dim='time', skipna=True, keep_attrs=False)) / nmonth.sum(dim='time', skipna=True, keep_attrs=False)
+        fmonth_year = xr.concat([fmonth.sel(time=fmonth.time.dt.year.isin(year)).squeeze().sum(dim='time', skipna=True, keep_attrs=False) for year in years], 
+                                pd.Index(years, name='year'))
+        nmonth_year = xr.concat([nmonth.sel(time=nmonth.time.dt.year.isin(year)).squeeze().sum(dim='time', skipna=True, keep_attrs=False) for year in years], 
+                                pd.Index(years, name='year'))
+        ratios[out_var +'_month']  = np.true_divide(fmonth.sum(dim='time', skipna=True, keep_attrs=False), nmonth.sum(dim='time', skipna=True, keep_attrs=False))
+        ratios[out_var+'_month_years'] = np.true_divide(fmonth_year, nmonth_year)
+        
         # all years
-        ratios[out_var +'_year'] = (var1.sum(dim='time', skipna=True, keep_attrs=False)) / (var2.sum(dim='time', skipna=True, keep_attrs=False))
+        ratios[out_var +'_year'] = np.true_divide(var1.sum(dim='time', skipna=True, keep_attrs=False), (var2.sum(dim='time', skipna=True, keep_attrs=False)))
+        ratios[out_var+'_year_years'] = np.true_divide(var1.groupby('time.year').sum(dim='time', skipna=True, keep_attrs=False),
+                                                       var2.groupby('time.year').sum(dim='time', skipna=True, keep_attrs=False))
 
     elif stats == 'mean':
-        # if out_var == 'sf_eff':
         # per season
-        if seasons == 'normal':
-            ratios[out_var+'_season'] = (var1/var2).groupby('time.season').mean(dim='time', skipna=True, keep_attrs=False)
-        else:
-            ratios[out_var+'_season'] = xr.concat([(xr.concat([(var1/var2).sel(time=is_season(var1['time.month'], 11,12)),
-                                                                     (var1/var2).sel(time=is_season(var1['time.month'], 1,1))], dim='time')).mean(dim='time', skipna=True, keep_attrs=False),
-                                                         ((var1/var2).sel(time=is_season(var1['time.month'], 5,7))).mean(dim='time', skipna=True, keep_attrs=False),
-                                                         ((var1/var2).sel(time=is_season(var1['time.month'], 2,4))).mean(dim='time', skipna=True, keep_attrs=False),
-                                                         ((var1/var2).sel(time=is_season(var1['time.month'], 8,10))).mean(dim='time', skipna=True, keep_attrs=False)],
-                                                 dim='season')
-            ratios[out_var+'_season'] = ratios[out_var+'_season'].assign_coords({'season':['NDJ', 'MJJ', 'FMA', 'ASO']})
+        fseason_year = xr.concat([fseason.sel(time=fseason.time.dt.year.isin(year)).squeeze() for year in years],
+                                 pd.Index(years, name='year'))
+        nseason_year = xr.concat([nseason.sel(time=nseason.time.dt.year.isin(year)).squeeze() for year in years],
+                                 pd.Index(years, name='year'))
+        
+        ratios[out_var+'_season'] = (np.true_divide(fseason,nseason)).mean(dim='time',skipna=True, keep_attrs=False)
+        ratios[out_var+'_season_years'] = np.true_divide(fseason_year, nseason_year).mean(dim='time',skipna=True, keep_attrs=False)
+        
         # per month
-        ratios[out_var+'_month'] = (var1/var2).groupby('time.month').mean(dim='time', skipna=True, keep_attrs=False)
+        fmonth_year = xr.concat([fmonth.sel(time=fmonth.time.dt.year.isin(year)).squeeze() for year in years],
+                                 pd.Index(years, name='year'))
+        nmonth_year = xr.concat([nmonth.sel(time=nmonth.time.dt.year.isin(year)).squeeze() for year in years],
+                                 pd.Index(years, name='year'))
+
+        ratios[out_var+'_month'] = (np.true_divide(fmonth,nmonth)).mean(dim='time', skipna=True, keep_attrs=False)
+        ratios[out_var+'_month_years'] = (np.true_divide(fmonth_year, nmonth_year)).mean(dim='time', skipna=True, keep_attrs=False)
+        # ratios[out_var+'_month'] = (np.true_divide(var1,var2)).groupby('time.month').mean(dim='time', skipna=True, keep_attrs=False)
         
-        # else:    
-        #     # per season
-        #     ratios[out_var+'_season'] = fseason.mean(dim='time', skipna=True, keep_attrs=False) / nseason.mean(dim='time', skipna=True, keep_attrs=False)
-        #     # per month
-        #     ratios[out_var+'_month'] = fmonth.mean(dim='time', skipna=True, keep_attrs=False) / nmonth.mean(dim='time', skipna=True, keep_attrs=False)
+        # all years
+        fyear = xr.concat([var1.sel(time=var1.time.dt.year.isin(year)).squeeze() for year in years],
+                          pd.Index(years, name='year'))
+        nyear = xr.concat([var2.sel(time=var2.time.dt.year.isin(year)).squeeze() for year in years],
+                          pd.Index(years, name='year'))
         
-        ratios[out_var+'_year'] = (var1/var2).mean(dim='time', skipna=True, keep_attrs=False)
-    
-    ratios[out_var +'_season'] = ratios[out_var +'_season'].where(ratios[out_var +'_season'] > 0., other = np.nan)
-    ratios[out_var +'_month'] = ratios[out_var +'_month'].where(ratios[out_var +'_month'] > 0., other = np.nan)
-    ratios[out_var +'_year'] = ratios[out_var +'_year'].where(ratios[out_var +'_year'] > 0., other = np.nan)
+        ratios[out_var+'_year'] = (np.true_divide(var1,var2)).mean(dim='time', skipna=True, keep_attrs=False)
+        ratios[out_var+'_year_years'] = (np.true_divide(fyear, nyear)).mean(dim='time', skipna=True, keep_attrs=False)
+        
+    # ratios[out_var +'_season'] = ratios[out_var +'_season'].where(ratios[out_var +'_season'] > 0., other = np.nan)
+    # ratios[out_var +'_month'] = ratios[out_var +'_month'].where(ratios[out_var +'_month'] > 0., other = np.nan)
+    # ratios[out_var +'_year'] = ratios[out_var +'_year'].where(ratios[out_var +'_year'] > 0., other = np.nan)
     
     if out_var != 'sf_eff':
         ratios[out_var +'_season'] = ratios[out_var +'_season']*100
+        ratios[out_var +'_season_years'] = ratios[out_var +'_season_years']*100
         ratios[out_var +'_month'] = ratios[out_var +'_month']*100
+        ratios[out_var +'_month_years'] = ratios[out_var +'_month_years']*100
         ratios[out_var +'_year'] = ratios[out_var +'_year']*100
+        ratios[out_var +'_year_years'] = ratios[out_var +'_year_years']*100
     # for vars in ratios.keys():
     #     ratios[vars+'_mean'], ratios[vars+'_std'], ratios[vars+'_stats'] = weighted_average(ratios[vars], weights)
-
+    ratios[out_var+'_season'] = ratios[out_var+'_season'].where(~np.isinf(ratios[out_var+'_season']), other=0.)
+    ratios[out_var +'_season_years'] = ratios[out_var +'_season_years'].where(~np.isinf(ratios[out_var +'_season_years']), other=0.)
+                
+    ratios[out_var+'_month'] = ratios[out_var+'_month'].where(~np.isinf(ratios[out_var+'_month']), other=0.)
+    ratios[out_var +'_month_years'] = ratios[out_var +'_month_years'].where(~np.isinf(ratios[out_var +'_month_years']), other=0.)
+    # all years
+    ratios[out_var +'_year'] = ratios[out_var +'_year'].where(~np.isinf(ratios[out_var +'_year']), other=0.)
+    ratios[out_var +'_year_years'] = ratios[out_var +'_year_years'].where(~np.isinf(ratios[out_var +'_year_years']), other=0.)
     return(ratios)
 
 def get_ratios_dict(list_models, ds,seasons):
-    if seasons == 'normal':
-        seasons = seasons
-    else:
-        seasons = None
+    # if seasons == 'normal':
+    #     seasons = seasons
+    # else:
+    #     seasons = None
     ratios = {}
     for model in list_models:
         if model == 'cloudsat_250' or model == 'cloudsat_500':
@@ -1260,22 +1319,22 @@ def get_ratios_dict(list_models, ds,seasons):
                                         stats = 'sum',  
                                         out_var = 'FsLCC', 
                                         seasons=seasons), #out_var = 'lcc_wo_snow', weights = ds['2t'][model]['areacella']),
-                # get_ratios_season_month(var1 = ds['lcc_sf'][model]['n_sf_lcc_snow'], var2 = ds['orig'][model]['n_lcc'], 
-                #                         stats = 'sum', 
-                #                         out_var = 'FoP', 
-                #                         seasons=seasons),
-                get_ratios_season_month(var1 = ds['lcc_2t_sf'][model]['n_sf_lcc_snow'], var2 = ds['lcc_2t'][model]['n_lcc'], 
-                                        stats='sum', 
-                                        out_var = 'FoS', 
-                                        seasons=seasons), #out_var='lcc_w_snow', weights=ds['lcc_2t'][model]['areacella']),
-                get_ratios_season_month(var1 = ds['lcc_2t_days'][model]['sf_avg_lcc_snow'], var2 = ds['lcc_2t_days'][model]['lwp'], 
-                                        stats = 'mean', 
-                                        out_var = 'sf_eff', 
-                                        seasons=seasons),
+                # # get_ratios_season_month(var1 = ds['lcc_sf'][model]['n_sf_lcc_snow'], var2 = ds['orig'][model]['n_lcc'], 
+                # #                         stats = 'sum', 
+                # #                         out_var = 'FoP', 
+                # #                         seasons=seasons),
+                # get_ratios_season_month(var1 = ds['lcc_2t_sf'][model]['n_sf_lcc_snow'], var2 = ds['lcc_2t'][model]['n_lcc'], 
+                #                         stats='sum', 
+                #                         out_var = 'FoS', 
+                #                         seasons=seasons), #out_var='lcc_w_snow', weights=ds['lcc_2t'][model]['areacella']),
                 # get_ratios_season_month(var1 = ds['lcc_2t_days'][model]['sf_avg_lcc_snow'], var2 = ds['lcc_2t_days'][model]['lwp'], 
                 #                         stats = 'mean', 
-                #                         out_var = 'pr_eff', 
+                #                         out_var = 'sf_eff', 
                 #                         seasons=seasons),
+                # # get_ratios_season_month(var1 = ds['lcc_2t_days'][model]['sf_avg_lcc_snow'], var2 = ds['lcc_2t_days'][model]['lwp'], 
+                # #                         stats = 'mean', 
+                # #                         out_var = 'pr_eff', 
+                # #                         seasons=seasons),
                 get_ratios_season_month(var1 = ds['orig'][model]['n_lcc']-ds['lcc_2t'][model]['n_lcc'],
                                         var2 = ds['orig'][model]['n_obs'], 
                                         stats = 'sum', 
@@ -1296,23 +1355,23 @@ def get_ratios_dict(list_models, ds,seasons):
                                         stats='count', 
                                         out_var='FsLCC', 
                                         seasons=seasons),#out_var='lcc_wo_snow', weights=ds['2t'][model]['areacella']), # sLCC frequency compared to all observations when T<0C
-                # get_ratios_season_month(var1=ds['lcc'][model]['pr'].where(ds['lcc'][model]['pr']>=0.01, other=np.nan), 
-                #                         var2=ds['orig'][model]['tas'], 
+                # # get_ratios_season_month(var1=ds['lcc'][model]['pr'].where(ds['lcc'][model]['pr']>=0.01, other=np.nan), 
+                # #                         var2=ds['orig'][model]['tas'], 
+                # #                         stats='count', 
+                # #                         out_var='FoP', 
+                # #                         seasons=seasons),
+                # get_ratios_season_month(var1=ds['lcc_2t_sf'][model]['prsn'], var2=ds['lcc_2t'][model]['lwp'], 
                 #                         stats='count', 
-                #                         out_var='FoP', 
-                #                         seasons=seasons),
-                get_ratios_season_month(var1=ds['lcc_2t_sf'][model]['prsn'], var2=ds['lcc_2t'][model]['lwp'], 
-                                        stats='count', 
-                                        out_var='FoS', 
-                                        seasons=seasons), #out_var='lcc_w_snow', weights=ds['lcc_2t'][model]['areacella']),   # relative frequency of snowfall from liquid containing clouds
-                get_ratios_season_month(var1=ds['lcc_2t_days'][model]['prsn'], var2=ds['lcc_2t_days'][model]['lwp'], 
-                                        stats='mean', 
-                                        out_var='sf_eff', 
-                                        seasons=seasons),      # relative snowfall (precipitation) efficency
-                # get_ratios_season_month(var1=ds['lcc_2t_days'][model]['pr'], var2=ds['lcc_2t_days'][model]['lwp'], 
+                #                         out_var='FoS', 
+                #                         seasons=seasons), #out_var='lcc_w_snow', weights=ds['lcc_2t'][model]['areacella']),   # relative frequency of snowfall from liquid containing clouds
+                # get_ratios_season_month(var1=ds['lcc_2t_days'][model]['prsn'], var2=ds['lcc_2t_days'][model]['lwp'], 
                 #                         stats='mean', 
-                #                         out_var='pr_eff', 
+                #                         out_var='sf_eff', 
                 #                         seasons=seasons),      # relative snowfall (precipitation) efficency
+                # # get_ratios_season_month(var1=ds['lcc_2t_days'][model]['pr'], var2=ds['lcc_2t_days'][model]['lwp'], 
+                # #                         stats='mean', 
+                # #                         out_var='pr_eff', 
+                # #                         seasons=seasons),      # relative snowfall (precipitation) efficency
                 get_ratios_season_month(var1=ds['lcc'][model]['lwp']-ds['lcc_2t'][model]['lwp'],
                                         var2=ds['orig'][model]['tas'],
                                         stats='count',
@@ -1323,60 +1382,74 @@ def get_ratios_dict(list_models, ds,seasons):
     return(ratios)
 
 def get_only_valid_values(ratios, res, out_var):
-    for time in ['season', 'month', 'year']:
+        # for time in ['season', 'month', 'year']:
         # for out_var, time in product(d.keys(), times):
         #     for cs_key, era_key, cmip_key in zip(cloudsat_keys, era_keys, cmip_keys):
         cs_key = f'cloudsat_{res}'
         era_key = f'era_{res}'
         cmip_key = f'cmip_{res}'
         
-        v1_250 = ratios[cs_key][f'{out_var}_{time}']
-        v1_250 = v1_250.where(v1_250 != 0., other = np.nan)
+        # v1_250 = ratios[cs_key][f'{out_var}_{time}']
+        v1_250 = ratios[cs_key][f'{out_var}']
+        # v1_250 = v1_250.where(v1_250 != 0., other = np.nan)
         
-        v2_250 = ratios[era_key][f'{out_var}_{time}']
-        v2_250 = v2_250.where(v2_250 != 0., other = np.nan)
+        v2_250 = ratios[era_key][f'{out_var}']
+        # v2_250 = v2_250.where(v2_250 != 0., other = np.nan)
 
         
-        v3_250 = ratios[cmip_key][f'{out_var}_{time}']
-        v3_250 = v3_250.where(v3_250 != 0., other = np.nan)
+        v3_250 = ratios[cmip_key][f'{out_var}']
+        # v3_250 = v3_250.where(v3_250 != 0., other = np.nan)
 
-        v1_era_250 = v1_250.copy()
-        v1_era_250 = v1_era_250.where(~np.isnan(v2_250))  
-        ratios[cs_key][f'{out_var}_{time}_era'] = v1_era_250
+        # v1_era_250 = v1_250.copy()
+        # # v1_era_250 = v1_era_250.where(~np.isnan(v2_250))  
+        # ratios[cs_key][f'{out_var}_{time}_era'] = v1_era_250
+        
 
-        v1_cmip_250 = v1_250.copy()
-        v1_cmip_250 = v1_cmip_250.where(~np.isnan(v3_250))
-        v1_cmip_250 = v1_cmip_250.mean('model',skipna=True)
-        ratios[cs_key][f'{out_var}_{time}_cmip'] = v1_cmip_250
+        # v1_cmip_250 = v1_250.copy()
+        # # v1_cmip_250 = v1_cmip_250.where(~np.isnan(v3_250))
+        # # v1_cmip_250 = v1_cmip_250.mean('model',skipna=True)
+        # ratios[cs_key][f'{out_var}_{time}_cmip'] = v1_cmip_250
+        v1_250_cs = v1_250.copy()
+        v1_250_cs = v1_250_cs.where(np.logical_and(v1_250_cs.lat <= 82., v1_250_cs.lat >= -82), other=np.nan)
+        ratios[cs_key][f'{out_var}_cs'] = v1_250_cs
 
+        # v2_250_cs = v2_250.copy()
+        # v2_250_cs = v2_250_cs.where(~np.isnan(v1_250))
+        # ratios[era_key][f'{out_var}_{time}_cs'] = v2_250_cs
         v2_250_cs = v2_250.copy()
-        v2_250_cs = v2_250_cs.where(~np.isnan(v1_250))
-        ratios[era_key][f'{out_var}_{time}_cs'] = v2_250_cs
+        v2_250_cs = v2_250_cs.where(np.logical_and(v2_250_cs.lat <= 82., v2_250_cs.lat >= -82), other=np.nan)
+        ratios[era_key][f'{out_var}_cs'] = v2_250_cs
 
+        # v3_250_cs = v3_250.copy()
+        # v3_250_cs = v3_250_cs.where(~np.isnan(v1_250))
+        # ratios[cmip_key][f'{out_var}_{time}_cs'] = v3_250_cs
         v3_250_cs = v3_250.copy()
-        v3_250_cs = v3_250_cs.where(~np.isnan(v1_250))
-        ratios[cmip_key][f'{out_var}_{time}_cs'] = v3_250_cs
+        v3_250_cs = v3_250_cs.where(np.logical_and(v3_250_cs.lat <= 82., v3_250_cs.lat >= -82.), other=np.nan)
+        ratios[cmip_key][f'{out_var}_cs'] = v3_250_cs
+        
+        
+        
             
-        if out_var == 'sf_eff' or out_var == 'pr_eff':
-            v1_cmip_250 = v2_250.copy()
-            v1_cmip_250 = v1_cmip_250.where(~np.isnan(v3_250))
-            v1_cmip_250 = v1_cmip_250.mean('model', skipna=True)
-            ratios[era_key][f'{out_var}_{time}_cmip'] = v1_cmip_250
+        # if out_var == 'sf_eff' or out_var == 'pr_eff':
+        #     v1_cmip_250 = v2_250.copy()
+        #     v1_cmip_250 = v1_cmip_250.where(~np.isnan(v3_250))
+        #     v1_cmip_250 = v1_cmip_250.mean('model', skipna=True)
+        #     ratios[era_key][f'{out_var}_{time}_cmip'] = v1_cmip_250
             
-            v2_250_era = v2_250.copy()
-            v2_250_era = v2_250_era.where(~np.isnan(v2_250))
-            ratios[era_key][f'{out_var}_{time}_era'] = v2_250_era
+        #     v2_250_era = v2_250.copy()
+        #     v2_250_era = v2_250_era.where(~np.isnan(v2_250))
+        #     ratios[era_key][f'{out_var}_{time}_era'] = v2_250_era
             
-            v2_250_cmip = v3_250.copy()
-            v2_250_cmip = v2_250_cmip.where(~np.isnan(v3_250))
-            ratios[cmip_key][f'{out_var}_{time}_cmip'] = v2_250_cmip
+        #     v2_250_cmip = v3_250.copy()
+        #     v2_250_cmip = v2_250_cmip.where(~np.isnan(v3_250))
+        #     ratios[cmip_key][f'{out_var}_{time}_cmip'] = v2_250_cmip
             
-            v3_250_era = v3_250.copy()
-            v3_250_era = v3_250_era.where(~np.isnan(v2_250))
-            ratios[cmip_key][f'{out_var}_{time}_era'] = v3_250_era
+        #     v3_250_era = v3_250.copy()
+        #     v3_250_era = v3_250_era.where(~np.isnan(v2_250))
+        #     ratios[cmip_key][f'{out_var}_{time}_era'] = v3_250_era
             
 
-    return (ratios)
+        return (ratios)
 
 def create_projection(hemisphere):
     projections = {'NH': ccrs.NorthPolarStereo(central_longitude=0.0, globe=None),
@@ -1421,35 +1494,46 @@ def setup_axes(ax, hemisphere, lat_extent):
     
 
  
-def plt_monthly_model_variation(ds_dict, var_name, dict_label,fig_dir):
+def plt_monthly_model_variation(ds_dict, var_name, dict_label,fig_dir, lwp_threshold):
     colors = cm.hawaii(range(0, 256, int(256 / 3) + 1))
 
     
     
     f, axsm = plt.subplots(nrows=1, ncols=2, sharex=True, sharey=True, figsize=[12, 5])
+    f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
     ax = axsm.flat
 
     bp= [[],]
     for i, hemisphere in enumerate(['NH', 'SH']):
         # ax[i].hlines(0., 0.25, 12.75, colors='k')
         ax[i].grid(True)
-        cs_data = xr.concat([ds_dict['cloudsat_500'][var_name + '_month_mean'].sel(hemisphere=hemisphere),
-                             ds_dict['cloudsat_500'][var_name + '_year_mean'].sel(hemisphere=hemisphere).assign_coords(coords={'month':13})], dim='month')
+        cs_data = xr.concat([ds_dict[var_name + '_month_cs_mean'].sel(hemisphere=hemisphere, model='CloudSat'),
+                             ds_dict[var_name + '_year_cs_mean'].sel(hemisphere=hemisphere, model='CloudSat').assign_coords(coords={'month':13})], dim='month')
         ax[i].scatter(x=np.arange(1,14), y=cs_data, color='k', marker='o',s=50)
         
         # era_data = ds_dict['era_30'][var_name + '_month_mean'].sel(hemisphere=hemisphere,)
-        cmip_key = 'cmip_500'
+        # cmip_key = 'cmip_500'
         
         if var_name == 'sf_eff' or var_name == 'pr_eff':
-            era_data = xr.concat([ds_dict['era_500'][var_name + '_month_cmip_mean'].sel(hemisphere=hemisphere,),
-                                ds_dict['era_500'][var_name + '_year_cmip_mean'].sel(hemisphere=hemisphere,).assign_coords(coords={'month':13})], dim='month')
-            cmip_data = xr.concat([ds_dict[cmip_key][var_name + '_month_era_mean'],
-                               ds_dict[cmip_key][var_name + '_year_era_mean'].assign_coords(coords={'month':'years'})], dim='month')
+            era_data = xr.concat([ds_dict[var_name + '_month_mean'].sel(hemisphere=hemisphere, model='ERA5'),
+                                  ds_dict[var_name + '_year_mean'].sel(hemisphere=hemisphere, model='ERA5').assign_coords(coords={'month':13})],dim='month')
+            cmip_data = xr.concat([ds_dict[var_name + '_month_mean'].sel(hemisphere=hemisphere, model= ['MIROC6', 'CanESM5', 'AWI-ESM-1-1-LR',
+                                                                                                        'MPI-ESM1-2-LR', 'UKESM1-0-LL', 'HadGEM3-GC31-LL', 'CNRM-CM6-1',
+                                                                                                        'CNRM-ESM2-1', 'IPSL-CM6A-LR', 'IPSL-CM5A2-INCA']),
+                                   ds_dict[var_name + '_year_mean'].sel(hemisphere=hemisphere, model = ['MIROC6', 'CanESM5', 'AWI-ESM-1-1-LR',
+                                                                                                        'MPI-ESM1-2-LR', 'UKESM1-0-LL', 'HadGEM3-GC31-LL', 'CNRM-CM6-1',
+                                                                                                        'CNRM-ESM2-1', 'IPSL-CM6A-LR', 'IPSL-CM5A2-INCA']).assign_coords(coords={'month':'years'})], 
+                                  dim='month')
         else:
-            era_data = xr.concat([ds_dict['era_500'][var_name + '_month_cs_mean'].sel(hemisphere=hemisphere,),
-                                ds_dict['era_500'][var_name + '_year_cs_mean'].sel(hemisphere=hemisphere,).assign_coords(coords={'month':13})], dim='month')
-            cmip_data = xr.concat([ds_dict[cmip_key][var_name + '_month_cs_mean'],
-                               ds_dict[cmip_key][var_name + '_year_cs_mean'].assign_coords(coords={'month':'years'})], dim='month')
+            era_data = xr.concat([ds_dict[var_name + '_month_cs_mean'].sel(hemisphere=hemisphere, model='ERA5'),
+                                  ds_dict[var_name + '_year_cs_mean'].sel(hemisphere=hemisphere, model='ERA5').assign_coords(coords={'month':13})], dim='month')
+            cmip_data = xr.concat([ds_dict[var_name + '_month_cs_mean'].sel(hemisphere=hemisphere, model= ['MIROC6', 'CanESM5', 'AWI-ESM-1-1-LR',
+                                                                                                           'MPI-ESM1-2-LR', 'UKESM1-0-LL', 'HadGEM3-GC31-LL', 'CNRM-CM6-1',
+                                                                                                           'CNRM-ESM2-1', 'IPSL-CM6A-LR', 'IPSL-CM5A2-INCA']),
+                                   ds_dict[var_name + '_year_cs_mean'].sel(hemisphere=hemisphere, model= ['MIROC6', 'CanESM5', 'AWI-ESM-1-1-LR',
+                                                                                                                    'MPI-ESM1-2-LR', 'UKESM1-0-LL', 'HadGEM3-GC31-LL', 'CNRM-CM6-1',
+                                                                                                                    'CNRM-ESM2-1', 'IPSL-CM6A-LR', 'IPSL-CM5A2-INCA']).assign_coords(coords={'month':'years'})], 
+                                  dim='month')
 
         ax[i].scatter(x=np.arange(1.25,14.25), y=era_data, color=colors[0], marker="h", s=50)  
         
@@ -1460,8 +1544,8 @@ def plt_monthly_model_variation(ds_dict, var_name, dict_label,fig_dir):
         
         quantiles = cmip_data.quantile([0.25, 0.5, 0.75], dim=('model'), skipna=True, keep_attrs=False)
         iqr = quantiles.sel(quantile=0.75) - quantiles.sel(quantile=0.25)
-        max_val = (quantiles.sel(quantile=0.75) + 1.5 * iqr).assign_coords({'quantile': 'min'})
-        min_val = (quantiles.sel(quantile=0.25) - 1.5 * iqr).assign_coords({'quantile': 'max'})
+        max_val = (quantiles.sel(quantile=0.75) + 1.5 * iqr).assign_coords({'quantile': 'max'})
+        min_val = (quantiles.sel(quantile=0.25) - 1.5 * iqr).assign_coords({'quantile': 'min'})
         # means = ds_dict[cmip_key][var_name + '_month_mean'].mean(dim='model', skipna=True).assign_coords({'quantile': 'mean'})
         means = cmip_data.mean(dim='model', skipna=True).assign_coords({'quantile':'mean'})
         stats = xr.concat([max_val, quantiles, min_val, means], dim='quantile')
@@ -1470,7 +1554,7 @@ def plt_monthly_model_variation(ds_dict, var_name, dict_label,fig_dir):
                 positions = np.arange(j + 0.75, j + 13.75, 1)
         else:
                 positions = np.arange(j + 0.25, j + 13.25, 1)
-        boxplot_data = stats.sel(hemisphere=hemisphere,).transpose('quantile', 'month')
+        boxplot_data = stats.transpose('quantile', 'month')
         bp[j] = ax[i].boxplot(boxplot_data,  positions=positions, widths=0.4, 
                             boxprops=dict(color=color, lw=1.5),
                             medianprops=dict(color=color, lw=1.5),
@@ -1513,12 +1597,12 @@ def plt_monthly_model_variation(ds_dict, var_name, dict_label,fig_dir):
     ax[1].legend([
             # Line2D([0], [0], color=colors[0], lw=1.5, label='ERA5 (30 km)', linestyle=(0, (1, 1))),
             Line2D([0], [0], marker='o', color='w', label='CloudSat (500km)', markersize=10, markerfacecolor='k'),
-            Line2D([0], [0], marker='h', color='w', label='ERA5 (30 km)',markersize=10, markerfacecolor=colors[0], ),
+            Line2D([0], [0], marker='h', color='w', label='ERA5 (500 km)',markersize=10, markerfacecolor=colors[0], ),
             bp[0]["boxes"][0],
             # bp[1]["boxes"][0],
         ],
         ['CloudSat (500 km)',
-            'ERA5$_{mean}$ (500 km)', #'CMIP6 (500 km)', 
+            'ERA5 (500 km)', #'CMIP6 (500 km)', 
          'CMIP6 (500 km)'],
         bbox_to_anchor=bb,loc=8,ncol=3,mode='expand',borderaxespad=0,fancybox=True,bbox_transform=f.transFigure,
     )
@@ -1526,306 +1610,608 @@ def plt_monthly_model_variation(ds_dict, var_name, dict_label,fig_dir):
     plt.tight_layout(pad=0., w_pad=0., h_pad=0.)  ;
     
     figname = f'{var_name}_monthly_model_variation_2007_2010.png'
-    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=False)  
+    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=True)  
+    
+def plt_monthly_interannual_variation(dataset, var_name, lwp_threshold, fig_dir, dict_label):
+    # calculate statistics
+    stats_cloudsat = calculate_interannual_stats(dataset.sel(model='CloudSat'), var_name)
+    stats_era = calculate_interannual_stats(dataset.sel(model='ERA5'), var_name)
+    stats_cmip = calculate_interannual_stats(dataset.sel(model = ['MIROC6', 'CanESM5', 'AWI-ESM-1-1-LR',
+                                                                  'MPI-ESM1-2-LR', 'UKESM1-0-LL', 'HadGEM3-GC31-LL', 'CNRM-CM6-1',
+                                                                  'CNRM-ESM2-1', 'IPSL-CM6A-LR', 'IPSL-CM5A2-INCA']), 
+                                             var_name)
+    stats_cmip = stats_cmip.mean('model', skipna=True)
+    
+    # add cmip shading for max, min model all years
+    cmip_data = xr.concat([dataset[var_name+'_month_cs_mean'].sel(model = ['MIROC6', 'CanESM5', 'AWI-ESM-1-1-LR',
+                                                                           'MPI-ESM1-2-LR', 'UKESM1-0-LL', 'HadGEM3-GC31-LL', 'CNRM-CM6-1',
+                                                                           'CNRM-ESM2-1', 'IPSL-CM6A-LR', 'IPSL-CM5A2-INCA']),
+                           dataset[var_name + '_year_cs_mean'].sel(model = ['MIROC6', 'CanESM5', 'AWI-ESM-1-1-LR',
+                                                                            'MPI-ESM1-2-LR', 'UKESM1-0-LL', 'HadGEM3-GC31-LL', 'CNRM-CM6-1',
+                                                                            'CNRM-ESM2-1', 'IPSL-CM6A-LR', 'IPSL-CM5A2-INCA']).assign_coords(coords={'month':'years'})], dim='month')
+    quantiles = cmip_data.quantile([0.25, 0.5, 0.75], dim=('model'), skipna=True, keep_attrs=False)
+    iqr = quantiles.sel(quantile=0.75) - quantiles.sel(quantile=0.25)
+    max_val = (quantiles.sel(quantile=0.75) + 1.5 * iqr).assign_coords({'quantile': 'max'})
+    min_val = (quantiles.sel(quantile=0.25) - 1.5 * iqr).assign_coords({'quantile': 'min'})
+    #     # means = ds_dict[cmip_key][var_name + '_month_mean'].mean(dim='model', skipna=True).assign_coords({'quantile': 'mean'})
+    #     means = cmip_data.mean(dim='model', skipna=True).assign_coords({'quantile':'mean'})
+    #     stats = xr.concat([max_val, quantiles, min_val, means], dim='quantile')
     
     
-def calc_linear_regression(df, model, ):
-    # To do this we use the polyfit function from Numpy. Polyfit does a least squares polynomial fit over the data that it is given. 
-    # We want a linear regression over the data in columns cloudsat and MIROC6 so we pass these as parameters. The final parameter is the 
-    # degree of the polynomial. For linear regression the degree is 1.
-    d = np.polyfit(df['reference'], df[model],1) # These are the a and b values we were looking for in the linear function formula.
-    # We then use the convenience function poly1d to provide us with a function that will do the fitting.
-    f = np.poly1d(d) #predict the estimated results
-    # We now use the function f to produce our linear regression data and inserting that into a new column called Treg.
-    df.insert(2, 'Treg', f(df['reference']))
-    # the R-squared value is a number between 0 and 1. And the closer it is to 1 the more accurate your linear regression model is.
-    R2 = r2_score(df[model],f(df['reference']))
-    return(R2,d)
-
-def calc_linear_regression_hemisphere(ratios_x, ratios_y, season, model, lat_slice, var_name):
-
-    df_NH = pd.DataFrame()
-    df_NH['reference'] = ratios_x[f'{var_name}_season'].sel(season=season, lat=lat_slice).to_dataframe()[f'{var_name}_season']
-    
-    df_NH[model] = ratios_y[f'{var_name}_season'].sel(season=season, model=model, lat=lat_slice).to_dataframe()[f'{var_name}_season']
-    df_NH.replace([np.inf, -np.inf], np.nan, inplace=True)
-    df_NH.dropna(inplace=True)
-    R2_NH, d_NH = calc_linear_regression(df_NH, model)    
-    return(df_NH, R2_NH, d_NH)
-
-
-def calc_scatter_obs_model(ratios, var_name):
-    lat_north = slice(45, 90)
-    lat_south = slice(-90, -45)
-
-    df_NH = dict()
-    R2_NH = dict()
-    d_NH = dict()
-
-    df_SH = dict()
-    R2_SH = dict()
-    d_SH = dict()
-    for model in ratios['500'].model.values:
-        df_NH[model] = dict()
-        R2_NH[model] = dict()
-        d_NH[model] = dict()
-        
-        df_SH[model] = dict()
-        R2_SH[model] = dict()
-        d_SH[model] = dict()
-        for season in ratios['500'].season.values:
-            # print(season)
-            
-            if var_name == 'sf_eff' or var_name == 'pr_eff':
-                df_NH[model][season], R2_NH[model][season], d_NH[model][season] = calc_linear_regression_hemisphere(ratios['era_500'], 
-                                                                                                                                            ratios['500'], 
-                                                                                                                                            season, 
-                                                                                                                                            model, 
-                                                                                                                                            lat_north, var_name)
-                
-                df_SH[model][season], R2_SH[model][season], d_SH[model][season] = calc_linear_regression_hemisphere(ratios['era_500'], 
-                                                                                                                                            ratios['500'], 
-                                                                                                                                            season, 
-                                                                                                                                            model, 
-                                                                                                                                            lat_south, var_name)
-            else:
-                df_NH[model][season], R2_NH[model][season], d_NH[model][season] = calc_linear_regression_hemisphere(ratios['cloudsat_500'], 
-                                                                                                                                            ratios['500'], 
-                                                                                                                                            season, 
-                                                                                                                                            model, 
-                                                                                                                                            lat_north, var_name)
-                
-                df_SH[model][season], R2_SH[model][season], d_SH[model][season] = calc_linear_regression_hemisphere(ratios['cloudsat_500'], 
-                                                                                                                                            ratios['500'], 
-                                                                                                                                            season, 
-                                                                                                                                            model, 
-                                                                                                                                            lat_south, var_name)
-                
-    return(df_NH, R2_NH, d_NH, df_SH, R2_SH, d_SH)
-
-
-
-def plt_scatter_obs_model(ratios, var_name, dict_label, fig_dir):
-    
-    df_NH, R2_NH, d_NH, df_SH, R2_SH, d_SH = calc_scatter_obs_model(ratios, var_name)
-    
-    if var_name == 'sf_eff' or var_name == 'pr_eff':
-        df_NH.pop('ERA5')
-        # df_SH.pop('ERA5')
-    
-    f, axsm = plt.subplots(nrows=len(df_NH.keys()), ncols=4, sharex=True, sharey=True, figsize=[15, 37.5])
     colors = cm.hawaii(range(0, 256, int(256 / 3) + 1))
 
-    f.suptitle(dict_label['cb_label'], fontsize=15)
+    f, axsm = plt.subplots(nrows=1, ncols=2, sharex=True, sharey=True, figsize=[12, 5])
+    f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
+    ax = axsm.flat
 
+    bp = [[], [], []]
+    for (j, data), x_loc, color in zip(enumerate([stats_cloudsat, stats_era, stats_cmip]), [np.arange(1,14), np.arange(0.75, 13.75), np.arange(1.25, 14.25)], ['k', colors[0], colors[2]]):
+    # for (j, data), x_loc, color in zip(enumerate([stats_cloudsat, ]), [np.arange(1,14), np.arange(0.75, 13.75), np.arange(1.25, 14.25)], ['k', ]):
+        for (i, hemisphere) in enumerate(['NH', 'SH']):
+            ax[i].grid(True)
+            boxplot_data = (data.sel(hemisphere=hemisphere)).transpose('quantile', 'month')
+            
+            bp[j] = ax[i].boxplot(boxplot_data,  positions=x_loc, widths=0.3, 
+                                        boxprops=dict(color=color, lw=1.5),
+                                        medianprops=dict(color=color, lw=1.5),
+                                        whiskerprops=dict(color=color, lw=1.5),
+                                        capprops=dict(color=color, lw=1.5),
+                                        flierprops=dict(marker='+',markeredgecolor=color, markersize=10),
+                                        showmeans=True, meanprops=dict(marker='D',markerfacecolor=color, alpha=0.5, markeredgecolor=color,markersize=4),
+                                        patch_artist=True,)
+            for patch in bp[j]['boxes']:
+                    patch.set(facecolor=color, alpha=0.5)
+            
+            
+                    
+            ax[i].set_title('Northern Hemisphere' if hemisphere == 'NH' else 'Southern Hemisphere')   
+            ax[i].text(0.05, 0.95, f'{fig_label[i]}', fontweight='bold', horizontalalignment='left', verticalalignment='top', transform=ax[i].transAxes)
+            ax[i].set_xticks(np.arange(1,14)) 
+            ax[i].set_xlim([0, 13.5])
+            
+            ax[i].set_xticklabels(np.append(np.arange(1,13), 'years'), fontsize=12)
+            ax[i].set_xlabel('Month')
+            
+            if var_name == 'sf_eff':# or var_name == 'pr_eff':
+                ax[i].set_ylim([0,8.])
+                ax[i].set_yticks(np.arange(0,8.50,.50))
+            elif var_name == 'pr_eff':
+                ax[i].set_ylim([0,800])
+                ax[i].set_yticks(np.arange(0,850,50))
+            else:
+                ax[i].set_ylim([dict_label['vmin'],dict_label['vmax']])
+                ax[i].set_yticks(np.arange(0,110,10))
+            
+            ax[i].set_ylabel(dict_label['cb_label'] if i==0 else '') 
+    # add max, min model
+    xloc = [0.75]
+    xloc.extend(np.arange(2.25, 14.25))
+    for (i, hemisphere) in enumerate(['NH', 'SH']):
+        # ax[i].fill_between(x=xloc , y1=min_val.sel(hemisphere=hemisphere,), y2=max_val.sel(hemisphere=hemisphere,), alpha=0.25, color=colors[2])
+        ax[i].scatter(np.arange(1.25, 14.25), min_val.sel(hemisphere=hemisphere,), marker=".", s=75, color=colors[2], alpha=0.45)
+        ax[i].scatter(np.arange(1.25, 14.25), max_val.sel(hemisphere=hemisphere,), marker=".", s=75, color=colors[2], alpha=0.45)
+            
+    s = f.subplotpars
+    bb = [s.left, s.top - 0.92, (s.right - s.left), 0.05]
+
+    ax[0].legend([bp[0]["boxes"][0], bp[1]["boxes"][0], bp[2]["boxes"][0]], ['CloudSat', 'ERA5', 'CMIP6$_{mean}$'], bbox_to_anchor=bb,loc=8,ncol=3,borderaxespad=0,fancybox=True,bbox_transform=f.transFigure, mode='expand')
+    # ax[0].legend([bp[0]["boxes"][0], ], ['CloudSat', ], bbox_to_anchor=bb,loc=8,ncol=3,borderaxespad=0,fancybox=True,bbox_transform=f.transFigure, mode='expand')
+    
+    plt.tight_layout(pad=0., w_pad=0., h_pad=0.)  ;
+    
+    figname = f'{var_name}_monthly_interannual_variation_2007_2010.png'
+    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=True)    
+ 
+# def calc_linear_regression(df, model, ):
+#     # To do this we use the polyfit function from Numpy. Polyfit does a least squares polynomial fit over the data that it is given. 
+#     # We want a linear regression over the data in columns cloudsat and MIROC6 so we pass these as parameters. The final parameter is the 
+#     # degree of the polynomial. For linear regression the degree is 1.
+#     d = np.polyfit(df['reference'], df[model],1) # These are the a and b values we were looking for in the linear function formula.
+#     # We then use the convenience function poly1d to provide us with a function that will do the fitting.
+#     f = np.poly1d(d) #predict the estimated results
+#     # We now use the function f to produce our linear regression data and inserting that into a new column called Treg.
+#     df.insert(2, 'Treg', f(df['reference']))
+#     # the R-squared value is a number between 0 and 1. And the closer it is to 1 the more accurate your linear regression model is.
+#     R2 = r2_score(df[model],f(df['reference']))
+#     return(R2,d)
+
+# def calc_linear_regression_hemisphere(ratios_x, ratios_y, season, model, lat_slice, var_name):
+
+#     df_NH = pd.DataFrame()
+#     df_NH['reference'] = ratios_x[f'{var_name}_season'].sel(season=season, lat=lat_slice).to_dataframe()[f'{var_name}_season']
+    
+#     df_NH[model] = ratios_y[f'{var_name}_season'].sel(season=season, model=model, lat=lat_slice).to_dataframe()[f'{var_name}_season']
+#     df_NH.replace([np.inf, -np.inf], np.nan, inplace=True)
+#     df_NH.dropna(inplace=True)
+#     R2_NH, d_NH = calc_linear_regression(df_NH, model)    
+#     return(df_NH, R2_NH, d_NH)
+def calc_linear_regression_hemisphere(ratios, hemisphere, var_name):
+    lat_slice = slice(45,90) if hemisphere == 'NH' else slice(-90,-45)
+
+    slopes = dict()
+    intercepts = dict()
+    rvalues = dict()
+    for season in ratios.season.values:
+        slopes[season] = []
+        intercepts[season] = []
+        rvalues[season] = []
+        
+        if var_name == 'sf_eff':
+            # Extract the data for ERA5 for the current season
+            ratios_x = ratios[f'{var_name}_season'].sel(lat=lat_slice, season=season, model='ERA5').squeeze().values.flatten()
+            models = ratios.model.values[2:]
+        else:
+            # Extract the data for CloudSat for the current season
+            ratios_x = ratios[f'{var_name}_season'].sel(lat=lat_slice, season=season, model='CloudSat').squeeze().values.flatten()
+            models = ratios.model.values[1:]
+        
+        # Loop through other models
+        for model in models:
+            ratios_y = ratios[f'{var_name}_season'].sel(lat=lat_slice, season=season, model=model).squeeze().values.flatten()
+            mask = ~np.isnan(ratios_x) & ~np.isnan(ratios_y)
+            
+            result = linregress(ratios_x[mask],ratios_y[mask])
+            slope = result.slope
+            slopes[season].append(slope)
+            
+            intercept = result.intercept
+            intercepts[season].append(intercept)
+            
+            rvalue = result.rvalue
+            rvalues[season].append(rvalue)
+            
+        # Convert the list of slopes to a NumPy array
+        slopes[season] = np.array(slopes[season])
+        intercepts[season] = np.array(intercepts[season])
+        rvalues[season] = np.array(rvalues[season])
+    da = xr.Dataset()
+    da['linregress_slope'] = xr.DataArray(data = list(slopes.values()),
+                                          dims=['season', 'model'],
+                                          coords = dict(season=list(slopes.keys()), 
+                                                        model=models))
+    da['linregress_intercept'] = xr.DataArray(data = list(intercepts.values()),
+                                          dims=['season', 'model'],
+                                          coords = dict(season=list(intercepts.keys()), 
+                                                        model=models))
+    da['linregress_rvalues'] = xr.DataArray(data = list(rvalues.values()),
+                                          dims=['season', 'model'],
+                                          coords = dict(season=list(rvalues.keys()), 
+                                                        model=models))
+    return da#slopes, intercepts, rvalues
+
+def get_linear_regression_hemisphere(ratios,var_name):
+    results = dict()
+    for hemisphere in ['NH', 'SH']:
+        results[hemisphere] = calc_linear_regression_hemisphere(ratios, hemisphere, var_name)
+        
+    _ds = list(results.values())
+    _coord = list(results.keys())
+    linregress = xr.concat(objs=_ds, dim=_coord).rename({"concat_dim":"hemisphere"})
+    
+    return(linregress)
+# def calc_scatter_obs_model(ratios, var_name):
+#     lat_north = slice(45, 90)
+#     lat_south = slice(-90, -45)
+
+#     df_NH = dict()
+#     R2_NH = dict()
+#     d_NH = dict()
+
+#     df_SH = dict()
+#     R2_SH = dict()
+#     d_SH = dict()
+#     for model in ratios['500'].model.values:
+#         df_NH[model] = dict()
+#         R2_NH[model] = dict()
+#         d_NH[model] = dict()
+        
+#         df_SH[model] = dict()
+#         R2_SH[model] = dict()
+#         d_SH[model] = dict()
+#         for season in ratios['500'].season.values:
+#             # print(season)
+            
+#             if var_name == 'sf_eff' or var_name == 'pr_eff':
+#                 df_NH[model][season], R2_NH[model][season], d_NH[model][season] = calc_linear_regression_hemisphere(ratios['era_500'], 
+#                                                                                                                                             ratios['500'], 
+#                                                                                                                                             season, 
+#                                                                                                                                             model, 
+#                                                                                                                                             lat_north, var_name)
+                
+#                 df_SH[model][season], R2_SH[model][season], d_SH[model][season] = calc_linear_regression_hemisphere(ratios['era_500'], 
+#                                                                                                                                             ratios['500'], 
+#                                                                                                                                             season, 
+#                                                                                                                                             model, 
+#                                                                                                                                             lat_south, var_name)
+#             else:
+#                 df_NH[model][season], R2_NH[model][season], d_NH[model][season] = calc_linear_regression_hemisphere(ratios['cloudsat_500'], 
+#                                                                                                                                             ratios['500'], 
+#                                                                                                                                             season, 
+#                                                                                                                                             model, 
+#                                                                                                                                             lat_north, var_name)
+                
+#                 df_SH[model][season], R2_SH[model][season], d_SH[model][season] = calc_linear_regression_hemisphere(ratios['cloudsat_500'], 
+#                                                                                                                                             ratios['500'], 
+#                                                                                                                                             season, 
+#                                                                                                                                             model, 
+#                                                                                                                                             lat_south, var_name)
+                
+#     return(df_NH, R2_NH, d_NH, df_SH, R2_SH, d_SH)
+
+
+
+def plt_scatter_obs_model(ratios, regression, var_name, dict_label, fig_dir, lwp_threshold):
+    
+    # df_NH, R2_NH, d_NH, df_SH, R2_SH, d_SH = calc_scatter_obs_model(ratios, var_name)
+    
+    # if var_name == 'sf_eff' or var_name == 'pr_eff':
+    #     df_NH.pop('ERA5')
+    #     # df_SH.pop('ERA5')
+    if var_name == 'sf_eff':
+        models = regression.model.values[1:]
+    else:
+        models = regression.model.values 
+    
+    figsize=[12,3*len(models)]
+    colors = cm.hawaii(range(0, 256, int(256/3)+1))
+
+    f, axsm = plt.subplots(nrows=len(models), ncols=len(regression.season), sharex=True, sharey=True, figsize=figsize)
+    f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
     for ax, k in zip(axsm.flatten(), range(len(fig_label))):
         ax.text(0.05, 0.95, f'{fig_label[k]}', fontweight='bold', horizontalalignment='left', verticalalignment='top', transform=ax.transAxes)
         
 
-    for i, model in zip(range(len(df_NH)), df_NH.keys()):
-        for ax, season in zip(axsm.flatten()[i*4: (i+1)*4+1], df_NH[model].keys()):
+    # for i, model in zip(range(len(df_NH)), df_NH.keys()):
+    #     for ax, season in zip(axsm.flatten()[i*4: (i+1)*4+1], df_NH[model].keys()):
                 
                 
-                if i == 0:
-                    ax.set_title(f'season = {season}')
+    #             if i == 0:
+    #                 ax.set_title(f'season = {season}')
                     
-                ax.axline((0,0), slope=1, color='black',linestyle='--', )
+    #             ax.axline((0,0), slope=1, color='black',linestyle='--', )
                 
-                if var_name == 'sf_eff':# or var_name == 'pr_eff':
-                    ax.set_xlim([0,10])
-                    ax.set_ylim([0,10])
-                else:
-                    ax.set_xlim([dict_label['vmin'],dict_label['vmax']])
-                    ax.set_ylim([dict_label['vmin'],dict_label['vmax']])
+    #             if var_name == 'sf_eff':# or var_name == 'pr_eff':
+    #                 ax.set_xlim([0,10])
+    #                 ax.set_ylim([0,10])
+    #             else:
+    #                 ax.set_xlim([dict_label['vmin'],dict_label['vmax']])
+    #                 ax.set_ylim([dict_label['vmin'],dict_label['vmax']])
                 
-                df_NH[model][season].plot.scatter(ax = ax, x = 'reference',y=model, label = 'NH', color = colors[0].reshape(1,-1), alpha=0.1, legend=False)
-                df_NH[model][season].plot(x='reference', y='Treg',color=colors[0].reshape(1,-1),ax=ax, label= f"y$_N$ = {d_NH[model][season][0].round(2)} x + {d_NH[model][season][1].round(2)}" 
-                    "\n" 
-                    f"r$^2$ = {R2_NH[model][season].round(2)}")
+    #             df_NH[model][season].plot.scatter(ax = ax, x = 'reference',y=model, label = 'NH', color = colors[0].reshape(1,-1), alpha=0.1, legend=False)
+    #             df_NH[model][season].plot(x='reference', y='Treg',color=colors[0].reshape(1,-1),ax=ax, label= f"y$_N$ = {d_NH[model][season][0].round(2)} x + {d_NH[model][season][1].round(2)}" 
+    #                 "\n" 
+    #                 f"r$^2$ = {R2_NH[model][season].round(2)}")
                 
-                df_SH[model][season].plot.scatter(ax = ax, x = 'reference',y=model, label = 'SH', color = colors[2].reshape(1,-1), alpha=0.1, legend=False)
-                df_SH[model][season].plot(x='reference', y='Treg',color=colors[2].reshape(1,-1),ax=ax, label= f"y$_S$ = {d_SH[model][season][0].round(2)} x + {d_SH[model][season][1].round(2)}" 
-                    "\n" 
-                    f"r$^2$ = {R2_SH[model][season].round(2)}")
+    #             df_SH[model][season].plot.scatter(ax = ax, x = 'reference',y=model, label = 'SH', color = colors[2].reshape(1,-1), alpha=0.1, legend=False)
+    #             df_SH[model][season].plot(x='reference', y='Treg',color=colors[2].reshape(1,-1),ax=ax, label= f"y$_S$ = {d_SH[model][season][0].round(2)} x + {d_SH[model][season][1].round(2)}" 
+    #                 "\n" 
+    #                 f"r$^2$ = {R2_SH[model][season].round(2)}")
                 
-                ax.legend(loc='lower right')
-                ax.grid(True)
-                ax.set_ylabel(model)
-                if var_name != 'sf_eff':
-                    ax.set_xlabel('CloudSat')
-                if var_name == 'sf_eff':
-                    ax.set_xlabel('ERA5')
+    #             ax.legend(loc='lower right')
+    #             ax.grid(True)
+    #             ax.set_ylabel(model)
+    #             if var_name != 'sf_eff':
+    #                 ax.set_xlabel('CloudSat')
+    #             if var_name == 'sf_eff':
+    #                 ax.set_xlabel('ERA5')
             
+    for (j, model) in enumerate(models):
+        for (i, season)  in enumerate(regression.season.values): 
+            ax = axsm[j, i]
+            ax.grid(True)
+            ax.axline((0,0), slope=1, color='darkgrey', linestyle='--')
+            if i == 0:
+                ax.set_ylabel(f"{model}, {dict_label['cb_label']}")
+            if j == 0 :
+                ax.set_title(f"season = {season}")
+            if j == len(regression.model)-1:
+                if var_name == 'sf_eff':
+                    ax.set_xlabel(f"ERA5, {dict_label['cb_label']}")
+                else:
+                    ax.set_xlabel(f"CloudSat, {dict_label['cb_label']}")
+            for hemisphere in (['NH','SH']):
+                color = colors[0] if hemisphere == 'NH' else colors[2]
+                lat_slice = slice(45,90) if hemisphere == 'NH' else slice(-90,-45)
+                if var_name == 'sf_eff':
+                    ax.scatter(x= ratios[f"{var_name}_season"].sel(model='ERA5', lat=lat_slice, season=season),
+                               y= ratios[f"{var_name}_season"].sel(model=model, lat=lat_slice, season=season), 
+                               color = color, alpha=0.1, label = '_nolegend_' )
+                ax.scatter(x= ratios[f"{var_name}_season"].sel(model='CloudSat', lat=lat_slice, season=season),
+                           y= ratios[f"{var_name}_season"].sel(model=model, lat=lat_slice, season=season), 
+                           color = color, alpha=0.1, label = '_nolegend_' )
+                a = regression['linregress_intercept'].sel(variable=var_name, model=model, season=season, hemisphere=hemisphere)
+                b = regression['linregress_slope'].sel(variable=var_name, model=model, season=season, hemisphere=hemisphere)
+                rvalue = regression['linregress_rvalues'].sel(variable=var_name, model=model, season=season, hemisphere=hemisphere)
+                # Create sequence of 100 numbers from 0 to 100
+                xseq = np.linspace(0,100, num=9)
+                # Plot regression line
+                ax.plot(xseq, a.values + b.values * xseq, color=color, lw=2.5, label=f"{hemisphere}$_y$ = {b.values:.1f} x + {a.values:.1f}" "\n" f"R$^2$ = {rvalue.values:.1f}");
+            
+            ax.legend(loc='lower right')
+            
+            ax.set_xlim([dict_label['vmin'], dict_label['vmax']])
+            ax.set_ylim([dict_label['vmin'], dict_label['vmax']])
                 
     f.tight_layout(pad=0., w_pad=0., h_pad=0.)  
-    f.subplots_adjust(top=0.96)
+    # f.subplots_adjust(top=0.96)
     
     figname = f'{var_name}_season_scatter_2007_2010.png'
-    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=False)
+    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=True)
 
+def plt_R2_heatmap_season(regression, dict_label, fig_dir, lwp_threshold):
+    # def plt_R2_heatmap_season(df_NH, df_SH, dict_label, fig_dir, lwp_threshold):
+    # # define heatmap colors
+    # cmap = cm.hawaii_r  # define the colormap
+    # # extract all colors from the hawaii map
+    # cmaplist = [cmap(i) for i in range(cmap.N)]
+    # # create the new map
+    # cmap = LinearSegmentedColormap.from_list(
+    #     'Custom cmap', cmaplist, cmap.N)
 
-def plt_R2_heatmap_season(df_NH, df_SH, dict_label, fig_dir):
-    # define heatmap colors
-    cmap = cm.hawaii_r  # define the colormap
-    # extract all colors from the hawaii map
+    # # define the bins and normalize
+    # bounds = np.linspace(0, 1, 11)
+    # norm = BoundaryNorm(bounds, cmap.N)
+    
+    
+    # f, axsm = plt.subplots(nrows=1, ncols=len(df_NH)*2, sharex=True, sharey=True, figsize=[15, 5])
+    # f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=0.93)
+    # ax = axsm.flatten()
+
+    # for ax, var_name, k in zip(axsm.flatten()[::2],dict_label.keys(), fig_label[::2]): 
+    #     im = ax.imshow(df_NH[var_name], cmap=cmap, norm=norm)
+    #     ax.set_title(f'{k} NH', )#fontsize=10.)
+        
+    #     if k == 'a)':
+    #         ax.set(yticks=range(len(df_NH[var_name].index)), yticklabels=df_NH[var_name].index)
+    #     if var_name == 'FLCC':
+    #         x_position = 0.75  
+    #     elif var_name == 'FsLCC':
+    #         x_position = 0.75
+    #     elif var_name == 'FoP' or var_name == 'FoS' or var_name == 'sf_eff' or var_name == 'pr_eff' or var_name == 'FLCC-FsLCC':
+    #         x_position = 0.55
+        
+    #     plt.figtext(x_position,-0.11, dict_label[var_name]['cb_label'], fontweight='bold', horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
+    #     # elif var_name == 'sf_eff':
+    #     #     plt.figtext(0.25,-0.09, dict_label[var_name]['cb_label'], fontweight='bold', horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
+    #     # elif var_name == 'lcc_w_snow':
+    #     #     plt.figtext(0.35,-0.09, dict_label[var_name]['cb_label'], fontweight='bold', horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
+    #     ax.set(xticks=range(len(df_NH[var_name].columns)), xticklabels=df_NH[var_name].columns,)
+    # for ax, var_name, label, k in zip(axsm.flatten()[1::2],dict_label.keys(), dict_label.values(), fig_label[1::2]):     
+    #     im = ax.imshow(df_SH[var_name], cmap=cmap, norm=norm)
+    #     ax.set_title(f'{k} SH')
+    #     ax.set(xticks=range(len(df_SH[var_name].columns)), xticklabels=df_SH[var_name].columns,)
+
+    # # add space for colour bar
+    # f.subplots_adjust(right=0.85)
+    # cbar_ax = f.add_axes([1.01, 0.15, 0.0125, 0.7])
+    
+    # f.colorbar(im, cax=cbar_ax, cmap=cmap, norm=norm,
+    #     spacing='proportional', ticks=bounds, boundaries=bounds, label=f'R$^2$-values',shrink=0.5)
+
+    
+
+    # f.tight_layout(pad=0., w_pad=0.4, h_pad=0.) 
+    
+    figsize = [9,9]
+    cmap = cm.hawaii_r
     cmaplist = [cmap(i) for i in range(cmap.N)]
-    # create the new map
-    cmap = LinearSegmentedColormap.from_list(
-        'Custom cmap', cmaplist, cmap.N)
+    bounds = np.linspace(0, 1 , 11)
+    hemispheres = ['NH', 'SH']
+    # Create a custom colormap
+    cmap = LinearSegmentedColormap.from_list('Custom cmap', cmaplist, cmap.N)
+    norm = BoundaryNorm(bounds, 10)
 
-    # define the bins and normalize
-    bounds = np.linspace(0, 1, 11)
-    norm = BoundaryNorm(bounds, cmap.N)
-    
-    
-    f, axsm = plt.subplots(nrows=1, ncols=len(df_NH)*2, sharex=True, sharey=True, figsize=[15, 5])
-    ax = axsm.flatten()
+    # Create a formatting function for colorbar ticks
+    # qrates = list(np.arange(0.05 , 1.05 , 0.1 ))
+    qrates = list(np.arange(0.05 , 1.05 , 0.1 ))
+    fmt = FuncFormatter(lambda x, pos: qrates[::][norm(x)])
+    fmt = FormatStrFormatter("%.2f")
 
-    for ax, var_name, k in zip(axsm.flatten()[::2],dict_label.keys(), fig_label[::2]): 
-        im = ax.imshow(df_NH[var_name], cmap=cmap, norm=norm)
-        ax.set_title(f'{k} NH', )#fontsize=10.)
-        
-        if k == 'a)':
-            ax.set(yticks=range(len(df_NH[var_name].index)), yticklabels=df_NH[var_name].index)
-        if var_name == 'FLCC':
-            x_position = 0.75  
-        elif var_name == 'FsLCC':
-            x_position = 0.75
-        elif var_name == 'FoP' or var_name == 'FoS' or var_name == 'sf_eff' or var_name == 'pr_eff' or var_name == 'FLCC-FsLCC':
-            x_position = 0.55
-        
-        plt.figtext(x_position,-0.11, dict_label[var_name]['cb_label'], fontweight='bold', horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
-        # elif var_name == 'sf_eff':
-        #     plt.figtext(0.25,-0.09, dict_label[var_name]['cb_label'], fontweight='bold', horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
-        # elif var_name == 'lcc_w_snow':
-        #     plt.figtext(0.35,-0.09, dict_label[var_name]['cb_label'], fontweight='bold', horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
-        ax.set(xticks=range(len(df_NH[var_name].columns)), xticklabels=df_NH[var_name].columns,)
-    for ax, var_name, label, k in zip(axsm.flatten()[1::2],dict_label.keys(), dict_label.values(), fig_label[1::2]):     
-        im = ax.imshow(df_SH[var_name], cmap=cmap, norm=norm)
-        ax.set_title(f'{k} SH')
-        ax.set(xticks=range(len(df_SH[var_name].columns)), xticklabels=df_SH[var_name].columns,)
 
-    # add space for colour bar
-    f.subplots_adjust(right=0.85)
-    cbar_ax = f.add_axes([1.01, 0.15, 0.0125, 0.7])
-    
-    f.colorbar(im, cax=cbar_ax, cmap=cmap, norm=norm,
-        spacing='proportional', ticks=bounds, boundaries=bounds, label=f'R$^2$-values',shrink=0.5)
+    fig, axsm = plt.subplots(nrows=2, ncols=len(regression.variable.values), sharex=True, sharey=True, figsize=figsize)
+    fig.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.01)
 
     
+    for j, var_name in enumerate(regression.variable.values):
+                da = regression['linregress_rvalues'].sel(variable=var_name, )
+                da = da.transpose()
+                da = da.where(~np.isnan(da),other=np.nan)
+                for i, hemisphere in enumerate(['NH', 'SH']):
+                        ax = axsm[i,j]
+                        # ax.set_title(f"{dict_label['cb_label']}", fontsize=8)
+                        im = ax.imshow(da.sel(hemisphere=hemisphere), cmap=cmap.resampled(10), norm=norm)
+                        
+                        # Show all ticks and label them with the respective list entries
+                        ax.set_yticks(np.arange(len(da.model.values)), labels=da.model.values)
+                        ax.set_xticks(np.arange(len(da.season.values)), labels=da.season.values)
+                        
+                        # Rotate the tick labels and set their alignment.
+                        plt.setp(ax.get_xticklabels(), rotation=90, ha="right", va="center", rotation_mode="anchor")
 
-    f.tight_layout(pad=0., w_pad=0.4, h_pad=0.)  
+                        for k in range(len(da.model.values)):
+                                for l in range(len(da.season.values)):
+                                        if var_name == 'sf_eff' and k == 0:
+                                                if l == 0 or l ==1 or l ==2 or l==3:
+                                                        color = 'white'
+                                        else:
+                                                color = 'k'
+                                        text = ax.text(l, k, f"{(abs(da.sel(hemisphere=hemisphere)).values[k, l]):.1f}",
+                                                        ha="center", va="center", color=color,)
+                                        
+                        if hemisphere == 'SH':
+                                if var_name == 'FLCC-FsLCC':
+                                        var_text = 'FLCC-FsLCC (%)'
+                                else:
+                                        var_text = dict_label[var_name]['cb_label']
+                                plt.figtext(0.5, -0.15, f"{var_text}", fontweight='bold', horizontalalignment='center', verticalalignment='center', transform=ax.transAxes)
+
+    for ax, row in zip(axsm[:,0], ['Northern Hemisphere', 'Southern Hemisphere']):
+                ax.text(-1.03, 0.55, row, va='bottom', ha='center', rotation='vertical',
+                        rotation_mode='anchor', transform=ax.transAxes, fontweight='bold')
+    # Add subplot label
+    for ax, k, var_name in zip(axsm.flatten(), range(len(fig_label)), list(dict_label.keys()) + list(dict_label.keys())):
+                # ax.text(0.05, 1.035, f"{fct.fig_label[k]} {dict_label['cb_label']}", fontweight='bold', horizontalalignment='left', verticalalignment='top', transform=ax.transAxes)
+                ax.text(0.05, 1.035, f"{fig_label[k]}", fontweight='bold', horizontalalignment='center', verticalalignment='top', transform=ax.transAxes)
+
+    # Create colorbar
+    fig.subplots_adjust(right=0.85)
+    cbar_ax = fig.add_axes([1.015, 0.275, 0.0125, 0.5])
+    cbar_kw = dict(ticks=np.arange(0.05,1.05,0.1), format=fmt)
+    fig.colorbar(im, cax=cbar_ax, **cbar_kw, label=f' R$^2$', shrink=0.5)#cmap=cmap, norm=norm, )
+    plt.tight_layout(pad=0., w_pad=0., h_pad=0)  ; 
     figname = f'R2_season_2007_2010.png'
-    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=False)
+    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=True)
 
 
 def plot_spatial_season(difference, val1, val2, val3, val1_mean, val2_mean, val3_mean,
-                        hemisphere, ds, var_name, dict_label, fig_dir, lat_extent):
+                        hemisphere, ds, var_name, dict_label, fig_dir, lat_extent, lwp_threshold):
   
     if difference != None:
         if var_name == 'sf_eff' or var_name == 'pr_eff':
-            val1 = val2.where(val2>0., other=np.nan)
-            val1_mean = val2_mean.copy()
+            _val3 = val3.copy()
+            diff_2 = val2 - val3
+            diff_2_mean = val2_mean - val3_mean 
+        if var_name == 'FLCC' or var_name == 'FsLCC' or var_name == 'FoS' or var_name == 'FLCC-FsLCC':    
+            _val1 = val1.fillna(0.)
+            _val1 = _val1.where(np.logical_and(_val1.lat <= 82., _val1.lat >= -82.), other=np.nan)
+            _val2 = val2.fillna(0.)
+            _val2 = _val2.where(np.logical_and(_val2.lat <= 82., _val2.lat >= -82.), other=np.nan)
+            _val3 = val3.fillna(0.)
+            _val3 = _val3.where(np.logical_and(_val3.lat <= 82., _val3.lat >= -82.), other=np.nan)
+        
+            # diff_1 = _val1.where(~np.isnan(_val2)) - _val2.where(~np.isnan(_val1))
+            diff_1 = _val1 - _val2
+            diff_1_mean = val1_mean - val2_mean
             
-        
-        diff_1 = val1.where(~np.isnan(val2)) - val2.where(~np.isnan(val1))
-        diff_1_mean = val1_mean - val2_mean
-        
-        diff_2 = val1.where(~np.isnan(val3)) - val3.where(~np.isnan(val1))
-        diff_2_mean = val1_mean - val3_mean
+            # diff_2 = _val1.where(~np.isnan(_val3)) - _val3.where(~np.isnan(_val1))
+            diff_2 = _val1 - _val3
+            diff_2_mean = val1_mean - val3_mean
         
         if 'model' in diff_2.coords:
             len_model = len(diff_2['model'])
             diff_2 = diff_2.mean('model', skipna=True, keep_attrs=False)
-            diff_2 = diff_2.where(~np.isnan(diff_2))
+            # diff_2 = diff_2.where(~np.isnan(diff_2))
             diff_2_mean = diff_2_mean.mean('model',skipna=True, keep_attrs=False)
             # create model std 
-            std_cmip = val3.std('model', skipna=True, keep_attrs=False)
-            std_cmip = std_cmip.where(~np.isnan(std_cmip))
+            std_cmip = _val3.std('model', skipna=True, keep_attrs=False)
+            # std_cmip = std_cmip.where(~np.isnan(std_cmip))
             # calculate statistic significance dependend on the model spread https://towardsdatascience.com/confidence-intervals-explained-simply-for-data-scientists-8354a6e2266b
             SE = std_cmip/np.sqrt(len_model) # standard error
             CI = SE * 1.96   # for 95% confidence level, or CI=2.58*SE for 99% confidence level
         
-        if 'model' in val3.coords:
-            val3 = val3.mean('model', skipna=True, keep_attrs=False)
+        if 'model' in _val3.coords:
+            _val3 = _val3.mean('model', skipna=True, keep_attrs=False)
             val3_mean = val3_mean.mean('model', skipna=True, keep_attrs=False)    
-        val3= val3.where(val3>0., other=np.nan)
-        
+        if var_name == 'FLCC' or var_name == 'FsLCC' or var_name == 'FoS':
+    #     else:
+            var1= val1.copy() #where(val1>=0., other=np.nan)
+            var1_mean = val1_mean.copy()
+            
+            var2 = diff_1.copy()    
+            var2_mean = diff_1_mean.copy()
+            
+            var3= diff_2.copy()            
+            var3_mean = diff_2_mean.copy()
+        if var_name == 'FLCC-FsLCC':
+            var1 = val1.copy()
+            var1_mean = val1_mean.copy()
+            
+            var2 = val2.copy()
+            var2_mean = val2_mean.copy()
+            
+            # var3 = val3.copy()
+            # var3_mean = val3_mean.copy()
+            var3 = diff_1.copy()
+            var3_mean = diff_1_mean.copy()
         if var_name == 'sf_eff' or var_name == 'pr_eff':
-            val1= val1.where(val1>0., other=np.nan)
-            val1_mean = val1_mean.copy()
+            var1 = val2.copy()
+            var1_mean = val2_mean.copy()
             
-            val2 = val3.where(val3>0., other=np.nan)
-            val2_mean = val3_mean.copy()
+            var2 = _val3.copy()
+            var2_mean = val3_mean.copy()
             
-            val3= diff_2.copy()            
-            val3_mean = diff_2_mean.copy()
-        elif var_name == 'FLCC-FsLCC':
-            val1 = val1.where(val1>0., other=np.nan)
-            val2 = val2.where(val2>0., other=np.nan)
-            val3 = val3.where(val3>0., other=np.nan)
-            val1_mean = val1_mean.copy()
-            val2_mean = val2_mean.copy()
-            val3_mean = val3_mean.copy()
-        else:
-            val1= val1.where(val1>0., other=np.nan)
-            val1_mean = val1_mean.copy()
+            var3 = diff_2.copy()
+            var3_mean = diff_2_mean.copy()
             
-            val2 = diff_1.copy()    
-            val2_mean = diff_1_mean.copy()
-            
-            val3= diff_2.copy()            
-            val3_mean = diff_2_mean.copy()
+
+        
                 
         
     
     if difference == None:
-        val1= val1.where(val1>0., other=np.nan)
-        val2= val2.where(val2>0., other=np.nan)
-        
-        if 'model' in val3.coords:
-            val3 = val3.mean('model', skipna=True, keep_attrs=False)
-            val3_mean = val3_mean.mean('model', skipna=True, keep_attrs=False)    
-        val3= val3.where(val3>0., other=np.nan)
-        
+        if var_name == 'FLCC' or var_name == 'FsLCC' or var_name == 'FoS' or var_name == 'FLCC-FsLCC':
+            var1 = val1.copy()
+            var1_mean = val1_mean.copy()
+            
+            var2 = val2.copy()
+            var2_mean = val2_mean.copy()
+            
+            if 'model' in val3.coords:
+                var3 = val3.mean('model', skipna=True, keep_attrs=False)
+                var3_mean = val3_mean.mean('model', skipna=True, keep_attrs=False)
+            else:
+                var3 = val3.copy()
+                var3_mean = val3_mean.copy()
+        if var_name == 'FLCC-FsLCC':
+            var1 = val1.copy()
+            var1_mean = val1_mean.copy()
+            
+            var2 = val2.copy()
+            var2_mean = val2_mean.copy()
+            
+            var3 = val3.where(np.isnan(val3), other=np.nan)
+            var3_mean = val3_mean.where(np.isnan(val3_mean), other=np.nan)
         
         if var_name == 'sf_eff' or var_name == 'pr_eff':
-            val1 = val2.copy()
-            val2 = val3.copy()
-            val3 = val3.where(np.isnan(val3),other=np.nan)
+            var1 = val2.copy()
+            var1_mean = val2_mean.copy()
             
-            val1_mean = val2_mean.copy()
-            val2_mean = val3_mean.copy()
-            val3_mean = val3_mean.where(np.isnan(val3_mean), other=np.nan)
+            if 'model' in val3.coords:
+                var2 = val3.mean('model', skipna=True, keep_attrs=False)
+                var2_mean = val3_mean.mean('model', skipna=True, keep_attrs=False)
+            else:
+                var2 = val3.copy()
+                var2_mean = val3_mean.copy()
+                
+            var3 = val3.where(np.isnan(val3), other=np.nan)
+            var3_mean = val3_mean.where(np.isnan(val3_mean), other=np.nan)
             
+
             
     
     
     projection = create_projection(hemisphere)
     density = 4
-    if ~np.isnan(val3).all() != False:
+    if ~np.isnan(var3).all() != False:
         f, axsm = plt.subplots(nrows=3, 
                             ncols=4, 
                             subplot_kw={'projection': projection}, 
                             figsize=[12, 9], sharex=True, sharey=True)
+        if difference != None:
+            f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=0.925)
+            if var_name == 'FLCC-FsLCC':
+                f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
+        else:
+            f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
         
     else:
         f, axsm = plt.subplots(nrows=2, 
                            ncols=4, 
                            subplot_kw={'projection': projection}, 
                            figsize=[12, 6], sharex=True, sharey=True)
+        f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
     if difference != None:
         if var_name == 'sf_eff' or var_name == 'pr_eff':
-            model_labels = ['ERA5 (500 km)', 'CMIP6$_{mean}$ (500km)', 'ERA5 - CMIP6$_{mean}$ (500km)']
+            model_labels = ['ERA5', 'CMIP6$_{mean}$', 'ERA5 - CMIP6$_{mean}$']
         elif var_name == 'FLCC-FsLCC':
             model_labels = ['FLCC', 'FsLCC', 'FLCC - FsLCC']
         else: 
-            model_labels = ['CloudSat (500km)', 'CloudSat - ERA5 (500km)', 'CloudSat - CMIP6$_{mean}$ (500km)']
+            model_labels = ['CloudSat', 'CloudSat - ERA5', 'CloudSat - CMIP6$_{mean}$']
     if difference == None:
         if var_name == 'sf_eff' or var_name == 'pr_eff':
-            model_labels = ['ERA5 (500km)', 'CMIP6$_{mean}$ (500km)', ]
+            model_labels = ['ERA5', 'CMIP6$_{mean}$', ]
         else:
-            model_labels = ['CloudSat (500km)', 'ERA5 (500km)', 'CMIP6$_{mean}$ (500km)']
+            model_labels = ['CloudSat', 'ERA5', 'CMIP6$_{mean}$']
         
     
     for ax, row in zip(axsm[:,0], model_labels):
@@ -1849,8 +2235,8 @@ def plot_spatial_season(difference, val1, val2, val3, val1_mean, val2_mean, val3
     vmin = dict_label['vmin']
     vmax = dict_label['vmax']
     
-    list1 = [val1, val2, val3]
-    list_glob = [val1_mean, val2_mean, val3_mean]
+    list1 = [var1, var2, var3]
+    list_glob = [var1_mean, var2_mean, var3_mean]
 
     
     for i, (value,hemi_glob) in enumerate(zip(list1,list_glob)):
@@ -1863,13 +2249,27 @@ def plot_spatial_season(difference, val1, val2, val3, val1_mean, val2_mean, val3
                 if var_name == 'sf_eff' or var_name == 'pr_eff' or var_name == 'FLCC-FsLCC':
                     cmap = cm.hawaii_r
                     levels = dict_label['levels']
+                    # boundaries = dict_label['levels']
+                    # colors = list(cmap(np.arange(len(boundaries))))
+                    # # set over-color to last color of list 
+                    # cmap.set_over(colors[0])
+                    # norm = BoundaryNorm(boundaries, ncolors=len(boundaries)-1, clip=False)
                 else:
                     cmap=cm.bam
                     levels = dict_label['diff_levels']
             if i == 2:
                 cmap=cm.bam
                 levels = dict_label['diff_levels']
-        norm = BoundaryNorm(levels, ncolors=cmap.N, clip=True)
+                
+        if var_name == 'FLCC-FsLCC' and i == 2:
+            cmaplist = [cmap(i) for i in range(cm.bam.N)]
+            cmap = LinearSegmentedColormap.from_list('new', cmaplist[int(len(cmaplist)/2):], int(cm.bam.N/2))
+            norm = BoundaryNorm(levels[int(len(levels)/2):], ncolors=cmap.N, clip=True)
+        else:
+            norm = BoundaryNorm(levels, ncolors=cmap.N, clip=False)
+            
+                    
+        
         sub_title = ""
 
         for ax, season in zip(axsm.flatten()[i * 4: (i + 1) * 4 + 1], val1.season):
@@ -1889,28 +2289,38 @@ def plot_spatial_season(difference, val1, val2, val3, val1_mean, val2_mean, val3
                 if var_name == 'sf_eff' or var_name == 'pr_eff':
                     cbaxes = f.add_axes([0.92, 0.4, 0.0125, 0.45])
                     cb_label = dict_label['cb_label']
+                    extend = 'max'
                 elif var_name == 'FLCC-FsLCC':
                     cbaxes = f.add_axes([1.0, 0.4, 0.0125, 0.45])
                     cb_label = 'Fraction (%)'
+                    extend = None
                 else:
                     cbaxes = f.add_axes([0.92, 0.65, 0.0125, 0.225])
                     cb_label = dict_label['cb_label']
-                plt.colorbar(cf, cax=cbaxes, shrink=0.5,extend=None, orientation='vertical', label=cb_label)
+                    extend = None
+                plt.colorbar(cf, cax=cbaxes, shrink=0.5,extend=extend, orientation='vertical', label=cb_label)
             if difference != None and i == 2:
                 if var_name == 'sf_eff' or var_name == 'sf_eff':
                     cbaxes = f.add_axes([0.92, 0.13, 0.0125, 0.2])
                     cb_label = 'ERA5 - Model (h$^{-1}$)'
+                    extend = 'both'
                 elif var_name == 'FLCC-FsLCC':
                     cbaxes = f.add_axes([1.0, 0.024, 0.0125, 0.3])
                     cb_label = 'FLCC-FsLCC (%)'
+                    extend = None
                 else:
                     cbaxes = f.add_axes([0.92, 0.13, 0.0125, 0.45])
                     cb_label = 'CloudSat - Model (%)'
-                plt.colorbar(cf, cax=cbaxes, shrink=0.5,extend=None, orientation='vertical', label=cb_label)
+                    extend = None
+                plt.colorbar(cf, cax=cbaxes, shrink=0.5,extend=extend, orientation='vertical', label=cb_label)
             if difference == None and i == 1:
-                cbaxes = f.add_axes([1.02, 0.25, 0.0125, 0.45])
+                cbaxes = f.add_axes([1, 0.25, 0.0125, 0.45])
                 cb_label = dict_label['cb_label']
-                plt.colorbar(cf, cax=cbaxes, shrink=0.5,extend=None, orientation='vertical', label=cb_label)
+                if var_name == 'sf_eff':
+                    extend = 'max'
+                else:
+                    extend = None
+                plt.colorbar(cf, cax=cbaxes, shrink=0.5,extend=extend, orientation='vertical', label=cb_label)
             
     
             if difference != None and i == 2 and var_name != 'FLCC-FsLCC':
@@ -1927,65 +2337,102 @@ def plot_spatial_season(difference, val1, val2, val3, val1_mean, val2_mean, val3
         figname = f'{var_name}_season_{hemisphere}_2007_2010.png'
     if difference == None:
         figname = f'{var_name}_CS_ERA5_CMIP6_season_{hemisphere}_2007_2010.png'
-    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=False)
+    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=True)
 
 
-def plt_spatial_season_var(ds, var_name, dict_label, fig_dir, lat_extent):
-    for hemisphere in ['NH', 'SH']:
-        val1= ds['cloudsat_500'][var_name + '_season']
-        val1_mean= ds['cloudsat_500'][var_name + '_season_mean']
-
-        val2= ds['era_500'][var_name + '_season']
-        val2_mean= ds['era_500'][var_name + '' + '_season_mean']
-
-        val3= ds['cmip_500'][var_name + '_season']
-        val3_mean = ds['cmip_500'][var_name + '' +'_season_mean']  
+def plt_spatial_season_var(ds, var_name, dict_label, fig_dir, lat_extent, lwp_threshold):
+    if var_name == 'FLCC-FsLCC':
+        val1= ds['FLCC' + '_season'].sel(model='CloudSat').squeeze()
+        val1_mean= ds['FLCC' + '_season_mean'].sel(model='CloudSat').squeeze()
         
-        plot_spatial_season('yes', val1, val2, val3, val1_mean, val2_mean, val3_mean,
-                        hemisphere, ds, var_name, dict_label[var_name], fig_dir, lat_extent)  
-        plot_spatial_season(None, val1, val2, val3, val1_mean, val2_mean, val3_mean,
-                        hemisphere, ds, var_name, dict_label[var_name], fig_dir, lat_extent) 
+
+        val2= ds['FsLCC' + '_season'].sel(model='CloudSat').squeeze()
+        val2_mean= ds['FsLCC' + '' + '_season_mean'].sel(model='CloudSat').squeeze()
+        
+        
+        val3= ds['FLCC-FsLCC' + '_season'].sel(model='CloudSat').squeeze()
+        val3_mean = ds['FLCC-FsLCC' + '' +'_season_mean'].sel(model='CloudSat').squeeze()
+        val3 = val3.drop('model')
+        val3_mean = val3_mean.drop('model')
+    else:
+        val1= ds[var_name + '_season'].sel(model='CloudSat').squeeze()
+        val2= ds[var_name + '_season'].sel(model='ERA5').squeeze()
+        val3= ds[var_name + '_season'].sel(model = ['MIROC6', 'CanESM5', 'AWI-ESM-1-1-LR',
+                                                    'MPI-ESM1-2-LR', 'UKESM1-0-LL', 'HadGEM3-GC31-LL', 'CNRM-CM6-1',
+                                                    'CNRM-ESM2-1', 'IPSL-CM6A-LR', 'IPSL-CM5A2-INCA'])
+        
+        if var_name == 'sf_eff':
+            val1_mean = ds[var_name + '_season_mean'].sel(model='CloudSat').squeeze()
+            val2_mean = ds[var_name + '_season_mean'].sel(model='ERA5').squeeze()
+            val3_mean = ds[var_name + '_season_mean'].sel(model=['MIROC6', 'CanESM5', 'AWI-ESM-1-1-LR',
+                                                                 'MPI-ESM1-2-LR', 'UKESM1-0-LL', 'HadGEM3-GC31-LL', 'CNRM-CM6-1',
+                                                                 'CNRM-ESM2-1', 'IPSL-CM6A-LR', 'IPSL-CM5A2-INCA'])
+        else:
+            val1_mean= ds[var_name + '_season_cs_mean'].sel(model='CloudSat').squeeze()
+            val2_mean= ds[var_name + '_season_cs_mean'].sel(model='ERA5').squeeze()
+            val3_mean= ds[var_name + '_season_cs_mean'].sel(model = ['MIROC6', 'CanESM5', 'AWI-ESM-1-1-LR',
+                                                                     'MPI-ESM1-2-LR', 'UKESM1-0-LL', 'HadGEM3-GC31-LL', 'CNRM-CM6-1',
+                                                                     'CNRM-ESM2-1', 'IPSL-CM6A-LR', 'IPSL-CM5A2-INCA'])
+    
+    val1 = val1.drop('model')
+    val1_mean = val1_mean.drop('model')
+    val2 = val2.drop('model')
+    val2_mean = val2_mean.drop('model')
 
 
-def plt_spatial_season_FLCC_FsLCC(ds, dict_label, fig_dir, lat_extent):
+        
+    
     for hemisphere in ['NH', 'SH']:
-        val1= ds['FLCC' + '_season']
-        val1_mean= ds['FLCC' + '_season_mean']
-
-        val2= ds['FsLCC' + '_season']
-        val2_mean= ds['FsLCC' + '' + '_season_mean']
-
-        val3= ds['FLCC-FsLCC' + '_season']
-        val3_mean = ds['FLCC-FsLCC' + '' +'_season_mean']
-            
+        plot_spatial_season(None, val1, val2, val3, val1_mean, val2_mean, val3_mean,
+                        hemisphere, ds, var_name, dict_label[var_name], fig_dir, lat_extent, lwp_threshold) 
         plot_spatial_season('yes', val1, val2, val3, val1_mean, val2_mean, val3_mean,
-                        hemisphere, ds, 'FLCC-FsLCC', dict_label['FLCC-FsLCC'], fig_dir, lat_extent)
+                        hemisphere, ds, var_name, dict_label[var_name], fig_dir, lat_extent, lwp_threshold)  
+        
+        
+        
+
+
+# def plt_spatial_season_FLCC_FsLCC(ds, dict_label, fig_dir, lat_extent, lwp_threshold):
+#     for hemisphere in ['NH', 'SH']:
+#         val1= ds['FLCC' + '_season']
+#         val1_mean= ds['FLCC' + '_season_mean']
+
+#         val2= ds['FsLCC' + '_season']
+#         val2_mean= ds['FsLCC' + '' + '_season_mean']
+
+#         val3= ds['FLCC-FsLCC' + '_season']
+#         val3_mean = ds['FLCC-FsLCC' + '' +'_season_mean']
+        
+#         plot_spatial_season(None, val1, val2, val3, val1_mean, val2_mean, val3_mean,
+#                         hemisphere, ds, 'FLCC-FsLCC', dict_label['FLCC-FsLCC'], fig_dir, lat_extent,lwp_threshold)    
+#         plot_spatial_season('yes', val1, val2, val3, val1_mean, val2_mean, val3_mean,
+#                         hemisphere, ds, 'FLCC-FsLCC', dict_label['FLCC-FsLCC'], fig_dir, lat_extent,lwp_threshold)
     
 
     
 def plot_spatial_season_model(val1, val2, val3, val1_mean, val2_mean, val3_mean,
-                        hemisphere, var_name, dict_label, fig_dir, lat_extent, model, res):
+                        hemisphere, var_name, dict_label, fig_dir, lat_extent, model):
     
     
-    val1 = val1.where(val1>0., other=np.nan)
+    # val1 = val1.where(val1>0., other=np.nan)
 
-    if 'model' in val2.coords:
-        len_model = len(val2['model'])
-        # create model std 
-        std_cmip = val2.std('model', skipna=True, keep_attrs=False)
-        std_cmip = std_cmip.where(~np.isnan(std_cmip))
-        # calculate statistic significance dependend on the model spread https://towardsdatascience.com/confidence-intervals-explained-simply-for-data-scientists-8354a6e2266b
-        SE = std_cmip/np.sqrt(len_model) # standard error
-        CI = SE * 1.96   # for 95% confidence level, or CI=2.58*SE for 99% confidence level
-        val2 = val2.sel(model=model)
-        val2 = val2.where(val2>0., other=np.nan)
+    # if 'model' in val2.coords:
+    #     len_model = len(val2['model'])
+    #     # create model std 
+    #     std_cmip = val2.std('model', skipna=True, keep_attrs=False)
+    #     std_cmip = std_cmip.where(~np.isnan(std_cmip))
+    #     # calculate statistic significance dependend on the model spread https://towardsdatascience.com/confidence-intervals-explained-simply-for-data-scientists-8354a6e2266b
+    #     SE = std_cmip/np.sqrt(len_model) # standard error
+    #     CI = SE * 1.96   # for 95% confidence level, or CI=2.58*SE for 99% confidence level
+    #     val2 = val2.sel(model=model)
+    #     val2 = val2.where(val2>0., other=np.nan)
         
-        val2_mean = val2_mean.sel(model=model)
+    #     val2_mean = val2_mean.sel(model=model)
         
-    if 'model' in val3.coords:
-        val3 = val3.sel(model=model)
+    # if 'model' in val3.coords:
+    #     val3 = val3.sel(model=model)
         
-        val3_mean = val3_mean.sel(model=model)  
+    #     val3_mean = val3_mean.sel(model=model)  
         
 
     
@@ -1997,9 +2444,10 @@ def plot_spatial_season_model(val1, val2, val3, val1_mean, val2_mean, val3_mean,
                             figsize=[12, 9], sharex=True, sharey=True)
         
     if var_name == 'sf_eff' or var_name == 'pr_eff':
-        model_labels = [f'ERA5 ({res}km)', f'{model} ({res}km)', f'ERA5 - {model}']
+        # model_labels = [f'ERA5 ({res}km)', f'{model} ({res}km)', f'ERA5 - {model}']
+        model_labels = [f'ERA5', f'{model}', f'ERA5 - {model}']
     else: 
-        model_labels = [f'CloudSat ({res}km)', f'{model} ({res}km)', f'CloudSat - {model}']
+        model_labels = [f'CloudSat', f'{model}', f'CloudSat - {model}']
     
     for ax, row in zip(axsm[:,0], model_labels):
         ax.text(-0.07, 0.55, row, 
@@ -2031,17 +2479,24 @@ def plot_spatial_season_model(val1, val2, val3, val1_mean, val2_mean, val3_mean,
         if i == 0 or i == 1:
             cmap = cm.hawaii_r 
             levels = dict_label['levels']
-            cbaxes = f.add_axes([0.92, 0.4, 0.0125, 0.45])
+            cbaxes = f.add_axes([1., 0.4, 0.0125, 0.45])
             cb_label = dict_label['cb_label']
+            if var_name == 'sf_eff':
+                extend = 'max'
+            else:
+                extend = None
 
         if i == 2:
             cmap=cm.bam
             levels = dict_label['diff_levels']
-            cbaxes = f.add_axes([0.92, 0.13, 0.0125, 0.2])
+            # cbaxes = f.add_axes([1., 0.13, 0.0125, 0.2])
+            cbaxes = f.add_axes([1.0, 0.025, 0.0125, 0.3])
             if var_name == 'sf_eff' or var_name == 'pr_eff':
                 cb_label = f"Diff. {dict_label['cb_label']}"
+                extend = 'both'
             else:
                 cb_label = f"Diff. {dict_label['cb_label']}  (%)"
+                extend = None
 
         norm = BoundaryNorm(levels, ncolors=cmap.N, clip=True)
         sub_title = ""
@@ -2058,43 +2513,156 @@ def plot_spatial_season_model(val1, val2, val3, val1_mean, val2_mean, val3_mean,
             add_text_box(ax, hemi_glob.sel(hemisphere=hemisphere, season=season), var_name)
             ax.set_title(sub_title)
                
-            plt.colorbar(cf, cax=cbaxes, shrink=0.5,extend=None, orientation='vertical', label=cb_label)
+            plt.colorbar(cf, cax=cbaxes, shrink=0.5,extend=extend, orientation='vertical', label=cb_label)
 
     
-            if i == 2:
-                plot_difference_significance(ax, hemisphere, val3, season, CI, density)
-                bb = [0.95, 0.09, 0.0125, 0.05]
-                axsm.flatten()[i].legend(
-                    [Patch(facecolor='none', edgecolor='k', hatch=density * '/', label='CI < 95%')],
-                    ['CI < 95%'], bbox_to_anchor=bb, loc=8, ncol=1, borderaxespad=0,
-                    fancybox=True, bbox_transform=f.transFigure
-                )
+            # if i == 2:
+            #     plot_difference_significance(ax, hemisphere, val3, season, CI, density)
+            #     bb = [0.95, 0.09, 0.0125, 0.05]
+            #     axsm.flatten()[i].legend(
+            #         [Patch(facecolor='none', edgecolor='k', hatch=density * '/', label='CI < 95%')],
+            #         ['CI < 95%'], bbox_to_anchor=bb, loc=8, ncol=1, borderaxespad=0,
+            #         fancybox=True, bbox_transform=f.transFigure
+            #     )
                 
     plt.tight_layout(pad=0., w_pad=0., h_pad=0.,)
     figname = f'{model}_{var_name}_season_{hemisphere}_2007_2010.png'
-    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=False)
+    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=True)
 
 
 def plt_spatial_season_all_models(ds, var_name, dict_label, fig_dir, lat_extent):
     
-    for model in ds['cmip_500']['model'].values:
-        if model == 'CanESM5' or model == 'IPSL-CM5A2-INCA':
-            res = 500
-        else:
-            res = 250
+    # for model in ds['cmip_500']['model'].values:
+        # if model == 'CanESM5' or model == 'IPSL-CM5A2-INCA':
+        #     res = 500
+        # else:
+        #     res = 250
                 
+    if var_name == 'sf_eff':
+            # val1 = ds[f'era_{res}'][var_name + '_season']
+            # val1_mean = ds[f'era_{res}'][var_name + '_season_mean']
+            val1 = ds[var_name + '_season'].sel(model='ERA5').squeeze()
+            val1_mean = ds[var_name +'_season_cs_mean'].sel(model='ERA5').squeeze()
+            models = list(ds.model.values)[2:]
+    else:
+            # val1 = ds[f'cloudsat_{res}'][var_name + '_season']
+            # val1_mean = ds[f'cloudsat_{res}'][var_name + '_season_mean']
+            val1 = ds[var_name + '_season'].sel(model='CloudSat').squeeze()
+            val1_mean = ds[var_name + '_season_cs_mean'].sel(model='CloudSat').squeeze()
+            models = list(ds.model.values)[1:]
+    val1 = val1.drop('model')
+    val1_mean = val1_mean.drop('model')
+    
+    for model in models:                
+        # val2 = ds[f'cmip_{res}'][var_name + '_season']
+        # val2_mean = ds[f'cmip_{res}'][var_name + '_season_mean']
+        val2 = ds[var_name + '_season'].sel(model=model ).squeeze()
         if var_name == 'sf_eff':
-            val1 = ds[f'era_{res}'][var_name + '_season']
-            val1_mean = ds[f'era_{res}'][var_name + '_season_mean']
+            val2_mean = ds[var_name + '_season_mean'].sel(model=model).squeeze()
         else:
-            val1 = ds[f'cloudsat_{res}'][var_name + '_season']
-            val1_mean = ds[f'cloudsat_{res}'][var_name + '_season_mean']
-                    
-        val2 = ds[f'cmip_{res}'][var_name + '_season']
-        val2_mean = ds[f'cmip_{res}'][var_name + '_season_mean']
+            val2_mean = ds[var_name + '_season_cs_mean'].sel(model=model).squeeze()
+        
+        val2 = val2.drop('model')
+        val2_mean = val2_mean.drop('model')
+        
 
         val3 = val1-val2
         val3_mean = val1_mean-val2_mean
         for hemisphere in ['NH', 'SH']:
             plot_spatial_season_model(val1, val2, val3, val1_mean, val2_mean, val3_mean,
-                                    hemisphere, var_name, dict_label[var_name], fig_dir, lat_extent, model, res)
+                                    hemisphere, var_name, dict_label[var_name], fig_dir, lat_extent, model)
+            
+            
+            
+def plt_percent_difference_season(dataset, var_name, lwp_threshold, dict_label,  fig_dir):
+    if var_name == 'sf_eff' or var_name == 'pr_eff':
+        da = ((dataset[var_name+'_season_cs_mean'].sel(model='ERA5') - dataset[var_name+'_season_cs_mean'].sel(model = ['ERA5','MIROC6', 'CanESM5', 'AWI-ESM-1-1-LR',
+                                                                                                                        'MPI-ESM1-2-LR', 'UKESM1-0-LL', 'HadGEM3-GC31-LL', 'CNRM-CM6-1',
+                                                                                                                        'CNRM-ESM2-1', 'IPSL-CM6A-LR', 'IPSL-CM5A2-INCA']))/dataset[var_name+'_season_cs_mean'].sel(model='ERA5'))*100
+    
+        da2 = dataset[var_name+'_season_cs_mean'].sel(model = ['ERA5','MIROC6', 'CanESM5', 'AWI-ESM-1-1-LR',
+                                                               'MPI-ESM1-2-LR', 'UKESM1-0-LL', 'HadGEM3-GC31-LL', 'CNRM-CM6-1',
+                                                               'CNRM-ESM2-1', 'IPSL-CM6A-LR', 'IPSL-CM5A2-INCA'])
+        
+    else:
+        da = ((dataset[var_name+'_season_cs_mean'].sel(model='CloudSat') - dataset[var_name+'_season_cs_mean'])/dataset[var_name+'_season_cs_mean'].sel(model='CloudSat'))*100
+        da2 = dataset[var_name+'_season_cs_mean']
+        
+    da = da.where(da != 0., other=np.nan)
+    
+
+    # find minimum and maximum model in each season
+    row_max = abs(da).argmax('model')
+    row_max2 = abs(da.round(0)).argmax('model')
+    row_min = abs(da).argmin('model')
+    row_min2 = abs(da.round(0)).argmin('model')
+
+
+    figsize = [12,5]
+    cmap = cm.hawaii_r
+    cmaplist = [cmap(i) for i in range(cmap.N)]
+    bounds = np.linspace(0, 1 * 100, 11)
+    hemispheres = ['NH', 'SH']
+
+    # Create a custom colormap
+    cmap = LinearSegmentedColormap.from_list('Custom cmap', cmaplist, cmap.N)
+    norm = BoundaryNorm(bounds, 10)
+
+    # Create a formatting function for colorbar ticks
+    qrates = list(np.arange(0.05 * 100, 1.05 * 100, 0.1 * 100))
+    fmt = FuncFormatter(lambda x, pos: qrates[::][norm(x)])
+    fmt = FormatStrFormatter("%.0f")
+
+
+    # Create the figure and subplots
+    fig, axsm = plt.subplots(nrows=2, ncols=1, sharex=True, sharey=True, figsize=figsize)
+    fig.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
+
+    # Iterate over hemispheres and subplots
+    for i, hemisphere in enumerate(['NH', 'SH']):
+        ax = axsm[i]
+        # Plot your data, add labels, and set ticks
+        im = ax.imshow(abs(da.sel(hemisphere=hemisphere)), cmap=cmap.resampled(10), norm=norm)
+
+        # Show all ticks and label them with the respective list entries
+        ax.set_xticks(np.arange(len(da.model.values)), labels=da.model.values)
+        ax.set_yticks(np.arange(len(da.season.values)), labels=da.season.values)
+        
+        # Rotate the tick labels and set their alignment.
+        plt.setp(ax.get_xticklabels(), rotation=90, ha="right", va="center", rotation_mode="anchor")
+        
+        # Turn spines on and create white grid.
+        ax.spines[:].set_visible(True)
+        ax.grid(which="minor", color="white", linestyle='-', linewidth=3)
+        # ax.set_xticks(np.arange(da.shape[1]+1)-.5, minor=True)
+        # ax.set_yticks(np.arange(da.shape[0]+1)-.5, minor=True)
+        
+        
+        # Add subplot label
+        ax.text(-0.09, 0.99, f'{fig_label[i]}', fontweight='bold', horizontalalignment='left', verticalalignment='top', transform=ax.transAxes)
+        
+        # Loop over data dimensions and create text annotations.
+        for j in range(len(da2.season.values)):
+            for k in range(len(da2.model.values)):
+                text = ax.text(k, j, f"{(abs(da2.sel(hemisphere=hemisphere)).values[j, k]):.0f}",
+                            ha="center", va="center", color="k",)
+
+        # Add max and min Rectangles
+        for (row, position), (row2, position2) in zip(enumerate(row_max.sel(hemisphere=hemisphere).values), enumerate(row_max2.sel(hemisphere=hemisphere).values)):
+            ax.add_patch(Rectangle((position-0.49,row-0.49),0.98,0.98, fill=False, edgecolor='white', lw=1.5))
+            ax.add_patch(Rectangle((position2-0.49,row2-0.49),0.98,0.98, fill=False, edgecolor='white', lw=1.5))
+        
+        for (row, position), (row2, position2) in zip(enumerate(row_min.sel(hemisphere=hemisphere).values), enumerate(row_min2.sel(hemisphere=hemisphere).values)):
+            ax.add_patch(Rectangle((position-0.49,row-0.49),0.98,0.98, fill=False, edgecolor='blue', lw=1.5))
+            ax.add_patch(Rectangle((position2-0.49,row2-0.49),0.98,0.98, fill=False, edgecolor='blue', lw=1.5))
+
+    # Create colorbar
+    fig.subplots_adjust(right=0.85)
+    cbar_ax = fig.add_axes([.715, 0.375, 0.0125, 0.5])
+    cbar_kw = dict(ticks=np.arange(0.05*100,1.05*100,0.1*100), format=fmt)
+    fig.colorbar(im, cax=cbar_ax, **cbar_kw, label=f"% Difference {dict_label['cb_label']}", shrink=0.5)#cmap=cmap, norm=norm, )
+
+    plt.tight_layout(pad=0., w_pad=0., h_pad=.5)  ;
+    # save figure
+    figname = f'{var_name}_perc_diff_2007_2010.png'
+    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=True)   
