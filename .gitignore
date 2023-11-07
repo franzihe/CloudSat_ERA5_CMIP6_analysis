@@ -48,3 +48,6 @@
 
 ### xesmf regridder files
 bilinear_*.nc
+
+### Figures
+*.png
