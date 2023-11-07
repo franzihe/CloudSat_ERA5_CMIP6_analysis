@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,8 +38,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -76,6 +77,15 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -136,13 +146,14 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
+  
     
     
       
     
     
-    <img src="../_static/logo.png" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="../_static/logo.png" class="logo__image only-light" alt="globalsnow - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="globalsnow - Home"/>`);</script>
   
   
 </a></div>
@@ -343,10 +354,10 @@ const thebe_selector_output = ".output, .cell_output"
 
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
@@ -354,7 +365,7 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -461,7 +472,7 @@ document.write(`
 
 <span class="k">if</span> <span class="s2">&quot;mimi&quot;</span> <span class="ow">in</span> <span class="n">hostname</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">hostname</span><span class="p">)</span>
-    <span class="n">DATA_DIR</span> <span class="o">=</span> <span class="s2">&quot;/scratch/franzihe/&quot;</span>
+    <span class="n">DATA_DIR</span> <span class="o">=</span> <span class="s2">&quot;/mn/vann/franzihe/&quot;</span>
     <span class="c1"># FIG_DIR = &quot;/uio/kant/geo-geofag-u1/franzihe/Documents/Figures/ERA5/&quot;</span>
     <span class="n">FIG_DIR</span> <span class="o">=</span> <span class="s2">&quot;/uio/kant/geo-geofag-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/Figures/CS_ERA5_CMIP6/&quot;</span>
 <span class="k">elif</span> <span class="s2">&quot;glefsekaldt&quot;</span> <span class="ow">in</span> <span class="n">hostname</span><span class="p">:</span> 
@@ -508,7 +519,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7fae10586fe0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7fd5d8257670&gt;
 </pre></div>
 </div>
 </div>
@@ -573,8 +584,10 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">era_dict</span> <span class="o">=</span> <span class="p">{}</span>
 
 <span class="n">era_files</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">era_in</span><span class="si">}</span><span class="s1">/daily_means/40NS/daily_mean_40*ERA5*.nc&#39;</span><span class="p">))]</span> <span class="o">+</span> \
-        <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">era_in</span><span class="si">}</span><span class="s1">/common_grid/40NS/*ERA5_*_IPSL-CM6A-LR*.nc&#39;</span><span class="p">))</span> <span class="o">+</span> \
-        <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">era_in</span><span class="si">}</span><span class="s1">/common_grid/40NS/*ERA5_*_IPSL-CM5A2-INCA*.nc&#39;</span><span class="p">))</span>
+        <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">era_in</span><span class="si">}</span><span class="s1">/common_grid/40NS/*ERA5_daily_mean*_IPSL-CM6A-LR*.nc&#39;</span><span class="p">))</span> <span class="o">+</span> \
+        <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">era_in</span><span class="si">}</span><span class="s1">/common_grid/40NS/*ERA5_daily_mean*_IPSL-CM5A2-INCA*.nc&#39;</span><span class="p">))</span>
+
+
 <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">era_files</span><span class="p">:</span>
     <span class="k">if</span> <span class="s1">&#39;IPSL-CM6A-LR&#39;</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">res</span> <span class="o">=</span> <span class="s1">&#39;era_250&#39;</span>
@@ -653,11 +666,11 @@ document.write(`
 </ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">th_lcc</span> <span class="o">=</span> <span class="mf">0.005</span>
-<span class="n">th_2t</span> <span class="o">=</span> <span class="mf">273.15</span>
-<span class="n">th_frac_days</span> <span class="o">=</span> <span class="mf">0.1</span>
-<span class="n">th_tp</span> <span class="o">=</span> <span class="mf">0.01</span>
-<span class="n">th_sf</span> <span class="o">=</span> <span class="mf">0.01</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># th_lcc = 0.005</span>
+<span class="c1"># th_2t = 273.15</span>
+<span class="c1"># th_frac_days = 0.1</span>
+<span class="c1"># th_tp = 0.01</span>
+<span class="c1"># th_sf = 0.01</span>
 </pre></div>
 </div>
 </div>
@@ -688,7 +701,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">find_lcc_sf</span><span class="p">(</span><span class="n">ds</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">find_lcc_sf</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">lwp_threshold</span><span class="p">):</span>
     <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span> <span class="o">=</span> <span class="n">calc_days_season</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
     
     <span class="c1"># find where 2m-temperature &lt;= 0C or &lt;= threshold</span>
@@ -698,7 +711,7 @@ document.write(`
     <span class="n">ds_2t</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="s1">&#39;tas&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">th_2t</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
     
     <span class="c1"># 1. find where liquid water &gt;= 0.005 kgm-2 or &gt;= threshold</span>
-    <span class="n">th_lcc</span> <span class="o">=</span> <span class="mf">0.005</span>
+    <span class="n">th_lcc</span> <span class="o">=</span> <span class="mf">0.001</span><span class="o">*</span><span class="n">lwp_threshold</span>
     <span class="n">ds_lcc_2t</span> <span class="o">=</span> <span class="n">ds_2t</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds_2t</span><span class="p">[</span><span class="s1">&#39;lwp&#39;</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">th_lcc</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
     <span class="n">ds_lcc</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="s1">&#39;lwp&#39;</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">th_lcc</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
     
@@ -724,8 +737,8 @@ document.write(`
     <span class="c1"># days where liquid water content and temperature requirements are met. </span>
     <span class="c1"># assign percent of snowfall days, required in a pixle, which should be included in the statistics</span>
     <span class="n">th_frac</span> <span class="o">=</span> <span class="mf">0.1</span>
-    <span class="n">th_days_lcc_2t</span> <span class="o">=</span> <span class="p">(</span><span class="n">ds_lcc_2t</span><span class="p">[</span><span class="s1">&#39;twp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.season&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="n">keep_attrs</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span><span class="o">/</span><span class="n">days_season</span>
-    <span class="n">th_days_lcc</span>    <span class="o">=</span> <span class="p">(</span><span class="n">ds_lcc</span><span class="p">[</span><span class="s1">&#39;twp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.season&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="n">keep_attrs</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span><span class="o">/</span><span class="n">days_season</span>
+    <span class="n">th_days_lcc_2t</span> <span class="o">=</span> <span class="p">(</span><span class="n">ds_lcc_2t</span><span class="p">[</span><span class="s1">&#39;lwp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.season&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="n">keep_attrs</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span><span class="o">/</span><span class="n">days_season</span>
+    <span class="n">th_days_lcc</span>    <span class="o">=</span> <span class="p">(</span><span class="n">ds_lcc</span><span class="p">[</span><span class="s1">&#39;lwp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.season&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="n">keep_attrs</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span><span class="o">/</span><span class="n">days_season</span>
 
     <span class="n">ds_lcc_2t_season</span> <span class="o">=</span> <span class="n">ds_lcc_2t</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.season&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">ds_lcc_2t_season</span> <span class="o">=</span> <span class="n">ds_lcc_2t_season</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">th_days_lcc_2t</span><span class="o">&gt;=</span><span class="n">th_frac</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
@@ -770,7 +783,7 @@ document.write(`
     <span class="n">ds_lcc_sf</span> <span class="o">=</span> <span class="n">ds_lcc</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds_lcc</span><span class="p">[</span><span class="s1">&#39;prsn&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">th_sf</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
     <span class="n">ds_lcc_sf_season</span> <span class="o">=</span> <span class="n">ds_lcc_sf</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.season&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     
-    
+    <span class="n">ds_sf</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="s1">&#39;prsn&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">th_sf</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
     
     <span class="c1"># Now create daily dataset based on seasonal supercooled liquid containing cloud days above th_sf, and th_frac</span>
     <span class="c1"># _mam = ((ds_lcc_2t_sf.sel(time=fct.is_season(ds_lcc_2t_sf[&#39;time.month&#39;], 3, 5))).where(th_days_sf.sel(season=&#39;MAM&#39;) &gt;=th_frac)).drop(&#39;season&#39;)</span>
@@ -783,60 +796,10 @@ document.write(`
     
     
     <span class="c1"># ds_lcc, ds_lcc_2t_days, #ds_lcc_2t_sf_days</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">ds_2t</span><span class="p">,</span> 
+    <span class="k">return</span><span class="p">(</span><span class="n">ds_2t</span><span class="p">,</span> <span class="n">ds_sf</span><span class="p">,</span>
            <span class="n">ds_lcc_2t</span><span class="p">,</span> <span class="n">ds_lcc_2t_days</span><span class="p">,</span> <span class="n">ds_lcc_2t_sf</span><span class="p">,</span>
            <span class="n">ds_lcc</span><span class="p">,</span>    <span class="n">ds_lcc_days</span><span class="p">,</span> <span class="n">ds_lcc_sf</span><span class="p">,</span> 
            <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds_2t</span>      <span class="o">=</span> <span class="p">{}</span>
-<span class="n">ds_lcc_2t</span>   <span class="o">=</span> <span class="p">{}</span>
-<span class="n">ds_lcc_2t_days</span>  <span class="o">=</span> <span class="p">{}</span> 
-<span class="n">ds_lcc_2t_sf</span> <span class="o">=</span> <span class="p">{}</span>
-
-<span class="n">ds_lcc</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="n">ds_lcc_days</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="n">ds_lcc_sf</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="n">days_season</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="n">days_month</span>  <span class="o">=</span> <span class="p">{}</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Calculate statistics in ERA5 ...&#39;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">era_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="n">ds_2t</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_2t</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_2t_days</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_2t_sf</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> \
-        <span class="n">ds_lcc</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_days</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_sf</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> \
-            <span class="n">days_season</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">days_month</span><span class="p">[</span><span class="n">model</span><span class="p">]</span> <span class="o">=</span> <span class="n">find_lcc_sf</span><span class="p">(</span><span class="n">era_dict</span><span class="p">[</span><span class="n">model</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculate statistics in ERA5 ...
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Calculate statistics in CMIP6 ...&#39;</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">cmip_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>        
-    <span class="n">ds_2t</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_2t</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_2t_days</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_2t_sf</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> \
-        <span class="n">ds_lcc</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_days</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_sf</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> \
-                <span class="n">days_season</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">days_month</span><span class="p">[</span><span class="n">model</span><span class="p">]</span> <span class="o">=</span> <span class="n">find_lcc_sf</span><span class="p">(</span><span class="n">cmip_dict</span><span class="p">[</span><span class="n">model</span><span class="p">])</span>
-    
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculate statistics in CMIP6 ...
 </pre></div>
 </div>
 </div>
@@ -896,139 +859,75 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">era_dict</span><span class="p">,</span> <span class="s1">&#39;orig&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
-<span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">cmip_dict</span><span class="p">,</span> <span class="s1">&#39;orig&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
-<span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">ds_2t</span><span class="p">,</span> <span class="s1">&#39;2t&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
-<span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">ds_lcc_2t</span><span class="p">,</span> <span class="s1">&#39;lcc_2t&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span> <span class="p">)</span>
-<span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">ds_lcc_2t_days</span><span class="p">,</span> <span class="s1">&#39;lcc_2t_days&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
-<span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">ds_lcc_2t_sf</span><span class="p">,</span> <span class="s1">&#39;lcc_2t_sf&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
-<span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">ds_lcc</span><span class="p">,</span> <span class="s1">&#39;lcc&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
-<span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">ds_lcc_days</span><span class="p">,</span> <span class="s1">&#39;lcc_days&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
-<span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">ds_lcc_sf</span><span class="p">,</span> <span class="s1">&#39;lcc_sf&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cmip_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/era_30_orig_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/era_250_orig_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/era_500_orig_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/MIROC6_orig_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/CanESM5_orig_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/AWI-ESM-1-1-LR_orig_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/MPI-ESM1-2-LR_orig_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/UKESM1-0-LL_orig_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/HadGEM3-GC31-LL_orig_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/CNRM-CM6-1_orig_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/CNRM-ESM2-1_orig_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/IPSL-CM6A-LR_orig_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/IPSL-CM5A2-INCA_orig_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/cmip_250_orig_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/orig/cmip_500_orig_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/era_30_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/era_250_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/era_500_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/MIROC6_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/CanESM5_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/AWI-ESM-1-1-LR_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/MPI-ESM1-2-LR_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/UKESM1-0-LL_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/HadGEM3-GC31-LL_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/CNRM-CM6-1_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/CNRM-ESM2-1_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/IPSL-CM6A-LR_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/IPSL-CM5A2-INCA_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/cmip_250_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/2t/cmip_500_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/era_30_lcc_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/era_250_lcc_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/era_500_lcc_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/MIROC6_lcc_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/CanESM5_lcc_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/AWI-ESM-1-1-LR_lcc_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/MPI-ESM1-2-LR_lcc_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/UKESM1-0-LL_lcc_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/HadGEM3-GC31-LL_lcc_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/CNRM-CM6-1_lcc_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/CNRM-ESM2-1_lcc_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/IPSL-CM6A-LR_lcc_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/IPSL-CM5A2-INCA_lcc_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/cmip_250_lcc_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t/cmip_500_lcc_2t_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/era_30_lcc_2t_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/era_250_lcc_2t_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/era_500_lcc_2t_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/MIROC6_lcc_2t_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/CanESM5_lcc_2t_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/AWI-ESM-1-1-LR_lcc_2t_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/MPI-ESM1-2-LR_lcc_2t_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/UKESM1-0-LL_lcc_2t_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/HadGEM3-GC31-LL_lcc_2t_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/CNRM-CM6-1_lcc_2t_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/CNRM-ESM2-1_lcc_2t_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/IPSL-CM6A-LR_lcc_2t_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/IPSL-CM5A2-INCA_lcc_2t_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/cmip_250_lcc_2t_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/cmip_500_lcc_2t_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/era_30_lcc_2t_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/era_250_lcc_2t_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/era_500_lcc_2t_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/MIROC6_lcc_2t_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/CanESM5_lcc_2t_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/AWI-ESM-1-1-LR_lcc_2t_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/MPI-ESM1-2-LR_lcc_2t_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/UKESM1-0-LL_lcc_2t_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/HadGEM3-GC31-LL_lcc_2t_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/CNRM-CM6-1_lcc_2t_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/CNRM-ESM2-1_lcc_2t_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/IPSL-CM6A-LR_lcc_2t_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/IPSL-CM5A2-INCA_lcc_2t_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/cmip_250_lcc_2t_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/cmip_500_lcc_2t_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/era_30_lcc_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/era_250_lcc_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/era_500_lcc_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/MIROC6_lcc_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/CanESM5_lcc_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/AWI-ESM-1-1-LR_lcc_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/MPI-ESM1-2-LR_lcc_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/UKESM1-0-LL_lcc_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/HadGEM3-GC31-LL_lcc_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/CNRM-CM6-1_lcc_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/CNRM-ESM2-1_lcc_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/IPSL-CM6A-LR_lcc_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/IPSL-CM5A2-INCA_lcc_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/cmip_250_lcc_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc/cmip_500_lcc_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/era_30_lcc_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/era_250_lcc_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/era_500_lcc_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/MIROC6_lcc_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/CanESM5_lcc_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/AWI-ESM-1-1-LR_lcc_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/MPI-ESM1-2-LR_lcc_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/UKESM1-0-LL_lcc_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/HadGEM3-GC31-LL_lcc_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/CNRM-CM6-1_lcc_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/CNRM-ESM2-1_lcc_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/IPSL-CM6A-LR_lcc_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/IPSL-CM5A2-INCA_lcc_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/cmip_250_lcc_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_days/cmip_500_lcc_days_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/era_30_lcc_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/era_250_lcc_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/era_500_lcc_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/MIROC6_lcc_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/CanESM5_lcc_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/AWI-ESM-1-1-LR_lcc_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/MPI-ESM1-2-LR_lcc_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/UKESM1-0-LL_lcc_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/HadGEM3-GC31-LL_lcc_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/CNRM-CM6-1_lcc_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/CNRM-ESM2-1_lcc_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/IPSL-CM6A-LR_lcc_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/IPSL-CM5A2-INCA_lcc_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/cmip_250_lcc_sf_20070101-20101231.nc
-writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/cmip_500_lcc_sf_20070101-20101231.nc
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;MIROC6&#39;, &#39;CanESM5&#39;, &#39;AWI-ESM-1-1-LR&#39;, &#39;MPI-ESM1-2-LR&#39;, &#39;UKESM1-0-LL&#39;, &#39;HadGEM3-GC31-LL&#39;, &#39;CNRM-CM6-1&#39;, &#39;CNRM-ESM2-1&#39;, &#39;IPSL-CM6A-LR&#39;, &#39;IPSL-CM5A2-INCA&#39;, &#39;cmip_250&#39;, &#39;cmip_500&#39;])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">threshold</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">]:</span><span class="c1">#5, 10, 15, 20]:</span>
+    <span class="c1"># print(threshold*0.001)</span>
+    <span class="n">ds_2t</span>      <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">ds_sf</span>      <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">ds_lcc_2t</span>   <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">ds_lcc_2t_days</span>  <span class="o">=</span> <span class="p">{}</span> 
+    <span class="n">ds_lcc_2t_sf</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">ds_lcc</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">ds_lcc_days</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">ds_lcc_sf</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">days_season</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">days_month</span>  <span class="o">=</span> <span class="p">{}</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Calculate statistics in ERA5 ...&#39;</span><span class="p">)</span>
+    <span class="c1"># for model in era_dict.keys():</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="s1">&#39;era_500&#39;</span>
+    <span class="n">ds_2t</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_sf</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_2t</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_2t_days</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_2t_sf</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> \
+            <span class="n">ds_lcc</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_days</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_sf</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> \
+                <span class="n">days_season</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">days_month</span><span class="p">[</span><span class="n">model</span><span class="p">]</span> <span class="o">=</span> <span class="n">find_lcc_sf</span><span class="p">(</span><span class="n">era_dict</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">threshold</span><span class="p">)</span>
+                
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Calculate statistics in CMIP6 ...&#39;</span><span class="p">)</span>
+    <span class="c1"># for model in cmip_dict.keys():       </span>
+    <span class="n">model</span> <span class="o">=</span> <span class="s1">&#39;cmip_500&#39;</span> 
+    <span class="n">ds_2t</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_sf</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_2t</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_2t_days</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_2t_sf</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> \
+            <span class="n">ds_lcc</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_days</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">ds_lcc_sf</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> \
+                    <span class="n">days_season</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">days_month</span><span class="p">[</span><span class="n">model</span><span class="p">]</span> <span class="o">=</span> <span class="n">find_lcc_sf</span><span class="p">(</span><span class="n">cmip_dict</span><span class="p">[</span><span class="n">model</span><span class="p">],</span> <span class="n">threshold</span><span class="p">)</span>
+                    
+    <span class="c1"># statistic_to_netcdf(era_dict, &#39;orig&#39;, days_season, days_month)</span>
+    <span class="c1"># statistic_to_netcdf(cmip_dict, &#39;orig&#39;, days_season, days_month)</span>
+    <span class="c1"># statistic_to_netcdf(ds_2t, &#39;2t&#39;, days_season, days_month)</span>
+    <span class="c1"># statistic_to_netcdf(ds_sf, &#39;sf&#39;, days_season, days_month)</span>
+    <span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">ds_lcc_2t</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">threshold</span><span class="si">}</span><span class="s1">_lcc_2t&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span> <span class="p">)</span>
+    <span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">ds_lcc_2t_days</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">threshold</span><span class="si">}</span><span class="s1">_lcc_2t_days&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
+    <span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">ds_lcc_2t_sf</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">threshold</span><span class="si">}</span><span class="s1">_lcc_2t_sf&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
+    <span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">ds_lcc</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">threshold</span><span class="si">}</span><span class="s1">_lcc&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
+    <span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">ds_lcc_days</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">threshold</span><span class="si">}</span><span class="s1">_lcc_days&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
+    <span class="n">statistic_to_netcdf</span><span class="p">(</span><span class="n">ds_lcc_sf</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">threshold</span><span class="si">}</span><span class="s1">_lcc_sf&#39;</span><span class="p">,</span> <span class="n">days_season</span><span class="p">,</span> <span class="n">days_month</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculate statistics in ERA5 ...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculate statistics in CMIP6 ...
+writing file ... /mn/vann/franzihe/output/CS_ERA5_CMIP6/3_lcc_2t/era_500_3_lcc_2t_20070101-20101231.nc
+writing file ... /mn/vann/franzihe/output/CS_ERA5_CMIP6/3_lcc_2t/cmip_500_3_lcc_2t_20070101-20101231.nc
+writing file ... /mn/vann/franzihe/output/CS_ERA5_CMIP6/3_lcc_2t_days/era_500_3_lcc_2t_days_20070101-20101231.nc
+writing file ... /mn/vann/franzihe/output/CS_ERA5_CMIP6/3_lcc_2t_days/cmip_500_3_lcc_2t_days_20070101-20101231.nc
+writing file ... /mn/vann/franzihe/output/CS_ERA5_CMIP6/3_lcc_2t_sf/era_500_3_lcc_2t_sf_20070101-20101231.nc
+writing file ... /mn/vann/franzihe/output/CS_ERA5_CMIP6/3_lcc_2t_sf/cmip_500_3_lcc_2t_sf_20070101-20101231.nc
+writing file ... /mn/vann/franzihe/output/CS_ERA5_CMIP6/3_lcc/era_500_3_lcc_20070101-20101231.nc
+writing file ... /mn/vann/franzihe/output/CS_ERA5_CMIP6/3_lcc/cmip_500_3_lcc_20070101-20101231.nc
+writing file ... /mn/vann/franzihe/output/CS_ERA5_CMIP6/3_lcc_days/era_500_3_lcc_days_20070101-20101231.nc
+writing file ... /mn/vann/franzihe/output/CS_ERA5_CMIP6/3_lcc_days/cmip_500_3_lcc_days_20070101-20101231.nc
+writing file ... /mn/vann/franzihe/output/CS_ERA5_CMIP6/3_lcc_sf/era_500_3_lcc_sf_20070101-20101231.nc
+writing file ... /mn/vann/franzihe/output/CS_ERA5_CMIP6/3_lcc_sf/cmip_500_3_lcc_sf_20070101-20101231.nc
 </pre></div>
 </div>
 </div>
@@ -1061,16 +960,12 @@ writing file ... /scratch/franzihe/output/CS_ERA5_CMIP6/lcc_sf/cmip_500_lcc_sf_2
 
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -1143,8 +1038,8 @@ By Franziska Hellmuth
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
 
   <footer class="bd-footer">
   </footer>

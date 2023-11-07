@@ -35,9 +35,10 @@ from scipy.optimize import curve_fit
 
 
 import wget
-from matplotlib.colors import LogNorm, LinearSegmentedColormap, BoundaryNorm
+from matplotlib.colors import LogNorm, LinearSegmentedColormap, BoundaryNorm, TwoSlopeNorm, Normalize
 from matplotlib.lines import Line2D
-from matplotlib.patches import Patch
+from matplotlib.patches import Patch, Rectangle
+from matplotlib.ticker import FuncFormatter, FormatStrFormatter
 from sklearn.metrics import r2_score
 from urllib.error import HTTPError
 import functions as fct
