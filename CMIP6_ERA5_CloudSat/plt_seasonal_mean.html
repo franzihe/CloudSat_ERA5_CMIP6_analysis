@@ -452,6 +452,13 @@ document.write(`
 <p>The ERA5 0.25deg data is located in the folder <code class="docutils literal notranslate"><span class="pre">\scratch\franzihe\</span></code>, CloudSat at …</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lwp_threshold</span> <span class="o">=</span> <span class="mi">5</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">pathlib</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -464,9 +471,9 @@ document.write(`
 
 <span class="k">if</span> <span class="s2">&quot;mimi&quot;</span> <span class="ow">in</span> <span class="n">hostname</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">hostname</span><span class="p">)</span>
-    <span class="n">DATA_DIR</span> <span class="o">=</span> <span class="s2">&quot;/scratch/franzihe/&quot;</span>
+    <span class="n">DATA_DIR</span> <span class="o">=</span> <span class="s2">&quot;/mn/vann/franzihe/&quot;</span>
     <span class="c1"># FIG_DIR = &quot;/uio/kant/geo-geofag-u1/franzihe/Documents/Figures/ERA5/&quot;</span>
-    <span class="n">FIG_DIR</span> <span class="o">=</span> <span class="s2">&quot;/uio/kant/geo-geofag-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/Figures/CS_ERA5_CMIP6/&quot;</span>
+    <span class="n">FIG_DIR</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;/uio/kant/geo-geofag-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/Figures/CS_ERA5_CMIP6_</span><span class="si">{</span><span class="n">lwp_threshold</span><span class="si">}</span><span class="s2">/&quot;</span>
 <span class="k">elif</span> <span class="s2">&quot;glefsekaldt&quot;</span> <span class="ow">in</span> <span class="n">hostname</span><span class="p">:</span> 
     <span class="n">DATA_DIR</span> <span class="o">=</span> <span class="s2">&quot;/home/franzihe/Data/&quot;</span>
     <span class="n">FIG_DIR</span> <span class="o">=</span> <span class="s2">&quot;/home/franzihe/Documents/Figures/ERA5/&quot;</span>
@@ -487,11 +494,6 @@ document.write(`
     <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">FIG_DIR_mci</span><span class="p">)</span>
 <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
     <span class="k">pass</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mimi.uio.no
 </pre></div>
 </div>
 </div>
@@ -518,11 +520,6 @@ document.write(`
 
 
 <span class="n">xr</span><span class="o">.</span><span class="n">set_options</span><span class="p">(</span><span class="n">display_style</span><span class="o">=</span><span class="s1">&#39;html&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7f7cf6317430&gt;
 </pre></div>
 </div>
 </div>
@@ -555,232 +552,10 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># variable_id = [&#39;tas&#39;, &#39;prsn&#39;, &#39;pr&#39;, &#39;lwp&#39;, &#39;clivi&#39;, &#39;areacella&#39;]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ratios</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dat_in</span><span class="si">}</span><span class="s1">/ratios_500/*LWP</span><span class="si">{</span><span class="n">lwp_threshold</span><span class="si">}</span><span class="s1">*.nc&#39;</span><span class="p">))</span>
+<span class="n">ratios_mci</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dat_in</span><span class="si">}</span><span class="s1">/ratios_500_mci/*LWP</span><span class="si">{</span><span class="n">lwp_threshold</span><span class="si">}</span><span class="s1">*.nc&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define list of models</span>
-<span class="n">list_models</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;cloudsat_250&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;cloudsat_500&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;era_30&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;era_250&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;era_500&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;cmip_250&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;cmip_500&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;MIROC6&#39;</span><span class="p">,</span> 
-               <span class="s1">&#39;CanESM5&#39;</span><span class="p">,</span> 
-               <span class="s1">&#39;AWI-ESM-1-1-LR&#39;</span><span class="p">,</span> 
-               <span class="s1">&#39;MPI-ESM1-2-LR&#39;</span><span class="p">,</span> 
-               <span class="s1">&#39;UKESM1-0-LL&#39;</span><span class="p">,</span> 
-               <span class="s1">&#39;HadGEM3-GC31-LL&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;CNRM-CM6-1&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;CNRM-ESM2-1&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;IPSL-CM6A-LR&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;IPSL-CM5A2-INCA&#39;</span>
-            <span class="p">]</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create empty dictionaries to store the Xarray datasets for different variables:</span>
-<span class="n">variables</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;orig&#39;</span><span class="p">,</span> <span class="s1">&#39;2t&#39;</span><span class="p">,</span> <span class="s1">&#39;lcc&#39;</span><span class="p">,</span> <span class="s1">&#39;lcc_2t&#39;</span><span class="p">,</span> <span class="s1">&#39;lcc_sf&#39;</span><span class="p">,</span> <span class="s1">&#39;lcc_2t_days&#39;</span><span class="p">,</span> <span class="s1">&#39;lcc_2t_sf&#39;</span><span class="p">,</span> <span class="p">]</span>
-<span class="n">ds</span> <span class="o">=</span> <span class="p">{</span><span class="n">var</span><span class="p">:</span> <span class="p">{}</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">}</span>
-<span class="n">ds_mci</span> <span class="o">=</span> <span class="p">{</span><span class="n">var</span><span class="p">:</span> <span class="p">{}</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">}</span>
-<span class="n">ds</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;orig&#39;: {},
- &#39;2t&#39;: {},
- &#39;lcc&#39;: {},
- &#39;lcc_2t&#39;: {},
- &#39;lcc_sf&#39;: {},
- &#39;lcc_2t_days&#39;: {},
- &#39;lcc_2t_sf&#39;: {}}
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">list_models</span><span class="p">:</span>
-    
-    <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
-        <span class="n">file_pattern</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dat_in</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">_*</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">*.nc&#39;</span>
-        <span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="n">file_pattern</span><span class="p">))</span>
-        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-            <span class="n">_ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-            <span class="c1"># [var][model]</span>
-            <span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
-            <span class="c1"># ds_mci[var][model] = xr.Dataset()</span>
-            <span class="c1"># make the data cyclic going from -180 to 180</span>
-            <span class="k">for</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="n">_ds</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="n">data</span> <span class="o">=</span> <span class="n">_ds</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span>
-                
-                <span class="k">if</span> <span class="s1">&#39;lon&#39;</span> <span class="ow">in</span> <span class="n">_ds</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span> <span class="ow">and</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)):</span>
-                    <span class="n">lon</span> <span class="o">=</span> <span class="n">_ds</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span>
-                    <span class="n">lon_idx</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">dims</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;lon&#39;</span><span class="p">)</span>
-                    <span class="n">wrap_data</span><span class="p">,</span> <span class="n">wrap_lon</span> <span class="o">=</span> <span class="n">add_cyclic_point</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">coord</span><span class="o">=</span><span class="n">lon</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">lon_idx</span><span class="p">)</span>
-                    
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wrap_data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-                        <span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">wrap_data</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">],</span>
-                                                                                            <span class="n">lon</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))))</span>
-                    
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wrap_data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="s1">&#39;time&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">dims</span><span class="p">:</span>
-                            <span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">wrap_data</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">],</span>
-                                                                                                <span class="n">lat</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">],</span>
-                                                                                                <span class="n">lon</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))))</span>
-                        <span class="k">elif</span> <span class="s1">&#39;model&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">dims</span><span class="p">:</span>
-                            <span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">wrap_data</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">],</span>
-                                                                                                <span class="n">lon</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)),</span>
-                                                                                                <span class="n">model</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]),</span> 
-                                                                  <span class="p">)</span>
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wrap_data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-                        <span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">wrap_data</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">],</span>
-                                                                                            <span class="n">lat</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">],</span>
-                                                                                            <span class="n">lon</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)),</span>
-                                                                                            <span class="n">model</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]))</span>
-                        
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
-                    
-                <span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">attrs</span>
-                
-            <span class="c1"># ds_mci[var][model] = xr.concat([ds[var][model].sel(lat=slice(-90,-66.91)),</span>
-            <span class="c1">#                                 ds[var][model].sel(lat=slice(66.91,90))], dim =&#39;lat&#39;)</span>
-            <span class="c1"># ds_mci[var][model] = ds[var][model].where(np.logical_and((ds[var][model].lat&lt;=66.91),(ds[var][model].lat&gt;=66.91)), other=np.nan )</span>
-            
-<span class="c1"># Access the datasets using  ds[var][model]</span>
-<span class="c1"># For example:</span>
-<span class="c1"># lcc_2t_days_dataset = ds[&#39;lcc_2t_days&#39;][&#39;era_30&#39;]</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds_mci</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="n">ds_mci</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="n">ds_mci</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mf">66.91</span><span class="p">)),</span>
-                                        <span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mf">66.91</span><span class="p">,</span><span class="mi">90</span><span class="p">))],</span> <span class="n">dim</span> <span class="o">=</span><span class="s1">&#39;lat&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0, 1])
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plt_var_spatial_month</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="n">da2</span><span class="p">):</span>
-    <span class="n">f</span><span class="p">,</span> <span class="n">axsm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">NorthPolarStereo</span><span class="p">(</span><span class="n">central_longitude</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">globe</span><span class="o">=</span><span class="kc">None</span><span class="p">),},</span> <span class="c1">#figsize=[3, 6], </span>
-                           <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">coast</span> <span class="o">=</span> <span class="n">cy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span><span class="n">category</span><span class="o">=</span><span class="s1">&#39;physical&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;110m&#39;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;coastline&#39;</span><span class="p">)</span>
-
-    
-
-    <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">hawaii_r</span>
-    <span class="n">axsm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="mf">0.07</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span> <span class="n">rotation_mode</span><span class="o">=</span><span class="s1">&#39;anchor&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">axsm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axsm</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),[</span><span class="n">da</span><span class="p">,</span> <span class="n">da2</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="p">):</span>
-        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">levels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.225</span><span class="p">,</span><span class="mf">0.025</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">levels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
-        <span class="n">val</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.month&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">levels</span><span class="p">)</span>
-        
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_extent</span><span class="p">([</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">45</span><span class="p">],</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">coast</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-        <span class="n">gl</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">gridlines</span><span class="p">(</span><span class="n">draw_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">gl</span><span class="o">.</span><span class="n">top_labels</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">gl</span><span class="o">.</span><span class="n">right_labels</span> <span class="o">=</span> <span class="kc">False</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for model in ds[&#39;lcc_2t_days&#39;].keys():</span>
-<span class="c1">#     if model == &#39;cmip_250&#39; or model == &#39;cmip_500&#39;:</span>
-<span class="c1">#         print(model, &#39;lwp:&#39;, (ds[&#39;lcc_2t_days&#39;][model][&#39;lwp&#39;].sel(lat=slice(45,90)).groupby(&#39;time.month&#39;).mean((&#39;time&#39;, &#39;model&#39;), skipna=True)).max().values.round(2),&#39;prsn:&#39;, (ds[&#39;lcc_2t_days&#39;][model][&#39;prsn&#39;].sel(lat=slice(45,90)).groupby(&#39;time.month&#39;).mean((&#39;time&#39;, &#39;model&#39;), skipna=True)).max().values.round(2))</span>
-<span class="c1">#     else:</span>
-<span class="c1">#         try:</span>
-<span class="c1">#             print(model, &#39;lwp:&#39;, (ds[&#39;lcc_2t_days&#39;][model][&#39;lwp&#39;].sel(lat=slice(45,90)).groupby(&#39;time.month&#39;).mean(&#39;time&#39;, skipna=True)).max().values.round(2), &#39;prsn:&#39;, (ds[&#39;lcc_2t_days&#39;][model][&#39;prsn&#39;].sel(lat=slice(45,90)).groupby(&#39;time.month&#39;).mean(&#39;time&#39;, skipna=True)).max().values.round(2) )</span>
-<span class="c1">#         except KeyError:</span>
-<span class="c1">#             continue</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>era_30 lwp: 0.83 prsn: 3.32
-era_250 lwp: 0.42 prsn: 0.72
-era_500 lwp: 0.31 prsn: 0.55
-cmip_250 lwp: 4.66 prsn: 0.98
-cmip_500 lwp: 5.68 prsn: 0.54
-MIROC6 lwp: 1.91 prsn: 2.11
-CanESM5 lwp: 0.73 prsn: 0.78
-AWI-ESM-1-1-LR lwp: 0.49 prsn: 0.96
-MPI-ESM1-2-LR lwp: 0.45 prsn: 0.76
-UKESM1-0-LL lwp: 0.31 prsn: 1.07
-HadGEM3-GC31-LL lwp: 0.32 prsn: 1.06
-CNRM-CM6-1 lwp: 13.56 prsn: 1.06
-CNRM-ESM2-1 lwp: 16.24 prsn: 0.99
-IPSL-CM6A-LR lwp: 0.78 prsn: 1.03
-IPSL-CM5A2-INCA lwp: 0.27 prsn: 0.95
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for model in ds[&#39;lcc_2t_days&#39;].keys():</span>
-<span class="c1">#     # print(model)</span>
-<span class="c1">#     if model == &#39;cmip_250&#39; or model== &#39;cmip_500&#39;:</span>
-<span class="c1">#         plt_var_spatial_month(ds[&#39;lcc_2t_days&#39;][model][&#39;lwp&#39;].mean(&#39;model&#39;, skipna=True),</span>
-<span class="c1">#                               ds[&#39;lcc_2t_days&#39;][model][&#39;prsn&#39;].mean(&#39;model&#39;, skipna=True))</span>
-<span class="c1">#     else:</span>
-<span class="c1">#         try:</span>
-<span class="c1">#             plt_var_spatial_month(ds[&#39;lcc_2t_days&#39;][model][&#39;lwp&#39;], ds[&#39;lcc_2t_days&#39;][model][&#39;prsn&#39;])</span>
-<span class="c1">#         except KeyError:</span>
-<span class="c1">#             continue</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/5efbe36a2a3490b18b1c54655880442281cf3b48f950ee84c98accf0161f5f87.png" src="../_images/5efbe36a2a3490b18b1c54655880442281cf3b48f950ee84c98accf0161f5f87.png" />
-<img alt="../_images/ca83e8bdf05d613f1af7fdeed06b98c9762e95f624064a70445062cc5790a95a.png" src="../_images/ca83e8bdf05d613f1af7fdeed06b98c9762e95f624064a70445062cc5790a95a.png" />
-<img alt="../_images/eefd2ce2babb64277476cc7e79021ceddb09ce7a03abcef03645cb1cf1eb56e5.png" src="../_images/eefd2ce2babb64277476cc7e79021ceddb09ce7a03abcef03645cb1cf1eb56e5.png" />
-<img alt="../_images/6cc5c38c7f8115210661afeb994ec7dfb49ca4e6e40d64678e2cbb1317a45758.png" src="../_images/6cc5c38c7f8115210661afeb994ec7dfb49ca4e6e40d64678e2cbb1317a45758.png" />
-<img alt="../_images/d3f6909451b9fd5133645f167f6929de27754b7e47c25541559ad0029d35ad04.png" src="../_images/d3f6909451b9fd5133645f167f6929de27754b7e47c25541559ad0029d35ad04.png" />
-<img alt="../_images/1ceb5c9341f645179ff1a2858b604e2305dd1dee08f2a1ddb97327a6691fdff0.png" src="../_images/1ceb5c9341f645179ff1a2858b604e2305dd1dee08f2a1ddb97327a6691fdff0.png" />
-<img alt="../_images/7a49c4bfee219f3a626e5009537689e369cd9b7dd3ba9bbbd6d144949c666333.png" src="../_images/7a49c4bfee219f3a626e5009537689e369cd9b7dd3ba9bbbd6d144949c666333.png" />
-<img alt="../_images/f41e41aadac5115a9d59dddc50f849303cf5df43fe518efb42823383f887817f.png" src="../_images/f41e41aadac5115a9d59dddc50f849303cf5df43fe518efb42823383f887817f.png" />
-<img alt="../_images/1a435a42407aac18dbb0fbf7e858575f40705f693a802b8cc59db3142c520a41.png" src="../_images/1a435a42407aac18dbb0fbf7e858575f40705f693a802b8cc59db3142c520a41.png" />
-<img alt="../_images/2eb202dd214dc96868ae8090a2757303f142c993fb8a09de93904a2019e6bd2d.png" src="../_images/2eb202dd214dc96868ae8090a2757303f142c993fb8a09de93904a2019e6bd2d.png" />
-<img alt="../_images/98e0201ef9174c41d5f531a2fb2f8411fa9ca15a03a62a4e70b1398ce2843240.png" src="../_images/98e0201ef9174c41d5f531a2fb2f8411fa9ca15a03a62a4e70b1398ce2843240.png" />
-<img alt="../_images/6814105094e214944eea151a513128ca9f2dda3a9545abc9eb17a9396e6df2a7.png" src="../_images/6814105094e214944eea151a513128ca9f2dda3a9545abc9eb17a9396e6df2a7.png" />
-<img alt="../_images/9ab3c17cf80250a46d23b669ca3db1394f4f107ebc9ae5cd85d004a8f9b98dfe.png" src="../_images/9ab3c17cf80250a46d23b669ca3db1394f4f107ebc9ae5cd85d004a8f9b98dfe.png" />
-<img alt="../_images/966a9d550d3f8606961d5e68dbe6edd2393b058f38fcb3b7e9fd1a01baeb2819.png" src="../_images/966a9d550d3f8606961d5e68dbe6edd2393b058f38fcb3b7e9fd1a01baeb2819.png" />
-<img alt="../_images/185cca647a45541daa73c561f3bf49ccbb25f01d9e4fcc6e75f88b7b5bfdbb9c.png" src="../_images/185cca647a45541daa73c561f3bf49ccbb25f01d9e4fcc6e75f88b7b5bfdbb9c.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -794,235 +569,104 @@ IPSL-CM5A2-INCA lwp: 0.27 prsn: 0.95
      <span class="s1">&#39;FsLCC&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;cb_label&#39;</span><span class="p">:</span><span class="s1">&#39;FsLCC (%)&#39;</span><span class="p">,</span>            <span class="s1">&#39;levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">105.</span><span class="p">,</span><span class="mf">5.</span><span class="p">),</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>   <span class="s1">&#39;diff_levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>   <span class="s1">&#39;diff_vmin&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;diff_vmax&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">},</span>
      <span class="c1"># &#39;FoP&#39;  : {&#39;cb_label&#39;:&#39;FoP in LCCs (%)&#39;,      &#39;levels&#39;:np.arange(0,105.,5.), &#39;vmin&#39;:0, &#39;vmax&#39;: 100,   &#39;diff_levels&#39;:np.arange(-100,110,10),   &#39;diff_vmin&#39;:-100, &#39;diff_vmax&#39;:100},</span>
      <span class="s1">&#39;FoS&#39;</span>  <span class="p">:</span> <span class="p">{</span><span class="s1">&#39;cb_label&#39;</span><span class="p">:</span><span class="s1">&#39;FoS in sLCCs (%)&#39;</span><span class="p">,</span>     <span class="s1">&#39;levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">105.</span><span class="p">,</span><span class="mf">5.</span><span class="p">),</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>   <span class="s1">&#39;diff_levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>   <span class="s1">&#39;diff_vmin&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;diff_vmax&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">},</span>
-     <span class="s1">&#39;sf_eff&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;cb_label&#39;</span><span class="p">:</span><span class="s1">&#39;SE in sLCCs (h$^{-1}$)&#39;</span><span class="p">,</span><span class="s1">&#39;levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">5.5</span><span class="p">,</span><span class="mf">.5</span><span class="p">),</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>   <span class="s1">&#39;diff_levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">1.2</span><span class="p">,</span><span class="mf">1.4</span><span class="p">,</span><span class="mf">.2</span><span class="p">),</span>   <span class="s1">&#39;diff_vmin&#39;</span><span class="p">:</span><span class="o">-</span><span class="mf">1.2</span><span class="p">,</span> <span class="s1">&#39;diff_vmax&#39;</span><span class="p">:</span><span class="mf">1.2</span><span class="p">},</span>
      <span class="c1"># &#39;pr_eff&#39;: {&#39;cb_label&#39;:&#39;PE in sLCCs (h$^{-1}$)&#39;, &#39;levels&#39;:np.arange(0,550.,50.), &#39;vmin&#39;:0, &#39;vmax&#39;:500,   &#39;diff_levels&#39;:np.arange(-120,140,20),   &#39;diff_vmin&#39;:-120, &#39;diff_vmax&#39;:120},</span>
-     <span class="s1">&#39;FLCC-FsLCC&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;cb_label&#39;</span><span class="p">:</span><span class="s1">&#39;FLCC-FsLCC (%)&#39;</span><span class="p">,</span>  <span class="s1">&#39;levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">105.</span><span class="p">,</span><span class="mf">5.</span><span class="p">),</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>   <span class="s1">&#39;diff_levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>   <span class="s1">&#39;diff_vmin&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;diff_vmax&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">}}</span>
+     <span class="s1">&#39;FLCC-FsLCC&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;cb_label&#39;</span><span class="p">:</span><span class="s1">&#39;FLCC (%), FsLCC (%)&#39;</span><span class="p">,</span>  <span class="s1">&#39;levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">105.</span><span class="p">,</span><span class="mf">5.</span><span class="p">),</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>   <span class="s1">&#39;diff_levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>   <span class="s1">&#39;diff_vmin&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;diff_vmax&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">},</span>
+     <span class="s1">&#39;sf_eff&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;cb_label&#39;</span><span class="p">:</span><span class="s1">&#39;SE in sLCCs (h$^{-1}$)&#39;</span><span class="p">,</span><span class="s1">&#39;levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">5.5</span><span class="p">,</span><span class="mf">.5</span><span class="p">),</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>   <span class="s1">&#39;diff_levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">1.2</span><span class="p">,</span><span class="mf">1.4</span><span class="p">,</span><span class="mf">.2</span><span class="p">),</span>   <span class="s1">&#39;diff_vmin&#39;</span><span class="p">:</span><span class="o">-</span><span class="mf">1.2</span><span class="p">,</span> <span class="s1">&#39;diff_vmax&#39;</span><span class="p">:</span><span class="mf">1.2</span><span class="p">},</span>
+     <span class="c1"># &#39;sf_eff&#39;: {&#39;cb_label&#39;:&#39;SE in sLCCs (h$^{-1}$)&#39;,&#39;levels&#39;:np.arange(0,9.5,.5), &#39;vmin&#39;:0, &#39;vmax&#39;: 9,   &#39;diff_levels&#39;:np.arange(-1.2,1.4,.2),   &#39;diff_vmin&#39;:-1.2, &#39;diff_vmax&#39;:1.2},</span>
+     <span class="p">}</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ratios</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">get_ratios_dict</span><span class="p">(</span><span class="n">list_models</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span><span class="n">seasons</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculate linear regression and create dataset with values</span>
+<span class="n">linregress</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="p">(</span><span class="n">dict_label</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+    <span class="n">linregress</span><span class="p">[</span><span class="n">var_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">get_linear_regression_hemisphere</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="n">var_name</span><span class="p">)</span>
 
-<span class="n">ratios_mci</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">get_ratios_dict</span><span class="p">(</span><span class="n">list_models</span><span class="p">,</span> <span class="n">ds_mci</span><span class="p">,</span><span class="n">seasons</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">dict_label</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="n">ratios</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">get_only_valid_values</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="s1">&#39;250&#39;</span><span class="p">,</span> <span class="n">var_name</span><span class="p">)</span>
-    <span class="n">ratios</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">get_only_valid_values</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="s1">&#39;500&#39;</span><span class="p">,</span> <span class="n">var_name</span><span class="p">)</span>
-    
-    <span class="n">ratios_mci</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">get_only_valid_values</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">,</span> <span class="s1">&#39;250&#39;</span><span class="p">,</span> <span class="n">var_name</span><span class="p">)</span>
-    <span class="n">ratios_mci</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">get_only_valid_values</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">,</span> <span class="s1">&#39;500&#39;</span><span class="p">,</span> <span class="n">var_name</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># # Calculate weighted averages</span>
 
-<span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">ratios</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="n">weights</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;orig&#39;</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="s1">&#39;areacella&#39;</span><span class="p">]</span>
-    <span class="k">for</span> <span class="nb">vars</span> <span class="ow">in</span> <span class="n">ratios</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="n">ratios</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="o">+</span><span class="s1">&#39;_mean&#39;</span><span class="p">],</span> <span class="n">ratios</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="o">+</span><span class="s1">&#39;_std&#39;</span><span class="p">],</span> <span class="n">ratios</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="o">+</span><span class="s1">&#39;_stats&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">weighted_average</span><span class="p">(</span><span class="n">ratios</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="p">],</span> <span class="n">weights</span><span class="p">)</span>
-        <span class="n">ratios_mci</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="o">+</span><span class="s1">&#39;_mean&#39;</span><span class="p">],</span> <span class="n">ratios_mci</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="o">+</span><span class="s1">&#39;_std&#39;</span><span class="p">],</span> <span class="n">ratios_mci</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="o">+</span><span class="s1">&#39;_stats&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">weighted_average</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="p">],</span> <span class="n">weights</span><span class="p">)</span>
+<span class="n">_ds</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">linregress</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="n">_coord</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">linregress</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+<span class="n">regression</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">objs</span><span class="o">=</span><span class="n">_ds</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">_coord</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s2">&quot;concat_dim&quot;</span><span class="p">:</span><span class="s2">&quot;variable&quot;</span><span class="p">})</span>
+<span class="n">regression</span> <span class="o">=</span> <span class="n">regression</span><span class="o">.</span><span class="n">reindex</span><span class="p">({</span><span class="s1">&#39;model&#39;</span><span class="p">:[</span><span class="s1">&#39;ERA5&#39;</span><span class="p">,</span> <span class="s1">&#39;MIROC6&#39;</span><span class="p">,</span> <span class="s1">&#39;CanESM5&#39;</span><span class="p">,</span> <span class="s1">&#39;AWI-ESM-1-1-LR&#39;</span><span class="p">,</span>
+                                          <span class="s1">&#39;MPI-ESM1-2-LR&#39;</span><span class="p">,</span> <span class="s1">&#39;UKESM1-0-LL&#39;</span><span class="p">,</span> <span class="s1">&#39;HadGEM3-GC31-LL&#39;</span><span class="p">,</span> <span class="s1">&#39;CNRM-CM6-1&#39;</span><span class="p">,</span>
+                                          <span class="s1">&#39;CNRM-ESM2-1&#39;</span><span class="p">,</span> <span class="s1">&#39;IPSL-CM6A-LR&#39;</span><span class="p">,</span> <span class="s1">&#39;IPSL-CM5A2-INCA&#39;</span><span class="p">]})</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">dict_label</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="k">if</span> <span class="n">var_name</span> <span class="o">==</span> <span class="s1">&#39;FLCC-FsLCC&#39;</span><span class="p">:</span>
-        <span class="k">continue</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">fct</span><span class="o">.</span><span class="n">plt_spatial_season_var</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">,</span> <span class="n">FIG_DIR</span><span class="p">,</span> <span class="mi">45</span><span class="p">)</span>
-        <span class="n">fct</span><span class="o">.</span><span class="n">plt_spatial_season_var</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">,</span> <span class="n">FIG_DIR_mci</span><span class="p">,</span> <span class="mi">66</span><span class="p">)</span>
-        
-        <span class="c1"># plot monthly model variation</span>
-        <span class="n">fct</span><span class="o">.</span><span class="n">plt_monthly_model_variation</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">],</span><span class="n">FIG_DIR</span><span class="p">)</span>
-        <span class="n">fct</span><span class="o">.</span><span class="n">plt_monthly_model_variation</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">],</span><span class="n">FIG_DIR_mci</span><span class="p">)</span>
-        
-        
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculate linear regression and create dataset with values</span>
+<span class="n">linregress_mci</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="p">(</span><span class="n">dict_label</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+    <span class="n">linregress_mci</span><span class="p">[</span><span class="n">var_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">get_linear_regression_hemisphere</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">,</span> <span class="n">var_name</span><span class="p">)</span>
+
+
+<span class="n">_ds</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">linregress_mci</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="n">_coord</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">linregress_mci</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+<span class="n">regression_mci</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">objs</span><span class="o">=</span><span class="n">_ds</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">_coord</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s2">&quot;concat_dim&quot;</span><span class="p">:</span><span class="s2">&quot;variable&quot;</span><span class="p">})</span>
+<span class="n">regression_mci</span> <span class="o">=</span> <span class="n">regression_mci</span><span class="o">.</span><span class="n">reindex</span><span class="p">({</span><span class="s1">&#39;model&#39;</span><span class="p">:[</span><span class="s1">&#39;ERA5&#39;</span><span class="p">,</span> <span class="s1">&#39;MIROC6&#39;</span><span class="p">,</span> <span class="s1">&#39;CanESM5&#39;</span><span class="p">,</span> <span class="s1">&#39;AWI-ESM-1-1-LR&#39;</span><span class="p">,</span>
+                                          <span class="s1">&#39;MPI-ESM1-2-LR&#39;</span><span class="p">,</span> <span class="s1">&#39;UKESM1-0-LL&#39;</span><span class="p">,</span> <span class="s1">&#39;HadGEM3-GC31-LL&#39;</span><span class="p">,</span> <span class="s1">&#39;CNRM-CM6-1&#39;</span><span class="p">,</span>
+                                          <span class="s1">&#39;CNRM-ESM2-1&#39;</span><span class="p">,</span> <span class="s1">&#39;IPSL-CM6A-LR&#39;</span><span class="p">,</span> <span class="s1">&#39;IPSL-CM5A2-INCA&#39;</span><span class="p">]})</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># .sel(model = [&#39;MIROC6&#39;, &#39;CanESM5&#39;, &#39;AWI-ESM-1-1-LR&#39;,</span>
+<span class="c1">#                                                     &#39;MPI-ESM1-2-LR&#39;, &#39;UKESM1-0-LL&#39;, &#39;HadGEM3-GC31-LL&#39;, &#39;CNRM-CM6-1&#39;,</span>
+<span class="c1">#                                                     &#39;CNRM-ESM2-1&#39;, &#39;IPSL-CM6A-LR&#39;, &#39;IPSL-CM5A2-INCA&#39;])</span>
         
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<img alt="../_images/899e08b262b9c80e2e8e7435d7cc224bae7c45f8bc2ba280d99a5b59e5141fe7.png" src="../_images/899e08b262b9c80e2e8e7435d7cc224bae7c45f8bc2ba280d99a5b59e5141fe7.png" />
-<img alt="../_images/8d4a695a24bf3db08f40f41f318d5fbf1eef76462813981d9533036e43ea4bc2.png" src="../_images/8d4a695a24bf3db08f40f41f318d5fbf1eef76462813981d9533036e43ea4bc2.png" />
-<img alt="../_images/01c64ef758bb888e16442ca1bb1e37c121ff875fbaae01f073ecc2af89c76976.png" src="../_images/01c64ef758bb888e16442ca1bb1e37c121ff875fbaae01f073ecc2af89c76976.png" />
-<img alt="../_images/613e28032daf578d635902b810049a3f42ec2f3613ab54f5632a64db54af4f09.png" src="../_images/613e28032daf578d635902b810049a3f42ec2f3613ab54f5632a64db54af4f09.png" />
-<img alt="../_images/d89a40079b420abdd64756495dc4626ade9fd4ed64484407479da7ad1b4448e4.png" src="../_images/d89a40079b420abdd64756495dc4626ade9fd4ed64484407479da7ad1b4448e4.png" />
-<img alt="../_images/ad97f6254bd042f10a2ee5acc3ea76f5fc101e21e071979e3cdee07cb8cf2492.png" src="../_images/ad97f6254bd042f10a2ee5acc3ea76f5fc101e21e071979e3cdee07cb8cf2492.png" />
-<img alt="../_images/befb14fed37bd6b811c45b5796f53c5827a9dfca8c783ed94d3f03cf55d8d2f6.png" src="../_images/befb14fed37bd6b811c45b5796f53c5827a9dfca8c783ed94d3f03cf55d8d2f6.png" />
-<img alt="../_images/62c37fd8032b5af34c6550fb61e2d76ebb4a6bc59001b10ce095c280ef8c2741.png" src="../_images/62c37fd8032b5af34c6550fb61e2d76ebb4a6bc59001b10ce095c280ef8c2741.png" />
-<img alt="../_images/6a68afe29637b818ba733be967c07e42e3ddfa9b371b8913f73a192fb1a92424.png" src="../_images/6a68afe29637b818ba733be967c07e42e3ddfa9b371b8913f73a192fb1a92424.png" />
-<img alt="../_images/5a143e491e7da863b5b1b4f08d1948af2a74c7c6f0a8b23d0f98728b99a91d8c.png" src="../_images/5a143e491e7da863b5b1b4f08d1948af2a74c7c6f0a8b23d0f98728b99a91d8c.png" />
-<img alt="../_images/1a2eaaeff088811ed44af760b0762b18c56ab2e4c5b6f28b2707000fb546cf63.png" src="../_images/1a2eaaeff088811ed44af760b0762b18c56ab2e4c5b6f28b2707000fb546cf63.png" />
-<img alt="../_images/433df3ddf83bc83110360cfdff3bf595dc7c965d676cba7689b27c9ad57b82df.png" src="../_images/433df3ddf83bc83110360cfdff3bf595dc7c965d676cba7689b27c9ad57b82df.png" />
-<img alt="../_images/28717eee7606e78d79ce3065dbd47ea351bc251937e298fdc63f4634f3288d7f.png" src="../_images/28717eee7606e78d79ce3065dbd47ea351bc251937e298fdc63f4634f3288d7f.png" />
-<img alt="../_images/58c06c91879f40f1224f7bc5db0532d329e6d0c715a3f7b946227477697423eb.png" src="../_images/58c06c91879f40f1224f7bc5db0532d329e6d0c715a3f7b946227477697423eb.png" />
-<img alt="../_images/bdec20328f449420fd680b0712dd2f0bd8db0c6e8daa832be111f7ffcf85074d.png" src="../_images/bdec20328f449420fd680b0712dd2f0bd8db0c6e8daa832be111f7ffcf85074d.png" />
-<img alt="../_images/67f7d632a38a4b44b510f633a55b17dcdd5444e648b3973c928b0e5d40dd3a0b.png" src="../_images/67f7d632a38a4b44b510f633a55b17dcdd5444e648b3973c928b0e5d40dd3a0b.png" />
-<img alt="../_images/13140b6f24dbb85025600d561e8492ed2397b92a23e35056c8e357bc46bf4f82.png" src="../_images/13140b6f24dbb85025600d561e8492ed2397b92a23e35056c8e357bc46bf4f82.png" />
-<img alt="../_images/934c7a705eacc3ee68ed5666e3fdbdb3c604f3a18576e7a13335666d905be1a0.png" src="../_images/934c7a705eacc3ee68ed5666e3fdbdb3c604f3a18576e7a13335666d905be1a0.png" />
-<img alt="../_images/409bdf8ef82dd5ae80ca34531d83e501eb72fae5ad3deb1ac5f6d912aace4f56.png" src="../_images/409bdf8ef82dd5ae80ca34531d83e501eb72fae5ad3deb1ac5f6d912aace4f56.png" />
-<img alt="../_images/c0345ae8702596f6ae0330196cac78de854a4afed441bcc7f17ad3c6d1fb4bce.png" src="../_images/c0345ae8702596f6ae0330196cac78de854a4afed441bcc7f17ad3c6d1fb4bce.png" />
-<img alt="../_images/71da49aea4e48876eb610f42eef5f0e73a703c18961299d838cc7d24e1cd7c6d.png" src="../_images/71da49aea4e48876eb610f42eef5f0e73a703c18961299d838cc7d24e1cd7c6d.png" />
-<img alt="../_images/cc3596d338d1bbd2af1dbf45e90623ce7bc0499cc09af1d978d9ffaa85cd86d7.png" src="../_images/cc3596d338d1bbd2af1dbf45e90623ce7bc0499cc09af1d978d9ffaa85cd86d7.png" />
-<img alt="../_images/e3dff83e57d76deda056b13c7599351e6cfc411c09b1b54d610cf30029ebbd7c.png" src="../_images/e3dff83e57d76deda056b13c7599351e6cfc411c09b1b54d610cf30029ebbd7c.png" />
-<img alt="../_images/d0d5177aa53c3818611b3e96a978f08f4bc4762e6339bedd60853732e1d21180.png" src="../_images/d0d5177aa53c3818611b3e96a978f08f4bc4762e6339bedd60853732e1d21180.png" />
-<img alt="../_images/17e6ef225567648d3606b8088ae91a802dc031ee718a2cfd088dbe1831a39bee.png" src="../_images/17e6ef225567648d3606b8088ae91a802dc031ee718a2cfd088dbe1831a39bee.png" />
-<img alt="../_images/ec0fd3f0ba6debf274c0ae8837e497e55a78aa105f617563b80e745306a8fc5d.png" src="../_images/ec0fd3f0ba6debf274c0ae8837e497e55a78aa105f617563b80e745306a8fc5d.png" />
-<img alt="../_images/1ade6e4cd15e345b554ee83d60be6661161cb4cf050edded091b5ba88cd5ef1b.png" src="../_images/1ade6e4cd15e345b554ee83d60be6661161cb4cf050edded091b5ba88cd5ef1b.png" />
-<img alt="../_images/57f65a535c1376b0b37c4ce1b14cc2a296859b0c670846b34e545d01ca2a7029.png" src="../_images/57f65a535c1376b0b37c4ce1b14cc2a296859b0c670846b34e545d01ca2a7029.png" />
-<img alt="../_images/9c097cd00e58ebc4eb7b99adfc2e8df381c970ad871208553dda1e69bb8ee1bb.png" src="../_images/9c097cd00e58ebc4eb7b99adfc2e8df381c970ad871208553dda1e69bb8ee1bb.png" />
-<img alt="../_images/72467c7f88d9fa9e76bfed59304dc8bd075b3ee50f77bd82db2e58f6f3804a3c.png" src="../_images/72467c7f88d9fa9e76bfed59304dc8bd075b3ee50f77bd82db2e58f6f3804a3c.png" />
-<img alt="../_images/48836030d1310f01ea47b9decb4f034c52ede4015d58090c4a05671196393e39.png" src="../_images/48836030d1310f01ea47b9decb4f034c52ede4015d58090c4a05671196393e39.png" />
-<img alt="../_images/b6795526f13c4e27fd2274f9dc4b7b62d9566e30b081358f813bcb26a6b2bbfc.png" src="../_images/b6795526f13c4e27fd2274f9dc4b7b62d9566e30b081358f813bcb26a6b2bbfc.png" />
-<img alt="../_images/d9363d925cd119ad5653daf2fe8ed2a5f00a3207b6e64de27b5ded8764060be7.png" src="../_images/d9363d925cd119ad5653daf2fe8ed2a5f00a3207b6e64de27b5ded8764060be7.png" />
-<img alt="../_images/d8e9f417916b585808f779ec5fd27e23394e1f9593eb170d939e59f9f6ae5c73.png" src="../_images/d8e9f417916b585808f779ec5fd27e23394e1f9593eb170d939e59f9f6ae5c73.png" />
-<img alt="../_images/1925489fe55826b8983c9b8045c45f85722cd3cf856033b2be4c3728df1152c8.png" src="../_images/1925489fe55826b8983c9b8045c45f85722cd3cf856033b2be4c3728df1152c8.png" />
-<img alt="../_images/d8d526e8afb6df306a7bc415d5e385ec1bb34685bd6f2a3b47e5d83fd8a9dad7.png" src="../_images/d8d526e8afb6df306a7bc415d5e385ec1bb34685bd6f2a3b47e5d83fd8a9dad7.png" />
-<img alt="../_images/d351e6bbef5b9b447576cafc2c9d427d29d2aed2041b1f7e6b3dfe69f3bbf6c7.png" src="../_images/d351e6bbef5b9b447576cafc2c9d427d29d2aed2041b1f7e6b3dfe69f3bbf6c7.png" />
-<img alt="../_images/79b4478abe9642ff9d10f951fc4d7c88f68e854429b8abca414e402947b144af.png" src="../_images/79b4478abe9642ff9d10f951fc4d7c88f68e854429b8abca414e402947b144af.png" />
-<img alt="../_images/621f27c7371ef62f2ba03f97c0352a2351e8417ae66a0a496c3e9e34a34f0f8a.png" src="../_images/621f27c7371ef62f2ba03f97c0352a2351e8417ae66a0a496c3e9e34a34f0f8a.png" />
-<img alt="../_images/d4e4669ff2ddb857cce6d705ffee85084ae79ff38c07b9a4abc64e8cf93bcdf6.png" src="../_images/d4e4669ff2ddb857cce6d705ffee85084ae79ff38c07b9a4abc64e8cf93bcdf6.png" />
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fct</span><span class="o">.</span><span class="n">plt_spatial_season_FLCC_FsLCC</span><span class="p">(</span><span class="n">ratios</span><span class="p">[</span><span class="s1">&#39;cloudsat_500&#39;</span><span class="p">],</span> <span class="n">dict_label</span><span class="p">,</span> <span class="n">FIG_DIR</span><span class="p">,</span> <span class="mi">45</span><span class="p">)</span>
-<span class="n">fct</span><span class="o">.</span><span class="n">plt_spatial_season_FLCC_FsLCC</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">[</span><span class="s1">&#39;cloudsat_500&#39;</span><span class="p">],</span> <span class="n">dict_label</span><span class="p">,</span> <span class="n">FIG_DIR_mci</span><span class="p">,</span> <span class="mi">66</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/ba1e965ad95184d2f475a1efd1b768495184b9787cee21d1cc71436c3c891eb7.png" src="../_images/ba1e965ad95184d2f475a1efd1b768495184b9787cee21d1cc71436c3c891eb7.png" />
-<img alt="../_images/d09b26d854210bc82fc76d69c5204d8a84b8a6a901c1292565f17a588a0c9023.png" src="../_images/d09b26d854210bc82fc76d69c5204d8a84b8a6a901c1292565f17a588a0c9023.png" />
-<img alt="../_images/7f533f7ca7011777340251e136bbe545cf93e80d2d258170b0c91174c9c8335f.png" src="../_images/7f533f7ca7011777340251e136bbe545cf93e80d2d258170b0c91174c9c8335f.png" />
-<img alt="../_images/e8f9c775a978b6b47f2fe131f03fb00a180b6ddf488272617b4a298e9a35a009.png" src="../_images/e8f9c775a978b6b47f2fe131f03fb00a180b6ddf488272617b4a298e9a35a009.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ratios</span><span class="p">[</span><span class="s1">&#39;250&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">ratios</span><span class="p">[</span><span class="s1">&#39;era_250&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">coords</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;model&#39;</span><span class="p">:</span><span class="s1">&#39;ERA5&#39;</span><span class="p">}),</span> <span class="n">ratios</span><span class="p">[</span><span class="s1">&#39;cmip_250&#39;</span><span class="p">]],</span> <span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">))</span>
-<span class="n">ratios</span><span class="p">[</span><span class="s1">&#39;500&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">ratios</span><span class="p">[</span><span class="s1">&#39;era_500&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">coords</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;model&#39;</span><span class="p">:</span><span class="s1">&#39;ERA5&#39;</span><span class="p">}),</span> <span class="n">ratios</span><span class="p">[</span><span class="s1">&#39;cmip_500&#39;</span><span class="p">]],</span> <span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="p">(</span><span class="n">dict_label</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+<span class="c1"># for var_name in [&#39;FLCC&#39;,]:#      &#39;FLCC-FsLCC&#39;, &#39;FsLCC&#39;, &#39;FoS&#39;, &#39;sf_eff&#39;,]:</span>
 
-<span class="n">ratios_mci</span><span class="p">[</span><span class="s1">&#39;250&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">ratios_mci</span><span class="p">[</span><span class="s1">&#39;era_250&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">coords</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;model&#39;</span><span class="p">:</span><span class="s1">&#39;ERA5&#39;</span><span class="p">}),</span> <span class="n">ratios_mci</span><span class="p">[</span><span class="s1">&#39;cmip_250&#39;</span><span class="p">]],</span> <span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">))</span>
-<span class="n">ratios_mci</span><span class="p">[</span><span class="s1">&#39;500&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">ratios_mci</span><span class="p">[</span><span class="s1">&#39;era_500&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">coords</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;model&#39;</span><span class="p">:</span><span class="s1">&#39;ERA5&#39;</span><span class="p">}),</span> <span class="n">ratios_mci</span><span class="p">[</span><span class="s1">&#39;cmip_500&#39;</span><span class="p">]],</span> <span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_NH</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-<span class="n">df_SH</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-<span class="n">df</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">dict_label</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">R2_var_NH</span><span class="p">,</span> <span class="n">d_var_NH</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">R2_var_SH</span><span class="p">,</span> <span class="n">d_var_SH</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">calc_scatter_obs_model</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="n">var_name</span><span class="p">)</span>
-    <span class="n">df_NH</span><span class="p">[</span><span class="n">var_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">model</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">R2_var_NH</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">R2_var_NH</span><span class="o">.</span><span class="n">keys</span><span class="p">()},</span> <span class="n">index</span><span class="o">=</span><span class="n">ratios</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">season</span><span class="o">.</span><span class="n">values</span><span class="p">))</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
-    <span class="n">df_SH</span><span class="p">[</span><span class="n">var_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">model</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">R2_var_SH</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">R2_var_SH</span><span class="o">.</span><span class="n">keys</span><span class="p">()},</span> <span class="n">index</span><span class="o">=</span><span class="n">ratios</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">season</span><span class="o">.</span><span class="n">values</span><span class="p">))</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
-  
-<span class="n">df_NH_mci</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-<span class="n">df_SH_mci</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-<span class="n">df_mci</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">dict_label</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">R2_var_NH_mci</span><span class="p">,</span> <span class="n">d_var_NH_mci</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">R2_var_SH_mci</span><span class="p">,</span> <span class="n">d_var_SH_mci</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">calc_scatter_obs_model</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">,</span> <span class="n">var_name</span><span class="p">)</span>
-    <span class="n">df_NH_mci</span><span class="p">[</span><span class="n">var_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">model</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">R2_var_NH_mci</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">R2_var_NH_mci</span><span class="o">.</span><span class="n">keys</span><span class="p">()},</span> <span class="n">index</span><span class="o">=</span><span class="n">ratios_mci</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">season</span><span class="o">.</span><span class="n">values</span><span class="p">))</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
-    <span class="n">df_SH_mci</span><span class="p">[</span><span class="n">var_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">model</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">R2_var_SH_mci</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">R2_var_SH_mci</span><span class="o">.</span><span class="n">keys</span><span class="p">()},</span> <span class="n">index</span><span class="o">=</span><span class="n">ratios_mci</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">season</span><span class="o">.</span><span class="n">values</span><span class="p">))</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
-    
+    <span class="n">fct</span><span class="o">.</span><span class="n">plt_spatial_season_var</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">,</span> <span class="n">FIG_DIR</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="n">lwp_threshold</span><span class="p">)</span>
+    <span class="n">fct</span><span class="o">.</span><span class="n">plt_spatial_season_var</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">,</span> <span class="n">FIG_DIR_mci</span><span class="p">,</span> <span class="mi">66</span><span class="p">,</span> <span class="n">lwp_threshold</span><span class="p">)</span>
+        
+    <span class="c1"># plot monthly model variation</span>
+    <span class="n">fct</span><span class="o">.</span><span class="n">plt_monthly_model_variation</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">],</span><span class="n">FIG_DIR</span><span class="p">,</span> <span class="n">lwp_threshold</span><span class="p">)</span>
+    <span class="n">fct</span><span class="o">.</span><span class="n">plt_monthly_model_variation</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">],</span><span class="n">FIG_DIR_mci</span><span class="p">,</span> <span class="n">lwp_threshold</span><span class="p">)</span>
+        
+    <span class="n">fct</span><span class="o">.</span><span class="n">plt_monthly_interannual_variation</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">lwp_threshold</span><span class="p">,</span> <span class="n">FIG_DIR</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">])</span>
+    <span class="n">fct</span><span class="o">.</span><span class="n">plt_monthly_interannual_variation</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">lwp_threshold</span><span class="p">,</span> <span class="n">FIG_DIR_mci</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">])</span>
+        
+    <span class="n">fct</span><span class="o">.</span><span class="n">plt_percent_difference_season</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">lwp_threshold</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">],</span> <span class="n">FIG_DIR</span><span class="p">)</span>
+    <span class="n">fct</span><span class="o">.</span><span class="n">plt_percent_difference_season</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">lwp_threshold</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">],</span> <span class="n">FIG_DIR_mci</span><span class="p">)</span>
 
-<span class="c1"># set ERA5 correlation number to nan </span>
-<span class="k">for</span> <span class="n">season</span> <span class="ow">in</span> <span class="n">df_NH</span><span class="p">[</span><span class="s1">&#39;sf_eff&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-    <span class="n">df_NH</span><span class="p">[</span><span class="s1">&#39;sf_eff&#39;</span><span class="p">][</span><span class="n">season</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;ERA5&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">df_SH</span><span class="p">[</span><span class="s1">&#39;sf_eff&#39;</span><span class="p">][</span><span class="n">season</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;ERA5&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="c1"># plot scatter CloudSat vs model</span>
+    <span class="n">fct</span><span class="o">.</span><span class="n">plt_scatter_obs_model</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="n">regression</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">],</span> <span class="n">FIG_DIR</span><span class="p">,</span> <span class="n">lwp_threshold</span><span class="p">)</span>
+    <span class="n">fct</span><span class="o">.</span><span class="n">plt_scatter_obs_model</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">,</span> <span class="n">regression_mci</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">],</span> <span class="n">FIG_DIR_mci</span><span class="p">,</span> <span class="n">lwp_threshold</span><span class="p">)</span>
+
+    <span class="c1"># # plot variable for individual model</span>
+    <span class="c1"># fct.plt_spatial_season_all_models(ratios, var_name, dict_label, FIG_DIR, 45)</span>
+    <span class="c1"># # fct.plt_spatial_season_all_models(ratios_mci, var_name, dict_label, FIG_DIR_mci, 66)</span>
     
-    <span class="c1"># df_NH[&#39;pr_eff&#39;][season].loc[&#39;ERA5&#39;] = np.nan</span>
-    <span class="c1"># df_SH[&#39;pr_eff&#39;][season].loc[&#39;ERA5&#39;] = np.nan</span>
-    
-    
-    
-<span class="k">for</span> <span class="n">season</span> <span class="ow">in</span> <span class="n">df_NH_mci</span><span class="p">[</span><span class="s1">&#39;sf_eff&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-    <span class="n">df_NH_mci</span><span class="p">[</span><span class="s1">&#39;sf_eff&#39;</span><span class="p">][</span><span class="n">season</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;ERA5&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">df_SH_mci</span><span class="p">[</span><span class="s1">&#39;sf_eff&#39;</span><span class="p">][</span><span class="n">season</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;ERA5&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-    
-    <span class="c1"># df_NH_mci[&#39;pr_eff&#39;][season].loc[&#39;ERA5&#39;] = np.nan</span>
-    <span class="c1"># df_SH_mci[&#39;pr_eff&#39;][season].loc[&#39;ERA5&#39;] = np.nan</span>
-    
+<span class="c1"># plot R2 values for all values and both hemispheres</span>
+<span class="n">fct</span><span class="o">.</span><span class="n">plt_R2_heatmap_season</span><span class="p">(</span><span class="n">regression</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">,</span> <span class="n">FIG_DIR</span><span class="p">,</span> <span class="n">lwp_threshold</span><span class="p">)</span>
+<span class="n">fct</span><span class="o">.</span><span class="n">plt_R2_heatmap_season</span><span class="p">(</span><span class="n">regression_mci</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">,</span> <span class="n">FIG_DIR_mci</span><span class="p">,</span> <span class="n">lwp_threshold</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fct</span><span class="o">.</span><span class="n">plt_R2_heatmap_season</span><span class="p">(</span><span class="n">df_NH</span><span class="p">,</span> <span class="n">df_SH</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">,</span><span class="n">FIG_DIR</span><span class="p">)</span>
-<span class="n">fct</span><span class="o">.</span><span class="n">plt_R2_heatmap_season</span><span class="p">(</span><span class="n">df_NH_mci</span><span class="p">,</span> <span class="n">df_SH_mci</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">,</span><span class="n">FIG_DIR_mci</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;FoS&#39;</span><span class="p">,]:</span><span class="c1">#              &#39;sf_eff&#39;, &#39;FLCC&#39;,&#39;FLCC-FsLCC&#39;,&#39;FsLCC&#39;,:</span>
+<span class="c1"># plot variable for individual model</span>
+    <span class="n">fct</span><span class="o">.</span><span class="n">plt_spatial_season_all_models</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">,</span> <span class="n">FIG_DIR</span><span class="p">,</span> <span class="mi">45</span><span class="p">)</span>
+    <span class="n">fct</span><span class="o">.</span><span class="n">plt_spatial_season_all_models</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">,</span> <span class="n">FIG_DIR_mci</span><span class="p">,</span> <span class="mi">66</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/9d6371058a2076fe53767f0636ae8ad7f85e5473e30be58947f181c106d5e538.png" src="../_images/9d6371058a2076fe53767f0636ae8ad7f85e5473e30be58947f181c106d5e538.png" />
-<img alt="../_images/d34906e80200c876a8ca4b4109716750247dfee61a0c8335b352e38df81db5a5.png" src="../_images/d34906e80200c876a8ca4b4109716750247dfee61a0c8335b352e38df81db5a5.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for var_name in dict_label.keys():</span>
-    <span class="c1"># fct.plt_spatial_season_all_models(ratios, var_name,dict_label,FIG_DIR, 45)</span>
-    <span class="c1"># fct.plt_spatial_season_all_models(ratios_mci, var_name, dict_label,FIG_DIR_mci, 66)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/d48aeb7047c3305a0e21cf16c32df28099f16fcc2c205aed1f219ebf074ef099.png" src="../_images/d48aeb7047c3305a0e21cf16c32df28099f16fcc2c205aed1f219ebf074ef099.png" />
-<img alt="../_images/4e606feeea124fa7da7cacee1d32775ea2ef987cb7e1269a36cf17326ad93253.png" src="../_images/4e606feeea124fa7da7cacee1d32775ea2ef987cb7e1269a36cf17326ad93253.png" />
-<img alt="../_images/6e469f31a5b4f066eb0bf76b2322a2847991413ca9635c7ce00bb4bfcc97511b.png" src="../_images/6e469f31a5b4f066eb0bf76b2322a2847991413ca9635c7ce00bb4bfcc97511b.png" />
-<img alt="../_images/b95efbe0145f3635e398e996eff9e51593410c24a0ad953468d2718a11162e45.png" src="../_images/b95efbe0145f3635e398e996eff9e51593410c24a0ad953468d2718a11162e45.png" />
-<img alt="../_images/12ccdc154e8ad5ea6d87bbcdc54cb14dd5ed17e9f4482da2eb9afa10f42664c8.png" src="../_images/12ccdc154e8ad5ea6d87bbcdc54cb14dd5ed17e9f4482da2eb9afa10f42664c8.png" />
-<img alt="../_images/8b0fac37558de948ace81a2ff2ca1db68442f18fbbde5b476d34894300a93d52.png" src="../_images/8b0fac37558de948ace81a2ff2ca1db68442f18fbbde5b476d34894300a93d52.png" />
-<img alt="../_images/19e104a23bc3cc2cc9d75022aac7a370a7845e5409973c57fd861092f37881e0.png" src="../_images/19e104a23bc3cc2cc9d75022aac7a370a7845e5409973c57fd861092f37881e0.png" />
-<img alt="../_images/073e8806c827787c3c940865bbac2c35d4b56bea3390a64b1673f95d0cbb2cbd.png" src="../_images/073e8806c827787c3c940865bbac2c35d4b56bea3390a64b1673f95d0cbb2cbd.png" />
-<img alt="../_images/3e051631dd054d0facaacbef085602b66c70f6d1b01a56ede9f089df3ed7be85.png" src="../_images/3e051631dd054d0facaacbef085602b66c70f6d1b01a56ede9f089df3ed7be85.png" />
-<img alt="../_images/e01ee86fda22d6208010ba692af7b7283ac8d270a07f0b48a0b14fa51dccafbe.png" src="../_images/e01ee86fda22d6208010ba692af7b7283ac8d270a07f0b48a0b14fa51dccafbe.png" />
-<img alt="../_images/679e00f5863087eb19e536347d862de07b8e87fd0ccad00c3de1f7f2bd82e2eb.png" src="../_images/679e00f5863087eb19e536347d862de07b8e87fd0ccad00c3de1f7f2bd82e2eb.png" />
-<img alt="../_images/fff8ae85fd9f67e812a18ae70e564ccc6fc52c367d2045a02fa16f55f197fb95.png" src="../_images/fff8ae85fd9f67e812a18ae70e564ccc6fc52c367d2045a02fa16f55f197fb95.png" />
-<img alt="../_images/d52c186186cd53b7c9172fbf4030c53727ed1c80e69f8451a35691999298b7aa.png" src="../_images/d52c186186cd53b7c9172fbf4030c53727ed1c80e69f8451a35691999298b7aa.png" />
-<img alt="../_images/2a597ccab91e46064a9260d949cfa34bb457ed2901760247026b9650c897511c.png" src="../_images/2a597ccab91e46064a9260d949cfa34bb457ed2901760247026b9650c897511c.png" />
-<img alt="../_images/330dab5128e13c5e944918825000dd01a1b833219e7515b741e8ddba1bf5222c.png" src="../_images/330dab5128e13c5e944918825000dd01a1b833219e7515b741e8ddba1bf5222c.png" />
-<img alt="../_images/c7a304f243aa8a407df8fad6730538e0823ef2c52e829e8b53488eee5565e43b.png" src="../_images/c7a304f243aa8a407df8fad6730538e0823ef2c52e829e8b53488eee5565e43b.png" />
-<img alt="../_images/9f686cc4d9ccfb013f54842c30cced2ed7a2155303bc408d2146eb2d46ba5d93.png" src="../_images/9f686cc4d9ccfb013f54842c30cced2ed7a2155303bc408d2146eb2d46ba5d93.png" />
-<img alt="../_images/081a3f2b51a7fa9e4dbfcfa39d115fbf4a5ff3a4b57a31c2ec83b56a126a1c66.png" src="../_images/081a3f2b51a7fa9e4dbfcfa39d115fbf4a5ff3a4b57a31c2ec83b56a126a1c66.png" />
-<img alt="../_images/030f93f062c65044d9d7f66350a049310057220e2b750769c7ef866063fd48c0.png" src="../_images/030f93f062c65044d9d7f66350a049310057220e2b750769c7ef866063fd48c0.png" />
-<img alt="../_images/451eb878fe7077b943354cbca3eb4e7228cffa9c2eac0cf871cf42ca79ce6f6c.png" src="../_images/451eb878fe7077b943354cbca3eb4e7228cffa9c2eac0cf871cf42ca79ce6f6c.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">dict_label</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="n">fct</span><span class="o">.</span><span class="n">plt_scatter_obs_model</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">],</span> <span class="n">FIG_DIR</span><span class="p">)</span>
-    <span class="n">fct</span><span class="o">.</span><span class="n">plt_scatter_obs_model</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">],</span> <span class="n">FIG_DIR_mci</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/c6627958ce4b863f1209057be200a6f5a59360c07b9d5edf752f781ad54ba2a2.png" src="../_images/c6627958ce4b863f1209057be200a6f5a59360c07b9d5edf752f781ad54ba2a2.png" />
-<img alt="../_images/907bdf85bccafcb5170bc592ee1d397b61eb0d099a759db6a4a1abb5e8b09bb7.png" src="../_images/907bdf85bccafcb5170bc592ee1d397b61eb0d099a759db6a4a1abb5e8b09bb7.png" />
-<img alt="../_images/0d654215e64517be2b6f3705af44d3b0de557bd903032c77ea49f1aea0e8b9cf.png" src="../_images/0d654215e64517be2b6f3705af44d3b0de557bd903032c77ea49f1aea0e8b9cf.png" />
-<img alt="../_images/b51bd3a5ea15951a9e97c234265a17dbe2ab86d330237f623a770e4b4cc119b3.png" src="../_images/b51bd3a5ea15951a9e97c234265a17dbe2ab86d330237f623a770e4b4cc119b3.png" />
-<img alt="../_images/7434a0caa90b0fcdad1463f61638ff09945941f6a8691d5609e19ff968e80dc5.png" src="../_images/7434a0caa90b0fcdad1463f61638ff09945941f6a8691d5609e19ff968e80dc5.png" />
-<img alt="../_images/d6ae999349fd3219bc5c5880fabcd9cdf7d62db124fbd816befac38950069ce1.png" src="../_images/d6ae999349fd3219bc5c5880fabcd9cdf7d62db124fbd816befac38950069ce1.png" />
-<img alt="../_images/fcfb50bde3ea39626ac881186fa995be1297e4164a0bfc9f13c8b4a05c40511c.png" src="../_images/fcfb50bde3ea39626ac881186fa995be1297e4164a0bfc9f13c8b4a05c40511c.png" />
-<img alt="../_images/3a8c33e9f0b350b183afeec7314b1e6e34043d6e5cee7d6f9179914f090d098a.png" src="../_images/3a8c33e9f0b350b183afeec7314b1e6e34043d6e5cee7d6f9179914f090d098a.png" />
-<img alt="../_images/947ee8647362e21cf281be094d12f1e3e0a1ad1641f935cae816e6fd5717eab1.png" src="../_images/947ee8647362e21cf281be094d12f1e3e0a1ad1641f935cae816e6fd5717eab1.png" />
-<img alt="../_images/1e8472c30813a78c8556420bd62b8adf4a2730ad1d19ed595889f0e4fd68d913.png" src="../_images/1e8472c30813a78c8556420bd62b8adf4a2730ad1d19ed595889f0e4fd68d913.png" />
 </div>
 </div>
 </section>
