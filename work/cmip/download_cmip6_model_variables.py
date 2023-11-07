@@ -51,7 +51,7 @@ from imports import(pd, glob, np, plt, wget,cm, HTTPError)
 
 # %%
 cmip_in = os.path.join(INPUT_DATA_DIR, 'cmip6_hist')
-cmip_out = os.path.join(INPUT_DATA_DIR, 'cmip6_hist/daily_means/single_model/')
+cmip_out = os.path.join(INPUT_DATA_DIR, 'cmip6_hist/single_model/')
 # make output data directory
 try:
     os.mkdir(cmip_out)
@@ -325,17 +325,30 @@ def get_download_dict(var_id):
 #                             print('File {} does not exist'.format(file))
 #                             continue
 
-		
-node = 'http://vesg.ipsl.upmc.fr/thredds/fileServer/cmip6/CMIP/'
-mdir = 'IPSL/IPSL-CM5A2-INCA/historical/r1i1p1f1/CFday/phalf/gr/v20200729/'
-file = 'phalf_CFday_IPSL-CM5A2-INCA_historical_r1i1p1f1_gr_20000101-20091231.nc'
-dwf = node + mdir + file
+
+# node = 'http://esg1.umr-cnrm.fr/thredds/fileServer/CMIP6_CNRM/CMIP/'
+# mdir = 'CNRM-CERFACS/CNRM-CM6-1/historical/r2i1p1f2/AERmon/lwp/gr/v20181126/'
+# file = 'lwp_AERmon_CNRM-CM6-1_historical_r2i1p1f2_gr_185001-201412.nc'
+
+
+node = 'http://vesg.ipsl.upmc.fr/thredds/fileServer/cmip6/CMIP/IPSL/IPSL-CM5A2-INCA/historical/r1i1p1f1/CFday/pfull/gr/v20200729/'
+file = 'pfull_CFday_IPSL-CM5A2-INCA_historical_r1i1p1f1_gr_19500101-20091231.nc'
+# dwf = node + mdir + file
+dwf = node + file
 file_out = cmip_out + '/' + file
 
 print('Download file ... ' + file)
 wget.download(dwf, file_out)
-#                             
+#   
 
+node = 'http://vesg.ipsl.upmc.fr/thredds/fileServer/cmip6/CMIP/IPSL/IPSL-CM5A2-INCA/historical/r1i1p1f1/CFday/phalf/gr/v20200729/'
+file = 'phalf_CFday_IPSL-CM5A2-INCA_historical_r1i1p1f1_gr_20000101-20091231.nc'
+# dwf = node + mdir + file
+dwf = node + file
+file_out = cmip_out + '/' + file
+
+print('Download file ... ' + file)
+wget.download(dwf, file_out)
 
 
 
