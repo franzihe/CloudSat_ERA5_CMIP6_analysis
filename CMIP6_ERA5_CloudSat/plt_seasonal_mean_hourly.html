@@ -450,7 +450,7 @@ document.write(`
 <p>The ERA5 0.25deg data is located in the folder <code class="docutils literal notranslate"><span class="pre">\scratch\franzihe\</span></code>, CloudSat at …</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lwp_threshold</span> <span class="o">=</span> <span class="mi">3</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lwp_threshold</span> <span class="o">=</span><span class="mi">5</span>
 </pre></div>
 </div>
 </div>
@@ -527,7 +527,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7fa95c1127a0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7f5c603bb490&gt;
 </pre></div>
 </div>
 </div>
@@ -572,171 +572,143 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define list of models</span>
-<span class="n">list_models</span> <span class="o">=</span> <span class="p">[</span><span class="c1">#&#39;cloudsat_250&#39;,</span>
-               <span class="s1">&#39;cloudsat_500&#39;</span><span class="p">,</span>
-               <span class="c1"># &#39;era_30&#39;,</span>
-               <span class="c1"># &#39;era_250&#39;,</span>
-               <span class="s1">&#39;era_500&#39;</span><span class="p">,</span>
-               <span class="c1"># &#39;cmip_250&#39;,</span>
-               <span class="s1">&#39;cmip_500&#39;</span><span class="p">,</span>
-               <span class="c1"># &#39;MIROC6&#39;, </span>
-               <span class="c1"># &#39;CanESM5&#39;, </span>
-               <span class="c1"># &#39;AWI-ESM-1-1-LR&#39;, </span>
-               <span class="c1"># &#39;MPI-ESM1-2-LR&#39;, </span>
-               <span class="c1"># &#39;UKESM1-0-LL&#39;, </span>
-               <span class="c1"># &#39;HadGEM3-GC31-LL&#39;,</span>
-               <span class="c1"># &#39;CNRM-CM6-1&#39;,</span>
-               <span class="c1"># &#39;CNRM-ESM2-1&#39;,</span>
-               <span class="c1"># &#39;IPSL-CM6A-LR&#39;,</span>
-               <span class="c1"># &#39;IPSL-CM5A2-INCA&#39;</span>
-            <span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ratios</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dat_in</span><span class="si">}</span><span class="s1">/ratios_500/*LWP</span><span class="si">{</span><span class="n">lwp_threshold</span><span class="si">}</span><span class="s1">_*.nc&#39;</span><span class="p">))</span>
+<span class="n">ratios_hourly</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dat_in</span><span class="si">}</span><span class="s1">_hourly/ratios_500/*LWP</span><span class="si">{</span><span class="n">lwp_threshold</span><span class="si">}</span><span class="s1">_*.nc&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create empty dictionaries to store the Xarray datasets for different variables:</span>
-<span class="n">variables</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;orig&#39;</span><span class="p">,</span> <span class="s1">&#39;2t&#39;</span><span class="p">,</span> <span class="s1">&#39;lcc&#39;</span><span class="p">,</span> <span class="s1">&#39;lcc_2t&#39;</span><span class="p">,</span> <span class="s1">&#39;lcc_sf&#39;</span><span class="p">,</span> <span class="s1">&#39;lcc_2t_days&#39;</span><span class="p">,</span> <span class="s1">&#39;lcc_2t_sf&#39;</span><span class="p">,</span> <span class="p">]</span>
-<span class="n">ds</span> <span class="o">=</span> <span class="p">{</span><span class="n">var</span><span class="p">:</span> <span class="p">{}</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">}</span>
-<span class="n">ds_mci</span> <span class="o">=</span> <span class="p">{</span><span class="n">var</span><span class="p">:</span> <span class="p">{}</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">}</span>
-<span class="n">ds_hourly</span> <span class="o">=</span> <span class="p">{</span><span class="n">var</span><span class="p">:</span> <span class="p">{}</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">}</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">list_models</span><span class="p">:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for model in list_models:</span>
     
-    <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;cloudsat_250&#39;</span> <span class="ow">or</span> <span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;cloudsat_500&#39;</span> <span class="ow">or</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;orig&#39;</span> <span class="ow">or</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;2t&#39;</span><span class="p">:</span>
-            <span class="n">file_pattern</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dat_in</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">*.nc&#39;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">file_pattern</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dat_in</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">lwp_threshold</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">lwp_threshold</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">*.nc&#39;</span>
-        <span class="c1"># print(file_pattern)</span>
-        <span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="n">file_pattern</span><span class="p">))</span>
-        <span class="c1"># print(files)</span>
-        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-            <span class="n">_ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-            <span class="c1"># [var][model]</span>
-            <span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
-            <span class="c1"># ds_mci[var][model] = xr.Dataset()</span>
-            <span class="c1"># make the data cyclic going from -180 to 180</span>
-            <span class="k">for</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="n">_ds</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="n">data</span> <span class="o">=</span> <span class="n">_ds</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span>
+<span class="c1">#     for var in variables:</span>
+<span class="c1">#         if model == &#39;cloudsat_250&#39; or model == &#39;cloudsat_500&#39; or var == &#39;orig&#39; or var == &#39;2t&#39;:</span>
+<span class="c1">#             file_pattern = f&#39;{dat_in}/{var}/{model}_{var}*.nc&#39;</span>
+<span class="c1">#         else:</span>
+<span class="c1">#             file_pattern = f&#39;{dat_in}/{lwp_threshold}_{var}/{model}_{lwp_threshold}_{var}*.nc&#39;</span>
+<span class="c1">#         # print(file_pattern)</span>
+<span class="c1">#         files = sorted(glob(file_pattern))</span>
+<span class="c1">#         # print(files)</span>
+<span class="c1">#         for file in files:</span>
+<span class="c1">#             _ds = xr.open_mfdataset(file)</span>
+<span class="c1">#             # [var][model]</span>
+<span class="c1">#             ds[var][model] = xr.Dataset()</span>
+<span class="c1">#             # ds_mci[var][model] = xr.Dataset()</span>
+<span class="c1">#             # make the data cyclic going from -180 to 180</span>
+<span class="c1">#             for var_id in _ds.keys():</span>
+<span class="c1">#                 data = _ds[var_id]</span>
                 
-                <span class="k">if</span> <span class="s1">&#39;lon&#39;</span> <span class="ow">in</span> <span class="n">_ds</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span> <span class="ow">and</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)):</span>
-                    <span class="n">lon</span> <span class="o">=</span> <span class="n">_ds</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span>
-                    <span class="n">lon_idx</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">dims</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;lon&#39;</span><span class="p">)</span>
-                    <span class="n">wrap_data</span><span class="p">,</span> <span class="n">wrap_lon</span> <span class="o">=</span> <span class="n">add_cyclic_point</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">coord</span><span class="o">=</span><span class="n">lon</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">lon_idx</span><span class="p">)</span>
+<span class="c1">#                 if &#39;lon&#39; in _ds[var_id].dims and (data[&#39;lon&#39;][0] != data[&#39;lon&#39;][-1]*(-1)):</span>
+<span class="c1">#                     lon = _ds.coords[&#39;lon&#39;]</span>
+<span class="c1">#                     lon_idx = data.dims.index(&#39;lon&#39;)</span>
+<span class="c1">#                     wrap_data, wrap_lon = add_cyclic_point(data, coord=lon, axis=lon_idx)</span>
                     
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wrap_data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-                        <span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">wrap_data</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">],</span>
-                                                                                            <span class="n">lon</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))))</span>
+<span class="c1">#                     if len(wrap_data.shape) == 2:</span>
+<span class="c1">#                         ds[var][model][var_id] = xr.DataArray(data = wrap_data, coords=dict(lat=data[&#39;lat&#39;],</span>
+<span class="c1">#                                                                                             lon=np.append(data[&#39;lon&#39;].values, data[&#39;lon&#39;][0].values*(-1))))</span>
                     
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wrap_data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="s1">&#39;time&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">dims</span><span class="p">:</span>
-                            <span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">wrap_data</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">],</span>
-                                                                                                <span class="n">lat</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">],</span>
-                                                                                                <span class="n">lon</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))))</span>
-                        <span class="k">elif</span> <span class="s1">&#39;model&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">dims</span><span class="p">:</span>
-                            <span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">wrap_data</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">],</span>
-                                                                                                <span class="n">lon</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)),</span>
-                                                                                                <span class="n">model</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]),</span> 
-                                                                  <span class="p">)</span>
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wrap_data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-                        <span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">wrap_data</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">],</span>
-                                                                                            <span class="n">lat</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">],</span>
-                                                                                            <span class="n">lon</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)),</span>
-                                                                                            <span class="n">model</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]))</span>
+<span class="c1">#                     if len(wrap_data.shape) == 3:</span>
+<span class="c1">#                         if &#39;time&#39; in data.dims:</span>
+<span class="c1">#                             ds[var][model][var_id] = xr.DataArray(data = wrap_data, coords=dict(time=data[&#39;time&#39;],</span>
+<span class="c1">#                                                                                                 lat=data[&#39;lat&#39;],</span>
+<span class="c1">#                                                                                                 lon=np.append(data[&#39;lon&#39;].values, data[&#39;lon&#39;][0].values*(-1))))</span>
+<span class="c1">#                         elif &#39;model&#39; in data.dims:</span>
+<span class="c1">#                             ds[var][model][var_id] = xr.DataArray(data = wrap_data, coords=dict(lat=data[&#39;lat&#39;],</span>
+<span class="c1">#                                                                                                 lon=np.append(data[&#39;lon&#39;].values, data[&#39;lon&#39;][0].values*(-1)),</span>
+<span class="c1">#                                                                                                 model=data[&#39;model&#39;]), </span>
+<span class="c1">#                                                                   )</span>
+<span class="c1">#                     if len(wrap_data.shape) == 4:</span>
+<span class="c1">#                         ds[var][model][var_id] = xr.DataArray(data = wrap_data, coords=dict(time=data[&#39;time&#39;],</span>
+<span class="c1">#                                                                                             lat=data[&#39;lat&#39;],</span>
+<span class="c1">#                                                                                             lon=np.append(data[&#39;lon&#39;].values, data[&#39;lon&#39;][0].values*(-1)),</span>
+<span class="c1">#                                                                                             model=data[&#39;model&#39;]))</span>
                         
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+<span class="c1">#                 else:</span>
+<span class="c1">#                     ds[var][model][var_id] = data</span>
                     
-                <span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">attrs</span>
+<span class="c1">#                 ds[var][model][var_id].attrs = data.attrs</span>
                 
-            <span class="c1"># ds_mci[var][model] = xr.concat([ds[var][model].sel(lat=slice(-90,-66.91)),</span>
-            <span class="c1">#                                 ds[var][model].sel(lat=slice(66.91,90))], dim =&#39;lat&#39;)</span>
-            <span class="c1"># ds_mci[var][model] = ds[var][model].where(np.logical_and((ds[var][model].lat&lt;=66.91),(ds[var][model].lat&gt;=66.91)), other=np.nan )</span>
+<span class="c1">#             # ds_mci[var][model] = xr.concat([ds[var][model].sel(lat=slice(-90,-66.91)),</span>
+<span class="c1">#             #                                 ds[var][model].sel(lat=slice(66.91,90))], dim =&#39;lat&#39;)</span>
+<span class="c1">#             # ds_mci[var][model] = ds[var][model].where(np.logical_and((ds[var][model].lat&lt;=66.91),(ds[var][model].lat&gt;=66.91)), other=np.nan )</span>
             
-<span class="c1"># Access the datasets using  ds[var][model]</span>
-<span class="c1"># For example:</span>
-<span class="c1"># lcc_2t_days_dataset = ds[&#39;lcc_2t_days&#39;][&#39;era_30&#39;]</span>
+<span class="c1"># # Access the datasets using  ds[var][model]</span>
+<span class="c1"># # For example:</span>
+<span class="c1"># # lcc_2t_days_dataset = ds[&#39;lcc_2t_days&#39;][&#39;era_30&#39;]</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">list_models</span><span class="p">:</span>
-<span class="c1"># for model in list_models[1:2]:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for model in list_models:</span>
+<span class="c1"># # for model in list_models[1:2]:</span>
 
     
-    <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;cloudsat_250&#39;</span> <span class="ow">or</span> <span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;cloudsat_500&#39;</span><span class="p">:</span>
-            <span class="n">file_pattern</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dat_in</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">*.nc&#39;</span>
-        <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;era_30&#39;</span> <span class="ow">or</span> <span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;era_250&#39;</span> <span class="ow">or</span> <span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;era_500&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;orig&#39;</span> <span class="ow">or</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;2t&#39;</span><span class="p">:</span>
-                <span class="n">file_pattern</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dat_in</span><span class="si">}</span><span class="s1">_hourly/</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">*.nc&#39;</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">file_pattern</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dat_in</span><span class="si">}</span><span class="s1">_hourly/</span><span class="si">{</span><span class="n">lwp_threshold</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">lwp_threshold</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">*.nc&#39;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;orig&#39;</span> <span class="ow">or</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;2t&#39;</span><span class="p">:</span>
-                <span class="n">file_pattern</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dat_in</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">*.nc&#39;</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">file_pattern</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dat_in</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">lwp_threshold</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">lwp_threshold</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">*.nc&#39;</span>
+<span class="c1">#     for var in variables:</span>
+<span class="c1">#         if model == &#39;cloudsat_250&#39; or model == &#39;cloudsat_500&#39;:</span>
+<span class="c1">#             file_pattern = f&#39;{dat_in}/{var}/{model}_{var}*.nc&#39;</span>
+<span class="c1">#         elif model == &#39;era_30&#39; or model == &#39;era_250&#39; or model == &#39;era_500&#39;:</span>
+<span class="c1">#             if var == &#39;orig&#39; or var == &#39;2t&#39;:</span>
+<span class="c1">#                 file_pattern = f&#39;{dat_in}_hourly/{var}/{model}_{var}*.nc&#39;</span>
+<span class="c1">#             else:</span>
+<span class="c1">#                 file_pattern = f&#39;{dat_in}_hourly/{lwp_threshold}_{var}/{model}_{lwp_threshold}_{var}*.nc&#39;</span>
+<span class="c1">#         else:</span>
+<span class="c1">#             if var == &#39;orig&#39; or var == &#39;2t&#39;:</span>
+<span class="c1">#                 file_pattern = f&#39;{dat_in}/{var}/{model}_{var}*.nc&#39;</span>
+<span class="c1">#             else:</span>
+<span class="c1">#                 file_pattern = f&#39;{dat_in}/{lwp_threshold}_{var}/{model}_{lwp_threshold}_{var}*.nc&#39;</span>
                 
                 
-        <span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="n">file_pattern</span><span class="p">))</span>
-        <span class="c1"># print(files)</span>
-        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-            <span class="n">_ds_hourly</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-            <span class="c1"># [var][model]</span>
-            <span class="n">ds_hourly</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
-            <span class="c1"># ds_hourly_mci[var][model] = xr.Dataset()</span>
-            <span class="c1"># make the data cyclic going from -180 to 180</span>
-            <span class="k">for</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="n">_ds_hourly</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="n">data</span> <span class="o">=</span> <span class="n">_ds_hourly</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span>
+<span class="c1">#         files = sorted(glob(file_pattern))</span>
+<span class="c1">#         # print(files)</span>
+<span class="c1">#         for file in files:</span>
+<span class="c1">#             _ds_hourly = xr.open_mfdataset(file)</span>
+<span class="c1">#             # [var][model]</span>
+<span class="c1">#             ds_hourly[var][model] = xr.Dataset()</span>
+<span class="c1">#             # ds_hourly_mci[var][model] = xr.Dataset()</span>
+<span class="c1">#             # make the data cyclic going from -180 to 180</span>
+<span class="c1">#             for var_id in _ds_hourly.keys():</span>
+<span class="c1">#                 data = _ds_hourly[var_id]</span>
                 
-                <span class="k">if</span> <span class="s1">&#39;lon&#39;</span> <span class="ow">in</span> <span class="n">_ds_hourly</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span> <span class="ow">and</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)):</span>
-                    <span class="n">lon</span> <span class="o">=</span> <span class="n">_ds_hourly</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span>
-                    <span class="n">lon_idx</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">dims</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;lon&#39;</span><span class="p">)</span>
-                    <span class="n">wrap_data</span><span class="p">,</span> <span class="n">wrap_lon</span> <span class="o">=</span> <span class="n">add_cyclic_point</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">coord</span><span class="o">=</span><span class="n">lon</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">lon_idx</span><span class="p">)</span>
+<span class="c1">#                 if &#39;lon&#39; in _ds_hourly[var_id].dims and (data[&#39;lon&#39;][0] != data[&#39;lon&#39;][-1]*(-1)):</span>
+<span class="c1">#                     lon = _ds_hourly.coords[&#39;lon&#39;]</span>
+<span class="c1">#                     lon_idx = data.dims.index(&#39;lon&#39;)</span>
+<span class="c1">#                     wrap_data, wrap_lon = add_cyclic_point(data, coord=lon, axis=lon_idx)</span>
                     
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wrap_data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-                        <span class="n">ds_hourly</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">wrap_data</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">],</span>
-                                                                                            <span class="n">lon</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))))</span>
+<span class="c1">#                     if len(wrap_data.shape) == 2:</span>
+<span class="c1">#                         ds_hourly[var][model][var_id] = xr.DataArray(data = wrap_data, coords=dict(lat=data[&#39;lat&#39;],</span>
+<span class="c1">#                                                                                             lon=np.append(data[&#39;lon&#39;].values, data[&#39;lon&#39;][0].values*(-1))))</span>
                     
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wrap_data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="s1">&#39;time&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">dims</span><span class="p">:</span>
-                            <span class="n">ds_hourly</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">wrap_data</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">],</span>
-                                                                                                <span class="n">lat</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">],</span>
-                                                                                                <span class="n">lon</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))))</span>
-                        <span class="k">elif</span> <span class="s1">&#39;model&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">dims</span><span class="p">:</span>
-                            <span class="n">ds_hourly</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">wrap_data</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">],</span>
-                                                                                                <span class="n">lon</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)),</span>
-                                                                                                <span class="n">model</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]),</span> 
-                                                                  <span class="p">)</span>
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wrap_data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-                        <span class="n">ds_hourly</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">wrap_data</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">],</span>
-                                                                                            <span class="n">lat</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">],</span>
-                                                                                            <span class="n">lon</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)),</span>
-                                                                                            <span class="n">model</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]))</span>
+<span class="c1">#                     if len(wrap_data.shape) == 3:</span>
+<span class="c1">#                         if &#39;time&#39; in data.dims:</span>
+<span class="c1">#                             ds_hourly[var][model][var_id] = xr.DataArray(data = wrap_data, coords=dict(time=data[&#39;time&#39;],</span>
+<span class="c1">#                                                                                                 lat=data[&#39;lat&#39;],</span>
+<span class="c1">#                                                                                                 lon=np.append(data[&#39;lon&#39;].values, data[&#39;lon&#39;][0].values*(-1))))</span>
+<span class="c1">#                         elif &#39;model&#39; in data.dims:</span>
+<span class="c1">#                             ds_hourly[var][model][var_id] = xr.DataArray(data = wrap_data, coords=dict(lat=data[&#39;lat&#39;],</span>
+<span class="c1">#                                                                                                 lon=np.append(data[&#39;lon&#39;].values, data[&#39;lon&#39;][0].values*(-1)),</span>
+<span class="c1">#                                                                                                 model=data[&#39;model&#39;]), </span>
+<span class="c1">#                                                                   )</span>
+<span class="c1">#                     if len(wrap_data.shape) == 4:</span>
+<span class="c1">#                         ds_hourly[var][model][var_id] = xr.DataArray(data = wrap_data, coords=dict(time=data[&#39;time&#39;],</span>
+<span class="c1">#                                                                                             lat=data[&#39;lat&#39;],</span>
+<span class="c1">#                                                                                             lon=np.append(data[&#39;lon&#39;].values, data[&#39;lon&#39;][0].values*(-1)),</span>
+<span class="c1">#                                                                                             model=data[&#39;model&#39;]))</span>
                         
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">ds_hourly</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+<span class="c1">#                 else:</span>
+<span class="c1">#                     ds_hourly[var][model][var_id] = data</span>
                     
-                <span class="n">ds_hourly</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">attrs</span>
+<span class="c1">#                 ds_hourly[var][model][var_id].attrs = data.attrs</span>
                 
-            <span class="c1"># ds_hourly_mci[var][model] = xr.concat([ds_hourly[var][model].sel(lat=slice(-90,-66.91)),</span>
-            <span class="c1">#                                 ds_hourly[var][model].sel(lat=slice(66.91,90))], dim =&#39;lat&#39;)</span>
-            <span class="c1"># ds_hourly_mci[var][model] = ds_hourly[var][model].where(np.logical_and((ds_hourly[var][model].lat&lt;=66.91),(ds_hourly[var][model].lat&gt;=66.91)), other=np.nan )</span>
+<span class="c1">#             # ds_hourly_mci[var][model] = xr.concat([ds_hourly[var][model].sel(lat=slice(-90,-66.91)),</span>
+<span class="c1">#             #                                 ds_hourly[var][model].sel(lat=slice(66.91,90))], dim =&#39;lat&#39;)</span>
+<span class="c1">#             # ds_hourly_mci[var][model] = ds_hourly[var][model].where(np.logical_and((ds_hourly[var][model].lat&lt;=66.91),(ds_hourly[var][model].lat&gt;=66.91)), other=np.nan )</span>
             
-<span class="c1"># Access the datasets using  ds_hourly[var][model]</span>
-<span class="c1"># For example:</span>
-<span class="c1"># lcc_2t_days_dataset = ds_hourly[&#39;lcc_2t_days&#39;][&#39;era_30&#39;]</span>
+<span class="c1"># # Access the datasets using  ds_hourly[var][model]</span>
+<span class="c1"># # For example:</span>
+<span class="c1"># # lcc_2t_days_dataset = ds_hourly[&#39;lcc_2t_days&#39;][&#39;era_30&#39;]</span>
 </pre></div>
 </div>
 </div>
@@ -775,205 +747,17 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>orig dict_keys([&#39;cloudsat_500&#39;, &#39;era_500&#39;, &#39;cmip_500&#39;])
-2t dict_keys([&#39;cloudsat_500&#39;, &#39;era_500&#39;, &#39;cmip_500&#39;])
-lcc dict_keys([&#39;era_500&#39;, &#39;cmip_500&#39;])
-lcc_2t dict_keys([&#39;cloudsat_500&#39;, &#39;era_500&#39;, &#39;cmip_500&#39;])
-lcc_sf dict_keys([&#39;cloudsat_500&#39;, &#39;era_500&#39;, &#39;cmip_500&#39;])
-lcc_2t_days dict_keys([&#39;cloudsat_500&#39;, &#39;era_500&#39;, &#39;cmip_500&#39;])
-lcc_2t_sf dict_keys([&#39;cloudsat_500&#39;, &#39;era_500&#39;, &#39;cmip_500&#39;])
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ratios</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">get_ratios_dict</span><span class="p">(</span><span class="n">list_models</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span><span class="n">seasons</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">)</span>
-<span class="n">ratios_hourly</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">get_ratios_dict</span><span class="p">(</span><span class="n">list_models</span><span class="p">,</span> <span class="n">ds_hourly</span><span class="p">,</span><span class="n">seasons</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">)</span>
-
-<span class="c1"># ratios_mci = fct.get_ratios_dict(list_models, ds_mci,seasons=None)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">variables</span> <span class="ow">in</span> <span class="n">ratios</span><span class="p">[</span><span class="s1">&#39;cloudsat_500&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">dict_label</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
-            <span class="n">ratios</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">get_only_valid_values</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="s1">&#39;500&#39;</span><span class="p">,</span> <span class="n">variables</span><span class="p">)</span>
-            <span class="n">ratios_hourly</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">get_only_valid_values</span><span class="p">(</span><span class="n">ratios_hourly</span><span class="p">,</span> <span class="s1">&#39;500&#39;</span><span class="p">,</span> <span class="n">variables</span><span class="p">)</span>
-    
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># # Calculate weighted averages</span>
-
-<span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">ratios</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="n">weights</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;orig&#39;</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="s1">&#39;areacella&#39;</span><span class="p">]</span>
-    <span class="k">for</span> <span class="nb">vars</span> <span class="ow">in</span> <span class="n">ratios</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="n">ratios</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="o">+</span><span class="s1">&#39;_mean&#39;</span><span class="p">],</span> <span class="n">ratios</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="o">+</span><span class="s1">&#39;_std&#39;</span><span class="p">],</span> <span class="n">ratios</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="o">+</span><span class="s1">&#39;_stats&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">weighted_average</span><span class="p">(</span><span class="n">ratios</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="p">],</span> <span class="n">weights</span><span class="p">)</span>
-        <span class="c1"># ratios_mci[model][vars+&#39;_mean&#39;], ratios_mci[model][vars+&#39;_std&#39;], ratios_mci[model][vars+&#39;_stats&#39;] = fct.weighted_average(ratios_mci[model][vars], weights)</span>
-        
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">ratios_hourly</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="n">weights_hourly</span> <span class="o">=</span> <span class="n">ds_hourly</span><span class="p">[</span><span class="s1">&#39;orig&#39;</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="s1">&#39;areacella&#39;</span><span class="p">]</span>
-    <span class="k">for</span> <span class="nb">vars</span> <span class="ow">in</span> <span class="n">ratios_hourly</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="n">ratios_hourly</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="o">+</span><span class="s1">&#39;_mean&#39;</span><span class="p">],</span> <span class="n">ratios_hourly</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="o">+</span><span class="s1">&#39;_std&#39;</span><span class="p">],</span> <span class="n">ratios_hourly</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="o">+</span><span class="s1">&#39;_stats&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">weighted_average</span><span class="p">(</span><span class="n">ratios_hourly</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="p">],</span> <span class="n">weights_hourly</span><span class="p">)</span>
-     
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ratios_hourly</span><span class="p">[</span><span class="s1">&#39;500&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">ratios_hourly</span><span class="p">[</span><span class="s1">&#39;cloudsat_500&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">coords</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;model&#39;</span><span class="p">:</span><span class="s1">&#39;CloudSat&#39;</span><span class="p">}),</span>
-                                  <span class="n">ratios_hourly</span><span class="p">[</span><span class="s1">&#39;era_500&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">coords</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;model&#39;</span><span class="p">:</span><span class="s1">&#39;ERA5&#39;</span><span class="p">}),</span>
-                                  <span class="n">ratios_hourly</span><span class="p">[</span><span class="s1">&#39;cmip_500&#39;</span><span class="p">]],</span> <span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">file_dir_hourly</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUTPUT_DATA_DIR</span><span class="p">,</span> <span class="s1">&#39;CS_ERA5_CMIP6_hourly/ratios_500/&#39;</span><span class="p">)</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">file_dir_hourly</span><span class="p">)</span>
-<span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
-    <span class="k">pass</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">dict_label</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="n">file_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_LWP</span><span class="si">{</span><span class="n">lwp_threshold</span><span class="si">}</span><span class="s1">_2007_2010.nc&#39;</span>
-    <span class="p">(</span><span class="n">ratios_hourly</span><span class="p">[</span><span class="s1">&#39;500&#39;</span><span class="p">][[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_season&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_season_cs_mean&#39;</span><span class="p">,</span>
-                           <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_month_mean&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_year_mean&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_month_cs_mean&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_year_cs_mean&#39;</span><span class="p">,</span>
-                           <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_month_years_mean&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_year_years_mean&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_season_mean&#39;</span><span class="p">,</span>
-                           <span class="p">]])</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">file_dir_hourly</span><span class="p">,</span> <span class="n">file_name</span><span class="p">),</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;NETCDF4&quot;</span><span class="p">)</span>
-    
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds_dict</span> <span class="o">=</span> <span class="n">ratios</span>
-<span class="n">ds_dict_hourly</span> <span class="o">=</span> <span class="n">ratios_hourly</span>
-<span class="n">fig_dir</span> <span class="o">=</span> <span class="n">FIG_DIR</span>
-<span class="n">var_name</span> <span class="o">=</span> <span class="s1">&#39;FLCC&#39;</span>
-<span class="c1"># var_name = &#39;FsLCC&#39;</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;FLCC&#39;</span><span class="p">,</span> <span class="s1">&#39;FsLCC&#39;</span><span class="p">]:</span>
-    <span class="n">colors</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">hawaii</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mi">256</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
-    <span class="n">f</span><span class="p">,</span> <span class="n">axsm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;LWP threshold: </span><span class="si">{</span><span class="n">lwp_threshold</span><span class="si">}</span><span class="s1"> g m$^</span><span class="si">{</span><span class="o">-</span><span class="mi">2</span><span class="si">}</span><span class="s1">$&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.005</span><span class="p">)</span>
-    <span class="c1"># ax = axsm.flat</span>
-    <span class="n">bp</span><span class="o">=</span> <span class="p">[[],]</span>
-    <span class="n">cmip_key</span> <span class="o">=</span> <span class="s1">&#39;cmip_500&#39;</span>
-
-    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">hemisphere</span> <span class="o">=</span> <span class="s1">&#39;NH&#39;</span>
-
-    <span class="n">axsm</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">cs_data</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">ds_dict</span><span class="p">[</span><span class="s1">&#39;cloudsat_500&#39;</span><span class="p">][</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_month_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">hemisphere</span><span class="o">=</span><span class="n">hemisphere</span><span class="p">),</span>
-                        <span class="n">ds_dict</span><span class="p">[</span><span class="s1">&#39;cloudsat_500&#39;</span><span class="p">][</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_year_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">hemisphere</span><span class="o">=</span><span class="n">hemisphere</span><span class="p">)</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">coords</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;month&#39;</span><span class="p">:</span><span class="mi">13</span><span class="p">})],</span> <span class="n">dim</span><span class="o">=</span><span class="s1">&#39;month&#39;</span><span class="p">)</span>
-    <span class="n">axsm</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">14</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">cs_data</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
-
-    <span class="n">era_data</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">ds_dict</span><span class="p">[</span><span class="s1">&#39;era_500&#39;</span><span class="p">][</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_month_cs_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">hemisphere</span><span class="o">=</span><span class="n">hemisphere</span><span class="p">,),</span>
-                        <span class="n">ds_dict</span><span class="p">[</span><span class="s1">&#39;era_500&#39;</span><span class="p">][</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_year_cs_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">hemisphere</span><span class="o">=</span><span class="n">hemisphere</span><span class="p">,)</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">coords</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;month&#39;</span><span class="p">:</span><span class="mi">13</span><span class="p">})],</span> <span class="n">dim</span><span class="o">=</span><span class="s1">&#39;month&#39;</span><span class="p">)</span>
-    <span class="n">era_data_hourly</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">ds_dict_hourly</span><span class="p">[</span><span class="s1">&#39;era_500&#39;</span><span class="p">][</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_month_cs_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">hemisphere</span><span class="o">=</span><span class="n">hemisphere</span><span class="p">,),</span>
-                                <span class="n">ds_dict_hourly</span><span class="p">[</span><span class="s1">&#39;era_500&#39;</span><span class="p">][</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_year_cs_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">hemisphere</span><span class="o">=</span><span class="n">hemisphere</span><span class="p">,)</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">coords</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;month&#39;</span><span class="p">:</span><span class="mi">13</span><span class="p">})],</span> <span class="n">dim</span><span class="o">=</span><span class="s1">&#39;month&#39;</span><span class="p">)</span>
-    <span class="n">axsm</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">1.25</span><span class="p">,</span><span class="mf">14.25</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">era_data</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">)</span>
-    <span class="n">axsm</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">.25</span><span class="o">+</span><span class="mi">7</span><span class="p">,</span> <span class="mf">.25</span><span class="o">+</span><span class="mi">11</span><span class="p">,</span> <span class="mf">0.25</span><span class="o">+</span><span class="mi">13</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">era_data_hourly</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
-
-
-    <span class="n">cmip_data</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">ds_dict</span><span class="p">[</span><span class="n">cmip_key</span><span class="p">][</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_month_cs_mean&#39;</span><span class="p">],</span>
-                        <span class="n">ds_dict</span><span class="p">[</span><span class="n">cmip_key</span><span class="p">][</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_year_cs_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">coords</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;month&#39;</span><span class="p">:</span><span class="s1">&#39;years&#39;</span><span class="p">})],</span> <span class="n">dim</span><span class="o">=</span><span class="s1">&#39;month&#39;</span><span class="p">)</span>
-
-    <span class="n">quantiles</span> <span class="o">=</span> <span class="n">cmip_data</span><span class="o">.</span><span class="n">quantile</span><span class="p">([</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">),</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">iqr</span> <span class="o">=</span> <span class="n">quantiles</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">quantile</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span> <span class="o">-</span> <span class="n">quantiles</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">quantile</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
-    <span class="n">max_val</span> <span class="o">=</span> <span class="p">(</span><span class="n">quantiles</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">quantile</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">iqr</span><span class="p">)</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">({</span><span class="s1">&#39;quantile&#39;</span><span class="p">:</span> <span class="s1">&#39;min&#39;</span><span class="p">})</span>
-    <span class="n">min_val</span> <span class="o">=</span> <span class="p">(</span><span class="n">quantiles</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">quantile</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">iqr</span><span class="p">)</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">({</span><span class="s1">&#39;quantile&#39;</span><span class="p">:</span> <span class="s1">&#39;max&#39;</span><span class="p">})</span>
-    <span class="c1"># means = ds_dict[cmip_key][var_name + &#39;_month_mean&#39;].mean(dim=&#39;model&#39;, skipna=True).assign_coords({&#39;quantile&#39;: &#39;mean&#39;})</span>
-    <span class="n">means</span> <span class="o">=</span> <span class="n">cmip_data</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">({</span><span class="s1">&#39;quantile&#39;</span><span class="p">:</span><span class="s1">&#39;mean&#39;</span><span class="p">})</span>
-    <span class="n">stats</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">max_val</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">,</span> <span class="n">min_val</span><span class="p">,</span> <span class="n">means</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="s1">&#39;quantile&#39;</span><span class="p">)</span>
-
-    <span class="n">positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span> <span class="o">+</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mi">0</span> <span class="o">+</span> <span class="mf">13.75</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">boxplot_data</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">hemisphere</span><span class="o">=</span><span class="n">hemisphere</span><span class="p">,)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="s1">&#39;quantile&#39;</span><span class="p">,</span> <span class="s1">&#39;month&#39;</span><span class="p">)</span>
-    <span class="n">j</span><span class="o">=</span><span class="mi">0</span>
-    <span class="n">bp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">axsm</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">boxplot_data</span><span class="p">,</span>  <span class="n">positions</span><span class="o">=</span><span class="n">positions</span><span class="p">,</span> <span class="n">widths</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> 
-                                <span class="n">boxprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">),</span>
-                                <span class="n">medianprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">),</span>
-                                <span class="n">whiskerprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">),</span>
-                                <span class="n">capprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">),</span>
-                                <span class="n">flierprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span><span class="n">markeredgecolor</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
-                                <span class="n">showmeans</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">meanprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">,</span><span class="n">markerfacecolor</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
-                                <span class="n">patch_artist</span><span class="o">=</span><span class="kc">True</span><span class="p">,)</span>
-
-    <span class="k">for</span> <span class="n">patch</span> <span class="ow">in</span> <span class="n">bp</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="s1">&#39;boxes&#39;</span><span class="p">]:</span>
-        <span class="n">patch</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-
-    <span class="n">axsm</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Northern Hemisphere&#39;</span> <span class="k">if</span> <span class="n">hemisphere</span> <span class="o">==</span> <span class="s1">&#39;NH&#39;</span> <span class="k">else</span> <span class="s1">&#39;Southern Hemisphere&#39;</span><span class="p">)</span>   
-    <span class="n">axsm</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">fct</span><span class="o">.</span><span class="n">fig_label</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">axsm</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
-    <span class="n">axsm</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">14</span><span class="p">))</span> 
-    <span class="n">axsm</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">13.5</span><span class="p">])</span>
-
-    <span class="n">axsm</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">13</span><span class="p">),</span> <span class="s1">&#39;years&#39;</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-    <span class="n">axsm</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Month&#39;</span><span class="p">)</span>
-
-    <span class="n">axsm</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">][</span><span class="s1">&#39;vmin&#39;</span><span class="p">],</span><span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">][</span><span class="s1">&#39;vmax&#39;</span><span class="p">]])</span>
-    <span class="n">axsm</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-
-    <span class="n">axsm</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">][</span><span class="s1">&#39;cb_label&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-
-
-    <span class="n">s</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">subplotpars</span>
-    <span class="n">bb</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">top</span> <span class="o">-</span> <span class="mf">0.92</span><span class="p">,</span> <span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">right</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">left</span><span class="p">),</span> <span class="mf">0.05</span><span class="p">]</span>
-
-    <span class="n">axsm</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span>
-                <span class="n">fct</span><span class="o">.</span><span class="n">Line2D</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;CloudSat (500km)&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">markerfacecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">),</span>
-                <span class="n">fct</span><span class="o">.</span><span class="n">Line2D</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ERA5 (500 km)&#39;</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">markerfacecolor</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span> <span class="p">),</span>
-                <span class="n">fct</span><span class="o">.</span><span class="n">Line2D</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ERA5-hourly &#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">markerfacecolor</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
-                <span class="n">bp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;boxes&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-            <span class="p">],</span>
-            <span class="p">[</span><span class="s1">&#39;CloudSat (500 km)&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;ERA5 (500 km)&#39;</span><span class="p">,</span> 
-            <span class="s1">&#39;ERA5-hourly (500 km)&#39;</span><span class="p">,</span> 
-            <span class="s1">&#39;CMIP6 (500 km)&#39;</span><span class="p">],</span>
-            <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="n">bb</span><span class="p">,</span><span class="n">loc</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;expand&#39;</span><span class="p">,</span><span class="n">borderaxespad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">fancybox</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">bbox_transform</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">transFigure</span><span class="p">,</span>
-        <span class="p">)</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">w_pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">h_pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>  <span class="p">;</span>
-    <span class="n">figname</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_monthly_model_variation_2007_2010.png&#39;</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fig_dir</span> <span class="o">+</span> <span class="n">figname</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
+    <span class="n">fct</span><span class="o">.</span><span class="n">plt_monthly_interannual_variation_hourly_data</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="n">ratios_hourly</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">lwp_threshold</span><span class="p">,</span> <span class="n">FIG_DIR</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">])</span>
+    <span class="n">fct</span><span class="o">.</span><span class="n">plt_monthly_model_variation_hourly</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="n">ratios_hourly</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">],</span> <span class="n">FIG_DIR</span><span class="p">,</span> <span class="n">lwp_threshold</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/9bb551b8cec826e2527c86095f1f5a4572aa7ba834140c5fe8bf2fff4db07b76.png" src="../_images/9bb551b8cec826e2527c86095f1f5a4572aa7ba834140c5fe8bf2fff4db07b76.png" />
-<img alt="../_images/9c014c14ec0b1e55e6a7169dc78fd49368c09bab8e9cf50b00a892e24923e5cc.png" src="../_images/9c014c14ec0b1e55e6a7169dc78fd49368c09bab8e9cf50b00a892e24923e5cc.png" />
+<img alt="../_images/87580b730961e4eb42c0a2addc3045b1352c9f5e9ca483acb868d3a2cd42a565.png" src="../_images/87580b730961e4eb42c0a2addc3045b1352c9f5e9ca483acb868d3a2cd42a565.png" />
+<img alt="../_images/f7e5a6ffe2d94a59d908a3f334e4cdb63a8284f83976b050d92c0da4e9771e9f.png" src="../_images/f7e5a6ffe2d94a59d908a3f334e4cdb63a8284f83976b050d92c0da4e9771e9f.png" />
+<img alt="../_images/2f418d7d4ea442789934215057b99c0c982dc5e281f8be891ac03982cab85200.png" src="../_images/2f418d7d4ea442789934215057b99c0c982dc5e281f8be891ac03982cab85200.png" />
+<img alt="../_images/ffd0e4aa71ea579f31440ef5c42095093c97f0d0e657c3aaeb1cc97aea364ade.png" src="../_images/ffd0e4aa71ea579f31440ef5c42095093c97f0d0e657c3aaeb1cc97aea364ade.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -986,26 +770,16 @@ lcc_2t_sf dict_keys([&#39;cloudsat_500&#39;, &#39;era_500&#39;, &#39;cmip_500&#3
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;FLCC&#39;</span><span class="p">,</span> <span class="s1">&#39;FsLCC&#39;</span><span class="p">]:</span>
-    <span class="n">val1</span><span class="o">=</span> <span class="n">ratios</span><span class="p">[</span><span class="s1">&#39;cloudsat_500&#39;</span><span class="p">][</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_month&#39;</span><span class="p">]</span>
-    <span class="n">val1_mean</span><span class="o">=</span> <span class="n">ratios</span><span class="p">[</span><span class="s1">&#39;cloudsat_500&#39;</span><span class="p">][</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_month_mean&#39;</span><span class="p">]</span>
+    <span class="n">val1</span><span class="o">=</span> <span class="n">ratios</span><span class="p">[</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_month&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;CloudSat&#39;</span><span class="p">)</span>
+    <span class="n">val1_mean</span><span class="o">=</span> <span class="n">ratios</span><span class="p">[</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_month_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;CloudSat&#39;</span><span class="p">)</span>
 
-<span class="c1">#     val2= ratios[&#39;era_500&#39;][var_name + &#39;_month_cs&#39;]</span>
-    <span class="n">val2</span><span class="o">=</span> <span class="n">ratios</span><span class="p">[</span><span class="s1">&#39;era_500&#39;</span><span class="p">][</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_month&#39;</span><span class="p">]</span>
-    <span class="n">val2_mean</span><span class="o">=</span> <span class="n">ratios</span><span class="p">[</span><span class="s1">&#39;era_500&#39;</span><span class="p">][</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span> <span class="s1">&#39;_month_cs_mean&#39;</span><span class="p">]</span>
+    <span class="n">val2</span><span class="o">=</span> <span class="n">ratios</span><span class="p">[</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_month&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;ERA5&#39;</span><span class="p">)</span>
+    <span class="n">val2_mean</span><span class="o">=</span> <span class="n">ratios</span><span class="p">[</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span> <span class="s1">&#39;_month_cs_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;ERA5&#39;</span><span class="p">)</span>
 
-    <span class="n">val3</span><span class="o">=</span> <span class="n">ratios_hourly</span><span class="p">[</span><span class="s1">&#39;era_500&#39;</span><span class="p">][</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_month&#39;</span><span class="p">]</span>
-    <span class="n">val3_mean</span> <span class="o">=</span> <span class="n">ratios_hourly</span><span class="p">[</span><span class="s1">&#39;era_500&#39;</span><span class="p">][</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span><span class="s1">&#39;_month_cs_mean&#39;</span><span class="p">]</span>
-
-    <span class="n">val1</span><span class="o">=</span> <span class="n">val1</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">val1</span><span class="o">&gt;=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
-    <span class="n">val2</span><span class="o">=</span> <span class="n">val2</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">val2</span><span class="o">&gt;=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
-
-
-
-
-    <span class="k">if</span> <span class="s1">&#39;model&#39;</span> <span class="ow">in</span> <span class="n">val3</span><span class="o">.</span><span class="n">coords</span><span class="p">:</span>
-        <span class="n">val3</span> <span class="o">=</span> <span class="n">val3</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">val3_mean</span> <span class="o">=</span> <span class="n">val3_mean</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>    
-    <span class="n">val3</span><span class="o">=</span> <span class="n">val3</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">val3</span><span class="o">&gt;=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="n">val3</span><span class="o">=</span> <span class="n">ratios_hourly</span><span class="p">[</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_month&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;ERA5&#39;</span><span class="p">)</span>
+    <span class="n">val3_mean</span> <span class="o">=</span> <span class="n">ratios_hourly</span><span class="p">[</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span><span class="s1">&#39;_month_cs_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;ERA5&#39;</span><span class="p">)</span>
+    
+    <span class="n">hemisphere</span> <span class="o">=</span> <span class="s1">&#39;NH&#39;</span>
 
 
     <span class="n">projection</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">create_projection</span><span class="p">(</span><span class="n">hemisphere</span><span class="p">)</span>
@@ -1016,7 +790,7 @@ lcc_2t_sf dict_keys([&#39;cloudsat_500&#39;, &#39;era_500&#39;, &#39;cmip_500&#3
                                 <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">f</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;LWP threshold: </span><span class="si">{</span><span class="n">lwp_threshold</span><span class="si">}</span><span class="s1"> g m$^</span><span class="si">{</span><span class="o">-</span><span class="mi">2</span><span class="si">}</span><span class="s1">$&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.005</span><span class="p">)</span>
 
-    <span class="n">model_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CloudSat (500km)&#39;</span><span class="p">,</span> <span class="s1">&#39;ERA5 (500km)&#39;</span><span class="p">,</span> <span class="s1">&#39;ERA5-hourly (500km)&#39;</span><span class="p">]</span>
+    <span class="n">model_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CloudSat&#39;</span><span class="p">,</span> <span class="s1">&#39;ERA5&#39;</span><span class="p">,</span> <span class="s1">&#39;ERA5-hourly&#39;</span><span class="p">]</span>
 
     <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axsm</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">model_labels</span><span class="p">):</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="mf">0.07</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> 
@@ -1077,24 +851,24 @@ lcc_2t_sf dict_keys([&#39;cloudsat_500&#39;, &#39;era_500&#39;, &#39;cmip_500&#3
                     
     <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">w_pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">h_pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">,)</span>
     <span class="n">figname</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_CS_ERA5_month_</span><span class="si">{</span><span class="n">hemisphere</span><span class="si">}</span><span class="s1">_2007_2010.png&#39;</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fig_dir</span> <span class="o">+</span> <span class="n">figname</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">+</span> <span class="n">figname</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b5268e098c055fb14e4581e5fa1ad936388f02e713c22fdaf7bb8b4990e690e5.png" src="../_images/b5268e098c055fb14e4581e5fa1ad936388f02e713c22fdaf7bb8b4990e690e5.png" />
-<img alt="../_images/8d17715ca36c0b03972dcffa764b6458181d2ea25fefc682887164b872eed4c9.png" src="../_images/8d17715ca36c0b03972dcffa764b6458181d2ea25fefc682887164b872eed4c9.png" />
+<img alt="../_images/7c36e8f2cabfd4b36eedf74b8819b6ea6efcc620f569d4f7d58679147b2d6e4d.png" src="../_images/7c36e8f2cabfd4b36eedf74b8819b6ea6efcc620f569d4f7d58679147b2d6e4d.png" />
+<img alt="../_images/070333f9cf83e0e3719152579a9f628820bf4037515ea1f0a4f87e1e69522da2.png" src="../_images/070333f9cf83e0e3719152579a9f628820bf4037515ea1f0a4f87e1e69522da2.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;FLCC&#39;</span><span class="p">,</span> <span class="s1">&#39;FsLCC&#39;</span><span class="p">]:</span>
 
-    <span class="n">val2</span><span class="o">=</span> <span class="n">ratios</span><span class="p">[</span><span class="s1">&#39;era_500&#39;</span><span class="p">][</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_month&#39;</span><span class="p">]</span>
-    <span class="n">val2_mean</span><span class="o">=</span> <span class="n">ratios</span><span class="p">[</span><span class="s1">&#39;era_500&#39;</span><span class="p">][</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span> <span class="s1">&#39;_month_cs_mean&#39;</span><span class="p">]</span>
+    <span class="n">val2</span><span class="o">=</span> <span class="n">ratios</span><span class="p">[</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_month&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;ERA5&#39;</span><span class="p">)</span>
+    <span class="n">val2_mean</span><span class="o">=</span> <span class="n">ratios</span><span class="p">[</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span> <span class="s1">&#39;_month_cs_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;ERA5&#39;</span><span class="p">)</span>
 
-    <span class="n">val3</span><span class="o">=</span> <span class="n">ratios_hourly</span><span class="p">[</span><span class="s1">&#39;era_500&#39;</span><span class="p">][</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_month&#39;</span><span class="p">]</span>
-    <span class="n">val3_mean</span> <span class="o">=</span> <span class="n">ratios_hourly</span><span class="p">[</span><span class="s1">&#39;era_500&#39;</span><span class="p">][</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span><span class="s1">&#39;_month_cs_mean&#39;</span><span class="p">]</span>
+    <span class="n">val3</span><span class="o">=</span> <span class="n">ratios_hourly</span><span class="p">[</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_month&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;ERA5&#39;</span><span class="p">)</span>
+    <span class="n">val3_mean</span> <span class="o">=</span> <span class="n">ratios_hourly</span><span class="p">[</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span><span class="s1">&#39;_month_cs_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;ERA5&#39;</span><span class="p">)</span>
 
     <span class="n">diff</span> <span class="o">=</span> <span class="n">val2</span><span class="o">-</span><span class="n">val3</span>
     <span class="n">diff_mean</span> <span class="o">=</span> <span class="n">val2_mean</span><span class="o">-</span><span class="n">val3_mean</span>
@@ -1174,7 +948,7 @@ lcc_2t_sf dict_keys([&#39;cloudsat_500&#39;, &#39;era_500&#39;, &#39;cmip_500&#3
                         
     <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">w_pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">h_pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">,)</span>
     <span class="n">figname</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_ERA5_diff_</span><span class="si">{</span><span class="n">hemisphere</span><span class="si">}</span><span class="s1">_2007_2010.png&#39;</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fig_dir</span> <span class="o">+</span> <span class="n">figname</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">+</span> <span class="n">figname</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1333,52 +1107,46 @@ lcc_2t_sf dict_keys([&#39;cloudsat_500&#39;, &#39;era_500&#39;, &#39;cmip_500&#3
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_idx7_min</span> <span class="o">=</span> <span class="n">diff</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">),</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">lat7_min</span> <span class="o">=</span> <span class="n">diff</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="mi">7</span><span class="p">)[</span><span class="n">_idx7_min</span><span class="p">]</span><span class="o">.</span><span class="n">lat</span><span class="o">.</span><span class="n">values</span>
-<span class="n">lon7_min</span> <span class="o">=</span> <span class="n">diff</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="mi">7</span><span class="p">)[</span><span class="n">_idx7_min</span><span class="p">]</span><span class="o">.</span><span class="n">lon</span><span class="o">.</span><span class="n">values</span>
-<span class="c1"># diff.sel(month=7)[_idx7_min].month.values</span>
-<span class="n">_idx7_max</span> <span class="o">=</span> <span class="n">diff</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">),</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">lat7_max</span> <span class="o">=</span> <span class="n">diff</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="mi">7</span><span class="p">)[</span><span class="n">_idx7_max</span><span class="p">]</span><span class="o">.</span><span class="n">lat</span><span class="o">.</span><span class="n">values</span>
-<span class="n">lon7_max</span> <span class="o">=</span> <span class="n">diff</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="mi">7</span><span class="p">)[</span><span class="n">_idx7_max</span><span class="p">]</span><span class="o">.</span><span class="n">lon</span><span class="o">.</span><span class="n">values</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># _idx7_min = diff.sel(month=7).argmin(dim=(&quot;lat&quot;, &#39;lon&#39;), skipna=True)</span>
+<span class="c1"># lat7_min = diff.sel(month=7)[_idx7_min].lat.values</span>
+<span class="c1"># lon7_min = diff.sel(month=7)[_idx7_min].lon.values</span>
+<span class="c1"># # diff.sel(month=7)[_idx7_min].month.values</span>
+<span class="c1"># _idx7_max = diff.sel(month=7).argmax(dim=(&quot;lat&quot;, &#39;lon&#39;), skipna=True)</span>
+<span class="c1"># lat7_max = diff.sel(month=7)[_idx7_max].lat.values</span>
+<span class="c1"># lon7_max = diff.sel(month=7)[_idx7_max].lon.values</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_idx11_min</span> <span class="o">=</span> <span class="n">diff</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">),</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">lat11_min</span> <span class="o">=</span> <span class="n">diff</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="mi">11</span><span class="p">)[</span><span class="n">_idx11_min</span><span class="p">]</span><span class="o">.</span><span class="n">lat</span><span class="o">.</span><span class="n">values</span>
-<span class="n">lon11_min</span> <span class="o">=</span> <span class="n">diff</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="mi">11</span><span class="p">)[</span><span class="n">_idx11_min</span><span class="p">]</span><span class="o">.</span><span class="n">lon</span><span class="o">.</span><span class="n">values</span>
-<span class="n">_idx11_max</span> <span class="o">=</span> <span class="n">diff</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">),</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">lat11_max</span> <span class="o">=</span> <span class="n">diff</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="mi">11</span><span class="p">)[</span><span class="n">_idx11_max</span><span class="p">]</span><span class="o">.</span><span class="n">lat</span><span class="o">.</span><span class="n">values</span>
-<span class="n">lon11_max</span> <span class="o">=</span> <span class="n">diff</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="mi">11</span><span class="p">)[</span><span class="n">_idx11_max</span><span class="p">]</span><span class="o">.</span><span class="n">lon</span><span class="o">.</span><span class="n">values</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># _idx11_min = diff.sel(month=11).argmin(dim=(&quot;lat&quot;, &#39;lon&#39;), skipna=True)</span>
+<span class="c1"># lat11_min = diff.sel(month=11)[_idx11_min].lat.values</span>
+<span class="c1"># lon11_min = diff.sel(month=11)[_idx11_min].lon.values</span>
+<span class="c1"># _idx11_max = diff.sel(month=11).argmax(dim=(&quot;lat&quot;, &#39;lon&#39;), skipna=True)</span>
+<span class="c1"># lat11_max = diff.sel(month=11)[_idx11_max].lat.values</span>
+<span class="c1"># lon11_max = diff.sel(month=11)[_idx11_max].lon.values</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lats_lons</span> <span class="o">=</span> <span class="p">[[</span><span class="n">lat7_min</span><span class="p">,</span> <span class="n">lon7_min</span><span class="p">,</span> <span class="s1">&#39;Min difference in July mean&#39;</span><span class="p">],</span>
- <span class="p">[</span><span class="n">lat7_max</span><span class="p">,</span> <span class="n">lon7_max</span><span class="p">,</span> <span class="s1">&#39;Max difference in July mean&#39;</span><span class="p">],</span>
- <span class="p">[</span><span class="n">lat11_min</span><span class="p">,</span> <span class="n">lon11_min</span><span class="p">,</span> <span class="s1">&#39;Min difference in November mean&#39;</span><span class="p">],</span>
- <span class="p">[</span><span class="n">lat11_max</span><span class="p">,</span> <span class="n">lon11_max</span><span class="p">,</span> <span class="s1">&#39;Max difference in November mean&#39;</span><span class="p">]]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># lats_lons = [[lat7_min, lon7_min, &#39;Min difference in July mean&#39;],</span>
+<span class="c1">#  [lat7_max, lon7_max, &#39;Max difference in July mean&#39;],</span>
+<span class="c1">#  [lat11_min, lon11_min, &#39;Min difference in November mean&#39;],</span>
+<span class="c1">#  [lat11_max, lon11_max, &#39;Max difference in November mean&#39;]]</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">subtitle</span> <span class="ow">in</span> <span class="n">lats_lons</span><span class="p">:</span>
-    <span class="n">time_series_max_min_points</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">subtitle</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="n">ds_hourly</span><span class="p">,</span> <span class="n">lwp_threshold</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for lat, lon, subtitle in lats_lons:</span>
+<span class="c1">#     time_series_max_min_points(lat, lon, subtitle, ds, ds_hourly, lwp_threshold)</span>
     
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/64f98a00e892194fda3bb89857a01e7ca04e7d03eb599cee217d915e0cfc26d6.png" src="../_images/64f98a00e892194fda3bb89857a01e7ca04e7d03eb599cee217d915e0cfc26d6.png" />
-<img alt="../_images/6117551c361fc5eafe2e46418ac79d354dc7d92777185a11088a3efa40c03bb5.png" src="../_images/6117551c361fc5eafe2e46418ac79d354dc7d92777185a11088a3efa40c03bb5.png" />
-<img alt="../_images/32395b1c3d0a53d78186d61bf91513e062d80147d307989b4c7253c0bce8512e.png" src="../_images/32395b1c3d0a53d78186d61bf91513e062d80147d307989b4c7253c0bce8512e.png" />
-<img alt="../_images/4c931545be170242258d46439b0a83f5227d7c4aa9cb85b864dbf3dcd9f83a5c.png" src="../_images/4c931545be170242258d46439b0a83f5227d7c4aa9cb85b864dbf3dcd9f83a5c.png" />
 </div>
 </div>
 </section>
