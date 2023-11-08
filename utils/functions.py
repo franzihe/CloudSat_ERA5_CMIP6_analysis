@@ -1319,22 +1319,22 @@ def get_ratios_dict(list_models, ds,seasons):
                                         stats = 'sum',  
                                         out_var = 'FsLCC', 
                                         seasons=seasons), #out_var = 'lcc_wo_snow', weights = ds['2t'][model]['areacella']),
-                # # get_ratios_season_month(var1 = ds['lcc_sf'][model]['n_sf_lcc_snow'], var2 = ds['orig'][model]['n_lcc'], 
-                # #                         stats = 'sum', 
-                # #                         out_var = 'FoP', 
-                # #                         seasons=seasons),
-                # get_ratios_season_month(var1 = ds['lcc_2t_sf'][model]['n_sf_lcc_snow'], var2 = ds['lcc_2t'][model]['n_lcc'], 
-                #                         stats='sum', 
-                #                         out_var = 'FoS', 
-                #                         seasons=seasons), #out_var='lcc_w_snow', weights=ds['lcc_2t'][model]['areacella']),
+                # get_ratios_season_month(var1 = ds['lcc_sf'][model]['n_sf_lcc_snow'], var2 = ds['orig'][model]['n_lcc'], 
+                #                         stats = 'sum', 
+                #                         out_var = 'FoP', 
+                #                         seasons=seasons),
+                get_ratios_season_month(var1 = ds['lcc_2t_sf'][model]['n_sf_lcc_snow'], var2 = ds['lcc_2t'][model]['n_lcc'], 
+                                        stats='sum', 
+                                        out_var = 'FoS', 
+                                        seasons=seasons), #out_var='lcc_w_snow', weights=ds['lcc_2t'][model]['areacella']),
+                get_ratios_season_month(var1 = ds['lcc_2t_days'][model]['sf_avg_lcc_snow'], var2 = ds['lcc_2t_days'][model]['lwp'], 
+                                        stats = 'mean', 
+                                        out_var = 'sf_eff', 
+                                        seasons=seasons),
                 # get_ratios_season_month(var1 = ds['lcc_2t_days'][model]['sf_avg_lcc_snow'], var2 = ds['lcc_2t_days'][model]['lwp'], 
                 #                         stats = 'mean', 
-                #                         out_var = 'sf_eff', 
+                #                         out_var = 'pr_eff', 
                 #                         seasons=seasons),
-                # # get_ratios_season_month(var1 = ds['lcc_2t_days'][model]['sf_avg_lcc_snow'], var2 = ds['lcc_2t_days'][model]['lwp'], 
-                # #                         stats = 'mean', 
-                # #                         out_var = 'pr_eff', 
-                # #                         seasons=seasons),
                 get_ratios_season_month(var1 = ds['orig'][model]['n_lcc']-ds['lcc_2t'][model]['n_lcc'],
                                         var2 = ds['orig'][model]['n_obs'], 
                                         stats = 'sum', 
@@ -1355,23 +1355,23 @@ def get_ratios_dict(list_models, ds,seasons):
                                         stats='count', 
                                         out_var='FsLCC', 
                                         seasons=seasons),#out_var='lcc_wo_snow', weights=ds['2t'][model]['areacella']), # sLCC frequency compared to all observations when T<0C
-                # # get_ratios_season_month(var1=ds['lcc'][model]['pr'].where(ds['lcc'][model]['pr']>=0.01, other=np.nan), 
-                # #                         var2=ds['orig'][model]['tas'], 
-                # #                         stats='count', 
-                # #                         out_var='FoP', 
-                # #                         seasons=seasons),
-                # get_ratios_season_month(var1=ds['lcc_2t_sf'][model]['prsn'], var2=ds['lcc_2t'][model]['lwp'], 
+                # get_ratios_season_month(var1=ds['lcc'][model]['pr'].where(ds['lcc'][model]['pr']>=0.01, other=np.nan), 
+                #                         var2=ds['orig'][model]['tas'], 
                 #                         stats='count', 
-                #                         out_var='FoS', 
-                #                         seasons=seasons), #out_var='lcc_w_snow', weights=ds['lcc_2t'][model]['areacella']),   # relative frequency of snowfall from liquid containing clouds
-                # get_ratios_season_month(var1=ds['lcc_2t_days'][model]['prsn'], var2=ds['lcc_2t_days'][model]['lwp'], 
+                #                         out_var='FoP', 
+                #                         seasons=seasons),
+                get_ratios_season_month(var1=ds['lcc_2t_sf'][model]['prsn'], var2=ds['lcc_2t'][model]['lwp'], 
+                                        stats='count', 
+                                        out_var='FoS', 
+                                        seasons=seasons), #out_var='lcc_w_snow', weights=ds['lcc_2t'][model]['areacella']),   # relative frequency of snowfall from liquid containing clouds
+                get_ratios_season_month(var1=ds['lcc_2t_days'][model]['prsn'], var2=ds['lcc_2t_days'][model]['lwp'], 
+                                        stats='mean', 
+                                        out_var='sf_eff', 
+                                        seasons=seasons),      # relative snowfall (precipitation) efficency
+                # get_ratios_season_month(var1=ds['lcc_2t_days'][model]['pr'], var2=ds['lcc_2t_days'][model]['lwp'], 
                 #                         stats='mean', 
-                #                         out_var='sf_eff', 
+                #                         out_var='pr_eff', 
                 #                         seasons=seasons),      # relative snowfall (precipitation) efficency
-                # # get_ratios_season_month(var1=ds['lcc_2t_days'][model]['pr'], var2=ds['lcc_2t_days'][model]['lwp'], 
-                # #                         stats='mean', 
-                # #                         out_var='pr_eff', 
-                # #                         seasons=seasons),      # relative snowfall (precipitation) efficency
                 get_ratios_season_month(var1=ds['lcc'][model]['lwp']-ds['lcc_2t'][model]['lwp'],
                                         var2=ds['orig'][model]['tas'],
                                         stats='count',
@@ -1611,7 +1611,81 @@ def plt_monthly_model_variation(ds_dict, var_name, dict_label,fig_dir, lwp_thres
     
     figname = f'{var_name}_monthly_model_variation_2007_2010.png'
     plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=True)  
+
+def plt_monthly_model_variation_hourly(dataset, dataset_hourly, var_name, dict_label, fig_dir, lwp_threshold):
+    colors = cm.hawaii(range(0, 256, int(256 / 3) + 1))
+    f, ax = plt.subplots(nrows=1, ncols=1, sharex=True, sharey=True, figsize=[6, 5])
+    f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
+
+    hemisphere = 'NH'
+
+    ax.grid(True)
+    cs_data = dataset[var_name + '_month_cs_mean'].sel(month=[7,11], hemisphere=hemisphere, model='CloudSat')
+    ax.scatter(x=np.arange(1,3), y=cs_data, color='k', marker='o',s=50)
+
+    era_data = dataset[var_name + '_month_cs_mean'].sel(month=[7,11], hemisphere=hemisphere, model='ERA5')
+    ax.scatter(x=np.arange(1.25,3.25), y=era_data, color=colors[0], marker="h", s=50, alpha = 0.4)
     
+    era_data_hourly = dataset_hourly[var_name + '_month_cs_mean'].sel(month=[7,11], hemisphere=hemisphere, model='ERA5')
+    ax.scatter(x=np.arange(1.25,3.25), y=era_data_hourly, color=colors[0], marker="h", s=50)
+
+
+    cmip_data = dataset[var_name + '_month_cs_mean'].sel( hemisphere=hemisphere, model=['MIROC6', 'CanESM5','AWI-ESM-1-1-LR','MPI-ESM1-2-LR',
+                                                                                       'UKESM1-0-LL','HadGEM3-GC31-LL','CNRM-CM6-1', 'CNRM-ESM2-1',
+                                                                                       'IPSL-CM6A-LR','IPSL-CM5A2-INCA'])
+    quantiles = cmip_data.quantile([0.25, 0.5, 0.75], dim=('model'), skipna=True, keep_attrs=False)
+    iqr = quantiles.sel(quantile=0.75) - quantiles.sel(quantile=0.25)
+    max_val = (quantiles.sel(quantile=0.75) + 1.5 * iqr).assign_coords({'quantile': 'min'})
+    min_val = (quantiles.sel(quantile=0.25) - 1.5 * iqr).assign_coords({'quantile': 'max'})
+    means = cmip_data.mean(dim='model', skipna=True).assign_coords({'quantile':'mean'})
+    stats = xr.concat([max_val, quantiles, min_val, means], dim='quantile')
+    
+    boxplot_data = stats.transpose('quantile', 'month')
+    bp = ax.boxplot(boxplot_data.sel(month=[7,11],),  positions=np.arange(0.75, 2.75), widths=0.4, 
+                                boxprops=dict(color=colors[2], lw=1.5),
+                                medianprops=dict(color=colors[2], lw=1.5),
+                                whiskerprops=dict(color=colors[2], lw=1.5),
+                                capprops=dict(color=colors[2], lw=1.5),
+                                flierprops=dict(marker='+',markeredgecolor=colors[2], markersize=10),
+                                showmeans=True, meanprops=dict(marker='D',markerfacecolor=colors[2], markersize=4),
+                                patch_artist=True,)
+
+    for patch in bp['boxes']:
+        patch.set(facecolor=colors[2], alpha=0.5)
+        
+    ax.set_xticks(np.arange(1,3)) 
+    ax.set_xlim([0, 3])
+
+    ax.set_xticklabels([7, 11], fontsize=12)
+    ax.set_xlabel('Month')
+
+    ax.set_ylim([dict_label['vmin'],dict_label['vmax']])
+    ax.set_yticks(np.arange(0,110,10))
+
+    ax.set_ylabel(dict_label['cb_label'])
+
+
+    s = f.subplotpars
+    bb = [s.left, s.top - 0.92, (s.right - s.left), 0.05]
+
+    ax.legend([
+                Line2D([0], [0], marker='o', color='w', label='CloudSat', markersize=10, markerfacecolor='k'),
+                Line2D([0], [0], marker='h', color='w', label='ERA5',markersize=10, markerfacecolor=colors[0], alpha=0.6 ),
+                Line2D([0], [0], marker='h', color='w', label='ERA5-hourly ', markersize=10, markerfacecolor=colors[0]),
+                bp["boxes"][0],
+            ],
+            ['CloudSat',
+            'ERA5', 
+            'ERA5$_{hourly}$', 
+            'CMIP6'],
+            bbox_to_anchor=bb,loc=8,ncol=2,mode='expand',borderaxespad=0,fancybox=True,bbox_transform=f.transFigure,
+        )
+
+    plt.tight_layout(pad=0., w_pad=0., h_pad=0.)  ;
+    figname = f'{var_name}_monthly_model_variation_2007_2010.png'
+    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=True) 
+
+
 def plt_monthly_interannual_variation(dataset, var_name, lwp_threshold, fig_dir, dict_label):
     # calculate statistics
     stats_cloudsat = calculate_interannual_stats(dataset.sel(model='CloudSat'), var_name)
@@ -1701,7 +1775,85 @@ def plt_monthly_interannual_variation(dataset, var_name, lwp_threshold, fig_dir,
     
     figname = f'{var_name}_monthly_interannual_variation_2007_2010.png'
     plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=True)    
- 
+
+def plt_monthly_interannual_variation_hourly_data(dataset, dataset_hourly, var_name, lwp_threshold, fig_dir, dict_label):
+    stats_cloudsat = calculate_interannual_stats(dataset.sel(model='CloudSat', hemisphere='NH'), var_name)
+    stats_cloudsat = stats_cloudsat.transpose('quantile', 'month')
+    
+    stats_era = calculate_interannual_stats(dataset.sel(model='ERA5', hemisphere='NH'), var_name)
+    stats_era = stats_era.transpose('quantile', 'month')
+    stats_era_hourly = calculate_interannual_stats(dataset_hourly.sel(model='ERA5', hemisphere='NH'), var_name)
+    stats_era_hourly = stats_era_hourly.transpose('quantile', 'month')
+    
+    stats_cmip = calculate_interannual_stats(dataset.sel(model=['MIROC6', 'CanESM5','AWI-ESM-1-1-LR','MPI-ESM1-2-LR',
+                                                                'UKESM1-0-LL','HadGEM3-GC31-LL','CNRM-CM6-1', 'CNRM-ESM2-1',
+                                                                'IPSL-CM6A-LR','IPSL-CM5A2-INCA'], hemisphere='NH'), var_name)
+    stats_cmip = stats_cmip.mean('model', skipna=True)
+    stats_cmip = stats_cmip.transpose('quantile', 'month')
+    
+    cmip_data = dataset[var_name + '_month_cs_mean'].sel(model=['MIROC6', 'CanESM5','AWI-ESM-1-1-LR','MPI-ESM1-2-LR',
+                                                                        'UKESM1-0-LL','HadGEM3-GC31-LL','CNRM-CM6-1', 'CNRM-ESM2-1',
+                                                                        'IPSL-CM6A-LR','IPSL-CM5A2-INCA'], hemisphere='NH')
+    quantiles = cmip_data.quantile([0.25, 0.5, 0.75], dim=('model'), skipna=True, keep_attrs=False)
+    iqr = quantiles.sel(quantile=0.75) - quantiles.sel(quantile=0.25)
+    max_val = (quantiles.sel(quantile=0.75) + 1.5 * iqr).assign_coords({'quantile': 'max'})
+    min_val = (quantiles.sel(quantile=0.25) - 1.5 * iqr).assign_coords({'quantile': 'min'})
+        
+    colors = cm.hawaii(range(0, 256, int(256 / 3) + 1))
+    f, ax = plt.subplots(nrows=1, ncols=1, sharex=True, sharey=True, figsize=[6, 5])
+    f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
+    ax.grid(True)
+    bp = [[], [], [], []]
+    bp[3] = ax.boxplot(stats_era_hourly.sel(month=[7,11]), positions=np.arange(0.75, 2.75), widths=0.3, 
+                                                boxprops=dict(color=colors[1], lw=1.5),
+                                                medianprops=dict(color=colors[1], lw=1.5),
+                                                whiskerprops=dict(color=colors[1], lw=1.5),
+                                                capprops=dict(color=colors[1], lw=1.5),
+                                                flierprops=dict(marker='+',markeredgecolor=colors[1], markersize=10),
+                                                showmeans=True, meanprops=dict(marker='D',markerfacecolor=colors[1], alpha=0.5, markeredgecolor=colors[1],markersize=4),
+                                                patch_artist=True,);
+    for patch in bp[3]['boxes']:
+            patch.set(facecolor=colors[1], alpha=0.8)
+    for (j, data), x_loc, color in zip(enumerate([stats_cloudsat, stats_cmip, stats_era]), [np.arange(1,3), np.arange(1.25, 3.25), np.arange(0.75, 2.75)], ['k', colors[2], colors[0]]):
+        boxplot_data = data.sel(month=[7,11])
+        bp[j] = ax.boxplot(boxplot_data, positions=x_loc, widths=0.3, 
+                                                boxprops=dict(color=color, lw=1.5, alpha=0.35),
+                                                medianprops=dict(color=color, lw=1.5, alpha=0.35),
+                                                whiskerprops=dict(color=color, lw=1.5, alpha=0.35),
+                                                capprops=dict(color=color, lw=1.5, alpha=0.35),
+                                                flierprops=dict(marker='+',markeredgecolor=color, markersize=10, alpha=0.35),
+                                                showmeans=True, meanprops=dict(marker='D',markerfacecolor=color, alpha=0.35, markeredgecolor=color,markersize=4),
+                                                patch_artist=True,);
+        for patch in bp[j]['boxes']:
+            patch.set(facecolor=color, alpha=0.35)
+        
+    # ax.set_title('Northern Hemisphere')   
+    # ax.text(0.05, 0.95, f'{fig_label}', fontweight='bold', horizontalalignment='left', verticalalignment='top', transform=ax.transAxes)
+    ax.set_xticks(np.arange(1,3)) 
+    ax.set_xlim([0, 3])
+
+    ax.set_xticklabels([7, 11], fontsize=12)
+    ax.set_xlabel('Month')
+
+    ax.set_ylim([dict_label['vmin'],dict_label['vmax']])
+    ax.set_yticks(np.arange(0,110,10))
+    ax.set_ylabel(dict_label['cb_label']) 
+
+
+    # add max, min model
+    ax.scatter(np.arange(1.25, 3.25), min_val.sel(month=[7,11]), marker=".", s=75, color=colors[2], alpha=0.35)
+    ax.scatter(np.arange(1.25, 3.25), max_val.sel(month=[7,11]), marker=".", s=75, color=colors[2], alpha=0.35)
+
+
+    s = f.subplotpars
+    bb = [s.left, s.top - 0.92, (s.right - s.left), 0.05]
+
+    ax.legend([bp[0]["boxes"][0], bp[1]["boxes"][0], bp[2]["boxes"][0], bp[3]["boxes"][0]], ['CloudSat', 'CMIP6$_{mean}$', 'ERA5', 'ERA5$_{hourly}$'], bbox_to_anchor=bb,loc=8,ncol=4,borderaxespad=0,fancybox=True,bbox_transform=f.transFigure, mode='expand')
+    plt.tight_layout(pad=0., w_pad=0., h_pad=0.)  ;
+        
+    figname = f'{var_name}_monthly_interannual_variation_2007_2010.png'
+    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=True)
+
 # def calc_linear_regression(df, model, ):
 #     # To do this we use the polyfit function from Numpy. Polyfit does a least squares polynomial fit over the data that it is given. 
 #     # We want a linear regression over the data in columns cloudsat and MIROC6 so we pass these as parameters. The final parameter is the 
