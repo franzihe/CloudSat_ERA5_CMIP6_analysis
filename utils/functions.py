@@ -26,9 +26,14 @@ from imports import (
 
 import warnings
 
-# fig_label = ['a)', 'b)', 'c)', 'd)', 'e)', 'f)', 'g)', 'h)', 'i)', 'j)', 'k)', 'l)', 'm)']
-fig_label = ['a)', 'b)', 'c)', 'd)', 'e)', 'f)', 'g)', 'h)', 'i)', 'j)', 'k)', 'l)', 'm)', 'n)', 'o)', 'p)', 'q)', 'r)', 's)', 't)', 'u)', 'v)', 'w)', 'x)', 'y)', 'z)',
-             'aa)', 'bb)', 'cc)', 'dd)', 'ee)', 'ff)', 'gg)', 'hh)', 'ii)', 'jj)', 'kk)', 'll)', 'mm)', 'nn)', 'oo)', 'pp)', 'qq)', 'rr)', 'ss)', 'tt)', 'uu)', 'vv)', 'ww)', 'xx)', 'yy)', 'zz)']
+from seaborn import set_context
+
+# plot cosmetics
+set_context('paper', font_scale=1.5, rc={"lines.linewidth": 2})
+
+# fig_label = ['(a)', '(b)', '(c)', '(d)', '(e)', '(f)', '(g)', '(h)', '(i)', '(j)', '(k)', '(l)', '(m)']
+fig_label = ['(a)', '(b)', '(c)', '(d)', '(e)', '(f)', '(g)', '(h)', '(i)', '(j)', '(k)', '(l)', '(m)', '(n)', '(o)', '(p)', '(q)', '(r)', '(s)', '(t)', '(u)', '(v)', '(w)', '(x)', '(y)', '(z)',
+             '(aa)', '(bb)', '(cc)', '(dd)', '(ee)', '(ff)', '(gg)', '(hh)', '(ii)', '(jj)', '(kk)', '(ll)', '(mm)', '(nn)', '(oo)', '(pp)', '(qq)', '(rr)', '(ss)', '(tt)', '(uu)', '(vv)', '(ww)', '(xx)', '(yy)', '(zz)']
 
 class MidpointNormalize(Normalize):
     def __init__(self, vmin, vmax, midpoint=0, clip=False):
@@ -66,7 +71,7 @@ def regrid_data(ds_in, ds_out):
     ds_out = rename_coords_lon_lat(ds_out)
 
     # Regridder data
-    regridder = xe.Regridder(ds_in, ds_out, "conservative")  # "bilinear")  #
+    regridder = xe.Regridder(ds_in, ds_out, "bilinear")  # )  #"conservative"
     # regridder.clean_weight_file()
 
     # Apply regridder to data
@@ -83,9 +88,10 @@ def regrid_data(ds_in, ds_out):
             # ds_in_regrid.attrs['history']     = ds_in.attrs['history']
             ds_in_regrid.attrs = ds_in.attrs
 
-            ds_in_regrid[k].attrs["units"] = ds_in[k].attrs["units"]
-            ds_in_regrid[k].attrs["long_name"] = ds_in[k].attrs["long_name"]
+            
             try:
+                ds_in_regrid[k].attrs["units"] = ds_in[k].attrs["units"]
+                ds_in_regrid[k].attrs["long_name"] = ds_in[k].attrs["long_name"]
                 ds_in_regrid[k].attrs["standard_name"] = ds_in[k].attrs["standard_name"]
                 ds_in_regrid[k].attrs["comment"] = ds_in[k].attrs["comment"]
                 ds_in_regrid[k].attrs["original_name"] = ds_in[k].attrs["original_name"]
@@ -1083,8 +1089,7 @@ def to_ERA5_date(ds, model):
     ds = ds.sel(time=~((ds.time.dt.month == 2) & (ds.time.dt.day == 29)))
     ds = ds.sel(time=~((ds.time.dt.month == 2) & (ds.time.dt.day == 30)))
     
-    # if ds.time.dtype == 'datetime64[ns]':
-    #     print(model,ds.time[0].values)
+
     if ds.time.dtype == 'object':
         # print(model, ds.time[0].values)
         ds['time'] = ds.indexes['time'].to_datetimeindex()
@@ -1187,17 +1192,17 @@ def get_ratios_season_month(var1, var2, stats, out_var,seasons ):
             # nseason = var2.groupby('time.season')
         nseason = {season: var2.sel(time=is_season(var2['time.month'], months[0], months[2])) for season, months in selected_seasons.items()}
         if seasons == 'normal':
-            nseason['DJF'] = xr.concat([var2.sel(time=is_season(var1['time.month'], 12, 12)),
-                                        var2.sel(time=is_season(var1['time.month'], 1, 2))], dim='time')   
+            nseason['DJF'] = xr.concat([var2.sel(time=is_season(var2['time.month'], 12, 12)),
+                                        var2.sel(time=is_season(var2['time.month'], 1, 2))], dim='time')   
         else:
-            nseason['NDJ'] = xr.concat([var2.sel(time=is_season(var1['time.month'], 11, 12)),
-                                        var2.sel(time=is_season(var1['time.month'], 1, 1))], dim='time') 
+            nseason['NDJ'] = xr.concat([var2.sel(time=is_season(var2['time.month'], 11, 12)),
+                                        var2.sel(time=is_season(var2['time.month'], 1, 1))], dim='time') 
         myKeys = list(nseason.keys())
         myKeys.sort()
         sorted_dict = {i: nseason[i] for i in myKeys}
         nseason = xr.concat(list(sorted_dict.values()), pd.Index(list(sorted_dict.keys()), name='season'))
         # nmonth = var2.groupby('time.month')
-        nmonth = xr.concat([var2.sel(time=is_season(var1['time.month'], m, m)) for m in months], pd.Index(months, name='month'))
+        nmonth = xr.concat([var2.sel(time=is_season(var2['time.month'], m, m)) for m in months], pd.Index(months, name='month'))
 
     if stats == 'count':
         # per season
@@ -1344,8 +1349,6 @@ def get_ratios_dict(list_models, ds,seasons):
             ])
         else:
             ratios[model] = xr.merge(objects=[
-                # get_ratios_season_month(var1=ds['lcc_2t'][model]['lwp'], var2=ds['2t'][model]['twp'].where(ds['2t'][model]['twp']>0.), stats='count', out_var='lcc_wo_snow', weights=ds['2t'][model]['areacella']),              # relative frequency of liquid containing clouds in relation to when there is a cloud
-                # get_ratios_season_month(var1=ds['lcc_2t'][model]['lwp'], var2=ds['2t'][model]['tas'], stats='count', out_var='lcc_wo_snow', weights=ds['2t'][model]['areacella']), # sLCC frequency compared to all observations when T<0C
                 ## use of 'tas' in var2 as this has values everywhere where data is valid, while 'lwp' or 'prsn' might not have values
                 get_ratios_season_month(var1=ds['lcc'][model]['lwp'], var2=ds['orig'][model]['tas'], 
                                         stats='count', 
@@ -1355,11 +1358,6 @@ def get_ratios_dict(list_models, ds,seasons):
                                         stats='count', 
                                         out_var='FsLCC', 
                                         seasons=seasons),#out_var='lcc_wo_snow', weights=ds['2t'][model]['areacella']), # sLCC frequency compared to all observations when T<0C
-                # get_ratios_season_month(var1=ds['lcc'][model]['pr'].where(ds['lcc'][model]['pr']>=0.01, other=np.nan), 
-                #                         var2=ds['orig'][model]['tas'], 
-                #                         stats='count', 
-                #                         out_var='FoP', 
-                #                         seasons=seasons),
                 get_ratios_season_month(var1=ds['lcc_2t_sf'][model]['prsn'], var2=ds['lcc_2t'][model]['lwp'], 
                                         stats='count', 
                                         out_var='FoS', 
@@ -1368,10 +1366,6 @@ def get_ratios_dict(list_models, ds,seasons):
                                         stats='mean', 
                                         out_var='sf_eff', 
                                         seasons=seasons),      # relative snowfall (precipitation) efficency
-                # get_ratios_season_month(var1=ds['lcc_2t_days'][model]['pr'], var2=ds['lcc_2t_days'][model]['lwp'], 
-                #                         stats='mean', 
-                #                         out_var='pr_eff', 
-                #                         seasons=seasons),      # relative snowfall (precipitation) efficency
                 get_ratios_season_month(var1=ds['lcc'][model]['lwp']-ds['lcc_2t'][model]['lwp'],
                                         var2=ds['orig'][model]['tas'],
                                         stats='count',
@@ -1410,21 +1404,23 @@ def get_only_valid_values(ratios, res, out_var):
         # # v1_cmip_250 = v1_cmip_250.mean('model',skipna=True)
         # ratios[cs_key][f'{out_var}_{time}_cmip'] = v1_cmip_250
         v1_250_cs = v1_250.copy()
-        v1_250_cs = v1_250_cs.where(np.logical_and(v1_250_cs.lat <= 82., v1_250_cs.lat >= -82), other=np.nan)
+        v1_250_cs = v1_250_cs.where(np.logical_and(v1_250_cs.lat <= 83., v1_250_cs.lat >= -83), other=np.nan)
         ratios[cs_key][f'{out_var}_cs'] = v1_250_cs
 
         # v2_250_cs = v2_250.copy()
         # v2_250_cs = v2_250_cs.where(~np.isnan(v1_250))
         # ratios[era_key][f'{out_var}_{time}_cs'] = v2_250_cs
         v2_250_cs = v2_250.copy()
-        v2_250_cs = v2_250_cs.where(np.logical_and(v2_250_cs.lat <= 82., v2_250_cs.lat >= -82), other=np.nan)
+        v2_250_cs = v2_250_cs.where(np.logical_and(v2_250_cs.lat <= 83., v2_250_cs.lat >= -83), other=np.nan)
+        # v2_250_cs = v2_250_cs.where(np.logical_and(v1_250.lat <= 82., v1_250.lat >= -82), other=np.nan)
         ratios[era_key][f'{out_var}_cs'] = v2_250_cs
 
         # v3_250_cs = v3_250.copy()
         # v3_250_cs = v3_250_cs.where(~np.isnan(v1_250))
         # ratios[cmip_key][f'{out_var}_{time}_cs'] = v3_250_cs
         v3_250_cs = v3_250.copy()
-        v3_250_cs = v3_250_cs.where(np.logical_and(v3_250_cs.lat <= 82., v3_250_cs.lat >= -82.), other=np.nan)
+        v3_250_cs = v3_250_cs.where(np.logical_and(v3_250_cs.lat <= 83., v3_250_cs.lat >= -83.), other=np.nan)
+        # v3_250_cs = v3_250_cs.where(np.logical_and(v1_250.lat <= 82., v1_250.lat >= -82.), other=np.nan)
         ratios[cmip_key][f'{out_var}_cs'] = v3_250_cs
         
         
@@ -1500,7 +1496,7 @@ def plt_monthly_model_variation(ds_dict, var_name, dict_label,fig_dir, lwp_thres
     
     
     f, axsm = plt.subplots(nrows=1, ncols=2, sharex=True, sharey=True, figsize=[12, 5])
-    f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
+    # f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
     ax = axsm.flat
 
     bp= [[],]
@@ -1511,8 +1507,7 @@ def plt_monthly_model_variation(ds_dict, var_name, dict_label,fig_dir, lwp_thres
                              ds_dict[var_name + '_year_cs_mean'].sel(hemisphere=hemisphere, model='CloudSat').assign_coords(coords={'month':13})], dim='month')
         ax[i].scatter(x=np.arange(1,14), y=cs_data, color='k', marker='o',s=50)
         
-        # era_data = ds_dict['era_30'][var_name + '_month_mean'].sel(hemisphere=hemisphere,)
-        # cmip_key = 'cmip_500'
+        
         
         if var_name == 'sf_eff' or var_name == 'pr_eff':
             era_data = xr.concat([ds_dict[var_name + '_month_mean'].sel(hemisphere=hemisphere, model='ERA5'),
@@ -1596,12 +1591,12 @@ def plt_monthly_model_variation(ds_dict, var_name, dict_label,fig_dir, lwp_thres
 
     ax[1].legend([
             # Line2D([0], [0], color=colors[0], lw=1.5, label='ERA5 (30 km)', linestyle=(0, (1, 1))),
-            Line2D([0], [0], marker='o', color='w', label='CloudSat (500km)', markersize=10, markerfacecolor='k'),
+            Line2D([0], [0], marker='o', color='w', label='CloudSat-CALIPSO (500km)', markersize=10, markerfacecolor='k'),
             Line2D([0], [0], marker='h', color='w', label='ERA5 (500 km)',markersize=10, markerfacecolor=colors[0], ),
             bp[0]["boxes"][0],
             # bp[1]["boxes"][0],
         ],
-        ['CloudSat (500 km)',
+        ['CloudSat-CALIPSO (500 km)',
             'ERA5 (500 km)', #'CMIP6 (500 km)', 
          'CMIP6 (500 km)'],
         bbox_to_anchor=bb,loc=8,ncol=3,mode='expand',borderaxespad=0,fancybox=True,bbox_transform=f.transFigure,
@@ -1610,12 +1605,12 @@ def plt_monthly_model_variation(ds_dict, var_name, dict_label,fig_dir, lwp_thres
     plt.tight_layout(pad=0., w_pad=0., h_pad=0.)  ;
     
     figname = f'{var_name}_monthly_model_variation_2007_2010.png'
-    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=True)  
+    plt.savefig(fig_dir + figname, format='png', dpi=300, bbox_inches='tight', transparent=True)  
 
 def plt_monthly_model_variation_hourly(dataset, dataset_hourly, var_name, dict_label, fig_dir, lwp_threshold):
     colors = cm.hawaii(range(0, 256, int(256 / 3) + 1))
     f, ax = plt.subplots(nrows=1, ncols=1, sharex=True, sharey=True, figsize=[6, 5])
-    f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
+    # f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
 
     hemisphere = 'NH'
 
@@ -1669,12 +1664,12 @@ def plt_monthly_model_variation_hourly(dataset, dataset_hourly, var_name, dict_l
     bb = [s.left, s.top - 0.92, (s.right - s.left), 0.05]
 
     ax.legend([
-                Line2D([0], [0], marker='o', color='w', label='CloudSat', markersize=10, markerfacecolor='k'),
+                Line2D([0], [0], marker='o', color='w', label='CloudSat-CALIPSO', markersize=10, markerfacecolor='k'),
                 Line2D([0], [0], marker='h', color='w', label='ERA5',markersize=10, markerfacecolor=colors[0], alpha=0.6 ),
                 Line2D([0], [0], marker='h', color='w', label='ERA5-hourly ', markersize=10, markerfacecolor=colors[0]),
                 bp["boxes"][0],
             ],
-            ['CloudSat',
+            ['CloudSat-CALIPSO',
             'ERA5', 
             'ERA5$_{hourly}$', 
             'CMIP6'],
@@ -1683,7 +1678,7 @@ def plt_monthly_model_variation_hourly(dataset, dataset_hourly, var_name, dict_l
 
     plt.tight_layout(pad=0., w_pad=0., h_pad=0.)  ;
     figname = f'{var_name}_monthly_model_variation_2007_2010.png'
-    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=True) 
+    plt.savefig(fig_dir + figname, format='png', dpi=300, bbox_inches='tight', transparent=True) 
 
 
 def plt_monthly_interannual_variation(dataset, var_name, lwp_threshold, fig_dir, dict_label):
@@ -1715,7 +1710,7 @@ def plt_monthly_interannual_variation(dataset, var_name, lwp_threshold, fig_dir,
     colors = cm.hawaii(range(0, 256, int(256 / 3) + 1))
 
     f, axsm = plt.subplots(nrows=1, ncols=2, sharex=True, sharey=True, figsize=[12, 5])
-    f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
+    # f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
     ax = axsm.flat
 
     bp = [[], [], []]
@@ -1747,14 +1742,14 @@ def plt_monthly_interannual_variation(dataset, var_name, lwp_threshold, fig_dir,
             ax[i].set_xlabel('Month')
             
             if var_name == 'sf_eff':# or var_name == 'pr_eff':
-                ax[i].set_ylim([0,8.])
-                ax[i].set_yticks(np.arange(0,8.50,.50))
+                ax[i].set_ylim([dict_label['vmin'],dict_label['vmax2']])
+                ax[i].set_yticks(np.arange(dict_label['vmin'],dict_label['vmax2'] + .50,.50))
             elif var_name == 'pr_eff':
                 ax[i].set_ylim([0,800])
                 ax[i].set_yticks(np.arange(0,850,50))
             else:
-                ax[i].set_ylim([dict_label['vmin'],dict_label['vmax']])
-                ax[i].set_yticks(np.arange(0,110,10))
+                ax[i].set_ylim([dict_label['vmin'],dict_label['vmax2']])
+                ax[i].set_yticks(np.arange(dict_label['vmin'],dict_label['vmax2'] + 10,10))
             
             ax[i].set_ylabel(dict_label['cb_label'] if i==0 else '') 
     # add max, min model
@@ -1768,13 +1763,16 @@ def plt_monthly_interannual_variation(dataset, var_name, lwp_threshold, fig_dir,
     s = f.subplotpars
     bb = [s.left, s.top - 0.92, (s.right - s.left), 0.05]
 
-    ax[0].legend([bp[0]["boxes"][0], bp[1]["boxes"][0], bp[2]["boxes"][0]], ['CloudSat', 'ERA5', 'CMIP6$_{mean}$'], bbox_to_anchor=bb,loc=8,ncol=3,borderaxespad=0,fancybox=True,bbox_transform=f.transFigure, mode='expand')
-    # ax[0].legend([bp[0]["boxes"][0], ], ['CloudSat', ], bbox_to_anchor=bb,loc=8,ncol=3,borderaxespad=0,fancybox=True,bbox_transform=f.transFigure, mode='expand')
+    if var_name == 'sf_eff':
+        ax[0].legend([bp[1]["boxes"][0], bp[2]["boxes"][0]], ['ERA5', 'CMIP6$_{mean}$'], bbox_to_anchor=bb,loc=8,ncol=3,borderaxespad=0,fancybox=True,bbox_transform=f.transFigure, mode='expand')
+    else:
+        ax[0].legend([bp[0]["boxes"][0], bp[1]["boxes"][0], bp[2]["boxes"][0]], ['CloudSat-CALIPSO', 'ERA5', 'CMIP6$_{mean}$'], bbox_to_anchor=bb,loc=8,ncol=3,borderaxespad=0,fancybox=True,bbox_transform=f.transFigure, mode='expand')
+    # ax[0].legend([bp[0]["boxes"][0], ], ['CloudSat-CALIPSO', ], bbox_to_anchor=bb,loc=8,ncol=3,borderaxespad=0,fancybox=True,bbox_transform=f.transFigure, mode='expand')
     
     plt.tight_layout(pad=0., w_pad=0., h_pad=0.)  ;
     
     figname = f'{var_name}_monthly_interannual_variation_2007_2010.png'
-    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=True)    
+    plt.savefig(fig_dir + figname, format='png', dpi=300, bbox_inches='tight', transparent=True)    
 
 def plt_monthly_interannual_variation_hourly_data(dataset, dataset_hourly, var_name, lwp_threshold, fig_dir, dict_label):
     stats_cloudsat = calculate_interannual_stats(dataset.sel(model='CloudSat', hemisphere='NH'), var_name)
@@ -1801,7 +1799,7 @@ def plt_monthly_interannual_variation_hourly_data(dataset, dataset_hourly, var_n
         
     colors = cm.hawaii(range(0, 256, int(256 / 3) + 1))
     f, ax = plt.subplots(nrows=1, ncols=1, sharex=True, sharey=True, figsize=[6, 5])
-    f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
+    # f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
     ax.grid(True)
     bp = [[], [], [], []]
     bp[3] = ax.boxplot(stats_era_hourly.sel(month=[7,11]), positions=np.arange(0.75, 2.75), widths=0.3, 
@@ -1848,11 +1846,11 @@ def plt_monthly_interannual_variation_hourly_data(dataset, dataset_hourly, var_n
     s = f.subplotpars
     bb = [s.left, s.top - 0.92, (s.right - s.left), 0.05]
 
-    ax.legend([bp[0]["boxes"][0], bp[1]["boxes"][0], bp[2]["boxes"][0], bp[3]["boxes"][0]], ['CloudSat', 'CMIP6$_{mean}$', 'ERA5', 'ERA5$_{hourly}$'], bbox_to_anchor=bb,loc=8,ncol=4,borderaxespad=0,fancybox=True,bbox_transform=f.transFigure, mode='expand')
+    ax.legend([bp[0]["boxes"][0], bp[1]["boxes"][0], bp[2]["boxes"][0], bp[3]["boxes"][0]], ['CloudSat-CALIPSO', 'CMIP6$_{mean}$', 'ERA5', 'ERA5$_{hourly}$'], bbox_to_anchor=bb,loc=8,ncol=4,borderaxespad=0,fancybox=True,bbox_transform=f.transFigure, mode='expand')
     plt.tight_layout(pad=0., w_pad=0., h_pad=0.)  ;
         
     figname = f'{var_name}_monthly_interannual_variation_2007_2010.png'
-    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=True)
+    plt.savefig(fig_dir + figname, format='png', dpi=300, bbox_inches='tight', transparent=True)
 
 # def calc_linear_regression(df, model, ):
 #     # To do this we use the polyfit function from Numpy. Polyfit does a least squares polynomial fit over the data that it is given. 
@@ -1976,13 +1974,13 @@ def get_linear_regression_hemisphere(ratios,var_name):
 #                                                                                                                                             model, 
 #                                                                                                                                             lat_south, var_name)
 #             else:
-#                 df_NH[model][season], R2_NH[model][season], d_NH[model][season] = calc_linear_regression_hemisphere(ratios['cloudsat_500'], 
+#                 df_NH[model][season], R2_NH[model][season], d_NH[model][season] = calc_linear_regression_hemisphere(ratios['cloudSat_500'], 
 #                                                                                                                                             ratios['500'], 
 #                                                                                                                                             season, 
 #                                                                                                                                             model, 
 #                                                                                                                                             lat_north, var_name)
                 
-#                 df_SH[model][season], R2_SH[model][season], d_SH[model][season] = calc_linear_regression_hemisphere(ratios['cloudsat_500'], 
+#                 df_SH[model][season], R2_SH[model][season], d_SH[model][season] = calc_linear_regression_hemisphere(ratios['cloudSat_500'], 
 #                                                                                                                                             ratios['500'], 
 #                                                                                                                                             season, 
 #                                                                                                                                             model, 
@@ -2008,7 +2006,7 @@ def plt_scatter_obs_model(ratios, regression, var_name, dict_label, fig_dir, lwp
     colors = cm.hawaii(range(0, 256, int(256/3)+1))
 
     f, axsm = plt.subplots(nrows=len(models), ncols=len(regression.season), sharex=True, sharey=True, figsize=figsize)
-    f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
+    # f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
     for ax, k in zip(axsm.flatten(), range(len(fig_label))):
         ax.text(0.05, 0.95, f'{fig_label[k]}', fontweight='bold', horizontalalignment='left', verticalalignment='top', transform=ax.transAxes)
         
@@ -2060,7 +2058,7 @@ def plt_scatter_obs_model(ratios, regression, var_name, dict_label, fig_dir, lwp
                 if var_name == 'sf_eff':
                     ax.set_xlabel(f"ERA5, {dict_label['cb_label']}")
                 else:
-                    ax.set_xlabel(f"CloudSat, {dict_label['cb_label']}")
+                    ax.set_xlabel(f"CloudSat-CALIPSO, {dict_label['cb_label']}")
             for hemisphere in (['NH','SH']):
                 color = colors[0] if hemisphere == 'NH' else colors[2]
                 lat_slice = slice(45,90) if hemisphere == 'NH' else slice(-90,-45)
@@ -2088,7 +2086,7 @@ def plt_scatter_obs_model(ratios, regression, var_name, dict_label, fig_dir, lwp
     # f.subplots_adjust(top=0.96)
     
     figname = f'{var_name}_season_scatter_2007_2010.png'
-    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=True)
+    plt.savefig(fig_dir + figname, format='png', dpi=300, bbox_inches='tight', transparent=True)
 
 def plt_R2_heatmap_season(regression, dict_label, fig_dir, lwp_threshold):
     # def plt_R2_heatmap_season(df_NH, df_SH, dict_label, fig_dir, lwp_threshold):
@@ -2113,7 +2111,7 @@ def plt_R2_heatmap_season(regression, dict_label, fig_dir, lwp_threshold):
     #     im = ax.imshow(df_NH[var_name], cmap=cmap, norm=norm)
     #     ax.set_title(f'{k} NH', )#fontsize=10.)
         
-    #     if k == 'a)':
+    #     if k == '(a)':
     #         ax.set(yticks=range(len(df_NH[var_name].index)), yticklabels=df_NH[var_name].index)
     #     if var_name == 'FLCC':
     #         x_position = 0.75  
@@ -2211,11 +2209,11 @@ def plt_R2_heatmap_season(regression, dict_label, fig_dir, lwp_threshold):
     cbar_kw = dict(ticks=np.arange(0.05,1.05,0.1), format=fmt)
     fig.colorbar(im, cax=cbar_ax, **cbar_kw, label=f' R$^2$', shrink=0.5)#cmap=cmap, norm=norm, )
     plt.tight_layout(pad=0., w_pad=0., h_pad=0)  ; 
-    figname = f'R2_season_2007_2010.png'
-    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=True)
+    figname = f'r2_season_2007_2010.png'
+    plt.savefig(fig_dir + figname, format='png', dpi=300, bbox_inches='tight', transparent=True)
 
 
-def plot_spatial_season(difference, val1, val2, val3, val1_mean, val2_mean, val3_mean,
+def plot_spatial_season(difference, val1, val2, val3, val1_mean, val2_mean, val3_mean,sic_cc,
                         hemisphere, ds, var_name, dict_label, fig_dir, lat_extent, lwp_threshold):
   
     if difference != None:
@@ -2225,11 +2223,11 @@ def plot_spatial_season(difference, val1, val2, val3, val1_mean, val2_mean, val3
             diff_2_mean = val2_mean - val3_mean 
         if var_name == 'FLCC' or var_name == 'FsLCC' or var_name == 'FoS' or var_name == 'FLCC-FsLCC':    
             _val1 = val1.fillna(0.)
-            _val1 = _val1.where(np.logical_and(_val1.lat <= 82., _val1.lat >= -82.), other=np.nan)
+            _val1 = _val1.where(np.logical_and(_val1.lat <= 83., _val1.lat >= -83.), other=np.nan)
             _val2 = val2.fillna(0.)
-            _val2 = _val2.where(np.logical_and(_val2.lat <= 82., _val2.lat >= -82.), other=np.nan)
+            _val2 = _val2.where(np.logical_and(_val2.lat <= 83., _val2.lat >= -83.), other=np.nan)
             _val3 = val3.fillna(0.)
-            _val3 = _val3.where(np.logical_and(_val3.lat <= 82., _val3.lat >= -82.), other=np.nan)
+            _val3 = _val3.where(np.logical_and(_val3.lat <= 83., _val3.lat >= -83.), other=np.nan)
         
             # diff_1 = _val1.where(~np.isnan(_val2)) - _val2.where(~np.isnan(_val1))
             diff_1 = _val1 - _val2
@@ -2339,31 +2337,31 @@ def plot_spatial_season(difference, val1, val2, val3, val1_mean, val2_mean, val3
                             ncols=4, 
                             subplot_kw={'projection': projection}, 
                             figsize=[12, 9], sharex=True, sharey=True)
-        if difference != None:
-            f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=0.925)
-            if var_name == 'FLCC-FsLCC':
-                f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
-        else:
-            f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
+        # if difference != None:
+        #     f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=0.925)
+        #     if var_name == 'FLCC-FsLCC':
+                # f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
+        # else:
+            # f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
         
     else:
         f, axsm = plt.subplots(nrows=2, 
                            ncols=4, 
                            subplot_kw={'projection': projection}, 
                            figsize=[12, 6], sharex=True, sharey=True)
-        f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
+        # f.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
     if difference != None:
         if var_name == 'sf_eff' or var_name == 'pr_eff':
             model_labels = ['ERA5', 'CMIP6$_{mean}$', 'ERA5 - CMIP6$_{mean}$']
         elif var_name == 'FLCC-FsLCC':
             model_labels = ['FLCC', 'FsLCC', 'FLCC - FsLCC']
         else: 
-            model_labels = ['CloudSat', 'CloudSat - ERA5', 'CloudSat - CMIP6$_{mean}$']
+            model_labels = ['CloudSat-CALIPSO', 'CC - ERA5', 'CC - CMIP6$_{mean}$']
     if difference == None:
         if var_name == 'sf_eff' or var_name == 'pr_eff':
             model_labels = ['ERA5', 'CMIP6$_{mean}$', ]
         else:
-            model_labels = ['CloudSat', 'ERA5', 'CMIP6$_{mean}$']
+            model_labels = ['CloudSat-CALIPSO', 'ERA5', 'CMIP6$_{mean}$']
         
     
     for ax, row in zip(axsm[:,0], model_labels):
@@ -2426,13 +2424,49 @@ def plot_spatial_season(difference, val1, val2, val3, val1_mean, val2_mean, val3
 
         for ax, season in zip(axsm.flatten()[i * 4: (i + 1) * 4 + 1], val1.season):
             if i == 0:
-                sub_title = f'season = {season.values}'
+                    sub_title = f'season = {season.values}'
+                
+                # if difference == None and var_name == 'FsLCC':
+                    # plot sea ice extent
+                    value_sic = sic_cc.sel(lat=slice(45,90)) if hemisphere == 'NH' else sic_cc.sel(lat=slice(-90,-45))
+                    value_sic.sel( season=season).plot.contour(ax=ax, transform=ccrs.PlateCarree(), x='lon', y='lat', 
+                                                               levels = [20., ], lw=2., add_colorbar=False, colors = 'orangered')
+                    
+                    if season == 'SON':
+                        legend_elements = [Line2D([0], [0], color='orangered', lw=2., label='20% SIC'),]
+                        if difference != None:
+                            leg = ax.legend(handles=legend_elements, bbox_to_anchor=(1.05, 1.25), loc=2, borderaxespad=0., fancybox=True,
+                                            facecolor='none', )#'gainsboro')#loc='best')
+                        else:
+                            leg = ax.legend(handles=legend_elements, bbox_to_anchor=(1.05, 0.5), loc=2, borderaxespad=0., fancybox=True,
+                                            facecolor='none', )#'gainsboro')#loc='best')
+                        # leg.get_frame().set_edgecolor('k')
+                        # leg.get_frame().set_linewidth(0.0)
+                        
+                
+                        
+               
+
+            
+                
             
             val = value.sel(lat=slice(45,90)) if hemisphere == 'NH' else value.sel(lat=slice(-90,-45))
             cf = ax.pcolormesh(val.lon, val.lat, (val.where(~np.isnan(val))).sel(season=season), 
                             transform=ccrs.PlateCarree(), 
                             cmap=cmap, 
                             norm=norm)
+            
+        
+            
+            # hatch areas above 83N
+            val = value.sel(lat=slice(83,90)) if hemisphere == 'NH' else value.sel(lat=slice(-90,-83))
+            collection = ax.contourf(
+            val.lon, val.lat, val.sel(season=season), transform=ccrs.PlateCarree(),
+            colors='none', color='white', ecolor='red', hatches=[3 * '.', 3 * '.'], add_colorbar=False
+                )
+            ax.set_title('')
+            
+            
             
             add_text_box(ax, hemi_glob.sel(hemisphere=hemisphere, season=season), var_name)
             ax.set_title(sub_title)
@@ -2451,6 +2485,8 @@ def plot_spatial_season(difference, val1, val2, val3, val1_mean, val2_mean, val3
                     cb_label = dict_label['cb_label']
                     extend = None
                 plt.colorbar(cf, cax=cbaxes, shrink=0.5,extend=extend, orientation='vertical', label=cb_label)
+
+                
             if difference != None and i == 2:
                 if var_name == 'sf_eff' or var_name == 'sf_eff':
                     cbaxes = f.add_axes([0.92, 0.13, 0.0125, 0.2])
@@ -2462,11 +2498,17 @@ def plot_spatial_season(difference, val1, val2, val3, val1_mean, val2_mean, val3
                     extend = None
                 else:
                     cbaxes = f.add_axes([0.92, 0.13, 0.0125, 0.45])
-                    cb_label = 'CloudSat - Model (%)'
+                    cb_label = 'CC - Model (%)'
                     extend = None
-                plt.colorbar(cf, cax=cbaxes, shrink=0.5,extend=extend, orientation='vertical', label=cb_label)
+                # plt.colorbar(cf, cax=cbaxes, shrink=0.5,extend=extend, orientation='vertical', label=cb_label)
+                cbar= plt.colorbar(cf, cax=cbaxes, ticks=dict_label['diff_levels'][::2], shrink=0.5,extend=extend, orientation='vertical', label=cb_label)
+                # cbar.ax.set_xticklabels(dict_label['diff_levels'][::2]) 
+                
             if difference == None and i == 1:
-                cbaxes = f.add_axes([1, 0.25, 0.0125, 0.45])
+                # if var_name == 'FsLCC':
+                cbaxes = f.add_axes([0.9, 0.25, 0.0125, 0.45])
+                # else:
+                #     cbaxes = f.add_axes([1., 0.25, 0.0125, 0.45])
                 cb_label = dict_label['cb_label']
                 if var_name == 'sf_eff':
                     extend = 'max'
@@ -2477,7 +2519,7 @@ def plot_spatial_season(difference, val1, val2, val3, val1_mean, val2_mean, val3
     
             if difference != None and i == 2 and var_name != 'FLCC-FsLCC':
                 plot_difference_significance(ax, hemisphere, diff_2, season, CI, density)
-                bb = [0.95, 0.09, 0.0125, 0.05]
+                bb = [0.95, 0.05, 0.0125, 0.05]
                 axsm.flatten()[i].legend(
                     [Patch(facecolor='none', edgecolor='k', hatch=density * '/', label='CI < 95%')],
                     ['CI < 95%'], bbox_to_anchor=bb, loc=8, ncol=1, borderaxespad=0,
@@ -2489,10 +2531,11 @@ def plot_spatial_season(difference, val1, val2, val3, val1_mean, val2_mean, val3
         figname = f'{var_name}_season_{hemisphere}_2007_2010.png'
     if difference == None:
         figname = f'{var_name}_CS_ERA5_CMIP6_season_{hemisphere}_2007_2010.png'
-    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=True)
+    plt.savefig(fig_dir + figname, format='png', dpi=300, bbox_inches='tight', transparent=True)
+    # plt.savefig(fig_dir + figname, format='eps', dpi=300,  bbox_inches='tight', )#transparent=True)
 
 
-def plt_spatial_season_var(ds, var_name, dict_label, fig_dir, lat_extent, lwp_threshold):
+def plt_spatial_season_var(ds, var_name, dict_label, sic_cc, fig_dir, lat_extent, lwp_threshold):
     if var_name == 'FLCC-FsLCC':
         val1= ds['FLCC' + '_season'].sel(model='CloudSat').squeeze()
         val1_mean= ds['FLCC' + '_season_mean'].sel(model='CloudSat').squeeze()
@@ -2535,9 +2578,9 @@ def plt_spatial_season_var(ds, var_name, dict_label, fig_dir, lat_extent, lwp_th
         
     
     for hemisphere in ['NH', 'SH']:
-        plot_spatial_season(None, val1, val2, val3, val1_mean, val2_mean, val3_mean,
+        plot_spatial_season(None, val1, val2, val3, val1_mean, val2_mean, val3_mean,sic_cc,
                         hemisphere, ds, var_name, dict_label[var_name], fig_dir, lat_extent, lwp_threshold) 
-        plot_spatial_season('yes', val1, val2, val3, val1_mean, val2_mean, val3_mean,
+        plot_spatial_season('yes', val1, val2, val3, val1_mean, val2_mean, val3_mean,sic_cc,
                         hemisphere, ds, var_name, dict_label[var_name], fig_dir, lat_extent, lwp_threshold)  
         
         
@@ -2599,7 +2642,7 @@ def plot_spatial_season_model(val1, val2, val3, val1_mean, val2_mean, val3_mean,
         # model_labels = [f'ERA5 ({res}km)', f'{model} ({res}km)', f'ERA5 - {model}']
         model_labels = [f'ERA5', f'{model}', f'ERA5 - {model}']
     else: 
-        model_labels = [f'CloudSat', f'{model}', f'CloudSat - {model}']
+        model_labels = [f'CloudSat-CALIPSO', f'{model}', f'CC - {model}']
     
     for ax, row in zip(axsm[:,0], model_labels):
         ax.text(-0.07, 0.55, row, 
@@ -2679,7 +2722,7 @@ def plot_spatial_season_model(val1, val2, val3, val1_mean, val2_mean, val3_mean,
                 
     plt.tight_layout(pad=0., w_pad=0., h_pad=0.,)
     figname = f'{model}_{var_name}_season_{hemisphere}_2007_2010.png'
-    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=True)
+    plt.savefig(fig_dir + figname, format='png', dpi=300, bbox_inches='tight', transparent=True)
 
 
 def plt_spatial_season_all_models(ds, var_name, dict_label, fig_dir, lat_extent):
@@ -2697,8 +2740,8 @@ def plt_spatial_season_all_models(ds, var_name, dict_label, fig_dir, lat_extent)
             val1_mean = ds[var_name +'_season_cs_mean'].sel(model='ERA5').squeeze()
             models = list(ds.model.values)[2:]
     else:
-            # val1 = ds[f'cloudsat_{res}'][var_name + '_season']
-            # val1_mean = ds[f'cloudsat_{res}'][var_name + '_season_mean']
+            # val1 = ds[f'CloudSat_{res}'][var_name + '_season']
+            # val1_mean = ds[f'cloudSat_{res}'][var_name + '_season_mean']
             val1 = ds[var_name + '_season'].sel(model='CloudSat').squeeze()
             val1_mean = ds[var_name + '_season_cs_mean'].sel(model='CloudSat').squeeze()
             models = list(ds.model.values)[1:]
@@ -2725,22 +2768,37 @@ def plt_spatial_season_all_models(ds, var_name, dict_label, fig_dir, lat_extent)
                                     hemisphere, var_name, dict_label[var_name], fig_dir, lat_extent, model)
             
             
-            
-def plt_percent_difference_season(dataset, var_name, lwp_threshold, dict_label,  fig_dir):
+
+
+def plt_absolute_difference_season(dataset, var_name, lwp_threshold, dict_label,  fig_dir):
     if var_name == 'sf_eff' or var_name == 'pr_eff':
-        da = ((dataset[var_name+'_season_cs_mean'].sel(model='ERA5') - dataset[var_name+'_season_cs_mean'].sel(model = ['ERA5','MIROC6', 'CanESM5', 'AWI-ESM-1-1-LR',
+        abs_diff = abs(dataset[var_name+'_season_cs_mean'].sel(model='ERA5') - dataset[var_name+'_season_cs_mean'].sel(model = ['ERA5','MIROC6', 'CanESM5', 'AWI-ESM-1-1-LR',
                                                                                                                         'MPI-ESM1-2-LR', 'UKESM1-0-LL', 'HadGEM3-GC31-LL', 'CNRM-CM6-1',
-                                                                                                                        'CNRM-ESM2-1', 'IPSL-CM6A-LR', 'IPSL-CM5A2-INCA']))/dataset[var_name+'_season_cs_mean'].sel(model='ERA5'))*100
+                                                                                                                        'CNRM-ESM2-1', 'IPSL-CM6A-LR', 'IPSL-CM5A2-INCA']))
+        
+        # mean_diff = (dataset[var_name+'_season_cs_mean'].sel(model='ERA5') + dataset[var_name+'_season_cs_mean'].sel(model = ['ERA5','MIROC6', 'CanESM5', 'AWI-ESM-1-1-LR',
+        #                                                                                                                 'MPI-ESM1-2-LR', 'UKESM1-0-LL', 'HadGEM3-GC31-LL', 'CNRM-CM6-1',
+        #                                                                                                                 'CNRM-ESM2-1', 'IPSL-CM6A-LR', 'IPSL-CM5A2-INCA']))/2
+        # # da = ((dataset[var_name+'_season_cs_mean'].sel(model='ERA5') - dataset[var_name+'_season_cs_mean'].sel(model = ['ERA5','MIROC6', 'CanESM5', 'AWI-ESM-1-1-LR',
+        #                                                                                                                 'MPI-ESM1-2-LR', 'UKESM1-0-LL', 'HadGEM3-GC31-LL', 'CNRM-CM6-1',
+        #                                                                                                                 'CNRM-ESM2-1', 'IPSL-CM6A-LR', 'IPSL-CM5A2-INCA']))/dataset[var_name+'_season_cs_mean'].sel(model='ERA5'))*100
     
         da2 = dataset[var_name+'_season_cs_mean'].sel(model = ['ERA5','MIROC6', 'CanESM5', 'AWI-ESM-1-1-LR',
                                                                'MPI-ESM1-2-LR', 'UKESM1-0-LL', 'HadGEM3-GC31-LL', 'CNRM-CM6-1',
                                                                'CNRM-ESM2-1', 'IPSL-CM6A-LR', 'IPSL-CM5A2-INCA'])
         
     else:
-        da = ((dataset[var_name+'_season_cs_mean'].sel(model='CloudSat') - dataset[var_name+'_season_cs_mean'])/dataset[var_name+'_season_cs_mean'].sel(model='CloudSat'))*100
+        abs_diff = abs(dataset[var_name+'_season_cs_mean'].sel(model='CloudSat') - dataset[var_name+'_season_cs_mean'])
+        # mean_diff = (dataset[var_name+'_season_cs_mean'].sel(model='CloudSat') + dataset[var_name+'_season_cs_mean'])/2
+        
+        # da = ((dataset[var_name+'_season_cs_mean'].sel(model='CloudSat') - dataset[var_name+'_season_cs_mean'])/dataset[var_name+'_season_cs_mean'].sel(model='CloudSat'))*100
+        
         da2 = dataset[var_name+'_season_cs_mean']
         
+    da = abs_diff  
     da = da.where(da != 0., other=np.nan)
+    
+    da.model.values[0] = 'CloudSat-CALIPSO'
     
 
     # find minimum and maximum model in each season
@@ -2753,28 +2811,243 @@ def plt_percent_difference_season(dataset, var_name, lwp_threshold, dict_label, 
     figsize = [12,5]
     cmap = cm.hawaii_r
     cmaplist = [cmap(i) for i in range(cmap.N)]
-    bounds = np.linspace(0, 1 * 100, 11)
+    # bounds = np.linspace(0, 1 * 100, 11)
+    bounds = dict_label['bounds']
     hemispheres = ['NH', 'SH']
 
     # Create a custom colormap
     cmap = LinearSegmentedColormap.from_list('Custom cmap', cmaplist, cmap.N)
-    norm = BoundaryNorm(bounds, 10)
+    # norm = BoundaryNorm(bounds, 10)
+    norm = BoundaryNorm(bounds, ncolors=len(dict_label['qrates']))
 
     # Create a formatting function for colorbar ticks
-    qrates = list(np.arange(0.05 * 100, 1.05 * 100, 0.1 * 100))
+    # qrates = list(np.arange(0.05 * 100, 1.05 * 100, 0.1 * 100))
+    qrates = dict_label['qrates']
     fmt = FuncFormatter(lambda x, pos: qrates[::][norm(x)])
     fmt = FormatStrFormatter("%.0f")
 
 
     # Create the figure and subplots
     fig, axsm = plt.subplots(nrows=2, ncols=1, sharex=True, sharey=True, figsize=figsize)
-    fig.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
+    # fig.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
 
     # Iterate over hemispheres and subplots
     for i, hemisphere in enumerate(['NH', 'SH']):
         ax = axsm[i]
         # Plot your data, add labels, and set ticks
-        im = ax.imshow(abs(da.sel(hemisphere=hemisphere)), cmap=cmap.resampled(10), norm=norm)
+        im = ax.imshow(abs(da.sel(hemisphere=hemisphere)), cmap=cmap.resampled(len(dict_label['qrates'])), norm=norm)
+
+        # Show all ticks and label them with the respective list entries
+        ax.set_xticks(np.arange(len(da.model.values)), labels=da.model.values)
+        ax.set_yticks(np.arange(len(da.season.values)), labels=da.season.values)
+        
+        # Rotate the tick labels and set their alignment.
+        plt.setp(ax.get_xticklabels(), rotation=90, ha="right", va="center", rotation_mode="anchor")
+        
+        # Turn spines on and create white grid.
+        ax.spines[:].set_visible(True)
+        ax.grid(which="minor", color="white", linestyle='-', linewidth=3)
+        # ax.set_xticks(np.arange(da.shape[1]+1)-.5, minor=True)
+        # ax.set_yticks(np.arange(da.shape[0]+1)-.5, minor=True)
+        
+        
+        # Add subplot label
+        ax.text(-0.2, 0.99, f'{fig_label[i]}', fontweight='bold', horizontalalignment='left', verticalalignment='top', transform=ax.transAxes)
+        
+        # Loop over data dimensions and create text annotations.
+        for j in range(len(da2.season.values)):
+            for k in range(len(da2.model.values)):
+                text = ax.text(k, j, f"{(abs(da2.sel(hemisphere=hemisphere)).values[j, k]):.0f}",
+                            ha="center", va="center", color="k",)
+
+        # Add max and min Rectangles
+        for (row, position), (row2, position2) in zip(enumerate(row_max.sel(hemisphere=hemisphere).values), enumerate(row_max2.sel(hemisphere=hemisphere).values)):
+            ax.add_patch(Rectangle((position-0.49,row-0.49),0.98,0.98, fill=False, edgecolor='orangered', lw=1.5))
+            ax.add_patch(Rectangle((position2-0.49,row2-0.49),0.98,0.98, fill=False, edgecolor='orangered', lw=1.5))
+        
+        for (row, position), (row2, position2) in zip(enumerate(row_min.sel(hemisphere=hemisphere).values), enumerate(row_min2.sel(hemisphere=hemisphere).values)):
+            ax.add_patch(Rectangle((position-0.49,row-0.49),0.98,0.98, fill=False, edgecolor='blue', lw=1.5))
+            ax.add_patch(Rectangle((position2-0.49,row2-0.49),0.98,0.98, fill=False, edgecolor='blue', lw=1.5))
+
+    # Create colorbar
+    fig.subplots_adjust(right=0.85)
+    cbar_ax = fig.add_axes([.715, 0.375, 0.0125, 0.5])
+    # cbar_kw = dict(ticks=np.arange(0.05*100,1.05*100,0.1*100), format=fmt)
+    cbar_kw = dict(ticks=list(dict_label['bounds'])) #dict(ticks=dict_label['qrates'])
+    fig.colorbar(im, cax=cbar_ax, **cbar_kw, label=f"Abs. Difference {dict_label['cb_label']}", shrink=0.5)#cmap=cmap, norm=norm, )
+
+    plt.tight_layout(pad=0., w_pad=0., h_pad=.5)  ;
+    # save figure
+    figname = f'{var_name}_abs_diff_2007_2010.png'
+    plt.savefig(fig_dir + figname, format='png', dpi=300, bbox_inches='tight', transparent=True)   
+
+def plt_difference_season(dataset, var_name, lwp_threshold, dict_label, fig_dir):
+    if var_name == 'sf_eff' or var_name == 'pr_eff':
+        diff = (dataset[var_name+'_season_cs_mean'].sel(model='ERA5') - dataset[var_name+'_season_cs_mean'].sel(model = ['ERA5','MIROC6', 'CanESM5', 'AWI-ESM-1-1-LR',
+                                                                                                                        'MPI-ESM1-2-LR', 'UKESM1-0-LL', 'HadGEM3-GC31-LL', 'CNRM-CM6-1',
+                                                                                                                        'CNRM-ESM2-1', 'IPSL-CM6A-LR', 'IPSL-CM5A2-INCA']))
+        
+        da2 = dataset[var_name+'_season_cs_mean'].sel(model = ['ERA5','MIROC6', 'CanESM5', 'AWI-ESM-1-1-LR',
+                                                               'MPI-ESM1-2-LR', 'UKESM1-0-LL', 'HadGEM3-GC31-LL', 'CNRM-CM6-1',
+                                                               'CNRM-ESM2-1', 'IPSL-CM6A-LR', 'IPSL-CM5A2-INCA'])
+    else:
+        diff = (dataset[var_name+'_season_cs_mean'].sel(model='CloudSat') - dataset[var_name+'_season_cs_mean'])
+        da2 = dataset[var_name+'_season_cs_mean']
+    
+    da = diff
+    da = da.where(da != 0., other=np.nan)
+    da.model.values[0] = 'CloudSat-CALIPSO'
+    
+    # find minimum and maximum model in each season
+    row_max = abs(da).argmax('model')
+    row_max2 = abs(da.round(0)).argmax('model')
+    row_min = abs(da).argmin('model')
+    row_min2 = abs(da.round(0)).argmin('model')
+    
+    figsize = [12,5]
+    cmap = cm.bam
+    cmaplist = [cmap(i) for i in range(cmap.N)]
+    bounds = dict_label['bounds']
+    qrates = dict_label['qrates']
+    hemispheres = ['NH', 'SH']
+    
+    # Create a custom colormap
+    cmap = LinearSegmentedColormap.from_list('Custom cmap', cmaplist, cmap.N)
+    norm = BoundaryNorm(bounds, ncolors=len(qrates))
+    
+    # Create a formatting function for colorbar ticks
+    fmt = FuncFormatter(lambda x, pos: qrates[::][norm(x)])
+    fmt = FormatStrFormatter("%.0f")
+    
+    # Create the figure and subplots
+    fig, axsm = plt.subplots(nrows=2, ncols=1, sharex=True, sharey=True, figsize=figsize)
+    # Iterate over hemispheres and subplots
+    for i, hemisphere in enumerate(hemispheres):
+        ax = axsm[i]
+        # Plot your data, add labels, and set ticks
+        im = ax.imshow((da.sel(hemisphere=hemisphere)), cmap=cmap.resampled(len(qrates)), norm=norm)
+        
+        # Show all ticks and label them with the respective list entries
+        ax.set_xticks(np.arange(len(da.model.values)), labels=da.model.values)
+        ax.set_yticks(np.arange(len(da.season.values)), labels=da.season.values)
+        # Rotate the tick labels and set their alignment.
+        plt.setp(ax.get_xticklabels(), rotation=90, ha="right", va="center", rotation_mode="anchor")
+        
+        # Turn spines on and create white grid.
+        ax.spines[:].set_visible(True)
+        ax.grid(which="minor", color="white", linestyle='-', linewidth=3)
+        
+        # Add subplot label
+        ax.text(-0.2, 0.99, f'{fig_label[i]}', fontweight='bold', horizontalalignment='left', verticalalignment='top', transform=ax.transAxes)
+        
+        # Loop over data dimensions and create text annotations.
+        for j in range(len(da2.season.values)):
+            for k in range(len(da2.model.values)):
+                text = ax.text(k, j, f"{(abs(da2.sel(hemisphere=hemisphere)).values[j, k]):.0f}",
+                            ha="center", va="center", color="k",)
+                # text = ax.text(k, j, f"{((da.sel(hemisphere=hemisphere)).values[j, k]):.0f}",
+                #             ha="center", va="center", color="k",)
+            
+        # Add max and min Rectangles
+        for (row, position), (row2, position2) in zip(enumerate(row_max.sel(hemisphere=hemisphere).values), enumerate(row_max2.sel(hemisphere=hemisphere).values)):
+            ax.add_patch(Rectangle((position-0.49,row-0.49),0.98,0.98, fill=False, edgecolor='orangered', lw=1.5))
+            ax.add_patch(Rectangle((position2-0.49,row2-0.49),0.98,0.98, fill=False, edgecolor='orangered', lw=1.5))
+                    
+        for (row, position), (row2, position2) in zip(enumerate(row_min.sel(hemisphere=hemisphere).values), enumerate(row_min2.sel(hemisphere=hemisphere).values)):
+            ax.add_patch(Rectangle((position-0.49,row-0.49),0.98,0.98, fill=False, edgecolor='blue', lw=1.5))
+            ax.add_patch(Rectangle((position2-0.49,row2-0.49),0.98,0.98, fill=False, edgecolor='blue', lw=1.5))
+
+    # Create colorbar
+    fig.subplots_adjust(right=0.85)
+    cbar_ax = fig.add_axes([.715, 0.375, 0.0125, 0.5])
+    cbar_kw = dict(ticks=list(bounds)) # dict(ticks=qrates) #d #
+    cbar = fig.colorbar(im, cax=cbar_ax, **cbar_kw, label=f"Difference {dict_label['cb_label']}", shrink=0.5,extend='both')#cmap=cmap, norm=norm, )
+    if var_name == 'FoS':
+        cbar.ax.set_ylim(-80, 40)
+    elif var_name == 'FLCC':
+        cbar.ax.set_ylim(-40,20)
+    elif var_name == 'sf_eff':
+        cbar.ax.set_ylim(-1, 2)
+    plt.tight_layout(pad=0., w_pad=0., h_pad=.5)  ;
+    
+    # save figure
+    figname = f'{var_name}_diff_2007_2010.png'
+    plt.savefig(fig_dir + figname, format='png', dpi=300, bbox_inches='tight', transparent=True)   
+
+
+def plt_heatmap_all_models_season(dataset, var_name, lwp_threshold, dict_label,  fig_dir):
+    
+    if var_name == 'sf_eff' or var_name == 'pr_eff':
+        da = dataset[var_name+'_season_cs_mean'].sel(model = ['ERA5','MIROC6', 'CanESM5', 'AWI-ESM-1-1-LR',
+                                                              'MPI-ESM1-2-LR', 'UKESM1-0-LL', 'HadGEM3-GC31-LL', 'CNRM-CM6-1',
+                                                              'CNRM-ESM2-1', 'IPSL-CM6A-LR', 'IPSL-CM5A2-INCA'])
+    
+        da2 = abs(dataset[var_name+'_season_cs_mean'].sel(model='ERA5') - dataset[var_name+'_season_cs_mean'].sel(model = ['ERA5','MIROC6', 'CanESM5', 'AWI-ESM-1-1-LR',
+                                                                                                                           'MPI-ESM1-2-LR', 'UKESM1-0-LL', 'HadGEM3-GC31-LL', 'CNRM-CM6-1',
+                                                                                                                           'CNRM-ESM2-1', 'IPSL-CM6A-LR', 'IPSL-CM5A2-INCA']))
+        
+        
+    else:
+        da = dataset[var_name+'_season_cs_mean']
+        
+        da2 = abs(dataset[var_name+'_season_cs_mean'].sel(model='CloudSat') - dataset[var_name+'_season_cs_mean'])
+        
+    da2 = da2.where(da2 != 0., other=np.nan)
+    
+
+
+    # find minimum and maximum model in each season
+    row_max = abs(da2).argmax('model')
+    row_max2 = abs(da2.round(0)).argmax('model')
+    row_min = abs(da2).argmin('model')
+    row_min2 = abs(da2.round(0)).argmin('model')
+
+
+    figsize = [12,5]
+    cmap = cm.hawaii_r
+    cmaplist = [cmap(i) for i in range(cmap.N)]
+    if var_name == 'sf_eff':
+        bounds = np.linspace(0,5,11) 
+    elif var_name == 'FsLCC' or var_name == 'FLCC-FsLCC':
+        bounds = np.linspace(0,60,7)
+    else:
+        bounds = np.linspace(0, 1 * 100, 11)
+    # bounds = dict_label['bounds']
+    hemispheres = ['NH', 'SH']
+
+    
+
+    # Create a formatting function for colorbar ticks
+    if var_name == 'sf_eff':
+        qrates = list(np.arange(0.25, 5, 0.5))
+    elif var_name == 'FsLCC' or var_name == 'FLCC-FsLCC':
+        qrates = list(np.arange(5.,65.,10.))
+    else:
+        qrates = list(np.arange(0.05 * 100, 1.05 * 100, 0.1 * 100))
+    # qrates = dict_label['qrates']
+    # # Create a custom colormap
+    cmap = LinearSegmentedColormap.from_list('Custom cmap', cmaplist, cmap.N)
+    # norm = BoundaryNorm(bounds, 10)
+    norm = BoundaryNorm(bounds, ncolors=len(qrates))
+    # norm = BoundaryNorm(bounds, ncolors=len(dict_label['qrates']))
+    
+    
+    fmt = FuncFormatter(lambda x, pos: qrates[::][norm(x)])
+    if var_name == 'sf_eff':
+        fmt = FormatStrFormatter("%.2f")
+    else:
+        fmt = FormatStrFormatter("%.0f")
+
+
+    # Create the figure and subplots
+    fig, axsm = plt.subplots(nrows=2, ncols=1, sharex=True, sharey=True, figsize=figsize)
+    # fig.suptitle(f'LWP threshold: {lwp_threshold} g m$^{-2}$', y=1.005)
+
+    # Iterate over hemispheres and subplots
+    for i, hemisphere in enumerate(['NH', 'SH']):
+        ax = axsm[i]
+        # Plot your data, add labels, and set ticks
+        im = ax.imshow((da.sel(hemisphere=hemisphere)), cmap=cmap.resampled(len(qrates)), norm=norm)# cmap=cmap.resampled(len(dict_label['qrates'])), norm=norm)
 
         # Show all ticks and label them with the respective list entries
         ax.set_xticks(np.arange(len(da.model.values)), labels=da.model.values)
@@ -2794,9 +3067,13 @@ def plt_percent_difference_season(dataset, var_name, lwp_threshold, dict_label, 
         ax.text(-0.09, 0.99, f'{fig_label[i]}', fontweight='bold', horizontalalignment='left', verticalalignment='top', transform=ax.transAxes)
         
         # Loop over data dimensions and create text annotations.
-        for j in range(len(da2.season.values)):
-            for k in range(len(da2.model.values)):
-                text = ax.text(k, j, f"{(abs(da2.sel(hemisphere=hemisphere)).values[j, k]):.0f}",
+        for j in range(len(da.season.values)):
+            for k in range(len(da.model.values)):
+                if var_name == 'sf_eff':
+                    text = ax.text(k, j, f"{(abs(da.sel(hemisphere=hemisphere)).values[j, k]):.1f}",
+                            ha="center", va="center", color="k",)
+                else:
+                    text = ax.text(k, j, f"{(abs(da.sel(hemisphere=hemisphere)).values[j, k]):.0f}",
                             ha="center", va="center", color="k",)
 
         # Add max and min Rectangles
@@ -2811,10 +3088,82 @@ def plt_percent_difference_season(dataset, var_name, lwp_threshold, dict_label, 
     # Create colorbar
     fig.subplots_adjust(right=0.85)
     cbar_ax = fig.add_axes([.715, 0.375, 0.0125, 0.5])
-    cbar_kw = dict(ticks=np.arange(0.05*100,1.05*100,0.1*100), format=fmt)
-    fig.colorbar(im, cax=cbar_ax, **cbar_kw, label=f"% Difference {dict_label['cb_label']}", shrink=0.5)#cmap=cmap, norm=norm, )
+    if var_name == 'sf_eff':
+        cbar_kw = dict(ticks=np.arange(0.25, 5, 0.5), format=fmt)
+    elif var_name == 'FsLCC' or var_name == 'FLCC-FsLCC':
+        cbar_kw = dict(ticks=np.arange(5.,65.,10.), format=fmt)
+    else:
+        cbar_kw = dict(ticks=np.arange(0.05*100,1.05*100,0.1*100), format=fmt)
+    # cbar_kw = dict(ticks=dict_label['qrates'])
+    fig.colorbar(im, cax=cbar_ax, **cbar_kw, label=f"{dict_label['cb_label']}", shrink=0.5)#cmap=cmap, norm=norm, )
 
     plt.tight_layout(pad=0., w_pad=0., h_pad=.5)  ;
     # save figure
-    figname = f'{var_name}_perc_diff_2007_2010.png'
-    plt.savefig(fig_dir + figname, format='png', bbox_inches='tight', transparent=True)   
+    figname = f'{var_name}_heatmap_all_models_2007_2010.png'
+    plt.savefig(fig_dir + figname, format='png', dpi=300, bbox_inches='tight', transparent=True)   
+    
+def plt_spatial_annual_difference(dataset, hemisphere, var_name, dict_label, fig_dir, lat_extent, lwp_thresholds):
+    # Define constants
+    cmap = cm.bam
+    levels = np.arange(-50,55,5)#dict_label['diff_levels']
+    norm = BoundaryNorm(levels, ncolors=cmap.N, clip=False)
+    lat_slice = slice(45,90) if hemisphere =='NH' else slice(-90,-45)
+    
+    # Create projection
+    projection = create_projection(hemisphere)
+    
+    
+    # Create subplots
+    f, axsm = plt.subplots(nrows=2, ncols=len(lwp_thresholds), subplot_kw={'projection':projection}, figsize=[12,6], sharex=True, sharey=True)
+
+    # Set up axes
+    for ax, k in zip(axsm.flatten(), range(len(fig_label))):
+            setup_axes(ax, hemisphere, lat_extent)
+            ax.text(0.05, 0.95, 
+                    f'{fig_label[k]}', 
+                    fontweight='bold', 
+                    horizontalalignment='left', 
+                    verticalalignment='top', 
+                    transform=ax.transAxes)
+            
+    for ax, row in zip(axsm[:,0], ['CC - ERA5', 'CC - CMIP6$_{mean}$']):
+        ax.text(-0.07, 0.55, row, 
+                va='bottom', 
+                ha='center', 
+                rotation='vertical', 
+                rotation_mode='anchor', 
+                transform=ax.transAxes, 
+                fontweight='bold')
+        
+    ax = axsm.flat
+    for i, lwp_threshold in enumerate(lwp_thresholds):
+        model_ref = 'CloudSat'
+        model1 = 'ERA5'
+        model2 = ['MIROC6', 'CanESM5', 'AWI-ESM-1-1-LR',
+                  'MPI-ESM1-2-LR', 'UKESM1-0-LL', 'HadGEM3-GC31-LL', 'CNRM-CM6-1',
+                  'CNRM-ESM2-1', 'IPSL-CM6A-LR', 'IPSL-CM5A2-INCA']
+        # plot ERA data difference
+        data = dataset[f'{var_name}_year'].sel(model=model_ref, threshold=lwp_threshold) - dataset[f'{var_name}_year'].sel(model=model1, threshold=lwp_threshold)
+        data_glob = dataset[f'{var_name}_year_cs_mean'].sel(model=model_ref, threshold=lwp_threshold) - dataset[f'{var_name}_year_cs_mean'].sel(model=model1, threshold=lwp_threshold)
+        
+        data = data.sel(lat=lat_slice)
+        data_glob = data_glob.sel(hemisphere=hemisphere)
+        cf = ax[i].pcolormesh(data.lon, data.lat, (data.where(~np.isnan(data))), transform=ccrs.PlateCarree(), cmap=cmap, norm=norm)
+        add_text_box(ax[i], data_glob, var_name)
+        ax[i].set_title(f'LWP $\geq$ {lwp_threshold} g m$^{-1}$')
+        
+        # plot CMIP6 model mean difference
+        data_c = dataset[f'{var_name}_year'].sel(model=model_ref, threshold=lwp_threshold) - (dataset[f'{var_name}_year'].sel(threshold=lwp_threshold, model= model2)).mean('model',skipna=True)
+        data_c_glob = dataset[f'{var_name}_year_cs_mean'].sel(model=model_ref, threshold=lwp_threshold) - (dataset[f'{var_name}_year_cs_mean'].sel(threshold=lwp_threshold, model= model2)).mean('model',skipna=True)
+        data_c = data_c.sel(lat=lat_slice)
+        data_c_glob = data_c_glob.sel(hemisphere=hemisphere)
+        cf = ax[i+4].pcolormesh(data_c.lon, data_c.lat, (data_c.where(~np.isnan(data_c))), transform=ccrs.PlateCarree(), cmap=cmap, norm=norm)
+        add_text_box(ax[i+4], data_c_glob, var_name)
+    
+    cbaxes = f.add_axes([1, 0.125, 0.0125, 0.75])
+    cb_label = dict_label['cb_label']
+    plt.colorbar(cf,  cax=cbaxes, shrink=0.5,extend='both', orientation='vertical', label='CC - Model (%)')
+    plt.tight_layout(pad=0., w_pad=0., h_pad=0.,)
+    
+    figname = f'{var_name}_diff_annual_average_{hemisphere}_2007_2010.png'
+    plt.savefig(fig_dir + figname, format='png', dpi=300, bbox_inches='tight', transparent=True)
