@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,9 +38,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -137,6 +137,7 @@ const thebe_selector_output = ".output, .cell_output"
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
   
 
 <a class="navbar-brand logo" href="../intro.html">
@@ -350,6 +351,7 @@ const thebe_selector_output = ".output, .cell_output"
 </button>
 
 
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -359,6 +361,7 @@ document.write(`
   </button>
 `);
 </script>
+
 
 <script>
 document.write(`
@@ -450,7 +453,7 @@ document.write(`
 <p>The ERA5 0.25deg data is located in the folder <code class="docutils literal notranslate"><span class="pre">\scratch\franzihe\</span></code>, CloudSat at …</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lwp_threshold</span> <span class="o">=</span> <span class="mi">20</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lwp_threshold</span> <span class="o">=</span><span class="mi">5</span>
 </pre></div>
 </div>
 </div>
@@ -527,7 +530,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7ff2f0109d50&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7f19b4213d30&gt;
 </pre></div>
 </div>
 </div>
@@ -677,12 +680,12 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds_mci</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="n">ds_mci</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="n">ds_mci</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mf">66.91</span><span class="p">)),</span>
-                                        <span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mf">66.91</span><span class="p">,</span><span class="mi">90</span><span class="p">))],</span> <span class="n">dim</span> <span class="o">=</span><span class="s1">&#39;lat&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ds_mci = dict()</span>
+<span class="c1"># for var in ds.keys():</span>
+<span class="c1">#     ds_mci[var] = dict()</span>
+<span class="c1">#     for model in ds[var].keys():</span>
+<span class="c1">#         ds_mci[var][model] = xr.concat([ds[var][model].sel(lat=slice(-90,-66.91)),</span>
+<span class="c1">#                                         ds[var][model].sel(lat=slice(66.91,90))], dim =&#39;lat&#39;)</span>
 </pre></div>
 </div>
 </div>
@@ -1091,7 +1094,7 @@ lcc_2t_sf dict_keys([&#39;cloudsat_500&#39;, &#39;era_500&#39;, &#39;cmip_500&#3
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ratios</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">get_ratios_dict</span><span class="p">(</span><span class="n">list_models</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span><span class="n">seasons</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">)</span>
 
-<span class="n">ratios_mci</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">get_ratios_dict</span><span class="p">(</span><span class="n">list_models</span><span class="p">,</span> <span class="n">ds_mci</span><span class="p">,</span><span class="n">seasons</span><span class="o">=</span><span class="s1">&#39;alternative&#39;</span><span class="p">)</span>
+<span class="c1"># ratios_mci = fct.get_ratios_dict(list_models, ds_mci,seasons=&#39;alternative&#39;)</span>
 </pre></div>
 </div>
 </div>
@@ -1105,7 +1108,7 @@ lcc_2t_sf dict_keys([&#39;cloudsat_500&#39;, &#39;era_500&#39;, &#39;cmip_500&#3
             <span class="n">ratios</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">get_only_valid_values</span><span class="p">(</span><span class="n">ratios</span><span class="p">,</span> <span class="s1">&#39;500&#39;</span><span class="p">,</span> <span class="n">variables</span><span class="p">)</span>
             
             <span class="c1"># ratios_mci = fct.get_only_valid_values(ratios_mci, &#39;250&#39;, var_name)</span>
-            <span class="n">ratios_mci</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">get_only_valid_values</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">,</span> <span class="s1">&#39;500&#39;</span><span class="p">,</span> <span class="n">variables</span><span class="p">)</span>
+            <span class="c1"># ratios_mci = fct.get_only_valid_values(ratios_mci, &#39;500&#39;, variables)</span>
             <span class="c1"># print(variables, var_name)</span>
 </pre></div>
 </div>
@@ -1131,7 +1134,7 @@ lcc_2t_sf dict_keys([&#39;cloudsat_500&#39;, &#39;era_500&#39;, &#39;cmip_500&#3
     <span class="n">weights</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;orig&#39;</span><span class="p">][</span><span class="n">model</span><span class="p">][</span><span class="s1">&#39;areacella&#39;</span><span class="p">]</span>
     <span class="k">for</span> <span class="nb">vars</span> <span class="ow">in</span> <span class="n">ratios</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="n">ratios</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="o">+</span><span class="s1">&#39;_mean&#39;</span><span class="p">],</span> <span class="n">ratios</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="o">+</span><span class="s1">&#39;_std&#39;</span><span class="p">],</span> <span class="n">ratios</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="o">+</span><span class="s1">&#39;_stats&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">weighted_average</span><span class="p">(</span><span class="n">ratios</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="p">],</span> <span class="n">weights</span><span class="p">)</span>
-        <span class="n">ratios_mci</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="o">+</span><span class="s1">&#39;_mean&#39;</span><span class="p">],</span> <span class="n">ratios_mci</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="o">+</span><span class="s1">&#39;_std&#39;</span><span class="p">],</span> <span class="n">ratios_mci</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="o">+</span><span class="s1">&#39;_stats&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">weighted_average</span><span class="p">(</span><span class="n">ratios_mci</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="nb">vars</span><span class="p">],</span> <span class="n">weights</span><span class="p">)</span>
+        <span class="c1"># ratios_mci[model][vars+&#39;_mean&#39;], ratios_mci[model][vars+&#39;_std&#39;], ratios_mci[model][vars+&#39;_stats&#39;] = fct.weighted_average(ratios_mci[model][vars], weights)</span>
 </pre></div>
 </div>
 </div>
@@ -1147,9 +1150,79 @@ lcc_2t_sf dict_keys([&#39;cloudsat_500&#39;, &#39;era_500&#39;, &#39;cmip_500&#3
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ratios_mci</span><span class="p">[</span><span class="s1">&#39;500&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">ratios_mci</span><span class="p">[</span><span class="s1">&#39;cloudsat_500&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">coords</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;model&#39;</span><span class="p">:</span><span class="s1">&#39;CloudSat&#39;</span><span class="p">}),</span>
-                           <span class="n">ratios_mci</span><span class="p">[</span><span class="s1">&#39;era_500&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">coords</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;model&#39;</span><span class="p">:</span><span class="s1">&#39;ERA5&#39;</span><span class="p">}),</span>
-                           <span class="n">ratios_mci</span><span class="p">[</span><span class="s1">&#39;cmip_500&#39;</span><span class="p">]],</span> <span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">flcc</span> <span class="o">=</span> <span class="n">ratios</span><span class="p">[</span><span class="s1">&#39;500&#39;</span><span class="p">][</span><span class="s1">&#39;FLCC_season_cs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;MIROC6&#39;</span><span class="p">,</span> <span class="s1">&#39;CanESM5&#39;</span><span class="p">,</span> <span class="s1">&#39;AWI-ESM-1-1-LR&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;MPI-ESM1-2-LR&#39;</span><span class="p">,</span> <span class="s1">&#39;UKESM1-0-LL&#39;</span><span class="p">,</span> <span class="s1">&#39;HadGEM3-GC31-LL&#39;</span><span class="p">,</span> <span class="s1">&#39;CNRM-CM6-1&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;CNRM-ESM2-1&#39;</span><span class="p">,</span> <span class="s1">&#39;IPSL-CM6A-LR&#39;</span><span class="p">,</span> <span class="s1">&#39;IPSL-CM5A2-INCA&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">)</span>
+<span class="n">fslcc</span> <span class="o">=</span> <span class="n">ratios</span><span class="p">[</span><span class="s1">&#39;500&#39;</span><span class="p">][</span><span class="s1">&#39;FsLCC_season_cs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;MIROC6&#39;</span><span class="p">,</span> <span class="s1">&#39;CanESM5&#39;</span><span class="p">,</span> <span class="s1">&#39;AWI-ESM-1-1-LR&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;MPI-ESM1-2-LR&#39;</span><span class="p">,</span> <span class="s1">&#39;UKESM1-0-LL&#39;</span><span class="p">,</span> <span class="s1">&#39;HadGEM3-GC31-LL&#39;</span><span class="p">,</span> <span class="s1">&#39;CNRM-CM6-1&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;CNRM-ESM2-1&#39;</span><span class="p">,</span> <span class="s1">&#39;IPSL-CM6A-LR&#39;</span><span class="p">,</span> <span class="s1">&#39;IPSL-CM5A2-INCA&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hemisphere</span> <span class="o">=</span> <span class="s1">&#39;NH&#39;</span>
+<span class="n">lat_extent</span> <span class="o">=</span> <span class="mf">45.</span>
+<span class="n">projection</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">create_projection</span><span class="p">(</span><span class="n">hemisphere</span><span class="p">)</span>
+<span class="n">f</span><span class="p">,</span> <span class="n">axsm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> 
+                            <span class="n">ncols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> 
+                            <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="n">projection</span><span class="p">},</span> 
+                            <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axsm</span><span class="o">.</span><span class="n">flatten</span><span class="p">():</span>
+    <span class="n">fct</span><span class="o">.</span><span class="n">setup_axes</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">hemisphere</span><span class="p">,</span> <span class="n">lat_extent</span><span class="p">)</span>
+    
+<span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">hawaii_r</span> 
+<span class="n">levels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">105</span><span class="p">,</span><span class="mf">5.</span><span class="p">)</span>
+<span class="n">norm</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">BoundaryNorm</span><span class="p">(</span><span class="n">levels</span><span class="p">,</span> <span class="n">ncolors</span><span class="o">=</span><span class="n">cmap</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">season</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axsm</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">:</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">flcc</span><span class="o">.</span><span class="n">season</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">sub_title</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;season = </span><span class="si">{</span><span class="n">season</span><span class="o">.</span><span class="n">values</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">sub_title</span><span class="p">)</span>
+        
+    <span class="n">val</span> <span class="o">=</span> <span class="p">(</span><span class="n">flcc</span><span class="p">)</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span> <span class="k">if</span> <span class="n">hemisphere</span> <span class="o">==</span> <span class="s1">&#39;NH&#39;</span> <span class="k">else</span> <span class="p">(</span><span class="n">flcc</span><span class="p">)</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">))</span>
+    <span class="n">cf1</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="n">val</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">val</span><span class="p">)))</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">season</span><span class="o">=</span><span class="n">season</span><span class="p">),</span> 
+                            <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> 
+                            <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> 
+                            <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
+<span class="n">cbaxes</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.92</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="mf">0.0125</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">])</span>
+<span class="n">cb_label</span> <span class="o">=</span> <span class="s1">&#39;FLCC&#39;</span>
+<span class="n">extend</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cf1</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cbaxes</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">extend</span><span class="o">=</span><span class="n">extend</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">cb_label</span><span class="p">)</span>
+        
+<span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">season</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axsm</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">:</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">fslcc</span><span class="o">.</span><span class="n">season</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">sub_title</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;season = </span><span class="si">{</span><span class="n">season</span><span class="o">.</span><span class="n">values</span><span class="si">}</span><span class="s1">&#39;</span>
+        
+        <span class="n">val</span> <span class="o">=</span> <span class="p">(</span><span class="n">fslcc</span><span class="p">)</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span> <span class="k">if</span> <span class="n">hemisphere</span> <span class="o">==</span> <span class="s1">&#39;NH&#39;</span> <span class="k">else</span> <span class="p">(</span><span class="n">fslcc</span><span class="p">)</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">))</span>
+        <span class="n">cf</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="n">val</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">val</span><span class="p">)))</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">season</span><span class="o">=</span><span class="n">season</span><span class="p">),</span> 
+                            <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> 
+                            <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> 
+                            <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
+        
+<span class="n">cbaxes</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.92</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.0125</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">])</span>
+<span class="n">cb_label</span> <span class="o">=</span> <span class="s1">&#39;FsLCC&#39;</span>
+<span class="n">extend</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cf</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cbaxes</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">extend</span><span class="o">=</span><span class="n">extend</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">cb_label</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7fd6d8282d40&gt;
+</pre></div>
+</div>
+<img alt="../_images/dcbceca61f25f5985d64da9d082cdbfb857b6705859d0b0afa9d2731a4172f5b.png" src="../_images/dcbceca61f25f5985d64da9d082cdbfb857b6705859d0b0afa9d2731a4172f5b.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ratios_mci[&#39;500&#39;] = xr.concat([ratios_mci[&#39;cloudsat_500&#39;].assign_coords(coords={&#39;model&#39;:&#39;CloudSat&#39;}),</span>
+<span class="c1">#                            ratios_mci[&#39;era_500&#39;].assign_coords(coords={&#39;model&#39;:&#39;ERA5&#39;}),</span>
+<span class="c1">#                            ratios_mci[&#39;cmip_500&#39;]], dim=(&quot;model&quot;))</span>
 </pre></div>
 </div>
 </div>
@@ -1184,12 +1257,12 @@ lcc_2t_sf dict_keys([&#39;cloudsat_500&#39;, &#39;era_500&#39;, &#39;cmip_500&#3
                     <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_month&#39;</span><span class="p">,</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_year&#39;</span><span class="p">,</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_year_cs_mean&#39;</span><span class="p">,</span>
                     <span class="p">]])</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">file_dir</span><span class="p">,</span> <span class="n">file_name</span><span class="p">),</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;NETCDF4&quot;</span><span class="p">)</span>
     
-    <span class="n">file_name_mci</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;McI_</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_LWP</span><span class="si">{</span><span class="n">lwp_threshold</span><span class="si">}</span><span class="s1">_2007_2010.nc&#39;</span>
-    <span class="p">(</span><span class="n">ratios_mci</span><span class="p">[</span><span class="s1">&#39;500&#39;</span><span class="p">][[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_season&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_season_cs_mean&#39;</span><span class="p">,</span>
-                    <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_month_mean&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_year_mean&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_month_cs_mean&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_year_cs_mean&#39;</span><span class="p">,</span>
-                    <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_month_years_mean&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_year_years_mean&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_season_mean&#39;</span><span class="p">,</span>
-                    <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_month&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_year&#39;</span><span class="p">,</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_year_cs_mean&#39;</span><span class="p">,</span>
-                    <span class="p">]])</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">file_dir_mci</span><span class="p">,</span> <span class="n">file_name_mci</span><span class="p">),</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;NETCDF4&quot;</span><span class="p">)</span>
+    <span class="c1"># file_name_mci = f&#39;McI_{var_name}_LWP{lwp_threshold}_2007_2010.nc&#39;</span>
+    <span class="c1"># (ratios_mci[&#39;500&#39;][[f&#39;{var_name}_season&#39;, f&#39;{var_name}_season_cs_mean&#39;,</span>
+    <span class="c1">#                 f&#39;{var_name}_month_mean&#39;, f&#39;{var_name}_year_mean&#39;, f&#39;{var_name}_month_cs_mean&#39;, f&#39;{var_name}_year_cs_mean&#39;,</span>
+    <span class="c1">#                 f&#39;{var_name}_month_years_mean&#39;, f&#39;{var_name}_year_years_mean&#39;, f&#39;{var_name}_season_mean&#39;,</span>
+    <span class="c1">#                 f&#39;{var_name}_month&#39;, f&#39;{var_name}_year&#39;,f&#39;{var_name}_year_cs_mean&#39;,</span>
+    <span class="c1">#                 ]]).to_netcdf(path=os.path.join(file_dir_mci, file_name_mci), format=&quot;NETCDF4&quot;)</span>
 </pre></div>
 </div>
 </div>
@@ -1201,7 +1274,7 @@ lcc_2t_sf dict_keys([&#39;cloudsat_500&#39;, &#39;era_500&#39;, &#39;cmip_500&#3
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>20
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>5
 </pre></div>
 </div>
 </div>
@@ -1237,7 +1310,7 @@ lcc_2t_sf dict_keys([&#39;cloudsat_500&#39;, &#39;era_500&#39;, &#39;cmip_500&#3
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
 </div>
                 </footer>
@@ -1285,6 +1358,7 @@ By Franziska Hellmuth
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2022.
@@ -1311,8 +1385,8 @@ By Franziska Hellmuth
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
   <footer class="bd-footer">
   </footer>

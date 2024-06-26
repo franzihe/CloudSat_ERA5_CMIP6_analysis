@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,9 +38,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -137,6 +137,7 @@ const thebe_selector_output = ".output, .cell_output"
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
   
 
 <a class="navbar-brand logo" href="../intro.html">
@@ -350,6 +351,7 @@ const thebe_selector_output = ".output, .cell_output"
 </button>
 
 
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -359,6 +361,7 @@ document.write(`
   </button>
 `);
 </script>
+
 
 <script>
 document.write(`
@@ -450,7 +453,7 @@ document.write(`
 <p>The ERA5 0.25deg data is located in the folder <code class="docutils literal notranslate"><span class="pre">\scratch\franzihe\</span></code>, CloudSat at …</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lwp_threshold</span> <span class="o">=</span><span class="mi">5</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lwp_threshold</span> <span class="o">=</span> <span class="mi">5</span>
 </pre></div>
 </div>
 </div>
@@ -520,14 +523,16 @@ document.write(`
 <span class="c1"># from matplotlib.lines import Line2D</span>
 <span class="c1"># from matplotlib.patches import Patch</span>
 <span class="c1"># from sklearn.metrics import r2_score</span>
-
+<span class="kn">from</span> <span class="nn">seaborn</span> <span class="kn">import</span> <span class="n">set_context</span>
+<span class="c1"># plot cosmetics</span>
+<span class="n">set_context</span><span class="p">(</span><span class="s1">&#39;paper&#39;</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">rc</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;lines.linewidth&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>
 
 <span class="n">xr</span><span class="o">.</span><span class="n">set_options</span><span class="p">(</span><span class="n">display_style</span><span class="o">=</span><span class="s1">&#39;html&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7f5c603bb490&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7eff440e9600&gt;
 </pre></div>
 </div>
 </div>
@@ -734,13 +739,15 @@ document.write(`
 <span class="c1">#      &#39;lcc_w_snow&#39;:  {&#39;cb_label&#39;:&#39;FoS in sLCCs (%)&#39;, &#39;levels&#39;:np.arange(0,110,10), &#39;vmin&#39;: 0, &#39;vmax&#39;:100, &#39;diff_levels&#39;:np.arange(-60,65,5), &#39;diff_vmin&#39;:-60, &#39;diff_vmax&#39;:60},</span>
 <span class="c1">#      &#39;sf_eff&#39;:      {&#39;cb_label&#39;:&#39;SE in sLCCs (h$^{-1}$)&#39;, &#39;levels&#39;:np.arange(0,5.5,.5), &#39;vmin&#39;:0, &#39;vmax&#39;:5, &#39;diff_levels&#39;:np.arange(-1.2,1.4,.2), &#39;diff_vmin&#39;:-1.2, &#39;diff_vmax&#39;:1.2}#&#39;Relative snowfall efficiency (h$^{-1}$)&#39;</span>
      
-     <span class="s1">&#39;FLCC&#39;</span> <span class="p">:</span> <span class="p">{</span><span class="s1">&#39;cb_label&#39;</span><span class="p">:</span><span class="s1">&#39;FLCC (%)&#39;</span><span class="p">,</span>             <span class="s1">&#39;levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">105.</span><span class="p">,</span><span class="mf">5.</span><span class="p">),</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="mf">100.</span><span class="p">,</span>   <span class="s1">&#39;diff_levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>   <span class="s1">&#39;diff_vmin&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;diff_vmax&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">},</span>
-     <span class="s1">&#39;FsLCC&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;cb_label&#39;</span><span class="p">:</span><span class="s1">&#39;FsLCC (%)&#39;</span><span class="p">,</span>            <span class="s1">&#39;levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">105.</span><span class="p">,</span><span class="mf">5.</span><span class="p">),</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>   <span class="s1">&#39;diff_levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>   <span class="s1">&#39;diff_vmin&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;diff_vmax&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">},</span>
-     <span class="c1"># # &#39;FoP&#39;  : {&#39;cb_label&#39;:&#39;FoP in LCCs (%)&#39;,      &#39;levels&#39;:np.arange(0,105.,5.), &#39;vmin&#39;:0, &#39;vmax&#39;: 100,   &#39;diff_levels&#39;:np.arange(-100,110,10),   &#39;diff_vmin&#39;:-100, &#39;diff_vmax&#39;:100},</span>
-     <span class="c1"># &#39;FoS&#39;  : {&#39;cb_label&#39;:&#39;FoS in sLCCs (%)&#39;,     &#39;levels&#39;:np.arange(0,105.,5.), &#39;vmin&#39;:0, &#39;vmax&#39;: 100,   &#39;diff_levels&#39;:np.arange(-100,110,10),   &#39;diff_vmin&#39;:-100, &#39;diff_vmax&#39;:100},</span>
-     <span class="c1"># &#39;sf_eff&#39;: {&#39;cb_label&#39;:&#39;SE in sLCCs (h$^{-1}$)&#39;,&#39;levels&#39;:np.arange(0,5.5,.5), &#39;vmin&#39;:0, &#39;vmax&#39;: 5,   &#39;diff_levels&#39;:np.arange(-1.2,1.4,.2),   &#39;diff_vmin&#39;:-1.2, &#39;diff_vmax&#39;:1.2},</span>
-     <span class="c1"># # &#39;pr_eff&#39;: {&#39;cb_label&#39;:&#39;PE in sLCCs (h$^{-1}$)&#39;, &#39;levels&#39;:np.arange(0,550.,50.), &#39;vmin&#39;:0, &#39;vmax&#39;:500,   &#39;diff_levels&#39;:np.arange(-120,140,20),   &#39;diff_vmin&#39;:-120, &#39;diff_vmax&#39;:120},</span>
-     <span class="s1">&#39;FLCC-FsLCC&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;cb_label&#39;</span><span class="p">:</span><span class="s1">&#39;FLCC (%), FsLCC (%)&#39;</span><span class="p">,</span>  <span class="s1">&#39;levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">105.</span><span class="p">,</span><span class="mf">5.</span><span class="p">),</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>   <span class="s1">&#39;diff_levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>   <span class="s1">&#39;diff_vmin&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;diff_vmax&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">}}</span>
+     <span class="s1">&#39;FLCC&#39;</span> <span class="p">:</span> <span class="p">{</span><span class="s1">&#39;cb_label&#39;</span><span class="p">:</span><span class="s1">&#39;f$_{{LCC}}$ (%)&#39;</span><span class="p">,</span>             <span class="s1">&#39;levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">110.</span><span class="p">,</span><span class="mf">10.</span><span class="p">),</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="mf">100.</span><span class="p">,</span> <span class="s1">&#39;vmax2&#39;</span><span class="p">:</span> <span class="mf">100.</span><span class="p">,</span>  <span class="s1">&#39;diff_levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>   <span class="s1">&#39;diff_vmin&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;diff_vmax&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;bounds&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="mi">9</span><span class="p">),</span> <span class="s1">&#39;qrates&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">2.5</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="mi">5</span><span class="p">))},</span>
+     <span class="s1">&#39;FsLCC&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;cb_label&#39;</span><span class="p">:</span><span class="s1">&#39;f$_{{sLCC}}$ (%)&#39;</span><span class="p">,</span>            <span class="s1">&#39;levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">110.</span><span class="p">,</span><span class="mf">10.</span><span class="p">),</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;vmax2&#39;</span><span class="p">:</span> <span class="mf">65.</span><span class="p">,</span>   <span class="s1">&#39;diff_levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>   <span class="s1">&#39;diff_vmin&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;diff_vmax&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;bounds&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span> <span class="s1">&#39;qrates&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">2.5</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">5</span><span class="p">))},</span> 
+     <span class="c1"># &#39;FoP&#39;  : {&#39;cb_label&#39;:&#39;FoP in LCCs (%)&#39;,      &#39;levels&#39;:np.arange(0,105.,5.), &#39;vmin&#39;:0, &#39;vmax&#39;: 100,   &#39;diff_levels&#39;:np.arange(-100,110,10),   &#39;diff_vmin&#39;:-100, &#39;diff_vmax&#39;:100},</span>
+     <span class="c1"># &#39;FoS&#39;  : {&#39;cb_label&#39;:&#39;f$_{{snow}}$ (%)&#39;,     &#39;levels&#39;:np.arange(0,110.,10.), &#39;vmin&#39;:0, &#39;vmax&#39;: 100, &#39;vmax2&#39;: 100.,   &#39;diff_levels&#39;:np.arange(-100,110,10),   &#39;diff_vmin&#39;:-100, &#39;diff_vmax&#39;:100, &#39;bounds&#39;:np.linspace(0,80,17), &#39;qrates&#39;:list(np.arange(2.5,80,5))},</span>
+     <span class="c1"># &#39;pr_eff&#39;: {&#39;cb_label&#39;:&#39;PE in sLCCs (h$^{-1}$)&#39;, &#39;levels&#39;:np.arange(0,550.,50.), &#39;vmin&#39;:0, &#39;vmax&#39;:500,   &#39;diff_levels&#39;:np.arange(-120,140,20),   &#39;diff_vmin&#39;:-120, &#39;diff_vmax&#39;:120},</span>
+     <span class="s1">&#39;FLCC-FsLCC&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;cb_label&#39;</span><span class="p">:</span><span class="s1">&#39;f$_{{LCC}}$ (%), f$_{{sLCC}}$ (%)&#39;</span><span class="p">,</span>  <span class="s1">&#39;levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">110.</span><span class="p">,</span><span class="mf">10.</span><span class="p">),</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;vmax2&#39;</span><span class="p">:</span> <span class="mf">65.</span><span class="p">,</span>   <span class="s1">&#39;diff_levels&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>   <span class="s1">&#39;diff_vmin&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;diff_vmax&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;bounds&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">45</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="s1">&#39;qrates&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">2.5</span><span class="p">,</span><span class="mi">45</span><span class="p">,</span><span class="mi">5</span><span class="p">))},</span>
+     <span class="c1"># &#39;sf_eff&#39;: {&#39;cb_label&#39;:&#39;SE in sLCCs (h$^{-1}$)&#39;,&#39;levels&#39;:np.arange(0,5.5,.5), &#39;vmin&#39;:0, &#39;vmax&#39;: 5, &#39;vmax2&#39;: 7.5,   &#39;diff_levels&#39;:np.arange(-1.2,1.4,.2),   &#39;diff_vmin&#39;:-1.2, &#39;diff_vmax&#39;:1.2, &#39;bounds&#39;:np.linspace(0,2,11), &#39;qrates&#39;: list(np.arange(0.1,2,0.2))},</span>
+     <span class="c1"># &#39;sf_eff&#39;: {&#39;cb_label&#39;:&#39;SE in sLCCs (h$^{-1}$)&#39;,&#39;levels&#39;:np.arange(0,9.5,.5), &#39;vmin&#39;:0, &#39;vmax&#39;: 9,   &#39;diff_levels&#39;:np.arange(-1.2,1.4,.2),   &#39;diff_vmin&#39;:-1.2, &#39;diff_vmax&#39;:1.2},</span>
+     <span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -754,10 +761,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/87580b730961e4eb42c0a2addc3045b1352c9f5e9ca483acb868d3a2cd42a565.png" src="../_images/87580b730961e4eb42c0a2addc3045b1352c9f5e9ca483acb868d3a2cd42a565.png" />
-<img alt="../_images/f7e5a6ffe2d94a59d908a3f334e4cdb63a8284f83976b050d92c0da4e9771e9f.png" src="../_images/f7e5a6ffe2d94a59d908a3f334e4cdb63a8284f83976b050d92c0da4e9771e9f.png" />
-<img alt="../_images/2f418d7d4ea442789934215057b99c0c982dc5e281f8be891ac03982cab85200.png" src="../_images/2f418d7d4ea442789934215057b99c0c982dc5e281f8be891ac03982cab85200.png" />
-<img alt="../_images/ffd0e4aa71ea579f31440ef5c42095093c97f0d0e657c3aaeb1cc97aea364ade.png" src="../_images/ffd0e4aa71ea579f31440ef5c42095093c97f0d0e657c3aaeb1cc97aea364ade.png" />
+<img alt="../_images/1dd29a030406e24a8ddbfc550fb90eadf68712d145b68456ea2f30fa29315cd1.png" src="../_images/1dd29a030406e24a8ddbfc550fb90eadf68712d145b68456ea2f30fa29315cd1.png" />
+<img alt="../_images/869a06db50cf6bb434eb613c9302807a11282df1285c5ba8624e131a6cd1fa30.png" src="../_images/869a06db50cf6bb434eb613c9302807a11282df1285c5ba8624e131a6cd1fa30.png" />
+<img alt="../_images/8b1a6b18af364f3d428f1f0427ee6ce65fa317ce7186f3b4610545bcfef84b05.png" src="../_images/8b1a6b18af364f3d428f1f0427ee6ce65fa317ce7186f3b4610545bcfef84b05.png" />
+<img alt="../_images/30b48f8ae231298a1e947138f1deb591214c278ea72bb45b2a08b8e1558c1c15.png" src="../_images/30b48f8ae231298a1e947138f1deb591214c278ea72bb45b2a08b8e1558c1c15.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -788,9 +795,9 @@ document.write(`
                                 <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> 
                                 <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="n">projection</span><span class="p">},</span> 
                                 <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;LWP threshold: </span><span class="si">{</span><span class="n">lwp_threshold</span><span class="si">}</span><span class="s1"> g m$^</span><span class="si">{</span><span class="o">-</span><span class="mi">2</span><span class="si">}</span><span class="s1">$&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.005</span><span class="p">)</span>
+<span class="c1">#     f.suptitle(f&#39;LWP threshold: {lwp_threshold} g m$^{-2}$&#39;, y=1.005)</span>
 
-    <span class="n">model_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CloudSat&#39;</span><span class="p">,</span> <span class="s1">&#39;ERA5&#39;</span><span class="p">,</span> <span class="s1">&#39;ERA5-hourly&#39;</span><span class="p">]</span>
+    <span class="n">model_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CloudSat-CALIPSO&#39;</span><span class="p">,</span> <span class="s1">&#39;ERA5&#39;</span><span class="p">,</span> <span class="s1">&#39;ERA5-hourly&#39;</span><span class="p">]</span>
 
     <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axsm</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">model_labels</span><span class="p">):</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="mf">0.07</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> 
@@ -856,29 +863,37 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7c36e8f2cabfd4b36eedf74b8819b6ea6efcc620f569d4f7d58679147b2d6e4d.png" src="../_images/7c36e8f2cabfd4b36eedf74b8819b6ea6efcc620f569d4f7d58679147b2d6e4d.png" />
-<img alt="../_images/070333f9cf83e0e3719152579a9f628820bf4037515ea1f0a4f87e1e69522da2.png" src="../_images/070333f9cf83e0e3719152579a9f628820bf4037515ea1f0a4f87e1e69522da2.png" />
+<img alt="../_images/6720b90539d9097f523f6959b6d6435c150c49f7bbc8e3b65acdff4466aa4d18.png" src="../_images/6720b90539d9097f523f6959b6d6435c150c49f7bbc8e3b65acdff4466aa4d18.png" />
+<img alt="../_images/0a5a35e50059e44c60a92686153b9972eff54963f4c419e71c1d351296873dbe.png" src="../_images/0a5a35e50059e44c60a92686153b9972eff54963f4c419e71c1d351296873dbe.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;FLCC&#39;</span><span class="p">,</span> <span class="s1">&#39;FsLCC&#39;</span><span class="p">]:</span>
-
+    <span class="n">val1</span> <span class="o">=</span> <span class="n">ratios</span><span class="p">[</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_month&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;CloudSat&#39;</span><span class="p">)</span>
+    <span class="n">val1_mean</span> <span class="o">=</span> <span class="n">ratios</span><span class="p">[</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_month_cs_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;CloudSat&#39;</span><span class="p">)</span>
+    
     <span class="n">val2</span><span class="o">=</span> <span class="n">ratios</span><span class="p">[</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_month&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;ERA5&#39;</span><span class="p">)</span>
     <span class="n">val2_mean</span><span class="o">=</span> <span class="n">ratios</span><span class="p">[</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span> <span class="s1">&#39;_month_cs_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;ERA5&#39;</span><span class="p">)</span>
 
     <span class="n">val3</span><span class="o">=</span> <span class="n">ratios_hourly</span><span class="p">[</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;_month&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;ERA5&#39;</span><span class="p">)</span>
     <span class="n">val3_mean</span> <span class="o">=</span> <span class="n">ratios_hourly</span><span class="p">[</span><span class="n">var_name</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span><span class="s1">&#39;_month_cs_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;ERA5&#39;</span><span class="p">)</span>
 
-    <span class="n">diff</span> <span class="o">=</span> <span class="n">val2</span><span class="o">-</span><span class="n">val3</span>
-    <span class="n">diff_mean</span> <span class="o">=</span> <span class="n">val2_mean</span><span class="o">-</span><span class="n">val3_mean</span>
+    <span class="n">diff_cs_d</span> <span class="o">=</span> <span class="n">val1</span> <span class="o">-</span> <span class="n">val2</span>
+    <span class="n">diff_cs_d_mean</span> <span class="o">=</span> <span class="n">val1_mean</span> <span class="o">-</span> <span class="n">val2_mean</span>
+    
+    <span class="n">diff_cs_h</span> <span class="o">=</span> <span class="n">val1</span> <span class="o">-</span> <span class="n">val3</span>
+    <span class="n">diff_cs_h_mean</span> <span class="o">=</span> <span class="n">val1_mean</span> <span class="o">-</span> <span class="n">val3_mean</span>
+    
+    <span class="n">diff_era</span> <span class="o">=</span> <span class="n">val2</span> <span class="o">-</span> <span class="n">val3</span>
+    <span class="n">diff_era_mean</span> <span class="o">=</span> <span class="n">val2_mean</span> <span class="o">-</span> <span class="n">val3_mean</span>
 
     <span class="n">projection</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">create_projection</span><span class="p">(</span><span class="n">hemisphere</span><span class="p">)</span>
     <span class="n">density</span> <span class="o">=</span> <span class="mi">4</span>
-    <span class="n">f</span><span class="p">,</span> <span class="n">axsm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
+    <span class="n">f</span><span class="p">,</span> <span class="n">axsm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">ncols</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> 
                                     <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="n">projection</span><span class="p">},</span> 
-                                    <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;LWP threshold: </span><span class="si">{</span><span class="n">lwp_threshold</span><span class="si">}</span><span class="s1"> g m$^</span><span class="si">{</span><span class="o">-</span><span class="mi">2</span><span class="si">}</span><span class="s1">$&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.005</span><span class="p">)</span>
+                                    <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># f.suptitle(f&#39;LWP threshold: {lwp_threshold} g m$^{-2}$&#39;, y=1.005)</span>
 
     <span class="n">model_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;July&#39;</span><span class="p">,</span> <span class="s1">&#39;November&#39;</span><span class="p">,</span> <span class="p">]</span>
 
@@ -899,62 +914,112 @@ document.write(`
                         <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> 
                         <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
                 
-    <span class="n">list1</span> <span class="o">=</span> <span class="p">[</span><span class="n">val2</span><span class="p">,</span> <span class="n">val3</span><span class="p">,</span> <span class="n">diff</span><span class="p">]</span>
-    <span class="n">list_glob</span> <span class="o">=</span> <span class="p">[</span><span class="n">val2_mean</span><span class="p">,</span> <span class="n">val3_mean</span><span class="p">,</span> <span class="n">diff_mean</span><span class="p">]</span>
+    <span class="n">list1</span> <span class="o">=</span> <span class="p">[</span><span class="n">val1</span><span class="p">,</span> <span class="n">val2</span><span class="p">,</span> <span class="n">val3</span><span class="p">,</span> <span class="n">diff_cs_d</span><span class="p">,</span>  <span class="n">diff_cs_h</span><span class="p">,</span> <span class="p">]</span><span class="c1">#diff_era]</span>
+    <span class="n">list_glob</span> <span class="o">=</span> <span class="p">[</span><span class="n">val1_mean</span><span class="p">,</span> <span class="n">val2_mean</span><span class="p">,</span> <span class="n">val3_mean</span><span class="p">,</span> <span class="n">diff_cs_d_mean</span><span class="p">,</span> <span class="n">diff_cs_h_mean</span><span class="p">,</span> <span class="p">]</span><span class="c1">#diff_era_mean]</span>
 
     <span class="c1"># for ax in axsm.flat:</span>
 
 
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="n">hemi_glob</span><span class="p">,</span><span class="n">sub_title</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">list1</span><span class="p">,</span><span class="n">list_glob</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;ERA5 daily means&quot;</span><span class="p">,</span> <span class="s2">&quot;ERA5 hourly&quot;</span><span class="p">,</span> <span class="s2">&quot;daily mean - hourly&quot;</span><span class="p">]</span> <span class="p">)):</span>
-        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="n">hemi_glob</span><span class="p">,</span><span class="n">sub_title</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">list1</span><span class="p">,</span><span class="n">list_glob</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;CloudSat-CALIPSO&quot;</span><span class="p">,</span> 
+                                                                          <span class="s2">&quot;ERA5 Daily mean&quot;</span><span class="p">,</span> 
+                                                                          <span class="s2">&quot;ERA5 Hourly&quot;</span><span class="p">,</span> 
+                                                                          <span class="s2">&quot;Daily mean&quot;</span><span class="p">,</span> 
+                                                                          <span class="s2">&quot;Hourly&quot;</span><span class="p">,</span> <span class="p">]</span> <span class="p">)):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">hawaii_r</span> 
             <span class="n">levels</span> <span class="o">=</span> <span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">][</span><span class="s1">&#39;levels&#39;</span><span class="p">]</span>
             <span class="n">norm</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">BoundaryNorm</span><span class="p">(</span><span class="n">levels</span><span class="p">,</span> <span class="n">ncolors</span><span class="o">=</span><span class="n">cmap</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">bam</span>
-            <span class="n">levels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="mf">17.5</span><span class="p">,</span><span class="mf">2.5</span><span class="p">)</span>
-            <span class="n">norm</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">BoundaryNorm</span><span class="p">(</span><span class="n">levels</span><span class="p">,</span> <span class="n">ncolors</span><span class="o">=</span><span class="n">cmap</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="n">levels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+                <span class="n">norm</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">BoundaryNorm</span><span class="p">(</span><span class="n">levels</span><span class="p">,</span> <span class="n">ncolors</span><span class="o">=</span><span class="n">cmap</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">extend</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1">#         else:</span>
+    <span class="c1">#             levels = np.arange(-15,17.5,2.5)</span>
+    <span class="c1">#             extend = &#39;both&#39;</span>
+    <span class="c1">#         norm = fct.BoundaryNorm(levels, ncolors=cmap.N, clip=True)</span>
         <span class="n">val</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span> <span class="k">if</span> <span class="n">hemisphere</span> <span class="o">==</span> <span class="s1">&#39;NH&#39;</span> <span class="k">else</span> <span class="n">value</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">))</span>
         <span class="n">cf</span> <span class="o">=</span> <span class="n">axsm</span><span class="o">.</span><span class="n">flat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="n">val</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">val</span><span class="p">)))</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="mi">7</span><span class="p">),</span> 
                                             <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> 
                                             <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> 
                                             <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">83</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span> <span class="k">if</span> <span class="n">hemisphere</span> <span class="o">==</span> <span class="s1">&#39;NH&#39;</span> <span class="k">else</span> <span class="n">value</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">83</span><span class="p">))</span>
+        <span class="n">collection</span> <span class="o">=</span> <span class="n">axsm</span><span class="o">.</span><span class="n">flat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span>
+            <span class="n">val</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="n">val</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">val</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="mi">7</span><span class="p">),</span> <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+            <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">ecolor</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">hatches</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span> <span class="o">*</span> <span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="s1">&#39;.&#39;</span><span class="p">],</span> <span class="n">add_colorbar</span><span class="o">=</span><span class="kc">False</span>
+                <span class="p">)</span>
+        <span class="c1"># axsm.flat[i].set_title(&#39;&#39;)</span>
+        
+        <span class="c1"># axsm.flat[i].set_title(sub_title)</span>
         <span class="n">axsm</span><span class="o">.</span><span class="n">flat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">sub_title</span><span class="p">)</span>
         <span class="n">fct</span><span class="o">.</span><span class="n">add_text_box</span><span class="p">(</span><span class="n">axsm</span><span class="o">.</span><span class="n">flat</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">hemi_glob</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">hemisphere</span><span class="o">=</span><span class="n">hemisphere</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">7</span><span class="p">),</span> <span class="n">var_name</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">cbaxes</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.0525</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">])</span>
+            <span class="n">cbaxes</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.115</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.4025</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">])</span>
+            <span class="n">cb_label</span> <span class="o">=</span> <span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">][</span><span class="s1">&#39;cb_label&#39;</span><span class="p">]</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cf</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cbaxes</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;horizontal&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">cb_label</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">cbaxes</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.7025</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.6025</span><span class="o">/</span><span class="mf">2.2</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">])</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cf</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cbaxes</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;horizontal&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">cb_label</span><span class="p">)</span>
-
+        <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">cbaxes</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.67</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.4025</span><span class="o">*</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">])</span>
+            <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cf</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cbaxes</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="n">extend</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;horizontal&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;CloudSat-CALIPSO - ERA5 (%)&quot;</span><span class="p">)</span>
+            <span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">10</span><span class="p">)[::</span><span class="mi">2</span><span class="p">])</span>
+    <span class="c1">#     elif i == 5:</span>
+    <span class="c1">#         cbaxes = f.add_axes([0.8525, -0.045, 0.4025*1/3, 0.025])</span>
+    <span class="c1">#         plt.colorbar(cf, cax=cbaxes, shrink=0.5, extend=extend, orientation=&quot;horizontal&quot;, label=f&quot;Diff. ERA5 daily - hourly&quot;)</span>
+        <span class="c1"># hatch areas above 83N</span>
+            
+        
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="n">hemi_glob</span><span class="p">,)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">list1</span><span class="p">,</span><span class="n">list_glob</span><span class="p">,</span> <span class="p">)):</span>
-        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">hawaii_r</span> 
             <span class="n">levels</span> <span class="o">=</span> <span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">][</span><span class="s1">&#39;levels&#39;</span><span class="p">]</span>
             <span class="n">norm</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">BoundaryNorm</span><span class="p">(</span><span class="n">levels</span><span class="p">,</span> <span class="n">ncolors</span><span class="o">=</span><span class="n">cmap</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">bam</span>
-            <span class="n">levels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="mf">17.5</span><span class="p">,</span><span class="mf">2.5</span><span class="p">)</span>
-            <span class="n">norm</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">BoundaryNorm</span><span class="p">(</span><span class="n">levels</span><span class="p">,</span> <span class="n">ncolors</span><span class="o">=</span><span class="n">cmap</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="n">levels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+                <span class="n">norm</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">BoundaryNorm</span><span class="p">(</span><span class="n">levels</span><span class="p">,</span> <span class="n">ncolors</span><span class="o">=</span><span class="n">cmap</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">extend</span><span class="o">=</span><span class="kc">None</span>
+    <span class="c1">#         else:</span>
+    <span class="c1">#             levels = np.arange(-15,17.5,2.5)</span>
+    <span class="c1">#             extend=&#39;both&#39;</span>
+    <span class="c1">#         norm = fct.BoundaryNorm(levels, ncolors=cmap.N, clip=True)</span>
         <span class="n">val</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span> <span class="k">if</span> <span class="n">hemisphere</span> <span class="o">==</span> <span class="s1">&#39;NH&#39;</span> <span class="k">else</span> <span class="n">value</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">))</span>
-        <span class="n">cf</span> <span class="o">=</span> <span class="n">axsm</span><span class="o">.</span><span class="n">flat</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="n">val</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">val</span><span class="p">)))</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="mi">11</span><span class="p">),</span> 
+        <span class="n">cf</span> <span class="o">=</span> <span class="n">axsm</span><span class="o">.</span><span class="n">flat</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="n">val</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">val</span><span class="p">)))</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="mi">11</span><span class="p">),</span> 
                                             <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> 
                                             <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> 
                                             <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
-        <span class="n">fct</span><span class="o">.</span><span class="n">add_text_box</span><span class="p">(</span><span class="n">axsm</span><span class="o">.</span><span class="n">flat</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">3</span><span class="p">],</span> <span class="n">hemi_glob</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">hemisphere</span><span class="o">=</span><span class="n">hemisphere</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">11</span><span class="p">),</span> <span class="n">var_name</span><span class="p">)</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">83</span><span class="p">,</span><span class="mi">90</span><span class="p">))</span> <span class="k">if</span> <span class="n">hemisphere</span> <span class="o">==</span> <span class="s1">&#39;NH&#39;</span> <span class="k">else</span> <span class="n">value</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">83</span><span class="p">))</span>
+        <span class="n">collection</span> <span class="o">=</span> <span class="n">axsm</span><span class="o">.</span><span class="n">flat</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span>
+            <span class="n">val</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="n">val</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">val</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="mi">11</span><span class="p">),</span> <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+            <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">ecolor</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">hatches</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span> <span class="o">*</span> <span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="s1">&#39;.&#39;</span><span class="p">],</span> <span class="n">add_colorbar</span><span class="o">=</span><span class="kc">False</span>
+                <span class="p">)</span>
+        <span class="c1"># axsm.flat[i].set_title(&#39;&#39;)</span>
+        
+        <span class="n">fct</span><span class="o">.</span><span class="n">add_text_box</span><span class="p">(</span><span class="n">axsm</span><span class="o">.</span><span class="n">flat</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">5</span><span class="p">],</span> <span class="n">hemi_glob</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">hemisphere</span><span class="o">=</span><span class="n">hemisphere</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">11</span><span class="p">),</span> <span class="n">var_name</span><span class="p">)</span>
 
 
                         
     <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">w_pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">h_pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">,)</span>
     <span class="n">figname</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">_ERA5_diff_</span><span class="si">{</span><span class="n">hemisphere</span><span class="si">}</span><span class="s1">_2007_2010.png&#39;</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">+</span> <span class="n">figname</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">+</span> <span class="n">figname</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7a938cc93fb0e7723be552782d16959badb9eb38c20434a68bbcf730f253795b.png" src="../_images/7a938cc93fb0e7723be552782d16959badb9eb38c20434a68bbcf730f253795b.png" />
-<img alt="../_images/4dc90f89429966194028f3b168ca6f062fd7a325bbe0c0c2706b458402f74837.png" src="../_images/4dc90f89429966194028f3b168ca6f062fd7a325bbe0c0c2706b458402f74837.png" />
+<img alt="../_images/1aa53ce18ef183d8e7195a97696b2197d94036e834d0b1f309f533c4362d45d9.png" src="../_images/1aa53ce18ef183d8e7195a97696b2197d94036e834d0b1f309f533c4362d45d9.png" />
+<img alt="../_images/620513a53c63786cf2539c659a5643ce3135f9cc7a5745b19d092548ec201a38.png" src="../_images/620513a53c63786cf2539c659a5643ce3135f9cc7a5745b19d092548ec201a38.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">FIG_DIR</span> <span class="o">+</span> <span class="n">figname</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;/uio/kant/geo-geofag-u1/franzihe/Documents/Python/globalsnow/CloudSat_ERA5_CMIP6_analysis/Figures/CS_ERA5_CMIP6_hourly_5/FsLCC_ERA5_diff_NH_2007_2010.png&#39;
+</pre></div>
+</div>
 </div>
 </div>
 <div class="cell docutils container">
@@ -1149,6 +1214,18 @@ document.write(`
 </div>
 </div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">lwp_threshold</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>5
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 </section>
 
@@ -1180,7 +1257,7 @@ document.write(`
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
 </div>
                 </footer>
@@ -1228,6 +1305,7 @@ By Franziska Hellmuth
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2022.
@@ -1254,8 +1332,8 @@ By Franziska Hellmuth
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
   <footer class="bd-footer">
   </footer>
