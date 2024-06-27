@@ -2905,7 +2905,8 @@ def plt_difference_season(dataset, var_name, lwp_threshold, dict_label, fig_dir)
     row_min2 = abs(da.round(0)).argmin('model')
     
     figsize = [12,5]
-    cmap = cm.bam
+    # cmap = cm.bam
+    cmap = cm.hawaii_r
     cmaplist = [cmap(i) for i in range(cmap.N)]
     bounds = dict_label['bounds']
     qrates = dict_label['qrates']
@@ -2916,8 +2917,8 @@ def plt_difference_season(dataset, var_name, lwp_threshold, dict_label, fig_dir)
     norm = BoundaryNorm(bounds, ncolors=len(qrates))
     
     # Create a formatting function for colorbar ticks
-    fmt = FuncFormatter(lambda x, pos: qrates[::][norm(x)])
-    fmt = FormatStrFormatter("%.0f")
+    # fmt = FuncFormatter(lambda x, pos: qrates[::][norm(x)])
+    # fmt = FormatStrFormatter("%.0f")
     
     # Create the figure and subplots
     fig, axsm = plt.subplots(nrows=2, ncols=1, sharex=True, sharey=True, figsize=figsize)
@@ -2925,7 +2926,7 @@ def plt_difference_season(dataset, var_name, lwp_threshold, dict_label, fig_dir)
     for i, hemisphere in enumerate(hemispheres):
         ax = axsm[i]
         # Plot your data, add labels, and set ticks
-        im = ax.imshow((da.sel(hemisphere=hemisphere)), cmap=cmap.resampled(len(qrates)), norm=norm)
+        im = ax.imshow((da.sel(hemisphere=hemisphere)), cmap=cmap.resampled(len(qrates)),clim = (bounds.min(), bounds.max()), norm=norm, )
         
         # Show all ticks and label them with the respective list entries
         ax.set_xticks(np.arange(len(da.model.values)), labels=da.model.values)
@@ -2961,18 +2962,13 @@ def plt_difference_season(dataset, var_name, lwp_threshold, dict_label, fig_dir)
     fig.subplots_adjust(right=0.85)
     cbar_ax = fig.add_axes([.715, 0.375, 0.0125, 0.5])
     cbar_kw = dict(ticks=list(bounds)) # dict(ticks=qrates) #d #
-    cbar = fig.colorbar(im, cax=cbar_ax, **cbar_kw, label=f"Difference {dict_label['cb_label']}", shrink=0.5,extend='both')#cmap=cmap, norm=norm, )
-    if var_name == 'FoS':
-        cbar.ax.set_ylim(-80, 40)
-    elif var_name == 'FLCC':
-        cbar.ax.set_ylim(-40,20)
-    elif var_name == 'sf_eff':
-        cbar.ax.set_ylim(-1, 2)
+    cbar = fig.colorbar(im, cax=cbar_ax, **cbar_kw, label=f"Difference {dict_label['cb_label']}", shrink=0.5,extend='both', cmap=cmap, norm=norm, )
+    
     plt.tight_layout(pad=0., w_pad=0., h_pad=.5)  ;
     
     # save figure
     figname = f'{var_name}_diff_2007_2010.png'
-    plt.savefig(fig_dir + figname, format='png', dpi=300, bbox_inches='tight', transparent=True)   
+    plt.savefig(fig_dir + figname, format='png', dpi=300, bbox_inches='tight', transparent=True)    
 
 
 def plt_heatmap_all_models_season(dataset, var_name, lwp_threshold, dict_label,  fig_dir):
