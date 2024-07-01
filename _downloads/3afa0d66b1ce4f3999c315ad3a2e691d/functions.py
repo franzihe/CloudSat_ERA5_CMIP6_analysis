@@ -20,7 +20,8 @@ from imports import (
     Normalize,
     FuncFormatter,
     FormatStrFormatter,
-    Rectangle
+    Rectangle,
+    TwoSlopeNorm
     
 )
 
@@ -2905,8 +2906,8 @@ def plt_difference_season(dataset, var_name, lwp_threshold, dict_label, fig_dir)
     row_min2 = abs(da.round(0)).argmin('model')
     
     figsize = [12,5]
-    # cmap = cm.bam
-    cmap = cm.hawaii_r
+    cmap = cm.bam
+    # cmap = cm.hawaii_r
     cmaplist = [cmap(i) for i in range(cmap.N)]
     bounds = dict_label['bounds']
     qrates = dict_label['qrates']
@@ -2914,7 +2915,7 @@ def plt_difference_season(dataset, var_name, lwp_threshold, dict_label, fig_dir)
     
     # Create a custom colormap
     cmap = LinearSegmentedColormap.from_list('Custom cmap', cmaplist, cmap.N)
-    norm = BoundaryNorm(bounds, ncolors=len(qrates))
+    norm = TwoSlopeNorm(vcenter=0, vmin=bounds.min(), vmax=bounds.max())
     
     # Create a formatting function for colorbar ticks
     # fmt = FuncFormatter(lambda x, pos: qrates[::][norm(x)])
@@ -2926,7 +2927,7 @@ def plt_difference_season(dataset, var_name, lwp_threshold, dict_label, fig_dir)
     for i, hemisphere in enumerate(hemispheres):
         ax = axsm[i]
         # Plot your data, add labels, and set ticks
-        im = ax.imshow((da.sel(hemisphere=hemisphere)), cmap=cmap.resampled(len(qrates)),clim = (bounds.min(), bounds.max()), norm=norm, )
+        im = ax.imshow((da.sel(hemisphere=hemisphere)), cmap=cmap, norm=norm, clim = (bounds.min(), bounds.max()))
         
         # Show all ticks and label them with the respective list entries
         ax.set_xticks(np.arange(len(da.model.values)), labels=da.model.values)
@@ -2944,7 +2945,7 @@ def plt_difference_season(dataset, var_name, lwp_threshold, dict_label, fig_dir)
         # Loop over data dimensions and create text annotations.
         for j in range(len(da2.season.values)):
             for k in range(len(da2.model.values)):
-                text = ax.text(k, j, f"{(abs(da2.sel(hemisphere=hemisphere)).values[j, k]):.0f}",
+                text = ax.text(k, j, f"{((da2.sel(hemisphere=hemisphere)).values[j, k]):.0f}",
                             ha="center", va="center", color="k",)
                 # text = ax.text(k, j, f"{((da.sel(hemisphere=hemisphere)).values[j, k]):.0f}",
                 #             ha="center", va="center", color="k",)
@@ -2961,11 +2962,10 @@ def plt_difference_season(dataset, var_name, lwp_threshold, dict_label, fig_dir)
     # Create colorbar
     fig.subplots_adjust(right=0.85)
     cbar_ax = fig.add_axes([.715, 0.375, 0.0125, 0.5])
-    cbar_kw = dict(ticks=list(bounds)) # dict(ticks=qrates) #d #
-    cbar = fig.colorbar(im, cax=cbar_ax, **cbar_kw, label=f"Difference {dict_label['cb_label']}", shrink=0.5,extend='both', cmap=cmap, norm=norm, )
-    
+    cbar = fig.colorbar(im, cax=cbar_ax, label=f"Difference {dict_label['cb_label']}", shrink=0.5,extend='both', cmap=cmap, norm=norm)
+    cbar.ax.set_yscale('linear')
+    cbar.ax.set_yticks(bounds)
     plt.tight_layout(pad=0., w_pad=0., h_pad=.5)  ;
-    
     # save figure
     figname = f'{var_name}_diff_2007_2010.png'
     plt.savefig(fig_dir + figname, format='png', dpi=300, bbox_inches='tight', transparent=True)    
