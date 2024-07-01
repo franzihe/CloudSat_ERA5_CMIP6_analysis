@@ -405,6 +405,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#change-attributes-matching-cmip6-data">Change attributes matching CMIP6 data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regrid-to-500km-nominal-resolution">Regrid to 500km nominal resolution</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-cloudsat-file">Save CloudSat file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regridd-ecmwf-aux-t2m-to-lat-lon">Regridd ECMWF-AUX T2m to lat/lon</a></li>
 </ul>
 </li>
 </ul>
@@ -587,11 +588,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mimi.uio.no
-</pre></div>
-</div>
-</div>
 </div>
 </section>
 <section id="import-python-packages">
@@ -610,11 +606,6 @@ document.write(`
 <span class="c1"># import packages</span>
 <span class="kn">from</span> <span class="nn">imports</span> <span class="kn">import</span><span class="p">(</span><span class="n">xr</span><span class="p">,</span> <span class="n">intake</span><span class="p">,</span> <span class="n">ccrs</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">plt</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">cm</span><span class="p">,</span> <span class="n">fct</span><span class="p">,</span> <span class="n">np</span><span class="p">,</span> <span class="n">da</span><span class="p">,</span> <span class="n">LogNorm</span><span class="p">,</span> <span class="n">pd</span><span class="p">,</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">xe</span><span class="p">)</span>
 <span class="n">xr</span><span class="o">.</span><span class="n">set_options</span><span class="p">(</span><span class="n">display_style</span><span class="o">=</span><span class="s1">&#39;html&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7f13f859b1f0&gt;
 </pre></div>
 </div>
 </div>
@@ -783,12 +774,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>DatasetGroupBy, grouped over &#39;month&#39;
-12 groups with labels 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12.
-</pre></div>
-</div>
-</div>
 </div>
 </section>
 <section id="change-attributes-matching-cmip6-data">
@@ -840,23 +825,6 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="n">ds_cs_all</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">var_id</span><span class="p">,</span> <span class="n">ds_cs_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">],</span> <span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>lcc_freq  
-n_obs  
-n_cld  
-n_lcc  
-n_sf_all  
-n_sf_all_snow  
-n_sf_lcc  
-n_sf_lcc_snow  
-lcc_sf_freq  
-sf_avg_all kg m-2 h-1 kg m-2 h-1
-sf_avg_all_snow kg m-2 h-1 kg m-2 h-1
-sf_avg_lcc kg m-2 h-1 kg m-2 h-1
-sf_avg_lcc_snow kg m-2 h-1 kg m-2 h-1
 </pre></div>
 </div>
 </div>
@@ -1017,13 +985,81 @@ sf_avg_lcc_snow kg m-2 h-1 kg m-2 h-1
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>file written: /mn/vann/franzihe/output/CS_ERA5_CMIP6/orig/cloudsat_500_orig_200701_201012.nc
-file written: /mn/vann/franzihe/output/CS_ERA5_CMIP6/lcc_sf/cloudsat_500_lcc_sf_200701_201012.nc
-file written: /mn/vann/franzihe/output/CS_ERA5_CMIP6/lcc_2t/cloudsat_500_lcc_2t_200701_201012.nc
-file written: /mn/vann/franzihe/output/CS_ERA5_CMIP6/2t/cloudsat_500_2t_200701_201012.nc
-file written: /mn/vann/franzihe/output/CS_ERA5_CMIP6/lcc_2t_sf/cloudsat_500_lcc_2t_sf_200701_201012.nc
-file written: /mn/vann/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/cloudsat_500_lcc_2t_days_200701_201012.nc
+</div>
+</section>
+<section id="regridd-ecmwf-aux-t2m-to-lat-lon">
+<h2>Regridd ECMWF-AUX T2m to lat/lon<a class="headerlink" href="#regridd-ecmwf-aux-t2m-to-lat-lon" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># read in lat grid from IPSL-CM5A2-INCA files</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="s1">&#39;IPSL-CM5A2-INCA&#39;</span>
+<span class="n">variable_id</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;areacella&#39;</span><span class="p">]</span>
+<span class="n">cmip_file_in</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cmip_in</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">variable_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">_fx_*</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">*.nc&#39;</span><span class="p">)</span>
+
+<span class="n">ds_cmip</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="n">cmip_file_in</span><span class="p">)</span>
+
+<span class="n">ds_cmip</span> <span class="o">=</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">lon</span><span class="o">=</span><span class="p">(((</span><span class="n">ds_cmip</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span><span class="p">)</span> <span class="o">-</span> <span class="mi">180</span><span class="p">))</span><span class="o">.</span><span class="n">sortby</span><span class="p">(</span><span class="s1">&#39;lon&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get common lat grid from IPSL-CM5A2-INCA</span>
+<span class="n">lat_grid</span> <span class="o">=</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">lat</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">aux_files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cs_in</span><span class="si">}</span><span class="s1">/cc_monthly_files/cloudsat_*_snow_data.nc&#39;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">aux_files</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">aux_files</span><span class="p">:</span>
+    <span class="n">year</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="o">-</span><span class="mi">20</span><span class="p">:</span><span class="o">-</span><span class="mi">16</span><span class="p">]</span>
+    <span class="n">month</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="o">-</span><span class="mi">15</span><span class="p">:</span><span class="o">-</span><span class="mi">13</span><span class="p">]</span>
+
+    <span class="c1"># open dataset</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    
+    <span class="c1"># Calculate monthly mean T2m on common lat grid</span>
+    <span class="n">temp_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lat_grid</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="n">count_lati</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">lat</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lat_grid</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+        <span class="c1"># grid_idx = np.array(np.where((np.abs(ds.lat - lat)) &lt; 0.9473686)).flatten()</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">lat</span> <span class="o">-</span> <span class="n">lat</span><span class="p">))</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">lat_grid</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="s1">&#39;lat&#39;</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># print(idx, i)</span>
+        
+        <span class="c1"># print(i, count_lati)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">temp_grid</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">temp_2m</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span> <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">temp_grid</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="c1"># print(temp_grid[i+1], np.nanmean(ds.temp_2m[grid_idx]))</span>
+        <span class="n">count_lati</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+    <span class="c1"># output monthly mean lat</span>
+    <span class="n">ds_out</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">data_vars</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;temp_2m&#39;</span><span class="p">:</span> <span class="p">([</span><span class="s1">&#39;lat&#39;</span><span class="p">],</span> <span class="n">temp_grid</span><span class="p">)},</span> 
+                        <span class="n">coords</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;lat&#39;</span><span class="p">:</span><span class="n">lat_grid</span><span class="p">})</span>
+    
+    <span class="c1"># make output directory</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INPUT_DATA_DIR</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;cloudsat/aux_monthly_zonal/&#39;</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="k">pass</span>
+        
+    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;cloudsat_500_T2m_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">.nc&#39;</span>
+    <span class="n">cs_file_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INPUT_DATA_DIR</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;cloudsat/aux_monthly_zonal/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    
+    <span class="n">ds_out</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1090,6 +1126,7 @@ file written: /mn/vann/franzihe/output/CS_ERA5_CMIP6/lcc_2t_days/cloudsat_500_lc
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#change-attributes-matching-cmip6-data">Change attributes matching CMIP6 data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regrid-to-500km-nominal-resolution">Regrid to 500km nominal resolution</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-cloudsat-file">Save CloudSat file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regridd-ecmwf-aux-t2m-to-lat-lon">Regridd ECMWF-AUX T2m to lat/lon</a></li>
 </ul>
 </li>
 </ul>
