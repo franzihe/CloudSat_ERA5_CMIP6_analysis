@@ -618,7 +618,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7fc5f0609180&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7ff3342df160&gt;
 </pre></div>
 </div>
 </div>
@@ -737,6 +737,7 @@ document.write(`
 <span class="c1"># ds_cs_orig  = xr.Dataset()</span>
 <span class="n">ds_cs_all</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
 <span class="n">ds_cs_orig_all</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
+<span class="c1"># ds_cs_2t = xr.Dataset()</span>
 
 
 <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">year_range</span><span class="p">:</span>
@@ -746,6 +747,7 @@ document.write(`
         <span class="c1"># cs_orig_in = []</span>
         <span class="n">cs_file_in_all</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">cs_orig_all</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># cs_2t = []</span>
         
         <span class="k">if</span> <span class="n">month</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
             <span class="c1"># cs_file_in.extend(sorted(glob(f&#39;{cs_in}/sf_lcc_monthly/cc_sf_lcc_{year}_0{month}.nc&#39;)))</span>
@@ -753,11 +755,13 @@ document.write(`
             <span class="c1"># cs_file_in_all.extend(sorted(glob(f&#39;{cs_in}/sf_lcc_monthly_T_thres_all/cc_sf_lcc_{year}_0{month}_T_thres_all.nc&#39;)))</span>
             <span class="n">cs_file_in_all</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cs_in</span><span class="si">}</span><span class="s1">/sf_lcc_monthly_T_thres_all_coarse/cc_sf_lcc_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">_0</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">_T_thres_all_coarse.nc&#39;</span><span class="p">)))</span>
             <span class="n">cs_orig_all</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cs_in</span><span class="si">}</span><span class="s1">/sf_lcc_monthly_no_T_thres_all_coarse/cc_sf_lcc_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">_0</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">_no_T_thres_all_coarse.nc&#39;</span><span class="p">)))</span>
+            <span class="c1"># cs_2t.extend(sorted(glob(f&#39;{cs_in}/aux_monthly_2t/cloudsat_500_T2m_{year}_0{month}.nc&#39;)))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># cs_file_in.extend(sorted(glob(f&#39;{cs_in}/sf_lcc_monthly/cc_sf_lcc_{year}_{month}.nc&#39;)))</span>
             <span class="c1"># cs_orig_in.extend(sorted(glob(f&#39;{cs_in}/sf_lcc_monthly_no_T_thres/cc_sf_lcc_{year}_{month}_no_T_thres.nc&#39;)))</span>
             <span class="n">cs_file_in_all</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cs_in</span><span class="si">}</span><span class="s1">/sf_lcc_monthly_T_thres_all_coarse/cc_sf_lcc_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">_T_thres_all_coarse.nc&#39;</span><span class="p">)))</span>
             <span class="n">cs_orig_all</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cs_in</span><span class="si">}</span><span class="s1">/sf_lcc_monthly_no_T_thres_all_coarse/cc_sf_lcc_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">_no_T_thres_all_coarse.nc&#39;</span><span class="p">)))</span>
+            <span class="c1"># cs_2t.extend(sorted(glob(f&#39;{cs_in}/aux_monthly_2t/cloudsat_500_T2m_{year}_{month}.nc&#39;)))</span>
         <span class="c1"># if len(cs_file_in) != 0:</span>
         <span class="c1">#     ds      = xr.open_mfdataset(cs_file_in, )</span>
         <span class="c1">#     ds_cs       = add_time_dim_and_attributes(ds, ds_cs)</span>
@@ -770,6 +774,9 @@ document.write(`
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cs_orig_all</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">ds_orig_all</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="n">cs_orig_all</span><span class="p">)</span>
             <span class="n">ds_cs_orig_all</span> <span class="o">=</span> <span class="n">add_time_dim_and_attributes</span><span class="p">(</span><span class="n">ds_orig_all</span><span class="p">,</span> <span class="n">ds_cs_orig_all</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">)</span>
+        <span class="c1"># if len(cs_2t) != 0:</span>
+        <span class="c1">#     ds_2t = xr.open_mfdataset(cs_2t)</span>
+        <span class="c1">#     ds_cs_2t = add_time_dim_and_attributes(ds_cs, ds_cs_2t, year, month)</span>
             
 
 <span class="c1"># try: </span>
@@ -784,10 +791,99 @@ document.write(`
 </pre></div>
 </div>
 </div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds_cs_all</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.month&#39;</span><span class="p">)</span>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
+no T2m in file
 </pre></div>
 </div>
 </div>
@@ -842,6 +938,23 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var_id</span> <span class="ow">in</span> <span class="n">ds_cs_all</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">var_id</span><span class="p">,</span> <span class="n">ds_cs_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">],</span> <span class="n">ds_cs_orig_all</span><span class="p">[</span><span class="n">var_id</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>lcc_freq  
+n_obs  
+n_cld  
+n_lcc  
+n_sf_all  
+n_sf_all_snow  
+n_sf_lcc  
+n_sf_lcc_snow  
+lcc_sf_freq  
+sf_avg_all kg m-2 h-1 kg m-2 h-1
+sf_avg_all_snow kg m-2 h-1 kg m-2 h-1
+sf_avg_lcc kg m-2 h-1 kg m-2 h-1
+sf_avg_lcc_snow kg m-2 h-1 kg m-2 h-1
 </pre></div>
 </div>
 </div>
@@ -990,15 +1103,15 @@ document.write(`
     <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;cloudsat_500_</span><span class="si">{</span><span class="n">stats</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">starty</span><span class="si">}</span><span class="s1">01_</span><span class="si">{</span><span class="n">endy</span><span class="si">}</span><span class="s1">12.nc&#39;</span>
     <span class="n">cs_file_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cs_out</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">stats</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
     
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">cs_file_out</span><span class="p">):</span>
-        <span class="n">dataset</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">cs_file_out</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;file written: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cs_file_out</span><span class="p">))</span>
-            <span class="c1">#     print(f&#39;{cs_file_out} is downloaded&#39;)</span>
-            <span class="c1">#     counter += 1</span>
-            <span class="c1">#     print(f&#39;Have regridded in total: {counter} files&#39;)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">dataset</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">cs_file_out</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;file written: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cs_file_out</span><span class="p">))</span>
+    <span class="c1"># if os.path.exists(cs_file_out):</span>
+    <span class="c1">#     dataset.to_netcdf(cs_file_out)</span>
+    <span class="c1">#     print(&#39;file written: {}&#39;.format(cs_file_out))</span>
+    <span class="c1">#         #     print(f&#39;{cs_file_out} is downloaded&#39;)</span>
+    <span class="c1">#         #     counter += 1</span>
+    <span class="c1">#         #     print(f&#39;Have regridded in total: {counter} files&#39;)</span>
+    <span class="c1"># else:</span>
+    <span class="c1">#     dataset.to_netcdf(cs_file_out)</span>
+    <span class="c1">#     print(&#39;file written: {}&#39;.format(cs_file_out))</span>
 </pre></div>
 </div>
 </div>
@@ -1025,6 +1138,7 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get common lat grid from IPSL-CM5A2-INCA</span>
 <span class="n">lat_grid</span> <span class="o">=</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">lat</span>
+<span class="n">lon_grid</span> <span class="o">=</span> <span class="n">ds_cmip</span><span class="o">.</span><span class="n">lon</span>
 </pre></div>
 </div>
 </div>
@@ -1039,7 +1153,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">aux_files</span><span class="p">:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">aux_files</span><span class="p">[:</span><span class="mi">1</span><span class="p">]:</span>
     <span class="n">year</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="o">-</span><span class="mi">20</span><span class="p">:</span><span class="o">-</span><span class="mi">16</span><span class="p">]</span>
     <span class="n">month</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="o">-</span><span class="mi">15</span><span class="p">:</span><span class="o">-</span><span class="mi">13</span><span class="p">]</span>
 
@@ -1066,15 +1180,73 @@ document.write(`
     <span class="c1"># output monthly mean lat</span>
     <span class="n">ds_out</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">data_vars</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;temp_2m&#39;</span><span class="p">:</span> <span class="p">([</span><span class="s1">&#39;lat&#39;</span><span class="p">],</span> <span class="n">temp_grid</span><span class="p">)},</span> 
                         <span class="n">coords</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;lat&#39;</span><span class="p">:</span><span class="n">lat_grid</span><span class="p">})</span>
+    <span class="c1"># add time dimension</span>
+    <span class="n">ds_out</span> <span class="o">=</span> <span class="n">ds_out</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">([</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]))</span>
+    
+    <span class="c1"># # make output directory</span>
+    <span class="c1"># try:</span>
+    <span class="c1">#     os.mkdir(os.path.join(INPUT_DATA_DIR, f&#39;cloudsat/aux_monthly_zonal/&#39;))</span>
+    <span class="c1"># except OSError:</span>
+    <span class="c1">#     pass</span>
+        
+    <span class="c1"># filename = f&#39;cloudsat_500_T2m_{year}_{month}.nc&#39;</span>
+    <span class="c1"># cs_file_out = os.path.join(INPUT_DATA_DIR, f&#39;cloudsat/aux_monthly_zonal/{filename}&#39;)</span>
+    
+    <span class="c1"># print(f&quot;Writing file: {cs_file_out}&quot;)</span>
+    <span class="c1"># ds_out.to_netcdf(cs_file_out)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">aux_files</span><span class="p">:</span>
+    <span class="n">year</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="o">-</span><span class="mi">20</span><span class="p">:</span><span class="o">-</span><span class="mi">16</span><span class="p">]</span>   <span class="c1"># Extract year from file name</span>
+    <span class="n">month</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="o">-</span><span class="mi">15</span><span class="p">:</span><span class="o">-</span><span class="mi">13</span><span class="p">]</span>  <span class="c1"># Extract month from file name</span>
+
+    <span class="c1"># Open dataset</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    
+    <span class="c1"># Initialize temp_grid as a 2D array (lat x lon), fill with NaNs</span>
+    <span class="n">temp_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">lat_grid</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">lon_grid</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    
+    <span class="c1"># Iterate over both latitude and longitude.</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">lat</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lat_grid</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span><span class="n">lon</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lon_grid</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+            
+            <span class="c1"># Get the latitude and longitude bounds for the current grid cell</span>
+            <span class="n">lat_half_diff</span> <span class="o">=</span> <span class="p">(</span><span class="n">lat_grid</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="s1">&#39;lat&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">lon_half_diff</span> <span class="o">=</span> <span class="p">(</span><span class="n">lon_grid</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="s1">&#39;lon&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">lon</span><span class="o">=</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            
+            <span class="c1"># Find the indices where lat and lon are within the cell bounds</span>
+            <span class="n">idx_lat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">lat</span> <span class="o">-</span> <span class="n">lat</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">lat_half_diff</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">idx_lon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">lon</span> <span class="o">-</span> <span class="n">lon</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">lon_half_diff</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            
+            <span class="c1"># Find the common indices for both lat and lon to get the common indices where both the latitude and longitude conditions are met.</span>
+            <span class="n">common_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">idx_lat</span><span class="p">,</span> <span class="n">idx_lon</span><span class="p">)</span>
+            
+            
+            <span class="c1"># # If there are valid points, calculate the mean temperature for this grid cell</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">common_idx</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">temp_grid</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">temp_2m</span><span class="p">[</span><span class="n">common_idx</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">temp_grid</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>   <span class="c1"># Assign NaN if no points fall in the grid cell</span>
+                
+    <span class="c1"># output monthly mean</span>
+    <span class="n">ds_out</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">data_vars</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;temp_2m&#39;</span><span class="p">:</span> <span class="p">([</span><span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">],</span> <span class="n">temp_grid</span><span class="p">)},</span> 
+                        <span class="n">coords</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;lat&#39;</span><span class="p">:</span><span class="n">lat_grid</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">:</span><span class="n">lon_grid</span><span class="p">})</span>
+    <span class="c1"># add time dimension</span>
+    <span class="n">ds_out</span> <span class="o">=</span> <span class="n">ds_out</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">([</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]))</span>
+    
     
     <span class="c1"># make output directory</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INPUT_DATA_DIR</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;cloudsat/aux_monthly_zonal/&#39;</span><span class="p">))</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INPUT_DATA_DIR</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;cloudsat/aux_monthly_2t/&#39;</span><span class="p">))</span>
     <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
         <span class="k">pass</span>
         
     <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;cloudsat_500_T2m_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">.nc&#39;</span>
-    <span class="n">cs_file_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INPUT_DATA_DIR</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;cloudsat/aux_monthly_zonal/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">cs_file_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INPUT_DATA_DIR</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;cloudsat/aux_monthly_2t/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
     
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing file: </span><span class="si">{</span><span class="n">cs_file_out</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">ds_out</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">cs_file_out</span><span class="p">)</span>
@@ -1103,58 +1275,6 @@ document.write(`
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cs_t2_file_in</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">ds_all</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="n">cs_t2_file_in</span><span class="p">)</span>
             <span class="n">ds_t2</span> <span class="o">=</span> <span class="n">add_time_dim_and_attributes</span><span class="p">(</span><span class="n">ds_all</span><span class="p">,</span> <span class="n">ds_t2</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
-no sLCC stats in file
 </pre></div>
 </div>
 </div>
@@ -1206,9 +1326,6 @@ no sLCC stats in file
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<img alt="../_images/f9e7029c2c1c0858b0b66a97f64afb562b4dfedb34424098fbf35241fa062c4e.png" src="../_images/f9e7029c2c1c0858b0b66a97f64afb562b4dfedb34424098fbf35241fa062c4e.png" />
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1217,21 +1334,11 @@ no sLCC stats in file
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array(0.24215912)
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">std_deviation</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">ds_t2</span><span class="p">[</span><span class="s1">&#39;temp_2m&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-</span> <span class="n">ds_t2</span><span class="p">[</span><span class="s1">&#39;era_temp_2m&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
 <span class="n">std_deviation</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array(0.22227109)
 </pre></div>
 </div>
 </div>

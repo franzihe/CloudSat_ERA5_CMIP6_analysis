@@ -514,7 +514,7 @@ document.write(`
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span> <span class="c1"># don&#39;t output warnings</span>
 
 <span class="c1"># import packages</span>
-<span class="kn">from</span> <span class="nn">imports</span> <span class="kn">import</span><span class="p">(</span><span class="n">xr</span><span class="p">,</span> <span class="n">ccrs</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">plt</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">cm</span><span class="p">,</span> <span class="n">fct</span><span class="p">,</span> <span class="n">np</span><span class="p">,</span> <span class="n">pd</span><span class="p">,</span> <span class="n">add_cyclic_point</span><span class="p">,</span> <span class="n">TwoSlopeNorm</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">imports</span> <span class="kn">import</span><span class="p">(</span><span class="n">xr</span><span class="p">,</span> <span class="n">ccrs</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">plt</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">cm</span><span class="p">,</span> <span class="n">fct</span><span class="p">,</span> <span class="n">np</span><span class="p">,</span> <span class="n">pd</span><span class="p">,</span> <span class="n">add_cyclic_point</span><span class="p">,</span> <span class="n">TwoSlopeNorm</span><span class="p">,</span> <span class="n">linregress</span><span class="p">)</span>
 <span class="c1"># from matplotlib.lines import Line2D</span>
 <span class="c1"># from matplotlib.patches import Patch</span>
 <span class="c1"># from sklearn.metrics import r2_score</span>
@@ -528,7 +528,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7fd64c68acb0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.core.options.set_options at 0x7efc0842c670&gt;
 </pre></div>
 </div>
 </div>
@@ -565,6 +565,140 @@ document.write(`
 <span class="c1">#     pass</span>
 
 <span class="n">sic</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INPUT_DATA_DIR</span><span class="p">,</span> <span class="s1">&#39;AMSR2_sea_ice/40NS/AMSR2_IPSL-CM6A-LR_200701_201012.nc&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds_cs_2t</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_mfdataset</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INPUT_DATA_DIR</span><span class="p">,</span> <span class="s1">&#39;cloudsat/aux_monthly_2t/cloudsat*.nc&#39;</span><span class="p">))))</span>
+<span class="n">cs_2t</span> <span class="o">=</span> <span class="n">ds_cs_2t</span><span class="o">.</span><span class="n">temp_2m</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.season&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds_era_2t</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="s1">&#39;/mn/vann/franzihe/output/CS_ERA5_CMIP6/orig/era_500_orig_20070101-20101231.nc&#39;</span><span class="p">)</span>
+<span class="n">era_2t</span> <span class="o">=</span> <span class="n">ds_era_2t</span><span class="o">.</span><span class="n">tas</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.season&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plotting with different markers and colors for each season</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">hawaii</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mi">256</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="n">season_colors</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;DJF&quot;</span><span class="p">:</span> <span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span>
+    <span class="s2">&quot;MAM&quot;</span><span class="p">:</span> <span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span>
+    <span class="s2">&quot;JJA&quot;</span><span class="p">:</span> <span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">,:],</span>
+    <span class="s2">&quot;SON&quot;</span><span class="p">:</span> <span class="n">colors</span><span class="p">[</span><span class="mi">3</span><span class="p">,:]</span>
+<span class="p">}</span>
+<span class="n">season_markers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;DJF&quot;</span><span class="p">:</span> <span class="s2">&quot;o&quot;</span><span class="p">,</span>  <span class="c1"># Circle</span>
+    <span class="s2">&quot;MAM&quot;</span><span class="p">:</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span>  <span class="c1"># Square</span>
+    <span class="s2">&quot;JJA&quot;</span><span class="p">:</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span>  <span class="c1"># Diamond</span>
+    <span class="s2">&quot;SON&quot;</span><span class="p">:</span> <span class="s2">&quot;^&quot;</span>     <span class="c1"># Triangle</span>
+<span class="p">}</span>
+
+<span class="c1"># fig, ax = plt.subplots(figsize=(10, 6))</span>
+<span class="c1"># f, axsm = plt.subplots(nrows=1, ncols=2, sharex=True, sharey=True, figsize=[15, 7.5])</span>
+<span class="n">f</span><span class="p">,</span> <span class="n">axsm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mf">12.5</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">hemisphere</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axsm</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fct</span><span class="o">.</span><span class="n">fig_label</span><span class="p">)),</span> <span class="p">[</span><span class="s1">&#39;NH&#39;</span><span class="p">,</span><span class="s1">&#39;SH&#39;</span><span class="p">,</span> <span class="s1">&#39;NH&#39;</span><span class="p">,</span> <span class="s1">&#39;SH&#39;</span><span class="p">]):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+    
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">fct</span><span class="o">.</span><span class="n">fig_label</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">hemisphere</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+    <span class="c1"># ax.set_xlabel(&#39;2m Temperature ECMWF-AUX (K)&#39;)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">273.15</span><span class="o">-</span><span class="mf">273.15</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkgrey&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">.7</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">273.15</span><span class="o">-</span><span class="mf">273.15</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkgrey&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">.7</span><span class="p">)</span>
+
+
+    <span class="c1"># plot each seasons data</span>
+    <span class="n">lat_slice</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">)</span> <span class="k">if</span> <span class="n">hemisphere</span> <span class="o">==</span> <span class="s1">&#39;NH&#39;</span> <span class="k">else</span> <span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">45</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">da_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">cs_2t</span><span class="o">-</span><span class="mf">273.15</span><span class="p">)</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span> <span class="o">=</span> <span class="n">lat_slice</span><span class="p">)</span>
+        <span class="n">da_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">era_2t</span><span class="o">-</span><span class="mf">273.15</span><span class="p">)</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span> <span class="o">=</span> <span class="n">lat_slice</span><span class="p">)</span>
+        <span class="c1"># for season in cs_2t.season.values:</span>
+        <span class="c1">#     ax.scatter(cs_2t.sel(season=season, lat=lat_slice),</span>
+        <span class="c1">#             era_2t.sel(season=season, lat=lat_slice),</span>
+        <span class="c1">#             color=season_colors[season],</span>
+        <span class="c1">#             marker=season_markers[season],</span>
+        <span class="c1">#             label=season,</span>
+        <span class="c1">#             alpha=0.7,</span>
+        <span class="c1">#             edgecolors=&quot;k&quot;  # Add black edge for clarity</span>
+        <span class="c1">#             )</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">205</span><span class="o">-</span><span class="mf">273.15</span><span class="p">,</span><span class="mi">305</span><span class="o">-</span><span class="mf">273.15</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">205</span><span class="o">-</span><span class="mf">273.15</span><span class="p">,</span><span class="mi">305</span><span class="o">-</span><span class="mf">273.15</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">da_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">cs_2t</span><span class="o">-</span><span class="mf">273.15</span><span class="p">)</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span> <span class="o">=</span> <span class="n">lat_slice</span><span class="p">)</span>
+        <span class="n">da_x</span> <span class="o">=</span> <span class="n">da_x</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">da_x</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">da_x</span> <span class="o">&lt;</span> <span class="o">+</span><span class="mi">2</span><span class="p">))</span>
+        
+        <span class="n">da_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">era_2t</span><span class="o">-</span><span class="mf">273.15</span><span class="p">)</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">lat</span> <span class="o">=</span> <span class="n">lat_slice</span><span class="p">)</span>
+        <span class="n">da_y</span> <span class="o">=</span> <span class="n">da_y</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">da_y</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">da_y</span> <span class="o">&lt;</span> <span class="o">+</span><span class="mi">2</span><span class="p">))</span>
+        
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">+</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">+</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">276</span><span class="o">-</span><span class="mf">273.15</span><span class="p">))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">276</span><span class="o">-</span><span class="mf">273.15</span><span class="p">))</span>
+        
+    <span class="c1"># Remove NaN values in both x and y</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">da_x</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">da_y</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
+    <span class="n">x_clean</span> <span class="o">=</span> <span class="n">da_x</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="n">y_clean</span> <span class="o">=</span> <span class="n">da_y</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="c1"># Perform polyfit on cleaned data</span>
+    <span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">,</span> <span class="n">r_value</span><span class="p">,</span> <span class="n">p_value</span><span class="p">,</span> <span class="n">std_err</span> <span class="o">=</span> <span class="n">linregress</span><span class="p">(</span><span class="n">x_clean</span><span class="p">,</span> <span class="n">y_clean</span><span class="p">)</span>
+    <span class="c1"># print(f&quot;Slope: {slope}, Intercept: {intercept}, Std err: {std_err}, R value: {r_value}&quot;)</span>
+    <span class="k">for</span> <span class="n">season</span> <span class="ow">in</span> <span class="n">cs_2t</span><span class="o">.</span><span class="n">season</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">da_x</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">season</span><span class="o">=</span><span class="n">season</span><span class="p">),</span>
+                   <span class="n">da_y</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">season</span><span class="o">=</span><span class="n">season</span><span class="p">),</span>
+                   <span class="n">color</span><span class="o">=</span><span class="n">season_colors</span><span class="p">[</span><span class="n">season</span><span class="p">],</span>
+                    <span class="n">marker</span><span class="o">=</span><span class="n">season_markers</span><span class="p">[</span><span class="n">season</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="n">season</span><span class="p">,</span>
+                    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+                    <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;k&quot;</span>  <span class="c1"># Add black edge for clarity)</span>
+        <span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkgrey&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">.7</span><span class="p">,</span><span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,)</span>
+    
+    <span class="n">textstr</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+    <span class="sa">r</span><span class="s1">&#39;$y=</span><span class="si">%.2f</span><span class="s1"> x + </span><span class="si">%.2f</span><span class="s1">$&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">),</span>
+    <span class="sa">r</span><span class="s1">&#39;$R^2=</span><span class="si">%.2f</span><span class="s1">$&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">r_value</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="p">),))</span>
+    <span class="c1"># these are matplotlib.patch.Patch properties</span>
+    <span class="n">props</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">boxstyle</span><span class="o">=</span><span class="s1">&#39;round&#39;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span><span class="c1">#0.5)</span>
+
+    <span class="c1"># place a text box in upper left in axes coords</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.605</span><span class="p">,</span> <span class="mf">0.125</span><span class="p">,</span> <span class="n">textstr</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="c1">#fontsize=14,</span>
+            <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="n">props</span><span class="p">)</span>
+   
+
+<span class="n">axsm</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;2m Temperature ERA5 ($^\circ C$)&#39;</span><span class="p">)</span>
+<span class="n">axsm</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;2m Temperature ERA5 ($^\circ C$)&#39;</span><span class="p">)</span>
+
+<span class="n">axsm</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;2m Temperature ECMWF-AUX ($^\circ C$)&#39;</span><span class="p">)</span>
+<span class="n">axsm</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;2m Temperature ECMWF-AUX ($^\circ C$)&#39;</span><span class="p">)</span>
+
+<span class="n">axsm</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="c1">#loc=&#39;lower right&#39;, </span>
+                 <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">w_pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">h_pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>  <span class="p">;</span>
+<span class="n">figname</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;CC_vs_ERA5_temp_NH_SH.png&#39;</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">FIG_DIR</span> <span class="o">+</span> <span class="n">figname</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/52e0e6cc7a777c62e99144ba2eb75d99b180d1a73b2ea9cfebf472c2e7fc0ed4.png" src="../_images/52e0e6cc7a777c62e99144ba2eb75d99b180d1a73b2ea9cfebf472c2e7fc0ed4.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds_cmip_2t</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="s1">&#39;/mn/vann/franzihe/output/CS_ERA5_CMIP6/orig/cmip_500_orig_20070101-20101231.nc&#39;</span><span class="p">)</span>
+<span class="n">cmip_2t</span> <span class="o">=</span> <span class="n">ds_cmip_2t</span><span class="o">.</span><span class="n">tas</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time.season&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="s1">&#39;model&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -725,9 +859,10 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hemisphere</span> <span class="o">=</span> <span class="s1">&#39;NH&#39;</span>
 <span class="n">lat_extent</span> <span class="o">=</span> <span class="mf">45.</span>
 
-<span class="n">value</span> <span class="o">=</span> <span class="n">ratios</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="n">lwp_threshold</span><span class="p">)[</span><span class="s1">&#39;FsLCC_season&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;ERA5&#39;</span><span class="p">,</span> <span class="n">season</span><span class="o">=</span><span class="s1">&#39;DJF&#39;</span><span class="p">)</span>
+<span class="n">value</span> <span class="o">=</span> <span class="n">ratios</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="n">lwp_threshold</span><span class="p">)[</span><span class="s1">&#39;FsLCC_season&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;CloudSat&#39;</span><span class="p">,</span> <span class="n">season</span><span class="o">=</span><span class="s1">&#39;DJF&#39;</span><span class="p">)</span>
 <span class="n">value_sic</span> <span class="o">=</span> <span class="n">sic</span><span class="p">[</span><span class="s1">&#39;z_season_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span> <span class="n">season</span><span class="o">=</span><span class="s1">&#39;DJF&#39;</span><span class="p">)</span>
-<span class="n">hemi_glob</span> <span class="o">=</span> <span class="n">ratios</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="n">lwp_threshold</span><span class="p">)[</span><span class="s1">&#39;FsLCC_season_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;ERA5&#39;</span><span class="p">,</span> <span class="n">season</span><span class="o">=</span><span class="s1">&#39;DJF&#39;</span><span class="p">)</span>
+<span class="n">temperature_da</span> <span class="o">=</span> <span class="n">cs_2t</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">season</span><span class="o">=</span><span class="s1">&#39;DJF&#39;</span><span class="p">)</span>
+<span class="n">hemi_glob</span> <span class="o">=</span> <span class="n">ratios</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="n">lwp_threshold</span><span class="p">)[</span><span class="s1">&#39;FsLCC_season_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;CloudSat&#39;</span><span class="p">,</span> <span class="n">season</span><span class="o">=</span><span class="s1">&#39;DJF&#39;</span><span class="p">)</span>
 <span class="n">projection</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">create_projection</span><span class="p">(</span><span class="n">hemisphere</span><span class="p">)</span>
 <span class="n">f</span><span class="p">,</span> <span class="n">axsm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
                             <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
@@ -738,7 +873,7 @@ document.write(`
 <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">hawaii_r</span>
 <span class="n">levels</span> <span class="o">=</span> <span class="n">dict_label</span><span class="p">[</span><span class="s1">&#39;FoS&#39;</span><span class="p">][</span><span class="s1">&#39;levels&#39;</span><span class="p">]</span>
 <span class="n">norm</span> <span class="o">=</span> <span class="n">fct</span><span class="o">.</span><span class="n">BoundaryNorm</span><span class="p">(</span><span class="n">levels</span><span class="p">,</span> <span class="n">ncolors</span><span class="o">=</span><span class="n">cmap</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">axsm</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="mf">0.07</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="s1">&#39;ERA5&#39;</span><span class="p">,</span> 
+<span class="n">axsm</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="mf">0.07</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="s1">&#39;CloudSat&#39;</span><span class="p">,</span> 
                 <span class="n">va</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> 
                 <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> 
                 <span class="n">rotation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span> 
@@ -752,6 +887,16 @@ document.write(`
                             <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> 
                             <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
 <span class="n">contour</span> <span class="o">=</span> <span class="n">value_sic</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axsm</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="n">levels</span> <span class="o">=</span> <span class="p">[</span><span class="mf">20.</span><span class="p">,</span> <span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">add_colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">colors</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+<span class="n">isotherm</span> <span class="o">=</span> <span class="n">axsm</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span>
+    <span class="n">temperature_da</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span>
+    <span class="n">temperature_da</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span>
+    <span class="n">temperature_da</span><span class="p">,</span>
+    <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+    <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="mf">273.15</span><span class="p">],</span>
+    <span class="n">colors</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>  <span class="c1"># Color for the isotherm line</span>
+    <span class="n">linewidths</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">linestyles</span><span class="o">=</span><span class="s2">&quot;--&quot;</span>  <span class="c1"># Dashed line for visibility</span>
+<span class="p">)</span>
 
 
 <span class="n">fct</span><span class="o">.</span><span class="n">add_text_box</span><span class="p">(</span><span class="n">axsm</span><span class="p">,</span> <span class="n">hemi_glob</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">hemisphere</span><span class="o">=</span><span class="n">hemisphere</span><span class="p">,),</span> <span class="s1">&#39;FoS&#39;</span><span class="p">)</span>
@@ -765,7 +910,7 @@ document.write(`
 
 
 <span class="n">legend_elements</span> <span class="o">=</span> <span class="p">[</span><span class="n">fct</span><span class="o">.</span><span class="n">Line2D</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;20% SIC&#39;</span><span class="p">),</span>
-                   
+                   <span class="n">fct</span><span class="o">.</span><span class="n">Line2D</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;0$\circ$C isotherm&#39;</span><span class="p">)</span>
                    <span class="p">]</span>
 <span class="n">leg</span> <span class="o">=</span> <span class="n">axsm</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">legend_elements</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.05</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">borderaxespad</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span><span class="c1">#loc=&#39;best&#39;)</span>
 <span class="n">leg</span><span class="o">.</span><span class="n">get_frame</span><span class="p">()</span><span class="o">.</span><span class="n">set_edgecolor</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
@@ -779,13 +924,13 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/312cfc513a4c314d2cc08456d3e2450076e45d23074daf6c645004ef6dd12d2e.png" src="../_images/312cfc513a4c314d2cc08456d3e2450076e45d23074daf6c645004ef6dd12d2e.png" />
+<img alt="../_images/00bcccef79273a42f0772a0de0f9d02e46e511f85d044ae1937e18f60c6ee8e8.png" src="../_images/00bcccef79273a42f0772a0de0f9d02e46e511f85d044ae1937e18f60c6ee8e8.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for var_name in (dict_label.keys()):</span>
-<span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;FsLCC&#39;</span><span class="p">,</span><span class="s1">&#39;FoS&#39;</span><span class="p">,]:</span><span class="c1">#         &#39;FLCC&#39;,&#39;FLCC-FsLCC&#39;,&#39;sf_eff&#39;, &#39;FsLCC&#39;,&#39;FoS&#39;,]:</span>
+<span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;FLCC&#39;</span><span class="p">]:</span><span class="c1">#         &#39;FLCC&#39;,&#39;FLCC-FsLCC&#39;,&#39;sf_eff&#39;, &#39;FsLCC&#39;,&#39;FoS&#39;,]:</span>
     
 <span class="c1">#     # for lwp_threshold in lwp_thresholds:</span>
     <span class="k">for</span> <span class="n">lwp_threshold</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">5</span><span class="p">,]:</span>
@@ -800,7 +945,7 @@ document.write(`
             <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">F_DIR_mci</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
             <span class="k">pass</span>
-        <span class="c1"># fct.plt_spatial_season_var(ratios.sel(threshold=lwp_threshold), var_name, dict_label, sic[&#39;z_season_mean&#39;], F_DIR, 45, lwp_threshold)</span>
+        <span class="n">fct</span><span class="o">.</span><span class="n">plt_spatial_season_var</span><span class="p">(</span><span class="n">ratios</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="n">lwp_threshold</span><span class="p">),</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">,</span> <span class="n">sic</span><span class="p">[</span><span class="s1">&#39;z_season_mean&#39;</span><span class="p">],</span><span class="n">cs_2t</span><span class="p">,</span><span class="n">era_2t</span><span class="p">,</span><span class="n">cmip_2t</span><span class="p">,</span> <span class="n">F_DIR</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="n">lwp_threshold</span><span class="p">)</span>
 <span class="c1">#         # # fct.plt_spatial_season_var(ratios_mci.sel(threshold=lwp_threshold), var_name, dict_label, F_DIR_mci, 66, lwp_threshold)</span>
             
         <span class="c1"># plot monthly model variation</span>
@@ -811,9 +956,9 @@ document.write(`
 <span class="c1">#         # # # fct.plt_monthly_interannual_variation(ratios_mci.sel(threshold=lwp_threshold), var_name, lwp_threshold, F_DIR_mci, dict_label[var_name])</span>
             
         
-        <span class="c1"># fct.plt_absolute_difference_season(ratios.sel(threshold=lwp_threshold), var_name, lwp_threshold, dict_label[var_name], F_DIR)</span>
-        <span class="n">fct</span><span class="o">.</span><span class="n">plt_difference_season</span><span class="p">(</span><span class="n">ratios</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="n">lwp_threshold</span><span class="p">),</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">lwp_threshold</span><span class="p">,</span> <span class="n">dict_label</span><span class="p">[</span><span class="n">var_name</span><span class="p">],</span> <span class="n">F_DIR</span><span class="p">)</span>
-        <span class="c1"># fct.plt_heatmap_all_models_season(ratios.sel(threshold=lwp_threshold), var_name, lwp_threshold, dict_label[var_name],  F_DIR)</span>
+        <span class="c1"># # fct.plt_absolute_difference_season(ratios.sel(threshold=lwp_threshold), var_name, lwp_threshold, dict_label[var_name], F_DIR)</span>
+        <span class="c1"># fct.plt_difference_season(ratios.sel(threshold=lwp_threshold), var_name, lwp_threshold, dict_label[var_name], F_DIR)</span>
+        <span class="c1"># # fct.plt_heatmap_all_models_season(ratios.sel(threshold=lwp_threshold), var_name, lwp_threshold, dict_label[var_name],  F_DIR)</span>
         
 <span class="c1">#         # plot scatter CloudSat vs model</span>
         <span class="c1"># fct.plt_scatter_obs_model(ratios.sel(threshold=lwp_threshold), regression.sel(threshold=lwp_threshold), var_name, dict_label[var_name], F_DIR, lwp_threshold)</span>
@@ -838,8 +983,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/d04db6d1c91abc7129aa312e260b8e31d6db915774adcf674b0af7ec0619a0c1.png" src="../_images/d04db6d1c91abc7129aa312e260b8e31d6db915774adcf674b0af7ec0619a0c1.png" />
-<img alt="../_images/31e064ff82dbfb0a0adc294e498e1934d8ba9d4e3455a9af633c74ac593d7e64.png" src="../_images/31e064ff82dbfb0a0adc294e498e1934d8ba9d4e3455a9af633c74ac593d7e64.png" />
+<img alt="../_images/7ba4eafb6b5a71708cc95a73ccc2f579dca142ffc5562bd17facc2f2b610b2b4.png" src="../_images/7ba4eafb6b5a71708cc95a73ccc2f579dca142ffc5562bd17facc2f2b610b2b4.png" />
+<img alt="../_images/e58af4051ec874fe42275fe3a41fd6a2b068c6516d93045a27e8dcd17be3236f.png" src="../_images/e58af4051ec874fe42275fe3a41fd6a2b068c6516d93045a27e8dcd17be3236f.png" />
+<img alt="../_images/d6d18e49aca68c5cc1511afd43030805b525c68c45ca849b54cf2d1fbd496c81.png" src="../_images/d6d18e49aca68c5cc1511afd43030805b525c68c45ca849b54cf2d1fbd496c81.png" />
+<img alt="../_images/88b8a167eb350d92e4eafef040b747dffb5380083fd15b2072288dc32af9bae0.png" src="../_images/88b8a167eb350d92e4eafef040b747dffb5380083fd15b2072288dc32af9bae0.png" />
 </div>
 </div>
 <div class="cell docutils container">
