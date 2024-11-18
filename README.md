@@ -1,6 +1,10 @@
-# globalsnow
+# My Repository: CloudSat, ERA5, and CMIP6 analysis
 
-studying snow and clouds
+[![DOI](https://zenodo.org/badge/DOI/10.1234/zenodo.56789.svg)](https://doi.org/10.1234/zenodo.56789)
+
+This repository contains the code used to produce figures for the article:
+["Evaluation of Biases in mid-to-high latitudes Surface Snowfall and Cloud Phase in ERA5 and CMIP6 using Satellite Observations"](https://doi.org/10.5194/egusphere-2024-754).
+
 
 ## Usage
 
