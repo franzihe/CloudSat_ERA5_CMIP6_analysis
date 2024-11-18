@@ -2214,7 +2214,7 @@ def plt_R2_heatmap_season(regression, dict_label, fig_dir, lwp_threshold):
     plt.savefig(fig_dir + figname, format='png', dpi=300, bbox_inches='tight', transparent=True)
 
 
-def plot_spatial_season(difference, val1, val2, val3, val1_mean, val2_mean, val3_mean,sic_cc,
+def plot_spatial_season(difference, val1, val2, val3, val1_mean, val2_mean, val3_mean,sic_cc,cc_2tm,era_2tm,cmip_2tm,
                         hemisphere, ds, var_name, dict_label, fig_dir, lat_extent, lwp_threshold):
   
     if difference != None:
@@ -2424,6 +2424,30 @@ def plot_spatial_season(difference, val1, val2, val3, val1_mean, val2_mean, val3
         sub_title = ""
 
         for ax, season in zip(axsm.flatten()[i * 4: (i + 1) * 4 + 1], val1.season):
+            if i == 1:
+                value_2tm = era_2tm.sel(lat=slice(45,90)) if hemisphere == 'NH' else era_2tm.sel(lat=slice(-90,-45))
+                isotherm = ax.contour(
+                    value_2tm.lon,
+                    value_2tm.lat,    
+                    value_2tm.sel( season=season),
+                    transform=ccrs.PlateCarree(),
+                    levels=[273.15],
+                    colors="k",  # Color for the isotherm line
+                    linewidths=2,
+                    linestyles="--"  # Dashed line for visibility
+                    )
+            if i == 2:
+                value_2tm = cmip_2tm.sel(lat=slice(45,90)) if hemisphere == 'NH' else cmip_2tm.sel(lat=slice(-90,-45))
+                isotherm = ax.contour(
+                    value_2tm.lon,
+                    value_2tm.lat,    
+                    value_2tm.sel( season=season),
+                    transform=ccrs.PlateCarree(),
+                    levels=[273.15],
+                    colors="k",  # Color for the isotherm line
+                    linewidths=2,
+                    linestyles="--"  # Dashed line for visibility
+                    )
             if i == 0:
                     sub_title = f'season = {season.values}'
                 
@@ -2433,10 +2457,23 @@ def plot_spatial_season(difference, val1, val2, val3, val1_mean, val2_mean, val3
                     value_sic.sel( season=season).plot.contour(ax=ax, transform=ccrs.PlateCarree(), x='lon', y='lat', 
                                                                levels = [20., ], lw=2., add_colorbar=False, colors = 'orangered')
                     
+                    value_2tm = cc_2tm.sel(lat=slice(45,90)) if hemisphere == 'NH' else cc_2tm.sel(lat=slice(-90,-45))
+                    isotherm = ax.contour(
+                        value_2tm.lon,
+                        value_2tm.lat,    
+                        value_2tm.sel( season=season),
+                        transform=ccrs.PlateCarree(),
+                        levels=[273.15],
+                        colors="k",  # Color for the isotherm line
+                        linewidths=2,
+                        linestyles="--"  # Dashed line for visibility
+                        )
+                    
                     if season == 'SON':
-                        legend_elements = [Line2D([0], [0], color='orangered', lw=2., label='20% SIC'),]
+                        legend_elements = [Line2D([0], [0], color='orangered', lw=2., label='20% SIC'),
+                                           Line2D([0], [1], color='k', lw=2.,ls='--', label='T=0$^\circ$C')]
                         if difference != None:
-                            leg = ax.legend(handles=legend_elements, bbox_to_anchor=(1.05, 1.25), loc=2, borderaxespad=0., fancybox=True,
+                            leg = ax.legend(handles=legend_elements, bbox_to_anchor=(1.05, 1.35), loc=2, borderaxespad=0., fancybox=True,
                                             facecolor='none', )#'gainsboro')#loc='best')
                         else:
                             leg = ax.legend(handles=legend_elements, bbox_to_anchor=(1.05, 0.5), loc=2, borderaxespad=0., fancybox=True,
@@ -2536,7 +2573,7 @@ def plot_spatial_season(difference, val1, val2, val3, val1_mean, val2_mean, val3
     # plt.savefig(fig_dir + figname, format='eps', dpi=300,  bbox_inches='tight', )#transparent=True)
 
 
-def plt_spatial_season_var(ds, var_name, dict_label, sic_cc, fig_dir, lat_extent, lwp_threshold):
+def plt_spatial_season_var(ds, var_name, dict_label, sic_cc,cc_2tm,era_2tm,cmip_2tm, fig_dir, lat_extent, lwp_threshold):
     if var_name == 'FLCC-FsLCC':
         val1= ds['FLCC' + '_season'].sel(model='CloudSat').squeeze()
         val1_mean= ds['FLCC' + '_season_mean'].sel(model='CloudSat').squeeze()
@@ -2579,9 +2616,9 @@ def plt_spatial_season_var(ds, var_name, dict_label, sic_cc, fig_dir, lat_extent
         
     
     for hemisphere in ['NH', 'SH']:
-        plot_spatial_season(None, val1, val2, val3, val1_mean, val2_mean, val3_mean,sic_cc,
+        plot_spatial_season(None, val1, val2, val3, val1_mean, val2_mean, val3_mean,sic_cc,cc_2tm,era_2tm,cmip_2tm,
                         hemisphere, ds, var_name, dict_label[var_name], fig_dir, lat_extent, lwp_threshold) 
-        plot_spatial_season('yes', val1, val2, val3, val1_mean, val2_mean, val3_mean,sic_cc,
+        plot_spatial_season('yes', val1, val2, val3, val1_mean, val2_mean, val3_mean,sic_cc,cc_2tm,era_2tm,cmip_2tm,
                         hemisphere, ds, var_name, dict_label[var_name], fig_dir, lat_extent, lwp_threshold)  
         
         
